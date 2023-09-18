@@ -8,9 +8,9 @@ public class Product : BaseEntity
     public string? Description { get; set; }
     public decimal Price { get; set; }
     public int StockQuantity { get; set; }
-    public List<string>? ImageUrls { get; set; }
+    public List<string> ImageUrls { get; set; } = new();
 
-    public List<Comment>? Comments { get; set; }
-    public List<Review>? Reviews { get; set; }
-    public Category? Category { get; set; }
+    public Guid CategoryId { get; set; }
+    public List<Comment> Comments { get; set; } = new();
+    public List<Review> Reviews { get; set; } = new();
 }

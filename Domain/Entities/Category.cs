@@ -9,5 +9,5 @@ public class Category : BaseEntity
     public string? ImageUrl { get; set; }
     public string? IconUrl { get; set; }
 
-    public List<Product>? Products { get; set; }
+    public List<Product> Products { get; set; } = new();
 }

@@ -7,7 +7,7 @@ public class Comment : BaseEntity
     public string? Title { get; set; }
     public string? Description { get; set; }
     
-    public User? User { get; set; }
-    public List<Vote>? Votes { get; set; }
-    public Review? Review { get; set; }
+    public Guid UserId { get; set; }
+    public Guid ReviewId { get; set; }
+    public List<Vote> Votes { get; set; } = new();
 }

@@ -5,12 +5,11 @@ public abstract class BaseEntity
     public BaseEntity()
     {
         DateCreated = DateModified = DateTime.UtcNow;
-        Id = Guid.NewGuid().ToString();
+        InternalId = Guid.NewGuid();
     }
 
-    public string Id { get; set; }
-
+    public Guid InternalId { get; set; }
+    public int ExternalId { get; set; }
     public DateTime DateCreated { get; set; }
-
     public DateTime DateModified { get; set; }
 }
