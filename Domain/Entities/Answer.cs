@@ -1,7 +1,6 @@
 ﻿using Domain.Common;
-using Domain.Entities;
 
-namespace Domain;
+namespace Domain.Entities;
 
 public class Answer : BaseEntity
 {
@@ -10,5 +9,5 @@ public class Answer : BaseEntity
 
     public Guid UserId { get; set; }
     public Guid QuestionId { get; set; }
-    public List<Vote> Votes { get; set; } = new();
+    public ICollection<Guid>? VoteIds { get; set; }
 }

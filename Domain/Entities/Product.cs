@@ -11,6 +11,6 @@ public class Product : BaseEntity
     public List<string> ImageUrls { get; set; } = new();
 
     public Guid CategoryId { get; set; }
-    public List<Comment> Comments { get; set; } = new();
-    public List<Review> Reviews { get; set; } = new();
+    public ICollection<Guid>? CommentIds { get; set; }
+    public ICollection<Guid>? ReviewIds { get; set; }
 }

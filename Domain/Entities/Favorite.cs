@@ -1,6 +1,7 @@
 ﻿using Domain.Common;
+using Domain.Enums;
 
-namespace Domain;
+namespace Domain.Entities;
 
 public class Favorite : BaseEntity
 {

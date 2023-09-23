@@ -1,7 +1,6 @@
 ﻿using Domain.Common;
-using Domain.Entities;
 
-namespace Domain;
+namespace Domain.Entities;
 
 public class Question : BaseEntity
 {
@@ -9,6 +8,6 @@ public class Question : BaseEntity
     public string? Description { get; set; }
 
     public Guid UserId { get; set; }
-    public List<Answer> Answers { get; set; } = new();
-    public List<Vote> Votes { get; set; } = new();
+    public ICollection<Guid>? AnswerIds { get; set; }
+    public ICollection<Guid>? VoteIds { get; set; }
 }

@@ -9,5 +9,5 @@ public class Comment : BaseEntity
     
     public Guid UserId { get; set; }
     public Guid ReviewId { get; set; }
-    public List<Vote> Votes { get; set; } = new();
+    public ICollection<Guid>? VoteIds { get; set; }
 }
