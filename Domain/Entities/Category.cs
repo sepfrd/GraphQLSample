@@ -9,5 +9,5 @@ public class Category : BaseEntity
     public string? ImageUrl { get; set; }
     public string? IconUrl { get; set; }
 
-    public ICollection<Guid>? ProductIds { get; set; }
+    public ICollection<Product>? Products { get; set; }
 }

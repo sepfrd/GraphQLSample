@@ -13,4 +13,3 @@ public enum PaymentMethod
     AmazonPay = 8,
     Other = 9
 }
-

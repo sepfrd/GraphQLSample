@@ -13,4 +13,3 @@ public enum ShippingMethod
     WhiteGloveDelivery = 8,
     Other = 9
 }
-
