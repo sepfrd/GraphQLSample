@@ -2,7 +2,7 @@
 
 namespace Domain.Entities;
 
-public class CartItem : BaseEntity
+public sealed class CartItem : BaseEntity
 {
     public int Quantity { get; set; }
     public decimal UnitPrice { get; set; }

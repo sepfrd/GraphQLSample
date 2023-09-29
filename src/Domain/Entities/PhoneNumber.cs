@@ -3,7 +3,7 @@ using Domain.Enums;
 
 namespace Domain.Entities;
 
-public class PhoneNumber : BaseEntity
+public sealed class PhoneNumber : BaseEntity
 {
     public PhoneNumber(string number, PhoneNumberType type)
     {

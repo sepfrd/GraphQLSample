@@ -1,6 +1,6 @@
 ﻿using Domain.Entities;
 
-namespace Domain.Interfaces;
+namespace Domain.Abstractions;
 
 public interface IVotableContent
 {

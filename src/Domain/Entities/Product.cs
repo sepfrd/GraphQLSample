@@ -1,9 +1,9 @@
-﻿using Domain.Common;
-using Domain.Interfaces;
+﻿using Domain.Abstractions;
+using Domain.Common;
 
 namespace Domain.Entities;
 
-public class Product : BaseEntity, IVotableContent
+public sealed class Product : BaseEntity, IVotableContent
 {
     public string? Name { get; set; }
     public string? Description { get; set; }

@@ -2,7 +2,7 @@
 
 namespace Domain.Entities;
 
-public class Cart : BaseEntity
+public sealed class Cart : BaseEntity
 {
     public ICollection<CartItem>? CartItems { get; set; }
     public User? User { get; set; }

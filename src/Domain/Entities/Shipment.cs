@@ -3,7 +3,7 @@ using Domain.Enums;
 
 namespace Domain.Entities;
 
-public class Shipment : BaseEntity
+public sealed class Shipment : BaseEntity
 {
     public Guid TraceId { get; set; }
     public ShipmentStatus Status { get; set; }

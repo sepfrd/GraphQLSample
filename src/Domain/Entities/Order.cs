@@ -2,7 +2,7 @@
 
 namespace Domain.Entities;
 
-public class Order : BaseEntity
+public sealed class Order : BaseEntity
 {
     public decimal TotalPrice { get; set; }
     public Payment? Payment { get; set; }

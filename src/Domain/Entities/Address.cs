@@ -2,7 +2,7 @@
 
 namespace Domain.Entities;
 
-public class Address : BaseEntity
+public sealed class Address : BaseEntity
 {
     public string? Street { get; set; }
     public string? City { get; set; }

@@ -1,10 +1,10 @@
-﻿using Domain.Common;
+﻿using Domain.Abstractions;
+using Domain.Common;
 using Domain.Enums;
-using Domain.Interfaces;
 
 namespace Domain.Entities;
 
-public class Vote : BaseEntity
+public sealed class Vote : BaseEntity
 {
     public VoteType Type { get; set; }
 

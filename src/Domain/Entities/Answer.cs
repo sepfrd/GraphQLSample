@@ -1,9 +1,9 @@
-﻿using Domain.Common;
-using Domain.Interfaces;
+﻿using Domain.Abstractions;
+using Domain.Common;
 
 namespace Domain.Entities;
 
-public class Answer : BaseEntity, IVotableContent
+public sealed class Answer : BaseEntity, IVotableContent
 {
     public string? Title { get; set; }
     public string? Description { get; set; }
