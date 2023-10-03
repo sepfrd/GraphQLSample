@@ -7,9 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="EntityManagement\Answers\Commands\" />
-    <Folder Include="EntityManagement\Answers\Dtos\" />
-    <Folder Include="EntityManagement\Answers\Handlers\" />
     <Folder Include="EntityManagement\Answers\Queries\" />
     <Folder Include="EntityManagement\CartItems\Commands\" />
     <Folder Include="EntityManagement\CartItems\Dtos\" />
@@ -70,6 +67,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.7.1" />
     <PackageReference Include="MediatR" Version="12.1.1" />
   </ItemGroup>
 
