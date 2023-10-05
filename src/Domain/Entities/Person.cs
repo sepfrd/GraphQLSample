@@ -5,7 +5,9 @@ namespace Domain.Entities;
 public sealed class Person : BaseEntity
 {
     public string? FirstName { get; set; }
+
     public string? LastName { get; set; }
+
     public DateTime BirthDate { get; set; }
 
     public int Age
@@ -15,7 +17,7 @@ public sealed class Person : BaseEntity
             DateTime currentDate = DateTime.UtcNow;
             DateTime birthDate = BirthDate.ToUniversalTime();
 
-            int age = currentDate.Year - birthDate.Year;
+            var age = currentDate.Year - birthDate.Year;
 
             if (birthDate.AddYears(age) < currentDate)
             {
@@ -25,5 +27,6 @@ public sealed class Person : BaseEntity
             return age;
         }
     }
+
     public string FullName => FirstName + " " + LastName;
 }

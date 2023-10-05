@@ -6,20 +6,20 @@ using MediatR;
 
 namespace Application.Common.Handlers;
 
-public class BaseGetAllDtosQueryHandler<TEntity, TDto>
-    : IRequestHandler<BaseGetAllDtosQuery<TEntity, TDto>, IEnumerable<TDto>?>
+public abstract class BaseGetAllDtosQueryHandler<TEntity, TDto>
+    : IRequestHandler<BaseGetAllDtosQuery<TDto>, IEnumerable<TDto>?>
     where TEntity : BaseEntity
 {
     private readonly IRepository<TEntity> _repository;
     private readonly IMappingService _mappingService;
 
-    public BaseGetAllDtosQueryHandler(IRepository<TEntity> repository, IMappingService mappingService)
+    protected BaseGetAllDtosQueryHandler(IRepository<TEntity> repository, IMappingService mappingService)
     {
         _repository = repository;
         _mappingService = mappingService;
     }
 
-    public async Task<IEnumerable<TDto>?> Handle(BaseGetAllDtosQuery<TEntity, TDto> request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<TDto>?> Handle(BaseGetAllDtosQuery<TDto> request, CancellationToken cancellationToken)
     {
         var entities = await _repository.GetAllAsync(cancellationToken);
 

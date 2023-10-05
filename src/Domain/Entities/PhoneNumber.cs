@@ -12,6 +12,6 @@ public sealed class PhoneNumber : BaseEntity
     }
 
     public string Number { get; set; }
+
     public PhoneNumberType Type { get; set; }
 }
-

@@ -5,13 +5,13 @@ using MediatR;
 
 namespace Application.Common.Handlers;
 
-public class BaseGetByInternalIdHandler<TEntity>
+public abstract class BaseGetByInternalIdQueryHandler<TEntity>
     : IRequestHandler<BaseGetByInternalIdQuery<TEntity>, TEntity?>
     where TEntity : BaseEntity
 {
     private readonly IRepository<TEntity> _repository;
 
-    public BaseGetByInternalIdHandler(IRepository<TEntity> repository) =>
+    protected BaseGetByInternalIdQueryHandler(IRepository<TEntity> repository) =>
         _repository = repository;
 
     public async Task<TEntity?> Handle(BaseGetByInternalIdQuery<TEntity> request, CancellationToken cancellationToken) =>

@@ -5,7 +5,9 @@ namespace Domain.Entities;
 public sealed class Cart : BaseEntity
 {
     public ICollection<CartItem>? CartItems { get; set; }
+
     public User? User { get; set; }
+
     public decimal TotalPrice
     {
         get
@@ -15,14 +17,7 @@ public sealed class Cart : BaseEntity
                 return 0;
             }
 
-            decimal totalPrice = 0;
-
-            foreach (var item in CartItems)
-            {
-                totalPrice += item.SubTotalPrice;
-            }
-
-            return totalPrice;
+            return CartItems.Sum(item => item.SubTotalPrice);
         }
     }
 }

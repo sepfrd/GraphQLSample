@@ -6,21 +6,21 @@ using MediatR;
 
 namespace Application.Common.Handlers;
 
-public class BaseGetByExternalIdHandler<TEntity, TDto>
-    : IRequestHandler<BaseGetByExternalIdQuery<TEntity, TDto>, TDto?>
+public abstract class BaseGetByExternalIdQueryHandler<TEntity, TDto>
+    : IRequestHandler<BaseGetByExternalIdQuery<TDto>, TDto?>
     where TEntity : BaseEntity
     where TDto : class
 {
     private readonly IRepository<TEntity> _repository;
     private readonly IMappingService _mappingService;
 
-    public BaseGetByExternalIdHandler(IRepository<TEntity> repository, IMappingService mappingService)
+    protected BaseGetByExternalIdQueryHandler(IRepository<TEntity> repository, IMappingService mappingService)
     {
         _repository = repository;
         _mappingService = mappingService;
     }
 
-    public async Task<TDto?> Handle(BaseGetByExternalIdQuery<TEntity, TDto> request, CancellationToken cancellationToken)
+    public async Task<TDto?> Handle(BaseGetByExternalIdQuery<TDto> request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetByExternalIdAsync(request.Id, cancellationToken);
 
