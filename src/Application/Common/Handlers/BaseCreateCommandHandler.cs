@@ -33,7 +33,7 @@ public abstract class BaseCreateCommandHandler<TEntity, TDto>
 
         if (entity is null)
         {
-            _logger.LogError(message: Messages.MappingFailed, DateTime.UtcNow, GetType());
+            _logger.LogError(message: Messages.MappingFailed, DateTime.UtcNow, typeof(TEntity));
 
             return CommandResult.Failure(Messages.InternalServerError);
         }
@@ -42,7 +42,7 @@ public abstract class BaseCreateCommandHandler<TEntity, TDto>
 
         if (createdEntity is null)
         {
-            _logger.LogError(message: Messages.EntityCreationFailed, DateTime.UtcNow, GetType());
+            _logger.LogError(message: Messages.EntityCreationFailed, DateTime.UtcNow, typeof(TEntity));
 
             return CommandResult.Failure(Messages.InternalServerError);
         }

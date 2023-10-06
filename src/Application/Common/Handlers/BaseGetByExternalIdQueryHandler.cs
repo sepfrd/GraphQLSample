@@ -41,7 +41,7 @@ public abstract class BaseGetByExternalIdQueryHandler<TEntity, TDto>
 
         if (dto is null)
         {
-            _logger.LogError(message: Messages.MappingFailed, DateTime.UtcNow, GetType());
+            _logger.LogError(message: Messages.MappingFailed, DateTime.UtcNow, typeof(TEntity));
 
             return new QueryResponse(Message: Messages.InternalServerError, HttpStatusCode: HttpStatusCode.InternalServerError);
         }

@@ -40,7 +40,7 @@ public abstract class BaseUpdateCommandHandler<TEntity, TDto>
 
         if (newEntity is null)
         {
-            _logger.LogError(message: Messages.MappingFailed, DateTime.UtcNow, GetType());
+            _logger.LogError(message: Messages.MappingFailed, DateTime.UtcNow, typeof(TEntity));
 
             return CommandResult.Failure(Messages.InternalServerError);
         }
@@ -49,7 +49,7 @@ public abstract class BaseUpdateCommandHandler<TEntity, TDto>
 
         if (updatedEntity is null)
         {
-            _logger.LogError(message: Messages.EntityUpdateFailed, DateTime.UtcNow, GetType());
+            _logger.LogError(message: Messages.EntityUpdateFailed, DateTime.UtcNow, typeof(TEntity));
 
             return CommandResult.Failure(Messages.InternalServerError);
         }

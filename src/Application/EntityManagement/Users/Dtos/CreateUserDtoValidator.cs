@@ -20,6 +20,7 @@ public class CreateUserDtoValidator : AbstractValidator<CreateUserDto>
             .SetValidator(new PhoneNumberDtoValidator());
         
         RuleFor(model => model.Password)
+            .Equal(model => model.PasswordConfirmation)
             .NotEmpty()
             .Matches(RegexPatterns.PasswordPattern);
     }

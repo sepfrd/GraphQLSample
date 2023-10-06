@@ -37,7 +37,7 @@ public abstract class BaseDeleteByInternalIdCommandHandler<TEntity, TDto>
 
         if (deletedEntity is null)
         {
-            _logger.LogError(Messages.EntityDeletionFailed, DateTime.UtcNow, GetType());
+            _logger.LogError(Messages.EntityDeletionFailed, DateTime.UtcNow, typeof(TEntity));
 
             return CommandResult.Failure(Messages.InternalServerError);
         }

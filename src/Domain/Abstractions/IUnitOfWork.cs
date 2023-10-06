@@ -39,7 +39,7 @@ public interface IUnitOfWork
 
     ICollection<IRepository<BaseEntity>> Repositories { get; set; }
     
-    void SaveChanges();
-
-    Task SaveChangesAsync();
+    int SaveChanges();
+    
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

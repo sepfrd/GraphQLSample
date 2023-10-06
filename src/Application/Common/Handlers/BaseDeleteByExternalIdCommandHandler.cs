@@ -22,7 +22,7 @@ public abstract class BaseDeleteByExternalIdCommandHandler<TEntity>
         _repository = (IRepository<TEntity>)repositoryInterface;
         _logger = logger;
     }
-
+    
     public virtual async Task<CommandResult> Handle(BaseDeleteByExternalIdCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetByExternalIdAsync(request.Id, cancellationToken);
@@ -36,7 +36,7 @@ public abstract class BaseDeleteByExternalIdCommandHandler<TEntity>
 
         if (deletedEntity is null)
         {
-            _logger.LogError(Messages.EntityDeletionFailed, DateTime.UtcNow, GetType());
+            _logger.LogError(Messages.EntityDeletionFailed, DateTime.UtcNow, typeof(TEntity));
             
             return CommandResult.Failure(Messages.InternalServerError);
         }
