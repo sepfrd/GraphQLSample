@@ -1,14 +1,14 @@
-using Application.Abstractions;
 using Application.Common.Handlers;
-using Application.EntityManagement.Answers.Dtos;
 using Domain.Abstractions;
 using Domain.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.Answers.Handlers;
 
-public class DeleteAnswerByExternalIdCommandHandler : BaseDeleteByExternalIdCommandHandler<Answer, AnswerDto>
+public class DeleteAnswerByExternalIdCommandHandler : BaseDeleteByExternalIdCommandHandler<Answer>
 {
-    public DeleteAnswerByExternalIdCommandHandler(IRepository<Answer> repository, IMappingService mappingService) : base(repository, mappingService)
+    public DeleteAnswerByExternalIdCommandHandler(IRepository<Answer> repository, ILogger logger)
+        : base(repository, logger)
     {
     }
 }

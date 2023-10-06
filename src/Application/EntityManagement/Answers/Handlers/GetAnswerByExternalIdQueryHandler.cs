@@ -3,12 +3,14 @@ using Application.Common.Handlers;
 using Application.EntityManagement.Answers.Dtos;
 using Domain.Abstractions;
 using Domain.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.Answers.Handlers;
 
 public class GetAnswerByExternalIdQueryHandler : BaseGetByExternalIdQueryHandler<Answer, AnswerDto>
 {
-    public GetAnswerByExternalIdQueryHandler(IRepository<Answer> repository, IMappingService mappingService) : base(repository, mappingService)
+    public GetAnswerByExternalIdQueryHandler(IRepository<Answer> repository, IMappingService mappingService, ILogger logger)
+        : base(repository, mappingService, logger)
     {
     }
 }

@@ -6,11 +6,11 @@ public class UpdateAnswerCommandValidator : AbstractValidator<UpdateAnswerComman
 {
     public UpdateAnswerCommandValidator()
     {
-        RuleFor(dto => dto.UpdateAnswerDto.Title)
+        RuleFor(dto => dto.AnswerDto.Title)
             .NotEmpty()
             .MinimumLength(5);
 
-        RuleFor(dto => dto.UpdateAnswerDto.Description)
+        RuleFor(dto => dto.AnswerDto.Description)
             .NotEmpty()
             .MinimumLength(20);
     }

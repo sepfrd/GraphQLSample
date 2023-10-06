@@ -3,4 +3,4 @@ using Application.EntityManagement.Answers.Dtos;
 
 namespace Application.EntityManagement.Answers.Commands.UpdateAnswer;
 
-public abstract record UpdateAnswerCommand(UpdateAnswerDto UpdateAnswerDto) : BaseUpdateCommand<AnswerDto>(UpdateAnswerDto);
+public record UpdateAnswerCommand(int Id, AnswerDto AnswerDto) : BaseUpdateCommand<AnswerDto>(Id, AnswerDto);

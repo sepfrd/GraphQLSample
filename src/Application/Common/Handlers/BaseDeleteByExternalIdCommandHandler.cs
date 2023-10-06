@@ -1,37 +1,42 @@
-using Application.Abstractions;
 using Application.Common.Commands;
 using Domain.Abstractions;
 using Domain.Common;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Common.Handlers;
 
-public abstract class BaseDeleteByExternalIdCommandHandler<TEntity, TDto>
-    : IRequestHandler<BaseDeleteByExternalIdCommand<TDto>, TDto?>
+public abstract class BaseDeleteByExternalIdCommandHandler<TEntity>
+    : IRequestHandler<BaseDeleteByExternalIdCommand, CommandResult>
     where TEntity : BaseEntity
-    where TDto : class
 {
     private readonly IRepository<TEntity> _repository;
-    private readonly IMappingService _mappingService;
+    private readonly ILogger _logger;
 
-    protected BaseDeleteByExternalIdCommandHandler(IRepository<TEntity> repository, IMappingService mappingService)
+    protected BaseDeleteByExternalIdCommandHandler(IRepository<TEntity> repository, ILogger logger)
     {
         _repository = repository;
-        _mappingService = mappingService;
-
+        _logger = logger;
     }
 
-    public async Task<TDto?> Handle(BaseDeleteByExternalIdCommand<TDto> request, CancellationToken cancellationToken)
+    public async Task<CommandResult> Handle(BaseDeleteByExternalIdCommand request, CancellationToken cancellationToken)
     {
-        var deletedEntity = await _repository.DeleteByExternalIdAsync(request.Id, cancellationToken);
+        var entity = await _repository.GetByExternalIdAsync(request.Id, cancellationToken);
+
+        if (entity is null)
+        {
+            return CommandResult.Failure(Messages.NotFound);
+        }
+
+        var deletedEntity = await _repository.DeleteAsync(entity, cancellationToken);
 
         if (deletedEntity is null)
         {
-            return null;
+            _logger.LogError(Messages.EntityDeletionFailed, DateTime.UtcNow, GetType());
+            
+            return CommandResult.Failure(Messages.InternalServerError);
         }
 
-        var deletedEntityDto = _mappingService.Map<TEntity, TDto>(deletedEntity);
-
-        return deletedEntityDto;
+        return CommandResult.Success(Messages.SuccessfullyDeleted);
     }
 }

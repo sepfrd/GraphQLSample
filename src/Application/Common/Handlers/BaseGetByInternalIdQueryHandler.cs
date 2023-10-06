@@ -2,11 +2,12 @@ using Application.Common.Queries;
 using Domain.Abstractions;
 using Domain.Common;
 using MediatR;
+using System.Net;
 
 namespace Application.Common.Handlers;
 
 public abstract class BaseGetByInternalIdQueryHandler<TEntity>
-    : IRequestHandler<BaseGetByInternalIdQuery<TEntity>, TEntity?>
+    : IRequestHandler<BaseGetByInternalIdQuery, QueryResponse>
     where TEntity : BaseEntity
 {
     private readonly IRepository<TEntity> _repository;
@@ -14,6 +15,21 @@ public abstract class BaseGetByInternalIdQueryHandler<TEntity>
     protected BaseGetByInternalIdQueryHandler(IRepository<TEntity> repository) =>
         _repository = repository;
 
-    public async Task<TEntity?> Handle(BaseGetByInternalIdQuery<TEntity> request, CancellationToken cancellationToken) =>
-        await _repository.GetByInternalIdAsync(request.Id, cancellationToken);
+    public async Task<QueryResponse> Handle(BaseGetByInternalIdQuery request, CancellationToken cancellationToken)
+    {
+        var entity = await _repository.GetByInternalIdAsync(request.Id, cancellationToken);
+
+        if (entity is null)
+        {
+            return new QueryResponse(Message: Messages.NotFound, HttpStatusCode: HttpStatusCode.NotFound);
+        }
+
+        return new QueryResponse
+            (
+            entity,
+            true,
+            Messages.SuccessfullyRetrieved,
+            HttpStatusCode.OK
+            );
+    }
 }

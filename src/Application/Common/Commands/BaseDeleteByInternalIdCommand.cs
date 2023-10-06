@@ -2,4 +2,4 @@ using MediatR;
 
 namespace Application.Common.Commands;
 
-public abstract record BaseDeleteByInternalIdCommand<TDto>(Guid Id) : IRequest<TDto?>;
+public abstract record BaseDeleteByInternalIdCommand(Guid Id) : IRequest<CommandResult>;
