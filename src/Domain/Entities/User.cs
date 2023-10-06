@@ -4,27 +4,29 @@ namespace Domain.Entities;
 
 public sealed class User : BaseEntity
 {
-    public string? Username { get; set; }
+    public required string Username { get; set; }
 
-    public string? Password { get; set; }
+    public required string Password { get; set; }
+    
+    public required string Email { get; set; }
 
+    public bool IsEmailConfirmed { get; set; }
+    
     public int Score { get; set; }
 
-    public Person? Person { get; set; }
+    public Guid PersonId { get; set; }
 
-    public Cart? Cart { get; set; }
+    public Guid CartId { get; set; }
 
-    public ICollection<Order>? Orders { get; set; }
+    public ICollection<Guid>? OrderIds { get; set; }
 
-    public ICollection<Address>? Addresses { get; set; }
+    public ICollection<Guid>? AddressIds { get; set; }
 
-    public ICollection<PhoneNumber>? PhoneNumbers { get; set; }
+    public ICollection<Guid>? PhoneNumberIds { get; set; }
 
-    public ICollection<Question>? Questions { get; set; }
+    public ICollection<Guid>? QuestionIds { get; set; }
 
-    public ICollection<Answer>? Answers { get; set; }
+    public ICollection<Guid>? AnswerIds { get; set; }
 
-    public ICollection<Vote>? Votes { get; set; }
-
-    public ICollection<Favorite>? Favorites { get; set; }
+    public ICollection<Guid>? VoteIds { get; set; }
 }

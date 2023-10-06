@@ -13,13 +13,17 @@ public abstract class BaseDeleteByExternalIdCommandHandler<TEntity>
     private readonly IRepository<TEntity> _repository;
     private readonly ILogger _logger;
 
-    protected BaseDeleteByExternalIdCommandHandler(IRepository<TEntity> repository, ILogger logger)
+    protected BaseDeleteByExternalIdCommandHandler(IUnitOfWork unitOfWork, ILogger logger)
     {
-        _repository = repository;
+        var repositoryInterface = unitOfWork
+            .Repositories
+            .First(repository => repository is IRepository<TEntity>);
+        
+        _repository = (IRepository<TEntity>)repositoryInterface;
         _logger = logger;
     }
 
-    public async Task<CommandResult> Handle(BaseDeleteByExternalIdCommand request, CancellationToken cancellationToken)
+    public virtual async Task<CommandResult> Handle(BaseDeleteByExternalIdCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetByExternalIdAsync(request.Id, cancellationToken);
 

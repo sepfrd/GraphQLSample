@@ -14,13 +14,17 @@ public abstract class BaseGetAllDtosQueryHandler<TEntity, TDto>
     private readonly IRepository<TEntity> _repository;
     private readonly IMappingService _mappingService;
 
-    protected BaseGetAllDtosQueryHandler(IRepository<TEntity> repository, IMappingService mappingService)
+    protected BaseGetAllDtosQueryHandler(IUnitOfWork unitOfWork, IMappingService mappingService)
     {
-        _repository = repository;
+        var repositoryInterface = unitOfWork
+            .Repositories
+            .First(repository => repository is IRepository<TEntity>);
+        
+        _repository = (IRepository<TEntity>)repositoryInterface;
         _mappingService = mappingService;
     }
 
-    public async Task<QueryResponse> Handle(BaseGetAllDtosQuery request, CancellationToken cancellationToken)
+    public virtual async Task<QueryResponse> Handle(BaseGetAllDtosQuery request, CancellationToken cancellationToken)
     {
         var entities = await _repository.GetAllAsync(cancellationToken);
 

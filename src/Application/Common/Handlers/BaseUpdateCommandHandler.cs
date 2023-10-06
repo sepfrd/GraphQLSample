@@ -16,14 +16,18 @@ public abstract class BaseUpdateCommandHandler<TEntity, TDto>
     private readonly IMappingService _mappingService;
     private readonly ILogger _logger;
 
-    protected BaseUpdateCommandHandler(IRepository<TEntity> repository, IMappingService mappingService, ILogger logger)
+    protected BaseUpdateCommandHandler(IUnitOfWork unitOfWork, IMappingService mappingService, ILogger logger)
     {
-        _repository = repository;
+        var repositoryInterface = unitOfWork
+            .Repositories
+            .First(repository => repository is IRepository<TEntity>);
+        
+        _repository = (IRepository<TEntity>)repositoryInterface;
         _mappingService = mappingService;
         _logger = logger;
     }
 
-    public async Task<CommandResult> Handle(BaseUpdateCommand<TDto> request, CancellationToken cancellationToken)
+    public virtual async Task<CommandResult> Handle(BaseUpdateCommand<TDto> request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetByExternalIdAsync(request.Id, cancellationToken);
 

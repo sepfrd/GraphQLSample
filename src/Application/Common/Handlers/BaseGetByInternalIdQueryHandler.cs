@@ -12,10 +12,16 @@ public abstract class BaseGetByInternalIdQueryHandler<TEntity>
 {
     private readonly IRepository<TEntity> _repository;
 
-    protected BaseGetByInternalIdQueryHandler(IRepository<TEntity> repository) =>
-        _repository = repository;
+    protected BaseGetByInternalIdQueryHandler(IUnitOfWork unitOfWork)
+    {
+        var repositoryInterface = unitOfWork
+            .Repositories
+            .First(repository => repository is IRepository<TEntity>);
 
-    public async Task<QueryResponse> Handle(BaseGetByInternalIdQuery request, CancellationToken cancellationToken)
+        _repository = (IRepository<TEntity>)repositoryInterface;
+    }
+
+    public virtual async Task<QueryResponse> Handle(BaseGetByInternalIdQuery request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetByInternalIdAsync(request.Id, cancellationToken);
 

@@ -14,4 +14,6 @@ public sealed class PhoneNumber : BaseEntity
     public string Number { get; set; }
 
     public PhoneNumberType Type { get; set; }
+    
+    public bool IsConfirmed { get; set; }
 }

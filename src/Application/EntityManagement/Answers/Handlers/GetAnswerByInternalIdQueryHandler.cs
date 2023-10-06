@@ -6,8 +6,8 @@ namespace Application.EntityManagement.Answers.Handlers;
 
 public class GetAnswerByInternalIdQueryHandler : BaseGetByInternalIdQueryHandler<Answer>
 {
-    public GetAnswerByInternalIdQueryHandler(IRepository<Answer> repository)
-        : base(repository)
+    public GetAnswerByInternalIdQueryHandler(IUnitOfWork unitOfWork)
+        : base(unitOfWork)
     {
     }
 }

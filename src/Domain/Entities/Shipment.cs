@@ -17,9 +17,9 @@ public sealed class Shipment : BaseEntity
 
     public decimal ShippingCost { get; set; }
 
-    public Address? DestinationAddress { get; set; }
+    public Guid DestinationAddressId { get; set; }
 
-    public Address? OriginAddress { get; set; }
+    public Guid OriginAddressId { get; set; }
 
-    public Order? Order { get; set; }
+    public Guid OrderId { get; set; }
 }

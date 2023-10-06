@@ -7,8 +7,8 @@ namespace Application.EntityManagement.Answers.Handlers;
 
 public class DeleteAnswerByExternalIdCommandHandler : BaseDeleteByExternalIdCommandHandler<Answer>
 {
-    public DeleteAnswerByExternalIdCommandHandler(IRepository<Answer> repository, ILogger logger)
-        : base(repository, logger)
+    public DeleteAnswerByExternalIdCommandHandler(IUnitOfWork unitOfWork, ILogger logger)
+        : base(unitOfWork, logger)
     {
     }
 }

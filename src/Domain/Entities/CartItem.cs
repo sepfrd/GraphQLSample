@@ -10,7 +10,7 @@ public sealed class CartItem : BaseEntity
 
     public decimal SubTotalPrice => UnitPrice * Quantity;
 
-    public Product? Product { get; set; }
+    public Guid ProductId { get; set; }
 
-    public Cart? Cart { get; set; }
+    public Guid CartId { get; set; }
 }

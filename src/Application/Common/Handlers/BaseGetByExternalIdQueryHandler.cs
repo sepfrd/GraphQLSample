@@ -17,14 +17,18 @@ public abstract class BaseGetByExternalIdQueryHandler<TEntity, TDto>
     private readonly IMappingService _mappingService;
     private readonly ILogger _logger;
 
-    protected BaseGetByExternalIdQueryHandler(IRepository<TEntity> repository, IMappingService mappingService, ILogger logger)
+    protected BaseGetByExternalIdQueryHandler(IUnitOfWork unitOfWork, IMappingService mappingService, ILogger logger)
     {
-        _repository = repository;
+        var repositoryInterface = unitOfWork
+            .Repositories
+            .First(repository => repository is IRepository<TEntity>);
+        
+        _repository = (IRepository<TEntity>)repositoryInterface;
         _mappingService = mappingService;
         _logger = logger;
     }
 
-    public async Task<QueryResponse> Handle(BaseGetByExternalIdQuery request, CancellationToken cancellationToken)
+    public virtual async Task<QueryResponse> Handle(BaseGetByExternalIdQuery request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetByExternalIdAsync(request.Id, cancellationToken);
 

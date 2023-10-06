@@ -1,4 +1,3 @@
-using Application.Abstractions;
 using Application.Common.Handlers;
 using Application.EntityManagement.Answers.Dtos;
 using Domain.Abstractions;
@@ -9,8 +8,8 @@ namespace Application.EntityManagement.Answers.Handlers;
 
 public class DeleteAnswerByInternalIdCommandHandler : BaseDeleteByInternalIdCommandHandler<Answer, AnswerDto>
 {
-    public DeleteAnswerByInternalIdCommandHandler(IRepository<Answer> repository, ILogger logger)
-        : base(repository, logger)
+    public DeleteAnswerByInternalIdCommandHandler(IUnitOfWork unitOfWork, ILogger logger)
+        : base(unitOfWork, logger)
     {
     }
 }

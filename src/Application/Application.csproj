@@ -44,9 +44,6 @@
         <Folder Include="EntityManagement\Persons\Handlers\"/>
         <Folder Include="EntityManagement\Persons\Queries\"/>
         <Folder Include="EntityManagement\PhoneNumbers\Commands\"/>
-        <Folder Include="EntityManagement\PhoneNumbers\Dtos\"/>
-        <Folder Include="EntityManagement\PhoneNumbers\Handlers\"/>
-        <Folder Include="EntityManagement\PhoneNumbers\Queries\"/>
         <Folder Include="EntityManagement\Products\Commands\"/>
         <Folder Include="EntityManagement\Products\Dtos\"/>
         <Folder Include="EntityManagement\Products\Handlers\"/>

@@ -9,9 +9,9 @@ public sealed class Question : BaseEntity, IVotableContent
 
     public string? Description { get; set; }
 
-    public User? User { get; set; }
+    public Guid UserId { get; set; }
 
     public ICollection<Answer>? Answers { get; set; }
 
-    public ICollection<Vote>? Votes { get; set; }
+    public ICollection<Guid>? VoteIds { get; set; }
 }

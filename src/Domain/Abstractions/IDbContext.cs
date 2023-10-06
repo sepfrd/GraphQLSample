@@ -1,18 +1,39 @@
 using Domain.Common;
+using Domain.Entities;
 
 namespace Domain.Abstractions;
 
-public interface IDbContext<TEntity> where TEntity : BaseEntity
+public interface IDbContext
 {
-    Task<TEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    ICollection<Address> Addresses { get; set; }
 
-    Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken = default);
+    ICollection<Answer> Answers { get; set; }
 
-    Task<TEntity?> CreateAsync(TEntity entity, CancellationToken cancellationToken = default);
+    ICollection<Cart> Carts { get; set; }
 
-    Task<TEntity?> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default);
+    ICollection<CartItem> CartItems { get; set; }
 
-    Task<TEntity?> DeleteAsync(TEntity entity, CancellationToken cancellationToken = default);
+    ICollection<Category> Categories { get; set; }
 
-    Task<TEntity?> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
+    ICollection<Comment> Comments { get; set; }
+
+    ICollection<Order> Orders { get; set; }
+
+    ICollection<OrderItem> OrderItems { get; set; }
+
+    ICollection<Payment> Payments { get; set; }
+
+    ICollection<Person> Persons { get; set; }
+
+    ICollection<PhoneNumber> PhoneNumbers { get; set; }
+
+    ICollection<Product> Products { get; set; }
+
+    ICollection<Question> Questions { get; set; }
+
+    ICollection<Shipment> Shipments { get; set; }
+
+    ICollection<User> Users { get; set; }
+
+    ICollection<Vote> Votes { get; set; }
 }

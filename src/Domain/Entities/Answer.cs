@@ -5,13 +5,13 @@ namespace Domain.Entities;
 
 public sealed class Answer : BaseEntity, IVotableContent
 {
-    public string? Title { get; set; }
+    public required string Title { get; set; }
 
-    public string? Description { get; set; }
+    public required string Description { get; set; }
 
-    public User? User { get; set; }
+    public Guid UserId { get; set; }
 
-    public Question? Question { get; set; }
+    public Guid QuestionId { get; set; }
 
-    public ICollection<Vote>? Votes { get; set; }
+    public ICollection<Guid>? VoteIds { get; set; }
 }

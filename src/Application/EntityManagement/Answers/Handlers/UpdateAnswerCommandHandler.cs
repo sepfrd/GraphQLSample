@@ -9,8 +9,8 @@ namespace Application.EntityManagement.Answers.Handlers;
 
 public class UpdateAnswerCommandHandler : BaseUpdateCommandHandler<Answer, AnswerDto>
 {
-    public UpdateAnswerCommandHandler(IRepository<Answer> repository, IMappingService mappingService, ILogger logger)
-        : base(repository, mappingService, logger)
+    public UpdateAnswerCommandHandler(IUnitOfWork unitOfWork, IMappingService mappingService, ILogger logger)
+        : base(unitOfWork, mappingService, logger)
     {
     }
 }

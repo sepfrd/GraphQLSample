@@ -8,8 +8,8 @@ namespace Application.EntityManagement.Answers.Handlers;
 
 public class GetAllAnswerDtosQueryHandler : BaseGetAllDtosQueryHandler<Answer, AnswerDto>
 {
-    public GetAllAnswerDtosQueryHandler(IRepository<Answer> repository, IMappingService mappingService)
-        : base(repository, mappingService)
+    public GetAllAnswerDtosQueryHandler(IUnitOfWork unitOfWork, IMappingService mappingService)
+        : base(unitOfWork, mappingService)
     {
     }
 }

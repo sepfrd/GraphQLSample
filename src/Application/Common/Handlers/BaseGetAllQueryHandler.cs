@@ -12,10 +12,16 @@ public abstract class BaseGetAllQueryHandler<TEntity>
 {
     private readonly IRepository<TEntity> _repository;
 
-    protected BaseGetAllQueryHandler(IRepository<TEntity> repository) =>
-        _repository = repository;
+    protected BaseGetAllQueryHandler(IUnitOfWork unitOfWork)
+    {
+        var repositoryInterface = unitOfWork
+            .Repositories
+            .First(repository => repository is IRepository<TEntity>);
+        
+        _repository = (IRepository<TEntity>)repositoryInterface;
+    }
     
-    public async Task<QueryResponse> Handle(BaseGetAllQuery request, CancellationToken cancellationToken)
+    public virtual async Task<QueryResponse> Handle(BaseGetAllQuery request, CancellationToken cancellationToken)
     {
         var entities = await _repository.GetAllAsync(cancellationToken);
         

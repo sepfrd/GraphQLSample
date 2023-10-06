@@ -9,8 +9,8 @@ namespace Application.EntityManagement.Answers.Handlers;
 
 public class CreateAnswerCommandHandler : BaseCreateCommandHandler<Answer, AnswerDto>
 {
-    public CreateAnswerCommandHandler(IRepository<Answer> repository, IMappingService mappingService, ILogger logger)
-        : base(repository, mappingService, logger)
+    public CreateAnswerCommandHandler(IUnitOfWork unitOfWork, IMappingService mappingService, ILogger logger)
+        : base(unitOfWork, mappingService, logger)
     {
     }
 }

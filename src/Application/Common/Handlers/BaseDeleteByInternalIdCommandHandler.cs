@@ -14,13 +14,17 @@ public abstract class BaseDeleteByInternalIdCommandHandler<TEntity, TDto>
     private readonly IRepository<TEntity> _repository;
     private readonly ILogger _logger;
 
-    protected BaseDeleteByInternalIdCommandHandler(IRepository<TEntity> repository, ILogger logger)
+    protected BaseDeleteByInternalIdCommandHandler(IUnitOfWork unitOfWork, ILogger logger)
     {
-        _repository = repository;
+        var repositoryInterface = unitOfWork
+            .Repositories
+            .First(repository => repository is IRepository<TEntity>);
+
+        _repository = (IRepository<TEntity>)repositoryInterface;
         _logger = logger;
     }
 
-    public async Task<CommandResult> Handle(BaseDeleteByInternalIdCommand request, CancellationToken cancellationToken)
+    public virtual async Task<CommandResult> Handle(BaseDeleteByInternalIdCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetByInternalIdAsync(request.Id, cancellationToken);
 
@@ -34,7 +38,7 @@ public abstract class BaseDeleteByInternalIdCommandHandler<TEntity, TDto>
         if (deletedEntity is null)
         {
             _logger.LogError(Messages.EntityDeletionFailed, DateTime.UtcNow, GetType());
-            
+
             return CommandResult.Failure(Messages.InternalServerError);
         }
 

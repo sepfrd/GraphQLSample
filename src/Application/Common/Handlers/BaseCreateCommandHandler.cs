@@ -16,14 +16,18 @@ public abstract class BaseCreateCommandHandler<TEntity, TDto>
     private readonly IMappingService _mappingService;
     private readonly ILogger _logger;
 
-    protected BaseCreateCommandHandler(IRepository<TEntity> repository, IMappingService mappingService, ILogger logger)
+    protected BaseCreateCommandHandler(IUnitOfWork unitOfWork, IMappingService mappingService, ILogger logger)
     {
-        _repository = repository;
+        var repositoryInterface = unitOfWork
+            .Repositories
+            .First(repository => repository is IRepository<TEntity>);
+        
+        _repository = (IRepository<TEntity>)repositoryInterface;
         _mappingService = mappingService;
         _logger = logger;
     }
 
-    public async Task<CommandResult> Handle(BaseCreateCommand<TDto> request, CancellationToken cancellationToken)
+    public virtual async Task<CommandResult> Handle(BaseCreateCommand<TDto> request, CancellationToken cancellationToken)
     {
         var entity = _mappingService.Map<TDto, TEntity>(request.Dto);
 

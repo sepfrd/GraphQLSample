@@ -9,8 +9,8 @@ namespace Application.EntityManagement.Answers.Handlers;
 
 public class GetAnswerByExternalIdQueryHandler : BaseGetByExternalIdQueryHandler<Answer, AnswerDto>
 {
-    public GetAnswerByExternalIdQueryHandler(IRepository<Answer> repository, IMappingService mappingService, ILogger logger)
-        : base(repository, mappingService, logger)
+    public GetAnswerByExternalIdQueryHandler(IUnitOfWork unitOfWork, IMappingService mappingService, ILogger logger)
+        : base(unitOfWork, mappingService, logger)
     {
     }
 }
