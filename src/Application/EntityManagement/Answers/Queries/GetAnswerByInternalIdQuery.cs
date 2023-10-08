@@ -2,5 +2,5 @@ using Application.Common.Queries;
 
 namespace Application.EntityManagement.Answers.Queries;
 
-public record GetAnswerByInternalIdQuery(Guid Id)
-    : BaseGetByInternalIdQuery(Id);
+public record GetAnswerByInternalIdQuery(Guid InternalId)
+    : BaseGetByInternalIdQuery(InternalId);

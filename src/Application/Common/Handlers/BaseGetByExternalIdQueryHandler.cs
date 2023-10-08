@@ -30,7 +30,7 @@ public abstract class BaseGetByExternalIdQueryHandler<TEntity, TDto>
 
     public virtual async Task<QueryResponse> Handle(BaseGetByExternalIdQuery request, CancellationToken cancellationToken)
     {
-        var entity = await _repository.GetByExternalIdAsync(request.Id, cancellationToken);
+        var entity = await _repository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
 
         if (entity is null)
         {

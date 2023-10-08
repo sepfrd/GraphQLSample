@@ -7,11 +7,11 @@ public sealed class User : BaseEntity
     public required string Username { get; set; }
 
     public required string Password { get; set; }
-    
+
     public required string Email { get; set; }
 
     public bool IsEmailConfirmed { get; set; }
-    
+
     public int Score { get; set; }
 
     public Guid PersonId { get; set; }

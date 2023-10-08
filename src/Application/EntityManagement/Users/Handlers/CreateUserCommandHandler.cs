@@ -1,7 +1,7 @@
 using Application.Common;
 using Application.EntityManagement.Addresses.Dtos;
 using Application.EntityManagement.PhoneNumbers.Dtos;
-using Application.EntityManagement.Users.Commands.CreateUser;
+using Application.EntityManagement.Users.Commands;
 using Application.EntityManagement.Users.Dtos;
 using Domain.Abstractions;
 using Domain.Entities;

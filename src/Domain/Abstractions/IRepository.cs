@@ -10,9 +10,9 @@ public interface IRepository<TEntity> where TEntity : BaseEntity
     
     Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken = default);
     
-    Task<TEntity?> GetByInternalIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<TEntity?> GetByInternalIdAsync(Guid internalId, CancellationToken cancellationToken = default);
 
-    Task<TEntity?> GetByExternalIdAsync(int id, CancellationToken cancellationToken = default);
+    Task<TEntity?> GetByExternalIdAsync(int externalId, CancellationToken cancellationToken = default);
 
     Task<TEntity?> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default);
 

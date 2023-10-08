@@ -2,5 +2,5 @@ using MediatR;
 
 namespace Application.Common.Queries;
 
-public abstract record BaseGetByInternalIdQuery(Guid Id)
+public abstract record BaseGetByInternalIdQuery(Guid InternalId)
     : IRequest<QueryResponse>;
