@@ -17,11 +17,11 @@ public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, QueryRe
 
     public async Task<QueryResponse> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
     {
-        var users = await _unitOfWork.UserRepository.GetAllAsync(cancellationToken);
+        var users = await _unitOfWork.UserRepository.GetAllAsync(request.RelationsToInclude, cancellationToken);
 
         return new QueryResponse
             (
-            users,
+            users.Paginate(request.Pagination),
             true,
             Messages.SuccessfullyRetrieved,
             HttpStatusCode.OK

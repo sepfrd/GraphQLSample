@@ -29,4 +29,8 @@ public sealed class Person : BaseEntity
     }
 
     public string FullName => FirstName + " " + LastName;
+    
+    public User? User { get; set; }
+    
+    public Guid UserId { get; set; }
 }

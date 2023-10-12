@@ -10,50 +10,48 @@ using System.Net;
 
 namespace Application.EntityManagement.Users.Handlers;
 
-public class GetAllUserDtosQueryHandler : IRequestHandler<GetAllUserDtosQuery, QueryResponse>
+public class GetUserByExternalIdQueryHandler : IRequestHandler<GetUserByExternalIdQuery, QueryResponse>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMappingService _mappingService;
     private readonly ILogger _logger;
 
-    public GetAllUserDtosQueryHandler(IUnitOfWork unitOfWork, IMappingService mappingService, ILogger logger)
+    public GetUserByExternalIdQueryHandler(IUnitOfWork unitOfWork, IMappingService mappingService, ILogger logger)
     {
         _unitOfWork = unitOfWork;
         _mappingService = mappingService;
         _logger = logger;
     }
 
-    public async Task<QueryResponse> Handle(GetAllUserDtosQuery request, CancellationToken cancellationToken)
+    public async Task<QueryResponse> Handle(GetUserByExternalIdQuery request, CancellationToken cancellationToken)
     {
-        var users = await _unitOfWork.UserRepository.GetAllAsync(request.RelationsToInclude, cancellationToken);
+        var user = await _unitOfWork.UserRepository.GetByExternalIdAsync(request.ExternalId, request.RelationsToInclude, cancellationToken);
 
-        var usersList = users.Paginate(request.Pagination);
-
-        if (usersList.Count == 0)
+        if (user is null)
         {
             return new QueryResponse
                 (
-                Array.Empty<UserDto>(),
+                null,
+                true,
+                Messages.NotFound,
+                HttpStatusCode.NoContent
+                );
+        }
+
+        var userDto = _mappingService.Map<User, UserDto>(user);
+
+        if (userDto is not null)
+        {
+            return new QueryResponse
+                (
+                userDto,
                 true,
                 Messages.SuccessfullyRetrieved,
                 HttpStatusCode.OK
                 );
         }
 
-        var userDtos = _mappingService.Map<List<User>, List<UserDto>>(usersList);
-
-        if (userDtos is not null)
-        {
-            return new QueryResponse
-                (
-                userDtos,
-                true,
-                Messages.SuccessfullyRetrieved,
-                HttpStatusCode.OK
-                );
-        }
-
-        _logger.LogError(Messages.MappingFailed, DateTime.UtcNow, typeof(User), typeof(GetAllUserDtosQueryHandler));
+        _logger.LogError(Messages.MappingFailed, DateTime.UtcNow, typeof(User), typeof(GetUserByExternalIdQueryHandler));
 
         return new QueryResponse
             (

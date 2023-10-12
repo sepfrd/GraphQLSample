@@ -12,5 +12,5 @@ public sealed class Category : BaseEntity
 
     public string? IconUrl { get; set; }
 
-    public ICollection<Guid>? ProductIds { get; set; }
+    public ICollection<Product>? Products { get; set; }
 }

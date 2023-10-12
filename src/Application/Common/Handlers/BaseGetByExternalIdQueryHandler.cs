@@ -9,7 +9,7 @@ using System.Net;
 namespace Application.Common.Handlers;
 
 public abstract class BaseGetByExternalIdQueryHandler<TEntity, TDto>
-    : IRequestHandler<BaseGetByExternalIdQuery, QueryResponse>
+    : IRequestHandler<BaseGetByExternalIdQuery<TEntity>, QueryResponse>
     where TEntity : BaseEntity
     where TDto : class
 {
@@ -22,15 +22,15 @@ public abstract class BaseGetByExternalIdQueryHandler<TEntity, TDto>
         var repositoryInterface = unitOfWork
             .Repositories
             .First(repository => repository is IRepository<TEntity>);
-        
+
         _repository = (IRepository<TEntity>)repositoryInterface;
         _mappingService = mappingService;
         _logger = logger;
     }
 
-    public virtual async Task<QueryResponse> Handle(BaseGetByExternalIdQuery request, CancellationToken cancellationToken)
+    public virtual async Task<QueryResponse> Handle(BaseGetByExternalIdQuery<TEntity> request, CancellationToken cancellationToken)
     {
-        var entity = await _repository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
+        var entity = await _repository.GetByExternalIdAsync(request.ExternalId, request.RelationsToInclude, cancellationToken);
 
         if (entity is null)
         {
@@ -39,19 +39,19 @@ public abstract class BaseGetByExternalIdQueryHandler<TEntity, TDto>
 
         var dto = _mappingService.Map<TEntity, TDto>(entity);
 
-        if (dto is null)
+        if (dto is not null)
         {
-            _logger.LogError(message: Messages.MappingFailed, DateTime.UtcNow, typeof(TEntity));
-
-            return new QueryResponse(Message: Messages.InternalServerError, HttpStatusCode: HttpStatusCode.InternalServerError);
+            return new QueryResponse
+                (
+                dto,
+                true,
+                Messages.SuccessfullyRetrieved,
+                HttpStatusCode.OK
+                );
         }
 
-        return new QueryResponse
-            (
-            dto,
-            true,
-            Messages.SuccessfullyRetrieved,
-            HttpStatusCode.OK
-            );
+        _logger.LogError(message: Messages.MappingFailed, DateTime.UtcNow, typeof(TEntity), typeof(BaseGetByExternalIdQueryHandler<TEntity, TDto>));
+
+        return new QueryResponse(Message: Messages.InternalServerError, HttpStatusCode: HttpStatusCode.InternalServerError);
     }
 }

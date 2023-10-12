@@ -12,6 +12,7 @@ public abstract class BaseCreateCommandHandler<TEntity, TDto>
     where TEntity : BaseEntity
     where TDto : class
 {
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IRepository<TEntity> _repository;
     private readonly IMappingService _mappingService;
     private readonly ILogger _logger;
@@ -21,8 +22,9 @@ public abstract class BaseCreateCommandHandler<TEntity, TDto>
         var repositoryInterface = unitOfWork
             .Repositories
             .First(repository => repository is IRepository<TEntity>);
-        
+
         _repository = (IRepository<TEntity>)repositoryInterface;
+        _unitOfWork = unitOfWork;
         _mappingService = mappingService;
         _logger = logger;
     }
@@ -33,7 +35,7 @@ public abstract class BaseCreateCommandHandler<TEntity, TDto>
 
         if (entity is null)
         {
-            _logger.LogError(message: Messages.MappingFailed, DateTime.UtcNow, typeof(TEntity));
+            _logger.LogError(message: Messages.MappingFailed, DateTime.UtcNow, typeof(TEntity), typeof(BaseCreateCommandHandler<TEntity, TDto>));
 
             return CommandResult.Failure(Messages.InternalServerError);
         }
@@ -42,11 +44,20 @@ public abstract class BaseCreateCommandHandler<TEntity, TDto>
 
         if (createdEntity is null)
         {
-            _logger.LogError(message: Messages.EntityCreationFailed, DateTime.UtcNow, typeof(TEntity));
+            _logger.LogError(message: Messages.EntityCreationFailed, DateTime.UtcNow, typeof(TEntity), typeof(BaseCreateCommandHandler<TEntity, TDto>));
 
             return CommandResult.Failure(Messages.InternalServerError);
         }
 
-        return CommandResult.Success(Messages.SuccessfullyCreated);
+        var savingResult = await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        if (savingResult != 0)
+        {
+            return CommandResult.Success(Messages.SuccessfullyCreated);
+        }
+
+        _logger.LogError(Messages.UnitOfWorkSavingChangesFailed, DateTime.UtcNow, typeof(BaseCreateCommandHandler<TEntity, TDto>));
+
+        return CommandResult.Failure(Messages.InternalServerError);
     }
 }

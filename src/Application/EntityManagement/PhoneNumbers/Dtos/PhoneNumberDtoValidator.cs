@@ -1,5 +1,4 @@
 using Application.Common;
-using Domain.Enums;
 using FluentValidation;
 
 namespace Application.EntityManagement.PhoneNumbers.Dtos;

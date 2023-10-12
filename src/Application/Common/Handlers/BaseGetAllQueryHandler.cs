@@ -7,7 +7,7 @@ using System.Net;
 namespace Application.Common.Handlers;
 
 public abstract class BaseGetAllQueryHandler<TEntity>
-    : IRequestHandler<BaseGetAllQuery, QueryResponse>
+    : IRequestHandler<BaseGetAllQuery<TEntity>, QueryResponse>
     where TEntity : BaseEntity
 {
     private readonly IRepository<TEntity> _repository;
@@ -21,13 +21,15 @@ public abstract class BaseGetAllQueryHandler<TEntity>
         _repository = (IRepository<TEntity>)repositoryInterface;
     }
     
-    public virtual async Task<QueryResponse> Handle(BaseGetAllQuery request, CancellationToken cancellationToken)
+    public virtual async Task<QueryResponse> Handle(BaseGetAllQuery<TEntity> request, CancellationToken cancellationToken)
     {
-        var entities = await _repository.GetAllAsync(cancellationToken);
+        var entities = await _repository.GetAllAsync(request.RelationsToInclude, cancellationToken);
+
+        var paginatedEntities = entities.Paginate(request.Pagination);
         
         return new QueryResponse
             (
-            entities,
+            paginatedEntities,
             true,
             Messages.SuccessfullyRetrieved,
             HttpStatusCode.OK

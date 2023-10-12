@@ -33,7 +33,7 @@ public interface IUnitOfWork
 
     IRepository<Shipment> ShipmentRepository { get; set; }
 
-    IUserRepository UserRepository { get; set; }
+    IRepository<User> UserRepository { get; set; }
 
     IRepository<Vote> VoteRepository { get; set; }
 

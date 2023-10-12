@@ -10,4 +10,8 @@ public sealed class Payment : BaseEntity
     public PaymentMethod PaymentMethod { get; set; }
 
     public PaymentStatus PaymentStatus { get; set; }
+    
+    public Order? Order { get; set; }
+    
+    public Guid OrderId { get; set; }
 }

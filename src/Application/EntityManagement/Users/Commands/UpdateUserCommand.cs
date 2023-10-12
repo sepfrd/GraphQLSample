@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Application.EntityManagement.Users.Commands;
 
-public sealed record CreateUserCommand(CreateUserDto UserDto) : IRequest<CommandResult>;
+public sealed record UpdateUserCommand(UserDto UserDto) : IRequest<CommandResult>;

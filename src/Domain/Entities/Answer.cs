@@ -9,9 +9,13 @@ public sealed class Answer : BaseEntity, IVotableContent
 
     public required string Description { get; set; }
 
+    public User? User { get; set; }
+    
     public Guid UserId { get; set; }
+    
+    public Question? Question { get; set; }
 
     public Guid QuestionId { get; set; }
-
-    public ICollection<Guid>? VoteIds { get; set; }
+    
+    public ICollection<Vote>? Votes { get; set; }
 }

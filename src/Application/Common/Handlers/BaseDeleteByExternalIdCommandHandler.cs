@@ -18,14 +18,14 @@ public abstract class BaseDeleteByExternalIdCommandHandler<TEntity>
         var repositoryInterface = unitOfWork
             .Repositories
             .First(repository => repository is IRepository<TEntity>);
-        
+
         _repository = (IRepository<TEntity>)repositoryInterface;
         _logger = logger;
     }
-    
+
     public virtual async Task<CommandResult> Handle(BaseDeleteByExternalIdCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _repository.GetByExternalIdAsync(request.Id, cancellationToken);
+        var entity = await _repository.GetByExternalIdAsync(request.ExternalId, null, cancellationToken);
 
         if (entity is null)
         {
@@ -34,13 +34,13 @@ public abstract class BaseDeleteByExternalIdCommandHandler<TEntity>
 
         var deletedEntity = await _repository.DeleteAsync(entity, cancellationToken);
 
-        if (deletedEntity is null)
+        if (deletedEntity is not null)
         {
-            _logger.LogError(Messages.EntityDeletionFailed, DateTime.UtcNow, typeof(TEntity));
-            
-            return CommandResult.Failure(Messages.InternalServerError);
+            return CommandResult.Success(Messages.SuccessfullyDeleted);
         }
 
-        return CommandResult.Success(Messages.SuccessfullyDeleted);
+        _logger.LogError(Messages.EntityDeletionFailed, DateTime.UtcNow, typeof(TEntity), typeof(BaseDeleteByExternalIdCommandHandler<TEntity>));
+
+        return CommandResult.Failure(Messages.InternalServerError);
     }
 }

@@ -12,6 +12,7 @@ public abstract class BaseUpdateCommandHandler<TEntity, TDto>
     where TEntity : BaseEntity
     where TDto : class
 {
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IRepository<TEntity> _repository;
     private readonly IMappingService _mappingService;
     private readonly ILogger _logger;
@@ -21,39 +22,42 @@ public abstract class BaseUpdateCommandHandler<TEntity, TDto>
         var repositoryInterface = unitOfWork
             .Repositories
             .First(repository => repository is IRepository<TEntity>);
-        
+
         _repository = (IRepository<TEntity>)repositoryInterface;
+        _unitOfWork = unitOfWork;
         _mappingService = mappingService;
         _logger = logger;
     }
 
     public virtual async Task<CommandResult> Handle(BaseUpdateCommand<TDto> request, CancellationToken cancellationToken)
     {
-        var entity = await _repository.GetByExternalIdAsync(request.Id, cancellationToken);
+        var entity = await _repository.GetByExternalIdAsync(request.Id, null, cancellationToken);
 
         if (entity is null)
         {
-            return CommandResult.Failure(Messages.NotFound);
+            return CommandResult.Success(Messages.NotFound);
         }
 
         var newEntity = _mappingService.Map(request.Dto, entity);
 
         if (newEntity is null)
         {
-            _logger.LogError(message: Messages.MappingFailed, DateTime.UtcNow, typeof(TEntity));
+            _logger.LogError(message: Messages.MappingFailed, DateTime.UtcNow, typeof(TEntity), typeof(BaseUpdateCommandHandler<TEntity, TDto>));
 
             return CommandResult.Failure(Messages.InternalServerError);
         }
 
         var updatedEntity = await _repository.UpdateAsync(newEntity, cancellationToken);
 
-        if (updatedEntity is null)
+        if (updatedEntity is not null)
         {
-            _logger.LogError(message: Messages.EntityUpdateFailed, DateTime.UtcNow, typeof(TEntity));
-
-            return CommandResult.Failure(Messages.InternalServerError);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            
+            return CommandResult.Success(Messages.SuccessfullyUpdated);
         }
 
-        return CommandResult.Success(Messages.SuccessfullyUpdated);
+        _logger.LogError(message: Messages.EntityUpdateFailed, DateTime.UtcNow, typeof(TEntity), typeof(BaseUpdateCommandHandler<TEntity, TDto>));
+
+        return CommandResult.Failure(Messages.InternalServerError);
     }
 }

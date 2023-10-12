@@ -17,4 +17,8 @@ public sealed class Address : BaseEntity
     public string? UnitNumber { get; set; }
 
     public string? BuildingNumber { get; set; }
+    
+    public User? User { get; set; }
+    
+    public Guid UserId { get; set; }
 }

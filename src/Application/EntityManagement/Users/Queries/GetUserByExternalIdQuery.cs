@@ -1,6 +1,11 @@
 using Application.Common;
+using Domain.Entities;
 using MediatR;
 
 namespace Application.EntityManagement.Users.Queries;
 
-public record GetUserByExternalIdQuery(int ExternalId) : IRequest<QueryResponse>;
+public sealed record GetUserByExternalIdQuery
+(
+    int ExternalId,
+    IEnumerable<Func<User, object?>>? RelationsToInclude = null
+) : IRequest<QueryResponse>;

@@ -30,46 +30,48 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Comma
             return CommandResult.Failure(Messages.DuplicateUsername);
         }
 
-        var person = await CreatePersonAsync(request.UserDto, cancellationToken);
+        var userInternalId = Guid.NewGuid();
+
+        var person = await CreatePersonAsync(request.UserDto, userInternalId, cancellationToken);
 
         if (person is null)
         {
-            _logger.LogError(Messages.EntityCreationFailed, DateTime.UtcNow, typeof(Person));
+            _logger.LogError(Messages.EntityCreationFailed, DateTime.UtcNow, typeof(Person), typeof(CreateUserCommandHandler));
 
             return CommandResult.Failure(Messages.InternalServerError);
         }
 
-        var user = await CreateUserAsync(request.UserDto, person.InternalId, cancellationToken);
+        var user = await CreateUserAsync(request.UserDto, userInternalId, person.InternalId, cancellationToken);
 
         if (user is null)
         {
-            _logger.LogError(Messages.EntityCreationFailed, DateTime.UtcNow, typeof(User));
-            
+            _logger.LogError(Messages.EntityCreationFailed, DateTime.UtcNow, typeof(User), typeof(CreateUserCommandHandler));
+
             return CommandResult.Failure(Messages.InternalServerError);
         }
 
         var savingResult = await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        if (savingResult == 0)
+        if (savingResult != 0)
         {
-            _logger.LogError(Messages.UnitOfWorkSavingChangesFailed, DateTime.UtcNow, typeof(CreateUserCommandHandler));
-            
-            return CommandResult.Failure(Messages.InternalServerError);
+            return CommandResult.Success(Messages.SuccessfullyCreated);
         }
-        
-        return CommandResult.Success(Messages.SuccessfullyCreated);
+
+        _logger.LogError(Messages.UnitOfWorkSavingChangesFailed, DateTime.UtcNow, typeof(CreateUserCommandHandler));
+
+        return CommandResult.Failure(Messages.InternalServerError);
     }
 
     private async Task<bool> IsUsernameUniqueAsync(string username, CancellationToken cancellationToken = default)
     {
-        var users = await _unitOfWork.UserRepository.GetAllAsync(cancellationToken);
+        var users = await _unitOfWork.UserRepository.GetAllAsync(null, cancellationToken);
 
         var existingUser = users.Where(user => user.Username == username);
 
         return !existingUser.Any();
     }
 
-    private async Task<Person?> CreatePersonAsync(CreateUserDto userDto, CancellationToken cancellationToken = default)
+    private async Task<Person?> CreatePersonAsync(CreateUserDto userDto, Guid userId, CancellationToken cancellationToken = default)
     {
         var externalId = await _unitOfWork.PersonRepository.GenerateUniqueExternalIdAsync(cancellationToken);
 
@@ -78,7 +80,8 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Comma
             FirstName = userDto.FirstName,
             LastName = userDto.LastName,
             BirthDate = userDto.BirthDate,
-            ExternalId = externalId
+            ExternalId = externalId,
+            UserId = userId
         };
 
         var createdPerson = await _unitOfWork.PersonRepository.CreateAsync(person, cancellationToken);
@@ -86,68 +89,66 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Comma
         return createdPerson;
     }
 
-    private async Task<User?> CreateUserAsync(CreateUserDto userDto, Guid personId, CancellationToken cancellationToken = default)
+    private async Task<User?> CreateUserAsync(CreateUserDto userDto, Guid userInternalId, Guid personId, CancellationToken cancellationToken = default)
     {
         var externalId = await _unitOfWork.UserRepository.GenerateUniqueExternalIdAsync(cancellationToken);
 
-        var phoneNumbersEntities = new List<PhoneNumber>();
-        var addressesEntities = new List<Address>();
+        var phoneNumberEntities = new List<PhoneNumber>();
 
         foreach (var phoneNumber in userDto.PhoneNumbers)
         {
-            var phoneNumberEntity = await CreatePhoneNumberAsync(phoneNumber, cancellationToken);
+            var createdPhoneNumber = await CreatePhoneNumberAsync(phoneNumber, userInternalId, cancellationToken);
 
-            if (phoneNumberEntity is null)
+            if (createdPhoneNumber is not null)
             {
-                _logger.LogError(Messages.EntityCreationFailed, DateTime.UtcNow, typeof(PhoneNumber));
-            }
-            else
-            {
-                phoneNumbersEntities.Add(phoneNumberEntity);
+                phoneNumberEntities.Add(createdPhoneNumber);
             }
         }
+
+        var addressEntities = new List<Address>();
 
         foreach (var address in userDto.Addresses)
         {
-            var addressEntity = await CreateAddressAsync(address, cancellationToken);
+            var createdAddress = await CreateAddressAsync(address, userInternalId, cancellationToken);
 
-            if (addressEntity is null)
+            if (createdAddress is not null)
             {
-                _logger.LogError(Messages.EntityCreationFailed, DateTime.UtcNow, typeof(Address));
-            }
-            else
-            {
-                addressesEntities.Add(addressEntity);
+                addressEntities.Add(createdAddress);
             }
         }
 
-        var phoneNumberIds = phoneNumbersEntities.Select(phoneNumber => phoneNumber.InternalId).ToList();
-
-        var addressIds = addressesEntities.Select(address => address.InternalId).ToList();
-
         var user = new User
         {
+            InternalId = userInternalId,
+            ExternalId = externalId,
             Username = userDto.Username,
             Password = userDto.Password,
             Email = userDto.Email,
             PersonId = personId,
-            PhoneNumberIds = phoneNumberIds,
-            AddressIds = addressIds,
-            ExternalId = externalId
+            Addresses = addressEntities,
+            PhoneNumbers = phoneNumberEntities
         };
 
         var createdUser = await _unitOfWork.UserRepository.CreateAsync(user, cancellationToken);
-        
-        return createdUser;
+
+        if (createdUser is not null)
+        {
+            return createdUser;
+        }
+
+        _logger.LogError(Messages.EntityCreationFailed, DateTime.UtcNow, typeof(User), typeof(CreateUserCommandHandler));
+
+        return null;
     }
 
-    private async Task<PhoneNumber?> CreatePhoneNumberAsync(PhoneNumberDto phoneNumberDto, CancellationToken cancellationToken = default)
+    private async Task<PhoneNumber?> CreatePhoneNumberAsync(PhoneNumberDto phoneNumberDto, Guid userInternalId, CancellationToken cancellationToken = default)
     {
         var externalId = await _unitOfWork.PhoneNumberRepository.GenerateUniqueExternalIdAsync(cancellationToken);
 
         var phoneNumber = new PhoneNumber(phoneNumberDto.Number, phoneNumberDto.Type)
         {
-            ExternalId = externalId
+            ExternalId = externalId,
+            UserId = userInternalId
         };
 
         var createdPhoneNumber = await _unitOfWork.PhoneNumberRepository.CreateAsync(phoneNumber, cancellationToken);
@@ -155,7 +156,7 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Comma
         return createdPhoneNumber;
     }
 
-    private async Task<Address?> CreateAddressAsync(AddressDto addressDto, CancellationToken cancellationToken = default)
+    private async Task<Address?> CreateAddressAsync(AddressDto addressDto, Guid userInternalId, CancellationToken cancellationToken = default)
     {
         var externalId = await _unitOfWork.AddressRepository.GenerateUniqueExternalIdAsync(cancellationToken);
 
@@ -168,7 +169,8 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Comma
             Country = addressDto.Country,
             UnitNumber = addressDto.UnitNumber,
             BuildingNumber = addressDto.BuildingNumber,
-            ExternalId = externalId
+            ExternalId = externalId,
+            UserId = userInternalId
         };
 
         var createdAddress = await _unitOfWork.AddressRepository.CreateAsync(address, cancellationToken);

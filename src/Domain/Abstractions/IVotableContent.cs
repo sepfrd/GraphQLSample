@@ -4,5 +4,5 @@ namespace Domain.Abstractions;
 
 public interface IVotableContent
 {
-    public ICollection<Guid>? VoteIds { get; set; }
+    public ICollection<Vote>? Votes { get; set; }
 }

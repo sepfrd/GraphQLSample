@@ -1,6 +1,11 @@
 using Application.Common;
+using Domain.Entities;
 using MediatR;
 
 namespace Application.EntityManagement.Users.Queries;
 
-public record GetAllUserDtosQuery : IRequest<QueryResponse>;
+public sealed record GetAllUserDtosQuery
+(
+    Pagination Pagination,
+    IEnumerable<Func<User, object?>>? RelationsToInclude = null
+) : IRequest<QueryResponse>;

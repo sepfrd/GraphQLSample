@@ -6,10 +6,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Common.Handlers;
 
-public abstract class BaseDeleteByInternalIdCommandHandler<TEntity, TDto>
+public abstract class BaseDeleteByInternalIdCommandHandler<TEntity>
     : IRequestHandler<BaseDeleteByInternalIdCommand, CommandResult>
     where TEntity : BaseEntity
-    where TDto : class
 {
     private readonly IRepository<TEntity> _repository;
     private readonly ILogger _logger;
@@ -26,7 +25,7 @@ public abstract class BaseDeleteByInternalIdCommandHandler<TEntity, TDto>
 
     public virtual async Task<CommandResult> Handle(BaseDeleteByInternalIdCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _repository.GetByInternalIdAsync(request.InternalId, cancellationToken);
+        var entity = await _repository.GetByInternalIdAsync(request.InternalId, null, cancellationToken);
 
         if (entity is null)
         {
@@ -35,13 +34,13 @@ public abstract class BaseDeleteByInternalIdCommandHandler<TEntity, TDto>
 
         var deletedEntity = await _repository.DeleteAsync(entity, cancellationToken);
 
-        if (deletedEntity is null)
+        if (deletedEntity is not null)
         {
-            _logger.LogError(Messages.EntityDeletionFailed, DateTime.UtcNow, typeof(TEntity));
-
-            return CommandResult.Failure(Messages.InternalServerError);
+            return CommandResult.Success(Messages.SuccessfullyDeleted);
         }
 
-        return CommandResult.Success(Messages.SuccessfullyDeleted);
+        _logger.LogError(Messages.EntityDeletionFailed, DateTime.UtcNow, typeof(TEntity), typeof(BaseDeleteByInternalIdCommandHandler<TEntity>));
+
+        return CommandResult.Failure(Messages.InternalServerError);
     }
 }
