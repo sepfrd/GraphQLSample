@@ -33,4 +33,6 @@ public sealed class User : BaseEntity
     public ICollection<Answer>? Answers { get; set; }
 
     public ICollection<Vote>? Votes { get; set; }
+    
+    public ICollection<Role>? Roles { get; set; }
 }

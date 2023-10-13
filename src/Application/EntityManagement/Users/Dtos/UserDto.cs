@@ -5,7 +5,7 @@ namespace Application.EntityManagement.Users.Dtos;
 
 public record UserDto
 (
-    int Id,
+    int ExternalId,
     string FirstName,
     string LastName,
     string Username,
@@ -15,6 +15,6 @@ public record UserDto
     int QuestionsCount,
     int AnswersCount,
     int VotesCount,
-    IEnumerable<AddressDto>? Addresses,
-    IEnumerable<PhoneNumberDto>? PhoneNumbers
+    IEnumerable<AddressDto>? AddressDtos,
+    IEnumerable<PhoneNumberDto>? PhoneNumberDtos
 );

@@ -64,11 +64,14 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Comma
 
     private async Task<bool> IsUsernameUniqueAsync(string username, CancellationToken cancellationToken = default)
     {
-        var users = await _unitOfWork.UserRepository.GetAllAsync(null, cancellationToken);
+        var users = await _unitOfWork.UserRepository.GetAllAsync
+            (
+            user => user.Username == username,
+            null,
+            cancellationToken
+            );
 
-        var existingUser = users.Where(user => user.Username == username);
-
-        return !existingUser.Any();
+        return !users.Any();
     }
 
     private async Task<Person?> CreatePersonAsync(CreateUserDto userDto, Guid userId, CancellationToken cancellationToken = default)
@@ -95,7 +98,7 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Comma
 
         var phoneNumberEntities = new List<PhoneNumber>();
 
-        foreach (var phoneNumber in userDto.PhoneNumbers)
+        foreach (var phoneNumber in userDto.PhoneNumberDtos)
         {
             var createdPhoneNumber = await CreatePhoneNumberAsync(phoneNumber, userInternalId, cancellationToken);
 
@@ -107,7 +110,7 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Comma
 
         var addressEntities = new List<Address>();
 
-        foreach (var address in userDto.Addresses)
+        foreach (var address in userDto.AddressDtos)
         {
             var createdAddress = await CreateAddressAsync(address, userInternalId, cancellationToken);
 

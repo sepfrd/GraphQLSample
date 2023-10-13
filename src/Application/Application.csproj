@@ -7,59 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Folder Include="EntityManagement\CartItems\Commands\"/>
-        <Folder Include="EntityManagement\CartItems\Dtos\"/>
-        <Folder Include="EntityManagement\CartItems\Handlers\"/>
-        <Folder Include="EntityManagement\CartItems\Queries\"/>
-        <Folder Include="EntityManagement\Carts\Commands\"/>
-        <Folder Include="EntityManagement\Carts\Dtos\"/>
-        <Folder Include="EntityManagement\Carts\Handlers\"/>
-        <Folder Include="EntityManagement\Carts\Queries\"/>
-        <Folder Include="EntityManagement\Categories\Commands\"/>
-        <Folder Include="EntityManagement\Categories\Dtos\"/>
-        <Folder Include="EntityManagement\Categories\Handlers\"/>
-        <Folder Include="EntityManagement\Categories\Queries\"/>
-        <Folder Include="EntityManagement\Comments\Commands\"/>
-        <Folder Include="EntityManagement\Comments\Dtos\"/>
-        <Folder Include="EntityManagement\Comments\Handlers\"/>
-        <Folder Include="EntityManagement\Comments\Queries\"/>
-        <Folder Include="EntityManagement\Favorites\Commands\"/>
-        <Folder Include="EntityManagement\Favorites\Dtos\"/>
-        <Folder Include="EntityManagement\Favorites\Handlers\"/>
-        <Folder Include="EntityManagement\Favorites\Queries\"/>
-        <Folder Include="EntityManagement\OrderItems\Commands\"/>
-        <Folder Include="EntityManagement\OrderItems\Dtos\"/>
-        <Folder Include="EntityManagement\OrderItems\Handlers\"/>
-        <Folder Include="EntityManagement\OrderItems\Queries\"/>
-        <Folder Include="EntityManagement\Orders\Commands\"/>
-        <Folder Include="EntityManagement\Orders\Dtos\"/>
-        <Folder Include="EntityManagement\Orders\Handlers\"/>
-        <Folder Include="EntityManagement\Orders\Queries\"/>
-        <Folder Include="EntityManagement\Payments\Commands\"/>
-        <Folder Include="EntityManagement\Payments\Dtos\"/>
-        <Folder Include="EntityManagement\Payments\Handlers\"/>
-        <Folder Include="EntityManagement\Payments\Queries\"/>
-        <Folder Include="EntityManagement\Persons\Commands\"/>
-        <Folder Include="EntityManagement\Persons\Dtos\"/>
-        <Folder Include="EntityManagement\Persons\Handlers\"/>
-        <Folder Include="EntityManagement\Persons\Queries\"/>
+        <Folder Include="EntityManagement\CartItems\Queries\" />
         <Folder Include="EntityManagement\PhoneNumbers\Commands\"/>
-        <Folder Include="EntityManagement\Products\Commands\"/>
-        <Folder Include="EntityManagement\Products\Dtos\"/>
-        <Folder Include="EntityManagement\Products\Handlers\"/>
-        <Folder Include="EntityManagement\Products\Queries\"/>
-        <Folder Include="EntityManagement\Questions\Commands\"/>
-        <Folder Include="EntityManagement\Questions\Dtos\"/>
-        <Folder Include="EntityManagement\Questions\Handlers\"/>
-        <Folder Include="EntityManagement\Questions\Queries\"/>
-        <Folder Include="EntityManagement\Shipments\Commands\"/>
-        <Folder Include="EntityManagement\Shipments\Dtos\"/>
-        <Folder Include="EntityManagement\Shipments\Handlers\"/>
-        <Folder Include="EntityManagement\Shipments\Queries\"/>
-        <Folder Include="EntityManagement\Votes\Commands\"/>
-        <Folder Include="EntityManagement\Votes\Dtos\"/>
-        <Folder Include="EntityManagement\Votes\Handlers\"/>
-        <Folder Include="EntityManagement\Votes\Queries\"/>
     </ItemGroup>
 
     <ItemGroup>

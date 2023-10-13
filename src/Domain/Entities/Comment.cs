@@ -5,9 +5,7 @@ namespace Domain.Entities;
 
 public sealed class Comment : BaseEntity, IVotableContent
 {
-    public string? Title { get; set; }
-
-    public string? Description { get; set; }
+    public required string Description { get; set; }
 
     public User? User { get; set; }
     

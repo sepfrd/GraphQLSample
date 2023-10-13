@@ -12,6 +12,6 @@ public sealed record CreateUserDto
     string Password,
     string PasswordConfirmation,
     string Email,
-    IEnumerable<AddressDto> Addresses,
-    IEnumerable<PhoneNumberDto> PhoneNumbers
+    IEnumerable<AddressDto> AddressDtos,
+    IEnumerable<PhoneNumberDto> PhoneNumberDtos
 );

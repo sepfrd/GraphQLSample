@@ -13,6 +13,7 @@ public static class Messages
 
     public const string NotFound = "Not Found";
     public const string DuplicateUsername = "Username already taken.";
+    public const string InvalidCredentials = "Invalid Username / Email or Password";
 
     /* --------------------------------- 500 --------------------------------- */
 
@@ -21,5 +22,6 @@ public static class Messages
     public const string EntityCreationFailed = "{time} - Internal Server Error - {entity} creation failed inside :  {class}";
     public const string EntityDeletionFailed = "{time} - Internal Server Error - {entity} deletion failed inside : {class}";
     public const string EntityUpdateFailed = "{time} - Internal Server Error - {entity} update failed inside : {class}";
+    public const string EntityRelationshipsRetrievalFailed = "{time} - Internal Server Error - {entity} relationships retrieval failed inside : {class}";
     public const string UnitOfWorkSavingChangesFailed = "{time} - Internal Server Error - UnitOfWork saving changes failed inside : {class}";
 }

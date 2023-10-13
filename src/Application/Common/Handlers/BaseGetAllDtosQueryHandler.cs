@@ -29,7 +29,7 @@ public abstract class BaseGetAllDtosQueryHandler<TEntity, TDto>
 
     public virtual async Task<QueryResponse> Handle(BaseGetAllDtosQuery<TEntity> request, CancellationToken cancellationToken)
     {
-        var entities = await _repository.GetAllAsync(request.RelationsToInclude, cancellationToken);
+        var entities = await _repository.GetAllAsync(null, request.RelationsToInclude, cancellationToken);
 
         var paginatedEntities = entities.Paginate(request.Pagination);
 

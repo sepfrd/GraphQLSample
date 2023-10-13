@@ -7,7 +7,7 @@ public sealed class Shipment : BaseEntity
 {
     public Guid TraceId { get; set; }
 
-    public ShipmentStatus Status { get; set; }
+    public ShipmentStatus ShipmentStatus { get; set; }
 
     public ShippingMethod ShippingMethod { get; set; }
 
