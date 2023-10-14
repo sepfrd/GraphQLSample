@@ -14,6 +14,7 @@ public static class Messages
     public const string NotFound = "Not Found";
     public const string DuplicateUsername = "Username already taken.";
     public const string InvalidCredentials = "Invalid Username / Email or Password";
+    public const string BadRequest = "Invalid Parameters";
 
     /* --------------------------------- 500 --------------------------------- */
 
