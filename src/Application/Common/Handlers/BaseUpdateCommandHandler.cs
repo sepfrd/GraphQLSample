@@ -31,7 +31,7 @@ public abstract class BaseUpdateCommandHandler<TEntity, TDto>
 
     public virtual async Task<CommandResult> Handle(BaseUpdateCommand<TDto> request, CancellationToken cancellationToken)
     {
-        var entity = await _repository.GetByExternalIdAsync(request.Id, null, cancellationToken);
+        var entity = await _repository.GetByExternalIdAsync(request.ExternalId, null, cancellationToken);
 
         if (entity is null)
         {

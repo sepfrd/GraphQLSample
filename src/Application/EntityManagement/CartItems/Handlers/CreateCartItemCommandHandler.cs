@@ -42,7 +42,7 @@ public class CreateCartItemCommandHandler : IRequestHandler<CreateCartItemComman
             return CommandResult.Failure(Messages.InternalServerError);
         }
 
-        var existingCartItem = cartEntity.CartItems.FirstOrDefault(item => item.Product?.ExternalId == request.CartItemDto.ProductDto?.ExternalId);
+        var existingCartItem = cartEntity.CartItems.FirstOrDefault(item => item.Product?.ExternalId == request.CartItemDto.ProductDto.ExternalId);
 
         if (existingCartItem is not null)
         {

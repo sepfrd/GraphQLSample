@@ -34,5 +34,9 @@ public sealed class User : BaseEntity
 
     public ICollection<Vote>? Votes { get; set; }
     
+    public ICollection<Payment>? Payments { get; set; }
+    
+    public ICollection<Comment>? Comments { get; set; }
+    
     public ICollection<Role>? Roles { get; set; }
 }

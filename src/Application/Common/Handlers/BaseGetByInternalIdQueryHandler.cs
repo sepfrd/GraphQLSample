@@ -27,7 +27,13 @@ public abstract class BaseGetByInternalIdQueryHandler<TEntity>
 
         if (entity is null)
         {
-            return new QueryResponse(Message: Messages.NotFound, HttpStatusCode: HttpStatusCode.NotFound);
+            return new QueryResponse
+                (
+                null,
+                false,
+                Messages.NotFound,
+                HttpStatusCode.NotFound
+                );
         }
 
         return new QueryResponse

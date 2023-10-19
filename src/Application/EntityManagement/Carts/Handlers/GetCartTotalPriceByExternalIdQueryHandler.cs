@@ -30,7 +30,7 @@ public class GetCartTotalPriceByExternalIdQueryHandler : IRequestHandler<GetCart
             return new QueryResponse
                 (
                 null,
-                true,
+                false,
                 Messages.NotFound,
                 HttpStatusCode.NotFound
                 );

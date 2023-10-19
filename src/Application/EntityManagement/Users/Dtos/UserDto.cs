@@ -1,9 +1,11 @@
 using Application.EntityManagement.Addresses.Dtos;
+using Application.EntityManagement.Comments.Dtos;
+using Application.EntityManagement.Payments.Dtos;
 using Application.EntityManagement.PhoneNumbers.Dtos;
 
 namespace Application.EntityManagement.Users.Dtos;
 
-public record UserDto
+public sealed record UserDto
 (
     int ExternalId,
     string FirstName,
@@ -16,5 +18,7 @@ public record UserDto
     int AnswersCount,
     int VotesCount,
     IEnumerable<AddressDto>? AddressDtos,
-    IEnumerable<PhoneNumberDto>? PhoneNumberDtos
+    IEnumerable<PhoneNumberDto>? PhoneNumberDtos,
+    IEnumerable<PaymentDto>? PaymentDtos,
+    IEnumerable<CommentDto>? CommentDtos
 );

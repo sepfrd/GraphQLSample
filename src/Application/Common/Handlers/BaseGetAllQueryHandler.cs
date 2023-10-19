@@ -24,12 +24,10 @@ public abstract class BaseGetAllQueryHandler<TEntity>
     public virtual async Task<QueryResponse> Handle(BaseGetAllQuery<TEntity> request, CancellationToken cancellationToken)
     {
         var entities = await _repository.GetAllAsync(null, request.RelationsToInclude, cancellationToken);
-
-        var paginatedEntities = entities.Paginate(request.Pagination);
         
         return new QueryResponse
             (
-            paginatedEntities,
+            entities.Paginate(request.Pagination),
             true,
             Messages.SuccessfullyRetrieved,
             HttpStatusCode.OK

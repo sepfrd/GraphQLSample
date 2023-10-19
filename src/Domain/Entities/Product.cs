@@ -16,8 +16,10 @@ public sealed class Product : BaseEntity, IVotableContent
     public ICollection<string>? ImageUrls { get; set; }
 
     public Category? Category { get; set; }
-    
+
     public Guid CategoryId { get; set; }
+
+    public ICollection<Question>? Questions { get; set; }
 
     public ICollection<Comment>? Comments { get; set; }
 
