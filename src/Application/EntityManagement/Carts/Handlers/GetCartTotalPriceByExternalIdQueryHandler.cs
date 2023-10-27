@@ -18,12 +18,11 @@ public class GetCartTotalPriceByExternalIdQueryHandler : IRequestHandler<GetCart
 
     public async Task<QueryResponse> Handle(GetCartTotalPriceByExternalIdQuery request, CancellationToken cancellationToken)
     {
-        var cart = await _unitOfWork.CartRepository.GetByExternalIdAsync(request.ExternalId,
-            new Func<Cart, object?>[]
-            {
-                entity => entity.CartItems
-            },
-            cancellationToken);
+        var cart = await _unitOfWork
+            .CartRepository
+            .GetByExternalIdAsync(request.ExternalId, cancellationToken,
+                entity => entity.CartItems);
+
 
         if (cart is null)
         {

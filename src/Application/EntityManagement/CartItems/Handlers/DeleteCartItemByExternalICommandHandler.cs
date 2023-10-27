@@ -13,10 +13,10 @@ public class DeleteCartItemByExternalICommandHandler : IRequestHandler<DeleteCar
     {
         _unitOfWork = unitOfWork;
     }
-    
+
     public async Task<CommandResult> Handle(DeleteCartItemByExternalICommand request, CancellationToken cancellationToken)
     {
-        var cartItem = await _unitOfWork.CartItemRepository.GetByExternalIdAsync(request.ExternalId, null, cancellationToken);
+        var cartItem = await _unitOfWork.CartItemRepository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
 
         if (cartItem is null)
         {

@@ -20,11 +20,10 @@ public class DeleteAllCartItemsByCartExternalIdCommandHandler : IRequestHandler<
 
     public async Task<CommandResult> Handle(DeleteAllCartItemsByCartExternalIdCommand request, CancellationToken cancellationToken)
     {
-        var cart = await _unitOfWork.CartRepository.GetByExternalIdAsync(request.ExternalId, new Func<Cart, object?>[]
-            {
-                cartEntity => cartEntity.CartItems
-            },
-            cancellationToken);
+        var cart = await _unitOfWork
+            .CartRepository
+            .GetByExternalIdAsync(request.ExternalId, cancellationToken,
+                cartEntity => cartEntity.CartItems);
 
         if (cart is null)
         {
@@ -36,7 +35,7 @@ public class DeleteAllCartItemsByCartExternalIdCommandHandler : IRequestHandler<
         if (cartItems is null)
         {
             _logger.LogError(Messages.EntityRelationshipsRetrievalFailed, DateTime.UtcNow, typeof(Cart), typeof(DeleteAllCartItemsByCartExternalIdCommandHandler));
-            
+
             return CommandResult.Failure(Messages.InternalServerError);
         }
 
@@ -44,7 +43,7 @@ public class DeleteAllCartItemsByCartExternalIdCommandHandler : IRequestHandler<
         {
             return CommandResult.Success(Messages.SuccessfullyDeleted);
         }
-        
+
         foreach (var cartItem in cartItems)
         {
             await _unitOfWork.CartItemRepository.DeleteAsync(cartItem, cancellationToken);

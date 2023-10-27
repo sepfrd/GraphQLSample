@@ -30,12 +30,8 @@ public class GetAllVotesByContentExternalIdQueryHandler<TContent>
 
     public async Task<QueryResponse> Handle(GetAllVotesByContentExternalIdQuery<TContent> request, CancellationToken cancellationToken)
     {
-        var content = await _repository.GetByExternalIdAsync(request.ContentExternalId,
-            new Func<TContent, object?>[]
-            {
-                entity => entity.Votes
-            },
-            cancellationToken);
+        var content = await _repository.GetByExternalIdAsync(request.ContentExternalId, cancellationToken,
+            entity => entity.Votes);
 
         if (content is null)
         {

@@ -25,7 +25,9 @@ public class GetAllUserDtosQueryHandler : IRequestHandler<GetAllUserDtosQuery, Q
 
     public async Task<QueryResponse> Handle(GetAllUserDtosQuery request, CancellationToken cancellationToken)
     {
-        var users = await _unitOfWork.UserRepository.GetAllAsync(null, request.RelationsToInclude, cancellationToken);
+        var users = await _unitOfWork
+            .UserRepository
+            .GetAllAsync(null, cancellationToken, request.RelationsToInclude);
 
         var usersList = users.Paginate(request.Pagination);
 

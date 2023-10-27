@@ -7,8 +7,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Folder Include="Common\"/>
-        <Folder Include="Persistence\"/>
+        <Folder Include="Persistence\Abstractions\" />
+        <Folder Include="Persistence\Repositories\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Domain\Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1" />
+      <PackageReference Include="MongoDB.Driver" Version="2.22.0" />
     </ItemGroup>
 
 </Project>

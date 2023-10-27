@@ -26,12 +26,10 @@ public class GetAllQuestionsByUserExternalIdQueryHandler
 
     public async Task<QueryResponse> Handle(GetAllQuestionsByUserExternalIdQuery request, CancellationToken cancellationToken)
     {
-        var user = await _unitOfWork.UserRepository.GetByExternalIdAsync(request.UserExternalId,
-            new Func<User, object?>[]
-            {
-                entity => entity.Questions
-            },
-            cancellationToken);
+        var user = await _unitOfWork
+            .UserRepository
+            .GetByExternalIdAsync(request.UserExternalId, cancellationToken,
+                entity => entity.Questions);
 
         if (user is null)
         {

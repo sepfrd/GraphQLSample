@@ -1,4 +1,7 @@
-﻿namespace Domain.Common;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
+namespace Domain.Common;
 
 public abstract class BaseEntity
 {
@@ -8,7 +11,9 @@ public abstract class BaseEntity
         InternalId = Guid.NewGuid();
     }
 
-    public Guid InternalId { get; set; }
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
+    public Guid InternalId { get; init; }
 
     public required int ExternalId { get; set; }
 

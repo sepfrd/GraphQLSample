@@ -26,12 +26,10 @@ public class GetAllProductsByCategoryExternalIdQueryHandler
 
     public async Task<QueryResponse> Handle(GetAllProductsByCategoryExternalIdQuery request, CancellationToken cancellationToken)
     {
-        var category = await _unitOfWork.CategoryRepository.GetByExternalIdAsync(request.CategoryExternalId,
-            new Func<Category, object?>[]
-            {
-                entity => entity.Products
-            },
-            cancellationToken);
+        var category = await _unitOfWork
+            .CategoryRepository
+            .GetByExternalIdAsync(request.CategoryExternalId, cancellationToken,
+                entity => entity.Products);
 
         if (category is null)
         {

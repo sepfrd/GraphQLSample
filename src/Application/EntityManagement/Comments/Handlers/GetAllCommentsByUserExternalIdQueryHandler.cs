@@ -25,11 +25,10 @@ public class GetAllCommentsByUserExternalIdQueryHandler : IRequestHandler<GetAll
 
     public async Task<QueryResponse> Handle(GetAllCommentsByUserExternalIdQuery request, CancellationToken cancellationToken)
     {
-        var user = await _unitOfWork.UserRepository.GetByExternalIdAsync(request.UserExternalId, new Func<User, object?>[]
-            {
-                entity => entity.Comments
-            },
-            cancellationToken);
+        var user = await _unitOfWork
+            .UserRepository
+            .GetByExternalIdAsync(request.UserExternalId, cancellationToken,
+                entity => entity.Comments);
 
         if (user is null)
         {

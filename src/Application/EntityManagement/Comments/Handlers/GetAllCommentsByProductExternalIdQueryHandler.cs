@@ -26,11 +26,10 @@ public class GetAllCommentsByProductExternalIdQueryHandler
 
     public async Task<QueryResponse> Handle(GetAllCommentsByProductExternalIdQuery request, CancellationToken cancellationToken)
     {
-        var product = await _unitOfWork.ProductRepository.GetByExternalIdAsync(request.ProductExternalId, new Func<Product, object?>[]
-            {
-                entity => entity.Comments
-            },
-            cancellationToken);
+        var product = await _unitOfWork
+            .ProductRepository
+            .GetByExternalIdAsync(request.ProductExternalId, cancellationToken,
+                entity => entity.Comments);
 
         if (product is null)
         {

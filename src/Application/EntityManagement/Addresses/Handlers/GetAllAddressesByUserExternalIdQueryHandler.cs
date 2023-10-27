@@ -25,12 +25,10 @@ public class GetAllAddressesByUserExternalIdQueryHandler : IRequestHandler<GetAl
 
     public async Task<QueryResponse> Handle(GetAllAddressesByUserExternalIdQuery request, CancellationToken cancellationToken)
     {
-        var user = await _unitOfWork.UserRepository.GetByExternalIdAsync(request.UserExternalId,
-            new Func<User, object?>[]
-            {
-                entity => entity.Addresses
-            },
-            cancellationToken);
+        var user = await _unitOfWork
+            .UserRepository
+            .GetByExternalIdAsync(request.UserExternalId, cancellationToken,
+                entity => entity.Addresses);
 
         if (user is null)
         {

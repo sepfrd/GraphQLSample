@@ -1,4 +1,5 @@
 using Domain.Common;
+using System.Linq.Expressions;
 
 namespace Domain.Abstractions;
 
@@ -9,15 +10,12 @@ public interface
 
     Task<int> GenerateUniqueExternalIdAsync(CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<TEntity>> GetAllAsync(Predicate<TEntity>? predicate = null, IEnumerable<Func<TEntity, object?>>? relationsToInclude = null, CancellationToken cancellationToken = default);
+    Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter = null, CancellationToken cancellationToken = default,
+        params Expression<Func<TEntity, object?>>[] includes);
 
-    Task<TEntity?> GetByInternalIdAsync(Guid internalId,
-        IEnumerable<Func<TEntity, object?>>? relationsToInclude = null,
-        CancellationToken cancellationToken = default);
+    Task<TEntity?> GetByInternalIdAsync(Guid internalId, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object?>>[] includes);
 
-    Task<TEntity?> GetByExternalIdAsync(int externalId,
-        IEnumerable<Func<TEntity, object?>>? relationsToInclude = null,
-        CancellationToken cancellationToken = default);
+    Task<TEntity?> GetByExternalIdAsync(int externalId, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object?>>[] includes);
 
     Task<TEntity?> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default);
 

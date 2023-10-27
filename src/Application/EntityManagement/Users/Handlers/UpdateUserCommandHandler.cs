@@ -23,7 +23,7 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Comma
 
     public async Task<CommandResult> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await _unitOfWork.UserRepository.GetByExternalIdAsync(request.UserDto.ExternalId, null, cancellationToken);
+        var user = await _unitOfWork.UserRepository.GetByExternalIdAsync(request.UserDto.ExternalId, cancellationToken);
 
         if (user is null)
         {

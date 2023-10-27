@@ -25,12 +25,10 @@ public class GetPaymentByOrderExternalIdQueryHandler : IRequestHandler<GetPaymen
 
     public async Task<QueryResponse> Handle(GetPaymentByOrderExternalIdQuery request, CancellationToken cancellationToken)
     {
-        var order = await _unitOfWork.OrderRepository.GetByExternalIdAsync(request.OrderExternalId,
-            new Func<Order, object?>[]
-            {
-                entity => entity.Payment
-            },
-            cancellationToken);
+        var order = await _unitOfWork
+            .OrderRepository
+            .GetByExternalIdAsync(request.OrderExternalId, cancellationToken,
+                entity => entity.Payment);
 
         if (order is null)
         {

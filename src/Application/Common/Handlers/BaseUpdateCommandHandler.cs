@@ -31,7 +31,7 @@ public abstract class BaseUpdateCommandHandler<TEntity, TDto>
 
     public virtual async Task<CommandResult> Handle(BaseUpdateCommand<TDto> request, CancellationToken cancellationToken)
     {
-        var entity = await _repository.GetByExternalIdAsync(request.ExternalId, null, cancellationToken);
+        var entity = await _repository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
 
         if (entity is null)
         {
@@ -52,7 +52,7 @@ public abstract class BaseUpdateCommandHandler<TEntity, TDto>
         if (updatedEntity is not null)
         {
             await _unitOfWork.SaveChangesAsync(cancellationToken);
-            
+
             return CommandResult.Success(Messages.SuccessfullyUpdated);
         }
 

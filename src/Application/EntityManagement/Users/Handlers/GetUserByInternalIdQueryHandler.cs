@@ -17,7 +17,9 @@ public class GetUserByInternalIdQueryHandler : IRequestHandler<GetUserByInternal
 
     public async Task<QueryResponse> Handle(GetUserByInternalIdQuery request, CancellationToken cancellationToken)
     {
-        var user = await _unitOfWork.UserRepository.GetByInternalIdAsync(request.InternalId, request.RelationsToInclude, cancellationToken);
+        var user = await _unitOfWork
+            .UserRepository
+            .GetByInternalIdAsync(request.InternalId, cancellationToken, request.RelationsToInclude);
 
         if (user is null)
         {

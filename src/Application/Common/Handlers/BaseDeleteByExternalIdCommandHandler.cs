@@ -25,7 +25,7 @@ public abstract class BaseDeleteByExternalIdCommandHandler<TEntity>
 
     public virtual async Task<CommandResult> Handle(BaseDeleteByExternalIdCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _repository.GetByExternalIdAsync(request.ExternalId, null, cancellationToken);
+        var entity = await _repository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
 
         if (entity is null)
         {

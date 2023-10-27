@@ -17,7 +17,9 @@ public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, QueryRe
 
     public async Task<QueryResponse> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
     {
-        var users = await _unitOfWork.UserRepository.GetAllAsync(null, request.RelationsToInclude, cancellationToken);
+        var users = await _unitOfWork
+            .UserRepository
+            .GetAllAsync(null, cancellationToken, request.RelationsToInclude);
 
         return new QueryResponse
             (

@@ -24,12 +24,10 @@ public class GetAllQuestionsByProductExternalIdQueryHandler
 
     public async Task<QueryResponse> Handle(GetAllQuestionsByProductExternalIdQuery request, CancellationToken cancellationToken)
     {
-        var product = await _unitOfWork.ProductRepository.GetByExternalIdAsync(request.ProductExternalId,
-            new Func<Product, object?>[]
-            {
-                entity => entity.Questions
-            },
-            cancellationToken);
+        var product = await _unitOfWork
+            .ProductRepository
+            .GetByExternalIdAsync(request.ProductExternalId, cancellationToken,
+                entity => entity.Questions);
 
         if (product is null)
         {

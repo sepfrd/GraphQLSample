@@ -25,11 +25,10 @@ public class GetAllOrderItemsByOrderExternalIdQueryHandler : IRequestHandler<Get
 
     public async Task<QueryResponse> Handle(GetAllOrderItemsByOrderExternalIdQuery request, CancellationToken cancellationToken)
     {
-        var order = await _unitOfWork.OrderRepository.GetByExternalIdAsync(request.OrderExternalId, new Func<Order, object?>[]
-            {
-                entity => entity.OrderItems
-            },
-            cancellationToken);
+        var order = await _unitOfWork
+            .OrderRepository
+            .GetByExternalIdAsync(request.OrderExternalId, cancellationToken,
+                entity => entity.OrderItems);
 
         if (order is null)
         {

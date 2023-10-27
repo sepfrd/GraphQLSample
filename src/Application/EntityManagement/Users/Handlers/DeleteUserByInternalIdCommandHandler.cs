@@ -20,7 +20,9 @@ public class DeleteUserByInternalIdCommandHandler : IRequestHandler<DeleteUserBy
 
     public async Task<CommandResult> Handle(DeleteUserByInternalIdCommand request, CancellationToken cancellationToken)
     {
-        var user = await _unitOfWork.UserRepository.GetByInternalIdAsync(request.InternalId, null, cancellationToken);
+        var user = await _unitOfWork
+            .UserRepository
+            .GetByInternalIdAsync(request.InternalId, cancellationToken);
 
         if (user is null)
         {
@@ -33,9 +35,9 @@ public class DeleteUserByInternalIdCommandHandler : IRequestHandler<DeleteUserBy
         {
             return CommandResult.Success(Messages.SuccessfullyDeleted);
         }
-        
+
         _logger.LogError(Messages.EntityDeletionFailed, DateTime.UtcNow, typeof(User), typeof(DeleteUserByInternalIdCommandHandler));
-        
+
         return CommandResult.Failure(Messages.InternalServerError);
     }
 }

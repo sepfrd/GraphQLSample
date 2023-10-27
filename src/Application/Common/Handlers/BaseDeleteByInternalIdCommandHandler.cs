@@ -25,7 +25,7 @@ public abstract class BaseDeleteByInternalIdCommandHandler<TEntity>
 
     public virtual async Task<CommandResult> Handle(BaseDeleteByInternalIdCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _repository.GetByInternalIdAsync(request.InternalId, null, cancellationToken);
+        var entity = await _repository.GetByInternalIdAsync(request.InternalId, cancellationToken);
 
         if (entity is null)
         {

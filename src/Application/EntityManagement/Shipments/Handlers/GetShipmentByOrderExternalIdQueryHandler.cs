@@ -25,12 +25,10 @@ public class GetShipmentByOrderExternalIdQueryHandler : IRequestHandler<GetShipm
 
     public async Task<QueryResponse> Handle(GetShipmentByOrderExternalIdQuery request, CancellationToken cancellationToken)
     {
-        var order = await _unitOfWork.OrderRepository.GetByExternalIdAsync(request.OrderExternalId,
-            new Func<Order, object?>[]
-            {
-                entity => entity.Shipment
-            },
-            cancellationToken);
+        var order = await _unitOfWork
+            .OrderRepository
+            .GetByExternalIdAsync(request.OrderExternalId, cancellationToken,
+                entity => entity.Shipment);
 
         if (order is null)
         {

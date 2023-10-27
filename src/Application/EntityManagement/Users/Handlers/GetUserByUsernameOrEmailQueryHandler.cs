@@ -1,7 +1,6 @@
 using Application.Common;
 using Application.EntityManagement.Users.Queries;
 using Domain.Abstractions;
-using Domain.Entities;
 using MediatR;
 using System.Net;
 
@@ -22,15 +21,12 @@ public class GetUserByUsernameOrEmailQueryHandler : IRequestHandler<GetUserByUse
             .GetAllAsync(user =>
                     user.Username == request.UsernameOrEmail ||
                     user.Email == request.UsernameOrEmail,
-                new Func<User, object?>[]
-                {
-                    user => user.Roles,
-                    user => user.Person
-                },
-                cancellationToken);
+                cancellationToken,
+                user => user.Roles,
+                user => user.Person);
 
         var user = users.FirstOrDefault();
-        
+
         if (user is not null)
         {
             return new QueryResponse
@@ -41,7 +37,7 @@ public class GetUserByUsernameOrEmailQueryHandler : IRequestHandler<GetUserByUse
                 HttpStatusCode.OK
                 );
         }
-        
+
         return new QueryResponse
             (
             null,

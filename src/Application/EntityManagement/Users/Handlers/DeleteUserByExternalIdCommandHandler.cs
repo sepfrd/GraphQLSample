@@ -20,7 +20,9 @@ public class DeleteUserByExternalIdCommandHandler : IRequestHandler<DeleteUserBy
 
     public async Task<CommandResult> Handle(DeleteUserByExternalIdCommand request, CancellationToken cancellationToken)
     {
-        var user = await _unitOfWork.UserRepository.GetByExternalIdAsync(request.ExternalId, null, cancellationToken);
+        var user = await _unitOfWork
+            .UserRepository
+            .GetByExternalIdAsync(request.ExternalId, cancellationToken);
 
         if (user is null)
         {

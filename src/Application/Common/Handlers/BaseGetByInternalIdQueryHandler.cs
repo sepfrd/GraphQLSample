@@ -23,7 +23,7 @@ public abstract class BaseGetByInternalIdQueryHandler<TEntity>
 
     public virtual async Task<QueryResponse> Handle(BaseGetByInternalIdQuery<TEntity> request, CancellationToken cancellationToken)
     {
-        var entity = await _repository.GetByInternalIdAsync(request.InternalId, request.RelationsToInclude, cancellationToken);
+        var entity = await _repository.GetByInternalIdAsync(request.InternalId, cancellationToken, request.RelationsToInclude);
 
         if (entity is null)
         {

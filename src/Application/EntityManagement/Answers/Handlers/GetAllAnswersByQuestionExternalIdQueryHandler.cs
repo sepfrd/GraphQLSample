@@ -26,12 +26,10 @@ public class GetAllAnswersByQuestionExternalIdQueryHandler
 
     public async Task<QueryResponse> Handle(GetAllAnswersByQuestionExternalIdQuery request, CancellationToken cancellationToken)
     {
-        var question = await _unitOfWork.QuestionRepository.GetByExternalIdAsync(request.QuestionExternalId,
-            new Func<Question, object?>[]
-            {
-                entity => entity.Answers
-            },
-            cancellationToken);
+        var question = await _unitOfWork
+            .QuestionRepository
+            .GetByExternalIdAsync(request.QuestionExternalId, cancellationToken,
+                entity => entity.Answers);
 
         if (question is null)
         {

@@ -20,7 +20,7 @@ public class UpdateCartItemQuantityCommandHandler : IRequestHandler<UpdateCartIt
 
     public async Task<CommandResult> Handle(UpdateCartItemQuantityCommand request, CancellationToken cancellationToken)
     {
-        var cartItem = await _unitOfWork.CartItemRepository.GetByExternalIdAsync(request.ExternalId, null, cancellationToken);
+        var cartItem = await _unitOfWork.CartItemRepository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
 
         if (cartItem is null || cartItem.Quantity == request.NewQuantity)
         {

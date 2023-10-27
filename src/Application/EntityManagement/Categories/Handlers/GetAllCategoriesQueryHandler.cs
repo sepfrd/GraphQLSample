@@ -25,7 +25,7 @@ public class GetAllCategoriesQueryHandler : IRequestHandler<GetAllCategoriesQuer
 
     public async Task<QueryResponse> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken)
     {
-        var categories = await _unitOfWork.CategoryRepository.GetAllAsync(null, null, cancellationToken);
+        var categories = await _unitOfWork.CategoryRepository.GetAllAsync(null, cancellationToken);
 
         var categoryDtos = _mappingService.Map<IEnumerable<Category>, IEnumerable<CategoryDto>>(categories);
 

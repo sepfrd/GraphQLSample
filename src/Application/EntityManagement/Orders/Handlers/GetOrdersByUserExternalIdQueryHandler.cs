@@ -25,12 +25,11 @@ public class GetOrdersByUserExternalIdQueryHandler : IRequestHandler<GetOrdersBy
 
     public async Task<QueryResponse> Handle(GetOrdersByUserExternalIdQuery request, CancellationToken cancellationToken)
     {
-        var user = await _unitOfWork.UserRepository.GetByExternalIdAsync(request.UserExternalId,
-            new Func<User, object?>[]
-            {
-                entity => entity.Orders
-            },
-            cancellationToken);
+        var user = await _unitOfWork
+            .UserRepository
+            .GetByExternalIdAsync(request.UserExternalId, cancellationToken,
+                entity => entity.Orders);
+
 
         if (user is null)
         {

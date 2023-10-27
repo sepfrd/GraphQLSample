@@ -25,12 +25,10 @@ public class GetPaymentsByUserExternalIdQueryHandler : IRequestHandler<GetPaymen
 
     public async Task<QueryResponse> Handle(GetPaymentsByUserExternalIdQuery request, CancellationToken cancellationToken)
     {
-        var user = await _unitOfWork.UserRepository.GetByExternalIdAsync(request.UserExternalId,
-            new Func<User, object?>[]
-            {
-                entity => entity.Payments
-            },
-            cancellationToken);
+        var user = await _unitOfWork
+            .UserRepository
+            .GetByExternalIdAsync(request.UserExternalId, cancellationToken,
+            entity => entity.Payments);
 
         if (user is null)
         {

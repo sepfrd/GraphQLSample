@@ -25,7 +25,9 @@ public class GetUserByExternalIdQueryHandler : IRequestHandler<GetUserByExternal
 
     public async Task<QueryResponse> Handle(GetUserByExternalIdQuery request, CancellationToken cancellationToken)
     {
-        var user = await _unitOfWork.UserRepository.GetByExternalIdAsync(request.ExternalId, request.RelationsToInclude, cancellationToken);
+        var user = await _unitOfWork
+            .UserRepository
+            .GetByExternalIdAsync(request.ExternalId, cancellationToken, request.RelationsToInclude);
 
         if (user is null)
         {

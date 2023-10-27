@@ -17,14 +17,14 @@ public abstract class BaseGetAllQueryHandler<TEntity>
         var repositoryInterface = unitOfWork
             .Repositories
             .First(repository => repository is IRepository<TEntity>);
-        
+
         _repository = (IRepository<TEntity>)repositoryInterface;
     }
-    
+
     public virtual async Task<QueryResponse> Handle(BaseGetAllQuery<TEntity> request, CancellationToken cancellationToken)
     {
-        var entities = await _repository.GetAllAsync(null, request.RelationsToInclude, cancellationToken);
-        
+        var entities = await _repository.GetAllAsync(null, cancellationToken, request.RelationsToInclude);
+
         return new QueryResponse
             (
             entities.Paginate(request.Pagination),

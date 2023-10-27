@@ -64,12 +64,9 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Comma
 
     private async Task<bool> IsUsernameUniqueAsync(string username, CancellationToken cancellationToken = default)
     {
-        var users = await _unitOfWork.UserRepository.GetAllAsync
-            (
-            user => user.Username == username,
-            null,
-            cancellationToken
-            );
+        var users = await _unitOfWork
+            .UserRepository
+            .GetAllAsync(user => user.Username == username, cancellationToken);
 
         return !users.Any();
     }

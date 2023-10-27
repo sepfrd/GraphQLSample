@@ -24,11 +24,10 @@ public class CreateCartItemCommandHandler : IRequestHandler<CreateCartItemComman
 
     public async Task<CommandResult> Handle(CreateCartItemCommand request, CancellationToken cancellationToken)
     {
-        var cartEntity = await _unitOfWork.CartRepository.GetByExternalIdAsync(request.CartItemDto.CartExternalId, new Func<Cart, object?>[]
-            {
-                cart => cart.CartItems
-            },
-            cancellationToken);
+        var cartEntity = await _unitOfWork
+            .CartRepository
+            .GetByExternalIdAsync(request.CartItemDto.CartExternalId, cancellationToken,
+                cart => cart.CartItems);
 
         if (cartEntity is null)
         {
@@ -60,7 +59,9 @@ public class CreateCartItemCommandHandler : IRequestHandler<CreateCartItemComman
             return CommandResult.Failure(Messages.InternalServerError);
         }
 
-        var productEntity = await _unitOfWork.ProductRepository.GetByExternalIdAsync(request.CartItemDto.ProductDto.ExternalId, null, cancellationToken);
+        var productEntity = await _unitOfWork
+            .ProductRepository
+            .GetByExternalIdAsync(request.CartItemDto.ProductDto.ExternalId, cancellationToken);
 
         if (productEntity is null)
         {

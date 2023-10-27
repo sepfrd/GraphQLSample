@@ -1,9 +1,10 @@
 using MediatR;
+using System.Linq.Expressions;
 
 namespace Application.Common.Queries;
 
 public abstract record BaseGetAllQuery<TEntity>
 (
     Pagination Pagination,
-    IEnumerable<Func<TEntity, object?>>? RelationsToInclude = null
+    Expression<Func<TEntity, object?>>[] RelationsToInclude
 ) : IRequest<QueryResponse>;

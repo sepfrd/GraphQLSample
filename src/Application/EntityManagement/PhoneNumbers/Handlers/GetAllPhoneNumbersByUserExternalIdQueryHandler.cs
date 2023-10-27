@@ -25,12 +25,10 @@ public class GetAllPhoneNumbersByUserExternalIdQueryHandler : IRequestHandler<Ge
 
     public async Task<QueryResponse> Handle(GetAllPhoneNumbersByUserExternalIdQuery request, CancellationToken cancellationToken)
     {
-        var user = await _unitOfWork.UserRepository.GetByExternalIdAsync(request.UserExternalId,
-            new Func<User, object?>[]
-            {
-                entity => entity.PhoneNumbers
-            },
-            cancellationToken);
+        var user = await _unitOfWork
+            .UserRepository
+            .GetByExternalIdAsync(request.UserExternalId, cancellationToken,
+                entity => entity.PhoneNumbers);
 
         if (user is null)
         {
