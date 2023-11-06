@@ -11,7 +11,7 @@ using System.Net;
 namespace Application.EntityManagement.Questions.Handlers;
 
 public class GetAllQuestionsByUserExternalIdQueryHandler
-    : IRequestHandler<GetAllQuestionsByUserExternalIdQuery, QueryResponse>
+    : IRequestHandler<GetAllQuestionsByUserExternalIdQuery, QueryReferenceResponse<IEnumerable<QuestionDto>>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMappingService _mappingService;
@@ -24,7 +24,7 @@ public class GetAllQuestionsByUserExternalIdQueryHandler
         _logger = logger;
     }
 
-    public async Task<QueryResponse> Handle(GetAllQuestionsByUserExternalIdQuery request, CancellationToken cancellationToken)
+    public async Task<QueryReferenceResponse<IEnumerable<QuestionDto>>> Handle(GetAllQuestionsByUserExternalIdQuery request, CancellationToken cancellationToken)
     {
         var user = await _unitOfWork
             .UserRepository
@@ -33,49 +33,41 @@ public class GetAllQuestionsByUserExternalIdQueryHandler
 
         if (user is null)
         {
-            return new QueryResponse
-                (
+            return new QueryReferenceResponse<IEnumerable<QuestionDto>>(
                 null,
                 false,
                 Messages.NotFound,
-                HttpStatusCode.NotFound
-                );
+                HttpStatusCode.NotFound);
         }
 
         if (user.Questions is null)
         {
             _logger.LogError(Messages.EntityRelationshipsRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(GetAllQuestionsByUserExternalIdQueryHandler));
 
-            return new QueryResponse
-                (
+            return new QueryReferenceResponse<IEnumerable<QuestionDto>>(
                 null,
                 false,
                 Messages.InternalServerError,
-                HttpStatusCode.InternalServerError
-                );
+                HttpStatusCode.InternalServerError);
         }
 
         var questionDtos = _mappingService.Map<ICollection<Question>, ICollection<QuestionDto>>(user.Questions);
 
         if (questionDtos is not null)
         {
-            return new QueryResponse
-                (
+            return new QueryReferenceResponse<IEnumerable<QuestionDto>>(
                 questionDtos.Paginate(request.Pagination),
                 true,
                 Messages.SuccessfullyRetrieved,
-                HttpStatusCode.OK
-                );
+                HttpStatusCode.OK);
         }
 
         _logger.LogError(Messages.MappingFailed, DateTime.UtcNow, typeof(ICollection<Question>), typeof(GetAllQuestionsByUserExternalIdQueryHandler));
 
-        return new QueryResponse
-            (
+        return new QueryReferenceResponse<IEnumerable<QuestionDto>>(
             null,
             false,
             Messages.InternalServerError,
-            HttpStatusCode.InternalServerError
-            );
+            HttpStatusCode.InternalServerError);
     }
 }

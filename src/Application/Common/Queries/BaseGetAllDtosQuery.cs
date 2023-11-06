@@ -3,8 +3,8 @@ using System.Linq.Expressions;
 
 namespace Application.Common.Queries;
 
-public abstract record BaseGetAllDtosQuery<TEntity>
+public abstract record BaseGetAllDtosQuery<TEntity, TDto>
 (
     Pagination Pagination,
     Expression<Func<TEntity, object?>>[] RelationsToInclude
-) : IRequest<QueryResponse>;
+) : IRequest<QueryReferenceResponse<IEnumerable<TDto>>>;

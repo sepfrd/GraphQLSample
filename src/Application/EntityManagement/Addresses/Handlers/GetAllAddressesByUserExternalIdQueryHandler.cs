@@ -10,7 +10,7 @@ using System.Net;
 
 namespace Application.EntityManagement.Addresses.Handlers;
 
-public class GetAllAddressesByUserExternalIdQueryHandler : IRequestHandler<GetAllAddressesByUserExternalIdQuery, QueryResponse>
+public class GetAllAddressesByUserExternalIdQueryHandler : IRequestHandler<GetAllAddressesByUserExternalIdQuery, QueryReferenceResponse<IEnumerable<AddressDto>>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMappingService _mappingService;
@@ -23,7 +23,7 @@ public class GetAllAddressesByUserExternalIdQueryHandler : IRequestHandler<GetAl
         _logger = logger;
     }
 
-    public async Task<QueryResponse> Handle(GetAllAddressesByUserExternalIdQuery request, CancellationToken cancellationToken)
+    public async Task<QueryReferenceResponse<IEnumerable<AddressDto>>> Handle(GetAllAddressesByUserExternalIdQuery request, CancellationToken cancellationToken)
     {
         var user = await _unitOfWork
             .UserRepository
@@ -32,7 +32,7 @@ public class GetAllAddressesByUserExternalIdQueryHandler : IRequestHandler<GetAl
 
         if (user is null)
         {
-            return new QueryResponse
+            return new QueryReferenceResponse<IEnumerable<AddressDto>>
                 (
                 null,
                 false,
@@ -45,7 +45,7 @@ public class GetAllAddressesByUserExternalIdQueryHandler : IRequestHandler<GetAl
         {
             _logger.LogError(Messages.EntityRelationshipsRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(GetAllAddressesByUserExternalIdQueryHandler));
 
-            return new QueryResponse
+            return new QueryReferenceResponse<IEnumerable<AddressDto>>
                 (
                 null,
                 false,
@@ -58,7 +58,7 @@ public class GetAllAddressesByUserExternalIdQueryHandler : IRequestHandler<GetAl
 
         if (addressDtos is not null)
         {
-            return new QueryResponse
+            return new QueryReferenceResponse<IEnumerable<AddressDto>>
                 (
                 addressDtos.Paginate(request.Pagination),
                 true,
@@ -69,7 +69,7 @@ public class GetAllAddressesByUserExternalIdQueryHandler : IRequestHandler<GetAl
 
         _logger.LogError(Messages.MappingFailed, DateTime.UtcNow, typeof(ICollection<Address>), typeof(GetAllAddressesByUserExternalIdQueryHandler));
 
-        return new QueryResponse
+        return new QueryReferenceResponse<IEnumerable<AddressDto>>
             (
             null,
             false,

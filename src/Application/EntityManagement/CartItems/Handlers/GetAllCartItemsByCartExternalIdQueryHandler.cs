@@ -10,7 +10,7 @@ using System.Net;
 
 namespace Application.EntityManagement.CartItems.Handlers;
 
-public sealed class GetAllCartItemsByCartExternalIdQueryHandler : IRequestHandler<GetAllCartItemsByCartExternalIdQuery, QueryResponse>
+public sealed class GetAllCartItemsByCartExternalIdQueryHandler : IRequestHandler<GetAllCartItemsByCartExternalIdQuery, QueryReferenceResponse<IEnumerable<CartItemDto>>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMappingService _mappingService;
@@ -23,7 +23,7 @@ public sealed class GetAllCartItemsByCartExternalIdQueryHandler : IRequestHandle
         _logger = logger;
     }
 
-    public async Task<QueryResponse> Handle(GetAllCartItemsByCartExternalIdQuery request, CancellationToken cancellationToken)
+    public async Task<QueryReferenceResponse<IEnumerable<CartItemDto>>> Handle(GetAllCartItemsByCartExternalIdQuery request, CancellationToken cancellationToken)
     {
         var cart = await _unitOfWork
             .CartRepository
@@ -32,7 +32,7 @@ public sealed class GetAllCartItemsByCartExternalIdQueryHandler : IRequestHandle
 
         if (cart is null)
         {
-            return new QueryResponse
+            return new QueryReferenceResponse<IEnumerable<CartItemDto>>
                 (
                 null,
                 false,
@@ -45,7 +45,7 @@ public sealed class GetAllCartItemsByCartExternalIdQueryHandler : IRequestHandle
         {
             _logger.LogError(Messages.EntityRelationshipsRetrievalFailed, DateTime.UtcNow, typeof(Cart), typeof(GetAllCartItemsByCartExternalIdQueryHandler));
 
-            return new QueryResponse
+            return new QueryReferenceResponse<IEnumerable<CartItemDto>>
                 (
                 null,
                 false,
@@ -58,7 +58,7 @@ public sealed class GetAllCartItemsByCartExternalIdQueryHandler : IRequestHandle
 
         if (cartItemDtos is not null)
         {
-            return new QueryResponse
+            return new QueryReferenceResponse<IEnumerable<CartItemDto>>
                 (
                 cartItemDtos.Paginate(request.Pagination),
                 true,
@@ -69,7 +69,7 @@ public sealed class GetAllCartItemsByCartExternalIdQueryHandler : IRequestHandle
 
         _logger.LogError(Messages.MappingFailed, DateTime.UtcNow, typeof(CartItem), typeof(GetAllCartItemsByCartExternalIdQueryHandler));
 
-        return new QueryResponse
+        return new QueryReferenceResponse<IEnumerable<CartItemDto>>
             (
             null,
             false,

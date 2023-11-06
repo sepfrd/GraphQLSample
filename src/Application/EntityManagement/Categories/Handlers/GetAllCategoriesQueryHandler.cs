@@ -10,7 +10,7 @@ using System.Net;
 
 namespace Application.EntityManagement.Categories.Handlers;
 
-public class GetAllCategoriesQueryHandler : IRequestHandler<GetAllCategoriesQuery, QueryResponse>
+public class GetAllCategoriesQueryHandler : IRequestHandler<GetAllCategoriesQuery, QueryReferenceResponse<IEnumerable<CategoryDto>>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMappingService _mappingService;
@@ -23,7 +23,7 @@ public class GetAllCategoriesQueryHandler : IRequestHandler<GetAllCategoriesQuer
         _logger = logger;
     }
 
-    public async Task<QueryResponse> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken)
+    public async Task<QueryReferenceResponse<IEnumerable<CategoryDto>>> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken)
     {
         var categories = await _unitOfWork.CategoryRepository.GetAllAsync(null, cancellationToken);
 
@@ -31,8 +31,7 @@ public class GetAllCategoriesQueryHandler : IRequestHandler<GetAllCategoriesQuer
 
         if (categoryDtos is not null)
         {
-            return new QueryResponse
-                (
+            return new QueryReferenceResponse<IEnumerable<CategoryDto>>(
                 categoryDtos,
                 true,
                 Messages.SuccessfullyRetrieved,
@@ -42,8 +41,7 @@ public class GetAllCategoriesQueryHandler : IRequestHandler<GetAllCategoriesQuer
 
         _logger.LogError(Messages.MappingFailed, DateTime.UtcNow, typeof(IEnumerable<Category>), typeof(GetAllCategoriesQueryHandler));
 
-        return new QueryResponse
-            (
+        return new QueryReferenceResponse<IEnumerable<CategoryDto>>(
             null,
             false,
             Messages.InternalServerError,

@@ -11,7 +11,7 @@ using System.Net;
 namespace Application.EntityManagement.Answers.Handlers;
 
 public class GetAllAnswersByUserExternalIdQueryHandler
-    : IRequestHandler<GetAllAnswersByUserExternalIdQuery, QueryResponse>
+    : IRequestHandler<GetAllAnswersByUserExternalIdQuery, QueryReferenceResponse<IEnumerable<AnswerDto>>>
 {
 
     private readonly IUnitOfWork _unitOfWork;
@@ -25,16 +25,16 @@ public class GetAllAnswersByUserExternalIdQueryHandler
         _logger = logger;
     }
 
-    public async Task<QueryResponse> Handle(GetAllAnswersByUserExternalIdQuery request, CancellationToken cancellationToken)
+    public async Task<QueryReferenceResponse<IEnumerable<AnswerDto>>> Handle(GetAllAnswersByUserExternalIdQuery request, CancellationToken cancellationToken)
     {
         var user = await _unitOfWork
             .UserRepository
             .GetByExternalIdAsync(request.UserExternalId, cancellationToken,
-            entity => entity.Answers);
+                entity => entity.Answers);
 
         if (user is null)
         {
-            return new QueryResponse
+            return new QueryReferenceResponse<IEnumerable<AnswerDto>>
                 (
                 null,
                 false,
@@ -47,7 +47,7 @@ public class GetAllAnswersByUserExternalIdQueryHandler
         {
             _logger.LogError(Messages.EntityRelationshipsRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(GetAllAnswersByUserExternalIdQueryHandler));
 
-            return new QueryResponse
+            return new QueryReferenceResponse<IEnumerable<AnswerDto>>
                 (
                 null,
                 false,
@@ -60,7 +60,7 @@ public class GetAllAnswersByUserExternalIdQueryHandler
 
         if (answerDtos is not null)
         {
-            return new QueryResponse
+            return new QueryReferenceResponse<IEnumerable<AnswerDto>>
                 (
                 answerDtos.Paginate(request.Pagination),
                 true,
@@ -71,7 +71,7 @@ public class GetAllAnswersByUserExternalIdQueryHandler
 
         _logger.LogError(Messages.MappingFailed, DateTime.UtcNow, typeof(ICollection<Answer>), typeof(GetAllAnswersByUserExternalIdQueryHandler));
 
-        return new QueryResponse
+        return new QueryReferenceResponse<IEnumerable<AnswerDto>>
             (
             null,
             false,

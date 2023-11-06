@@ -1,3 +1,4 @@
+using Domain.Common;
 using MediatR;
 using System.Linq.Expressions;
 
@@ -7,4 +8,5 @@ public abstract record BaseGetByInternalIdQuery<TEntity>
 (
     Guid InternalId,
     Expression<Func<TEntity, object?>>[] RelationsToInclude
-) : IRequest<QueryResponse>;
+) : IRequest<QueryReferenceResponse<TEntity>>
+    where TEntity : BaseEntity;

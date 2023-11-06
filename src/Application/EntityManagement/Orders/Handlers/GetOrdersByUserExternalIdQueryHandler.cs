@@ -10,7 +10,7 @@ using System.Net;
 
 namespace Application.EntityManagement.Orders.Handlers;
 
-public class GetOrdersByUserExternalIdQueryHandler : IRequestHandler<GetOrdersByUserExternalIdQuery, QueryResponse>
+public class GetOrdersByUserExternalIdQueryHandler : IRequestHandler<GetOrdersByUserExternalIdQuery, QueryReferenceResponse<IEnumerable<OrderDto>>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMappingService _mappingService;
@@ -23,7 +23,7 @@ public class GetOrdersByUserExternalIdQueryHandler : IRequestHandler<GetOrdersBy
         _logger = logger;
     }
 
-    public async Task<QueryResponse> Handle(GetOrdersByUserExternalIdQuery request, CancellationToken cancellationToken)
+    public async Task<QueryReferenceResponse<IEnumerable<OrderDto>>> Handle(GetOrdersByUserExternalIdQuery request, CancellationToken cancellationToken)
     {
         var user = await _unitOfWork
             .UserRepository
@@ -33,49 +33,41 @@ public class GetOrdersByUserExternalIdQueryHandler : IRequestHandler<GetOrdersBy
 
         if (user is null)
         {
-            return new QueryResponse
-                (
+            return new QueryReferenceResponse<IEnumerable<OrderDto>>(
                 null,
                 false,
                 Messages.NotFound,
-                HttpStatusCode.NotFound
-                );
+                HttpStatusCode.NotFound);
         }
 
         if (user.Orders is null)
         {
             _logger.LogError(Messages.EntityRelationshipsRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(GetOrdersByUserExternalIdQueryHandler));
 
-            return new QueryResponse
-                (
+            return new QueryReferenceResponse<IEnumerable<OrderDto>>(
                 null,
                 false,
                 Messages.InternalServerError,
-                HttpStatusCode.InternalServerError
-                );
+                HttpStatusCode.InternalServerError);
         }
 
         var orderDtos = _mappingService.Map<ICollection<Order>, ICollection<OrderDto>>(user.Orders);
 
         if (orderDtos is not null)
         {
-            return new QueryResponse
-                (
+            return new QueryReferenceResponse<IEnumerable<OrderDto>>(
                 orderDtos,
                 true,
                 Messages.SuccessfullyRetrieved,
-                HttpStatusCode.OK
-                );
+                HttpStatusCode.OK);
         }
 
         _logger.LogError(Messages.MappingFailed, DateTime.UtcNow, typeof(ICollection<Order>), typeof(GetOrdersByUserExternalIdQueryHandler));
 
-        return new QueryResponse
-            (
+        return new QueryReferenceResponse<IEnumerable<OrderDto>>(
             null,
             false,
             Messages.InternalServerError,
-            HttpStatusCode.InternalServerError
-            );
+            HttpStatusCode.InternalServerError);
     }
 }

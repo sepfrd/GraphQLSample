@@ -16,7 +16,7 @@ public class UserService
         _sender = sender;
     }
 
-    public async Task<QueryResponse?> LoginAsync(LoginDto dto, CancellationToken cancellationToken = default)
+    public async Task<QueryReferenceResponse<User>> LoginAsync(LoginDto dto, CancellationToken cancellationToken = default)
     {
         var getUserQuery = new GetUserByUsernameOrEmailQuery(dto.UsernameOrEmail);
 
@@ -24,8 +24,7 @@ public class UserService
 
         if (queryResponse.Data is null)
         {
-            return new QueryResponse
-                (
+            return new QueryReferenceResponse<User>(
                 null,
                 false,
                 Messages.InvalidCredentials,
@@ -33,25 +32,21 @@ public class UserService
                 );
         }
 
-        var user = (User)queryResponse.Data;
+        var user = queryResponse.Data;
 
         if (user.Password != dto.Password)
         {
-            return new QueryResponse
-                (
+            return new QueryReferenceResponse<User>(
                 null,
                 false,
                 Messages.InvalidCredentials,
-                HttpStatusCode.BadRequest
-                );
+                HttpStatusCode.BadRequest);
         }
 
-        return new QueryResponse
-            (
+        return new QueryReferenceResponse<User>(
             user,
             true,
             Messages.SuccessfullyRetrieved,
-            HttpStatusCode.OK
-            );
+            HttpStatusCode.OK);
     }
 }

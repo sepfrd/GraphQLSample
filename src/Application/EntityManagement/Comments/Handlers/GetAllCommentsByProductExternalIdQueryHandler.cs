@@ -11,7 +11,7 @@ using System.Net;
 namespace Application.EntityManagement.Comments.Handlers;
 
 public class GetAllCommentsByProductExternalIdQueryHandler
-    : IRequestHandler<GetAllCommentsByProductExternalIdQuery, QueryResponse>
+    : IRequestHandler<GetAllCommentsByProductExternalIdQuery, QueryReferenceResponse<IEnumerable<CommentDto>>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMappingService _mappingService;
@@ -24,7 +24,7 @@ public class GetAllCommentsByProductExternalIdQueryHandler
         _logger = logger;
     }
 
-    public async Task<QueryResponse> Handle(GetAllCommentsByProductExternalIdQuery request, CancellationToken cancellationToken)
+    public async Task<QueryReferenceResponse<IEnumerable<CommentDto>>> Handle(GetAllCommentsByProductExternalIdQuery request, CancellationToken cancellationToken)
     {
         var product = await _unitOfWork
             .ProductRepository
@@ -33,50 +33,41 @@ public class GetAllCommentsByProductExternalIdQueryHandler
 
         if (product is null)
         {
-            return new QueryResponse
-                (
+            return new QueryReferenceResponse<IEnumerable<CommentDto>>(
                 null,
                 false,
                 Messages.NotFound,
-                HttpStatusCode.NotFound
-                );
+                HttpStatusCode.NotFound);
         }
 
         if (product.Comments is null)
         {
             _logger.LogError(Messages.EntityRelationshipsRetrievalFailed, DateTime.UtcNow, typeof(Product), typeof(GetAllCommentsByProductExternalIdQueryHandler));
 
-            return new QueryResponse
-                (
+            return new QueryReferenceResponse<IEnumerable<CommentDto>>(
                 null,
                 false,
                 Messages.InternalServerError,
-                HttpStatusCode.InternalServerError
-                );
+                HttpStatusCode.InternalServerError);
         }
 
         var commentDtos = _mappingService.Map<ICollection<Comment>, ICollection<CommentDto>>(product.Comments);
 
         if (commentDtos is not null)
         {
-            return new QueryResponse
-                (
+            return new QueryReferenceResponse<IEnumerable<CommentDto>>(
                 commentDtos.Paginate(request.Pagination),
                 true,
                 Messages.SuccessfullyRetrieved,
-                HttpStatusCode.OK
-                );
+                HttpStatusCode.OK);
         }
 
         _logger.LogError(Messages.MappingFailed, DateTime.UtcNow, typeof(ICollection<Comment>), typeof(GetAllCommentsByProductExternalIdQueryHandler));
 
-        return new QueryResponse
-            (
+        return new QueryReferenceResponse<IEnumerable<CommentDto>>(
             null,
             false,
             Messages.InternalServerError,
-            HttpStatusCode.InternalServerError
-            );
-
+            HttpStatusCode.InternalServerError);
     }
 }

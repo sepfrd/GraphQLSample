@@ -11,7 +11,7 @@ using System.Net;
 namespace Application.EntityManagement.Products.Handlers;
 
 public class GetAllProductsByCategoryExternalIdQueryHandler
-    : IRequestHandler<GetAllProductsByCategoryExternalIdQuery, QueryResponse>
+    : IRequestHandler<GetAllProductsByCategoryExternalIdQuery, QueryReferenceResponse<IEnumerable<ProductDto>>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMappingService _mappingService;
@@ -24,7 +24,7 @@ public class GetAllProductsByCategoryExternalIdQueryHandler
         _logger = logger;
     }
 
-    public async Task<QueryResponse> Handle(GetAllProductsByCategoryExternalIdQuery request, CancellationToken cancellationToken)
+    public async Task<QueryReferenceResponse<IEnumerable<ProductDto>>> Handle(GetAllProductsByCategoryExternalIdQuery request, CancellationToken cancellationToken)
     {
         var category = await _unitOfWork
             .CategoryRepository
@@ -33,49 +33,41 @@ public class GetAllProductsByCategoryExternalIdQueryHandler
 
         if (category is null)
         {
-            return new QueryResponse
-                (
+            return new QueryReferenceResponse<IEnumerable<ProductDto>>(
                 null,
                 false,
                 Messages.NotFound,
-                HttpStatusCode.NotFound
-                );
+                HttpStatusCode.NotFound);
         }
 
         if (category.Products is null)
         {
             _logger.LogError(Messages.EntityRelationshipsRetrievalFailed, DateTime.UtcNow, typeof(Category), typeof(GetAllProductsByCategoryExternalIdQueryHandler));
 
-            return new QueryResponse
-                (
+            return new QueryReferenceResponse<IEnumerable<ProductDto>>(
                 null,
                 false,
                 Messages.InternalServerError,
-                HttpStatusCode.InternalServerError
-                );
+                HttpStatusCode.InternalServerError);
         }
 
         var productDtos = _mappingService.Map<ICollection<Product>, ICollection<ProductDto>>(category.Products);
 
         if (productDtos is not null)
         {
-            return new QueryResponse
-                (
+            return new QueryReferenceResponse<IEnumerable<ProductDto>>(
                 productDtos.Paginate(request.Pagination),
                 true,
                 Messages.SuccessfullyRetrieved,
-                HttpStatusCode.OK
-                );
+                HttpStatusCode.OK);
         }
 
         _logger.LogError(Messages.MappingFailed, DateTime.UtcNow, typeof(ICollection<Product>), typeof(GetAllProductsByCategoryExternalIdQueryHandler));
 
-        return new QueryResponse
-            (
+        return new QueryReferenceResponse<IEnumerable<ProductDto>>(
             null,
             false,
             Messages.InternalServerError,
-            HttpStatusCode.InternalServerError
-            );
+            HttpStatusCode.InternalServerError);
     }
 }

@@ -10,7 +10,7 @@ using System.Net;
 
 namespace Application.EntityManagement.PhoneNumbers.Handlers;
 
-public class GetAllPhoneNumbersByUserExternalIdQueryHandler : IRequestHandler<GetAllPhoneNumbersByUserExternalIdQuery, QueryResponse>
+public class GetAllPhoneNumbersByUserExternalIdQueryHandler : IRequestHandler<GetAllPhoneNumbersByUserExternalIdQuery, QueryReferenceResponse<IEnumerable<PhoneNumberDto>>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMappingService _mappingService;
@@ -23,7 +23,7 @@ public class GetAllPhoneNumbersByUserExternalIdQueryHandler : IRequestHandler<Ge
         _logger = logger;
     }
 
-    public async Task<QueryResponse> Handle(GetAllPhoneNumbersByUserExternalIdQuery request, CancellationToken cancellationToken)
+    public async Task<QueryReferenceResponse<IEnumerable<PhoneNumberDto>>> Handle(GetAllPhoneNumbersByUserExternalIdQuery request, CancellationToken cancellationToken)
     {
         var user = await _unitOfWork
             .UserRepository
@@ -32,49 +32,41 @@ public class GetAllPhoneNumbersByUserExternalIdQueryHandler : IRequestHandler<Ge
 
         if (user is null)
         {
-            return new QueryResponse
-                (
+            return new QueryReferenceResponse<IEnumerable<PhoneNumberDto>>(
                 null,
                 false,
                 Messages.NotFound,
-                HttpStatusCode.NotFound
-                );
+                HttpStatusCode.NotFound);
         }
 
         if (user.PhoneNumbers is null)
         {
             _logger.LogError(Messages.EntityRelationshipsRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(GetAllPhoneNumbersByUserExternalIdQueryHandler));
 
-            return new QueryResponse
-                (
+            return new QueryReferenceResponse<IEnumerable<PhoneNumberDto>>(
                 null,
                 false,
                 Messages.InternalServerError,
-                HttpStatusCode.InternalServerError
-                );
+                HttpStatusCode.InternalServerError);
         }
 
         var phoneNumberDtos = _mappingService.Map<ICollection<PhoneNumber>, ICollection<PhoneNumberDto>>(user.PhoneNumbers);
 
         if (phoneNumberDtos is not null)
         {
-            return new QueryResponse
-                (
+            return new QueryReferenceResponse<IEnumerable<PhoneNumberDto>>(
                 phoneNumberDtos.Paginate(request.Pagination),
                 true,
                 Messages.SuccessfullyRetrieved,
-                HttpStatusCode.OK
-                );
+                HttpStatusCode.OK);
         }
 
         _logger.LogError(Messages.MappingFailed, DateTime.UtcNow, typeof(ICollection<PhoneNumber>), typeof(GetAllPhoneNumbersByUserExternalIdQueryHandler));
 
-        return new QueryResponse
-            (
+        return new QueryReferenceResponse<IEnumerable<PhoneNumberDto>>(
             null,
             false,
             Messages.InternalServerError,
-            HttpStatusCode.InternalServerError
-            );
+            HttpStatusCode.InternalServerError);
     }
 }

@@ -7,4 +7,4 @@ public abstract record BaseGetAllQuery<TEntity>
 (
     Pagination Pagination,
     Expression<Func<TEntity, object?>>[] RelationsToInclude
-) : IRequest<QueryResponse>;
+) : IRequest<QueryReferenceResponse<IEnumerable<TEntity>>>;

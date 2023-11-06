@@ -10,7 +10,7 @@ using System.Net;
 
 namespace Application.EntityManagement.Payments.Handlers;
 
-public class GetPaymentByOrderExternalIdQueryHandler : IRequestHandler<GetPaymentByOrderExternalIdQuery, QueryResponse>
+public class GetPaymentByOrderExternalIdQueryHandler : IRequestHandler<GetPaymentByOrderExternalIdQuery, QueryReferenceResponse<PaymentDto>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMappingService _mappingService;
@@ -23,7 +23,7 @@ public class GetPaymentByOrderExternalIdQueryHandler : IRequestHandler<GetPaymen
         _logger = logger;
     }
 
-    public async Task<QueryResponse> Handle(GetPaymentByOrderExternalIdQuery request, CancellationToken cancellationToken)
+    public async Task<QueryReferenceResponse<PaymentDto>> Handle(GetPaymentByOrderExternalIdQuery request, CancellationToken cancellationToken)
     {
         var order = await _unitOfWork
             .OrderRepository
@@ -32,49 +32,41 @@ public class GetPaymentByOrderExternalIdQueryHandler : IRequestHandler<GetPaymen
 
         if (order is null)
         {
-            return new QueryResponse
-                (
+            return new QueryReferenceResponse<PaymentDto>(
                 null,
                 false,
                 Messages.NotFound,
-                HttpStatusCode.NotFound
-                );
+                HttpStatusCode.NotFound);
         }
 
         if (order.Payment is null)
         {
             _logger.LogError(Messages.EntityRelationshipsRetrievalFailed, DateTime.UtcNow, typeof(Order), typeof(GetPaymentByOrderExternalIdQueryHandler));
 
-            return new QueryResponse
-                (
+            return new QueryReferenceResponse<PaymentDto>(
                 null,
                 false,
                 Messages.InternalServerError,
-                HttpStatusCode.InternalServerError
-                );
+                HttpStatusCode.InternalServerError);
         }
 
         var paymentDto = _mappingService.Map<Payment, PaymentDto>(order.Payment);
 
         if (paymentDto is not null)
         {
-            return new QueryResponse
-                (
+            return new QueryReferenceResponse<PaymentDto>(
                 paymentDto,
                 true,
                 Messages.SuccessfullyRetrieved,
-                HttpStatusCode.OK
-                );
+                HttpStatusCode.OK);
         }
 
         _logger.LogError(Messages.MappingFailed, DateTime.UtcNow, typeof(Payment), typeof(GetPaymentByOrderExternalIdQueryHandler));
 
-        return new QueryResponse
-            (
+        return new QueryReferenceResponse<PaymentDto>(
             null,
             false,
             Messages.InternalServerError,
-            HttpStatusCode.InternalServerError
-            );
+            HttpStatusCode.InternalServerError);
     }
 }

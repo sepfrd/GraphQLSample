@@ -9,7 +9,7 @@ using System.Net;
 namespace Application.Common.Handlers;
 
 public abstract class BaseGetByExternalIdQueryHandler<TEntity, TDto>
-    : IRequestHandler<BaseGetByExternalIdQuery<TEntity>, QueryResponse>
+    : IRequestHandler<BaseGetByExternalIdQuery<TEntity, TDto>, QueryReferenceResponse<TDto>>
     where TEntity : BaseEntity
     where TDto : class
 {
@@ -28,13 +28,13 @@ public abstract class BaseGetByExternalIdQueryHandler<TEntity, TDto>
         _logger = logger;
     }
 
-    public virtual async Task<QueryResponse> Handle(BaseGetByExternalIdQuery<TEntity> request, CancellationToken cancellationToken)
+    public virtual async Task<QueryReferenceResponse<TDto>> Handle(BaseGetByExternalIdQuery<TEntity, TDto> request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetByExternalIdAsync(request.ExternalId, cancellationToken, request.RelationsToInclude);
 
         if (entity is null)
         {
-            return new QueryResponse
+            return new QueryReferenceResponse<TDto>
                 (
                 null,
                 false,
@@ -47,7 +47,7 @@ public abstract class BaseGetByExternalIdQueryHandler<TEntity, TDto>
 
         if (dto is not null)
         {
-            return new QueryResponse
+            return new QueryReferenceResponse<TDto>
                 (
                 dto,
                 true,
@@ -58,6 +58,6 @@ public abstract class BaseGetByExternalIdQueryHandler<TEntity, TDto>
 
         _logger.LogError(message: Messages.MappingFailed, DateTime.UtcNow, typeof(TEntity), typeof(BaseGetByExternalIdQueryHandler<TEntity, TDto>));
 
-        return new QueryResponse(Message: Messages.InternalServerError, HttpStatusCode: HttpStatusCode.InternalServerError);
+        return new QueryReferenceResponse<TDto>(Message: Messages.InternalServerError, HttpStatusCode: HttpStatusCode.InternalServerError);
     }
 }

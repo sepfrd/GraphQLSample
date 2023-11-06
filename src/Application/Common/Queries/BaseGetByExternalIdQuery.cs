@@ -3,8 +3,9 @@ using System.Linq.Expressions;
 
 namespace Application.Common.Queries;
 
-public abstract record BaseGetByExternalIdQuery<TEntity>
+public abstract record BaseGetByExternalIdQuery<TEntity, TDto>
 (
     int ExternalId,
     Expression<Func<TEntity, object?>>[] RelationsToInclude
-) : IRequest<QueryResponse>;
+) : IRequest<QueryReferenceResponse<TDto>> 
+    where TDto : class;

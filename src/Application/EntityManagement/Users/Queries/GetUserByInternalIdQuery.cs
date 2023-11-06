@@ -9,4 +9,4 @@ public sealed record GetUserByInternalIdQuery
 (
     Guid InternalId,
     Expression<Func<User, object?>>[] RelationsToInclude
-) : IRequest<QueryResponse>;
+) : IRequest<QueryReferenceResponse<User>>;

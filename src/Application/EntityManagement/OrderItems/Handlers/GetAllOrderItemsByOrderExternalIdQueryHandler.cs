@@ -10,7 +10,7 @@ using System.Net;
 
 namespace Application.EntityManagement.OrderItems.Handlers;
 
-public class GetAllOrderItemsByOrderExternalIdQueryHandler : IRequestHandler<GetAllOrderItemsByOrderExternalIdQuery, QueryResponse>
+public class GetAllOrderItemsByOrderExternalIdQueryHandler : IRequestHandler<GetAllOrderItemsByOrderExternalIdQuery, QueryReferenceResponse<IEnumerable<OrderItemDto>>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMappingService _mappingService;
@@ -23,7 +23,7 @@ public class GetAllOrderItemsByOrderExternalIdQueryHandler : IRequestHandler<Get
         _logger = logger;
     }
 
-    public async Task<QueryResponse> Handle(GetAllOrderItemsByOrderExternalIdQuery request, CancellationToken cancellationToken)
+    public async Task<QueryReferenceResponse<IEnumerable<OrderItemDto>>> Handle(GetAllOrderItemsByOrderExternalIdQuery request, CancellationToken cancellationToken)
     {
         var order = await _unitOfWork
             .OrderRepository
@@ -32,49 +32,41 @@ public class GetAllOrderItemsByOrderExternalIdQueryHandler : IRequestHandler<Get
 
         if (order is null)
         {
-            return new QueryResponse
-                (
+            return new QueryReferenceResponse<IEnumerable<OrderItemDto>>(
                 null,
                 false,
                 Messages.NotFound,
-                HttpStatusCode.NotFound
-                );
+                HttpStatusCode.NotFound);
         }
 
         if (order.OrderItems is null)
         {
             _logger.LogError(Messages.EntityRelationshipsRetrievalFailed, DateTime.UtcNow, typeof(Order), typeof(GetAllOrderItemsByOrderExternalIdQueryHandler));
 
-            return new QueryResponse
-                (
+            return new QueryReferenceResponse<IEnumerable<OrderItemDto>>(
                 null,
                 false,
                 Messages.InternalServerError,
-                HttpStatusCode.InternalServerError
-                );
+                HttpStatusCode.InternalServerError);
         }
 
         var orderItemDtos = _mappingService.Map<ICollection<OrderItem>, ICollection<OrderItemDto>>(order.OrderItems);
 
         if (orderItemDtos is not null)
         {
-            return new QueryResponse
-                (
+            return new QueryReferenceResponse<IEnumerable<OrderItemDto>>(
                 orderItemDtos,
                 true,
                 Messages.SuccessfullyRetrieved,
-                HttpStatusCode.OK
-                );
+                HttpStatusCode.OK);
         }
 
         _logger.LogError(Messages.MappingFailed, DateTime.UtcNow, typeof(ICollection<OrderItem>), typeof(GetAllOrderItemsByOrderExternalIdQueryHandler));
 
-        return new QueryResponse
-            (
+        return new QueryReferenceResponse<IEnumerable<OrderItemDto>>(
             null,
             false,
             Messages.InternalServerError,
-            HttpStatusCode.InternalServerError
-            );
+            HttpStatusCode.InternalServerError);
     }
 }

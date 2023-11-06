@@ -10,7 +10,7 @@ using System.Net;
 
 namespace Application.EntityManagement.Users.Handlers;
 
-public class GetAllUserDtosQueryHandler : IRequestHandler<GetAllUserDtosQuery, QueryResponse>
+public class GetAllUserDtosQueryHandler : IRequestHandler<GetAllUserDtosQuery, QueryReferenceResponse<IEnumerable<UserDto>>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMappingService _mappingService;
@@ -23,7 +23,7 @@ public class GetAllUserDtosQueryHandler : IRequestHandler<GetAllUserDtosQuery, Q
         _logger = logger;
     }
 
-    public async Task<QueryResponse> Handle(GetAllUserDtosQuery request, CancellationToken cancellationToken)
+    public async Task<QueryReferenceResponse<IEnumerable<UserDto>>> Handle(GetAllUserDtosQuery request, CancellationToken cancellationToken)
     {
         var users = await _unitOfWork
             .UserRepository
@@ -33,36 +33,30 @@ public class GetAllUserDtosQueryHandler : IRequestHandler<GetAllUserDtosQuery, Q
 
         if (usersList.Count == 0)
         {
-            return new QueryResponse
-                (
+            return new QueryReferenceResponse<IEnumerable<UserDto>>(
                 Array.Empty<UserDto>(),
                 true,
                 Messages.SuccessfullyRetrieved,
-                HttpStatusCode.OK
-                );
+                HttpStatusCode.OK);
         }
 
         var userDtos = _mappingService.Map<List<User>, List<UserDto>>(usersList);
 
         if (userDtos is not null)
         {
-            return new QueryResponse
-                (
+            return new QueryReferenceResponse<IEnumerable<UserDto>>(
                 userDtos,
                 true,
                 Messages.SuccessfullyRetrieved,
-                HttpStatusCode.OK
-                );
+                HttpStatusCode.OK);
         }
 
         _logger.LogError(Messages.MappingFailed, DateTime.UtcNow, typeof(User), typeof(GetAllUserDtosQueryHandler));
 
-        return new QueryResponse
-            (
+        return new QueryReferenceResponse<IEnumerable<UserDto>>(
             null,
             false,
             Messages.InternalServerError,
-            HttpStatusCode.InternalServerError
-            );
+            HttpStatusCode.InternalServerError);
     }
 }

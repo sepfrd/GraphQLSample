@@ -9,7 +9,7 @@ using System.Net;
 namespace Application.Common.Handlers;
 
 public abstract class BaseGetAllDtosQueryHandler<TEntity, TDto>
-    : IRequestHandler<BaseGetAllDtosQuery<TEntity>, QueryResponse>
+    : IRequestHandler<BaseGetAllDtosQuery<TEntity, TDto>, QueryReferenceResponse<IEnumerable<TDto>>>
     where TEntity : BaseEntity
 {
     private readonly IRepository<TEntity> _repository;
@@ -27,7 +27,7 @@ public abstract class BaseGetAllDtosQueryHandler<TEntity, TDto>
         _logger = logger;
     }
 
-    public virtual async Task<QueryResponse> Handle(BaseGetAllDtosQuery<TEntity> request, CancellationToken cancellationToken)
+    public virtual async Task<QueryReferenceResponse<IEnumerable<TDto>>> Handle(BaseGetAllDtosQuery<TEntity, TDto> request, CancellationToken cancellationToken)
     {
         var entities = await _repository.GetAllAsync(null, cancellationToken, request.RelationsToInclude);
 
@@ -35,7 +35,7 @@ public abstract class BaseGetAllDtosQueryHandler<TEntity, TDto>
 
         if (paginatedEntities.Count == 0)
         {
-            return new QueryResponse
+            return new QueryReferenceResponse<IEnumerable<TDto>>
                 (
                 Array.Empty<TDto>(),
                 true,
@@ -48,7 +48,7 @@ public abstract class BaseGetAllDtosQueryHandler<TEntity, TDto>
 
         if (dtos is not null && dtos.Any())
         {
-            return new QueryResponse
+            return new QueryReferenceResponse<IEnumerable<TDto>>
                 (
                 dtos,
                 true,
@@ -59,7 +59,7 @@ public abstract class BaseGetAllDtosQueryHandler<TEntity, TDto>
 
         _logger.LogError(Messages.MappingFailed, DateTime.UtcNow, typeof(TEntity), typeof(BaseGetAllDtosQueryHandler<TEntity, TDto>));
 
-        return new QueryResponse
+        return new QueryReferenceResponse<IEnumerable<TDto>>
             (
             null,
             false,

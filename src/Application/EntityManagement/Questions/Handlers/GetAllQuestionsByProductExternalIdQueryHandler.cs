@@ -22,7 +22,7 @@ public class GetAllQuestionsByProductExternalIdQueryHandler
         _logger = logger;
     }
 
-    public async Task<QueryResponse> Handle(GetAllQuestionsByProductExternalIdQuery request, CancellationToken cancellationToken)
+    public async Task<QueryReferenceResponse<IEnumerable<QuestionDto>>> Handle(GetAllQuestionsByProductExternalIdQuery request, CancellationToken cancellationToken)
     {
         var product = await _unitOfWork
             .ProductRepository
@@ -31,49 +31,41 @@ public class GetAllQuestionsByProductExternalIdQueryHandler
 
         if (product is null)
         {
-            return new QueryResponse
-                (
+            return new QueryReferenceResponse<IEnumerable<QuestionDto>>(
                 null,
                 false,
                 Messages.NotFound,
-                HttpStatusCode.NotFound
-                );
+                HttpStatusCode.NotFound);
         }
 
         if (product.Questions is null)
         {
             _logger.LogError(Messages.EntityRelationshipsRetrievalFailed, DateTime.UtcNow, typeof(Product), typeof(GetAllQuestionsByProductExternalIdQueryHandler));
 
-            return new QueryResponse
-                (
+            return new QueryReferenceResponse<IEnumerable<QuestionDto>>(
                 null,
                 false,
                 Messages.InternalServerError,
-                HttpStatusCode.InternalServerError
-                );
+                HttpStatusCode.InternalServerError);
         }
 
         var questionDtos = _mappingService.Map<ICollection<Question>, ICollection<QuestionDto>>(product.Questions);
 
         if (questionDtos is not null)
         {
-            return new QueryResponse
-                (
+            return new QueryReferenceResponse<IEnumerable<QuestionDto>>(
                 questionDtos.Paginate(request.Pagination),
                 true,
                 Messages.SuccessfullyRetrieved,
-                HttpStatusCode.OK
-                );
+                HttpStatusCode.OK);
         }
 
         _logger.LogError(Messages.MappingFailed, DateTime.UtcNow, typeof(ICollection<Question>), typeof(GetAllQuestionsByProductExternalIdQueryHandler));
 
-        return new QueryResponse
-            (
+        return new QueryReferenceResponse<IEnumerable<QuestionDto>>(
             null,
             false,
             Messages.InternalServerError,
-            HttpStatusCode.InternalServerError
-            );
+            HttpStatusCode.InternalServerError);
     }
 }

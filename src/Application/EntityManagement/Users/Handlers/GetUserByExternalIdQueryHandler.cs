@@ -10,7 +10,7 @@ using System.Net;
 
 namespace Application.EntityManagement.Users.Handlers;
 
-public class GetUserByExternalIdQueryHandler : IRequestHandler<GetUserByExternalIdQuery, QueryResponse>
+public class GetUserByExternalIdQueryHandler : IRequestHandler<GetUserByExternalIdQuery, QueryReferenceResponse<UserDto>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMappingService _mappingService;
@@ -23,7 +23,7 @@ public class GetUserByExternalIdQueryHandler : IRequestHandler<GetUserByExternal
         _logger = logger;
     }
 
-    public async Task<QueryResponse> Handle(GetUserByExternalIdQuery request, CancellationToken cancellationToken)
+    public async Task<QueryReferenceResponse<UserDto>> Handle(GetUserByExternalIdQuery request, CancellationToken cancellationToken)
     {
         var user = await _unitOfWork
             .UserRepository
@@ -31,36 +31,30 @@ public class GetUserByExternalIdQueryHandler : IRequestHandler<GetUserByExternal
 
         if (user is null)
         {
-            return new QueryResponse
-                (
+            return new QueryReferenceResponse<UserDto>(
                 null,
                 true,
                 Messages.NotFound,
-                HttpStatusCode.NoContent
-                );
+                HttpStatusCode.NoContent);
         }
 
         var userDto = _mappingService.Map<User, UserDto>(user);
 
         if (userDto is not null)
         {
-            return new QueryResponse
-                (
+            return new QueryReferenceResponse<UserDto>(
                 userDto,
                 true,
                 Messages.SuccessfullyRetrieved,
-                HttpStatusCode.OK
-                );
+                HttpStatusCode.OK);
         }
 
         _logger.LogError(Messages.MappingFailed, DateTime.UtcNow, typeof(User), typeof(GetUserByExternalIdQueryHandler));
 
-        return new QueryResponse
-            (
+        return new QueryReferenceResponse<UserDto>(
             null,
             false,
             Messages.InternalServerError,
-            HttpStatusCode.InternalServerError
-            );
+            HttpStatusCode.InternalServerError);
     }
 }

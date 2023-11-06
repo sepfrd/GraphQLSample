@@ -7,7 +7,7 @@ using System.Net;
 namespace Application.Common.Handlers;
 
 public abstract class BaseGetByInternalIdQueryHandler<TEntity>
-    : IRequestHandler<BaseGetByInternalIdQuery<TEntity>, QueryResponse>
+    : IRequestHandler<BaseGetByInternalIdQuery<TEntity>, QueryReferenceResponse<TEntity>>
     where TEntity : BaseEntity
 {
     private readonly IRepository<TEntity> _repository;
@@ -21,13 +21,13 @@ public abstract class BaseGetByInternalIdQueryHandler<TEntity>
         _repository = (IRepository<TEntity>)repositoryInterface;
     }
 
-    public virtual async Task<QueryResponse> Handle(BaseGetByInternalIdQuery<TEntity> request, CancellationToken cancellationToken)
+    public virtual async Task<QueryReferenceResponse<TEntity>> Handle(BaseGetByInternalIdQuery<TEntity> request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetByInternalIdAsync(request.InternalId, cancellationToken, request.RelationsToInclude);
 
         if (entity is null)
         {
-            return new QueryResponse
+            return new QueryReferenceResponse<TEntity>
                 (
                 null,
                 false,
@@ -36,7 +36,7 @@ public abstract class BaseGetByInternalIdQueryHandler<TEntity>
                 );
         }
 
-        return new QueryResponse
+        return new QueryReferenceResponse<TEntity>
             (
             entity,
             true,

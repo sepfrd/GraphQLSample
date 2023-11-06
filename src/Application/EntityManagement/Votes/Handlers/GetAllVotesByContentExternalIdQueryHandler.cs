@@ -11,7 +11,7 @@ using System.Net;
 namespace Application.EntityManagement.Votes.Handlers;
 
 public class GetAllVotesByContentExternalIdQueryHandler<TContent>
-    : IRequestHandler<GetAllVotesByContentExternalIdQuery<TContent>, QueryResponse>
+    : IRequestHandler<GetAllVotesByContentExternalIdQuery, QueryReferenceResponse<GetAllVotesByContentExternalIdResponseDto>>
     where TContent : BaseEntity, IVotableContent
 {
     private readonly ILogger _logger;
@@ -28,33 +28,29 @@ public class GetAllVotesByContentExternalIdQueryHandler<TContent>
         _repository = (IRepository<TContent>)repositoryInterface;
     }
 
-    public async Task<QueryResponse> Handle(GetAllVotesByContentExternalIdQuery<TContent> request, CancellationToken cancellationToken)
+    public async Task<QueryReferenceResponse<GetAllVotesByContentExternalIdResponseDto>> Handle(GetAllVotesByContentExternalIdQuery request, CancellationToken cancellationToken)
     {
         var content = await _repository.GetByExternalIdAsync(request.ContentExternalId, cancellationToken,
             entity => entity.Votes);
 
         if (content is null)
         {
-            return new QueryResponse
-                (
+            return new QueryReferenceResponse<GetAllVotesByContentExternalIdResponseDto>(
                 null,
                 false,
                 Messages.NotFound,
-                HttpStatusCode.NotFound
-                );
+                HttpStatusCode.NotFound);
         }
 
         if (content.Votes is null)
         {
             _logger.LogError(Messages.EntityRelationshipsRetrievalFailed, DateTime.UtcNow, typeof(TContent), typeof(GetAllVotesByContentExternalIdQueryHandler<TContent>));
 
-            return new QueryResponse
-                (
+            return new QueryReferenceResponse<GetAllVotesByContentExternalIdResponseDto>(
                 null,
                 false,
                 Messages.InternalServerError,
-                HttpStatusCode.InternalServerError
-                );
+                HttpStatusCode.InternalServerError);
         }
 
         var hatesCount = content.Votes.Count(vote => vote.Type is VoteType.Hate);
@@ -62,20 +58,16 @@ public class GetAllVotesByContentExternalIdQueryHandler<TContent>
         var likesCount = content.Votes.Count(vote => vote.Type is VoteType.Like);
         var superLikesCount = content.Votes.Count(vote => vote.Type is VoteType.SuperLike);
 
-        var response = new GetAllVotesByContentExternalIdResponseDto
-            (
+        var response = new GetAllVotesByContentExternalIdResponseDto(
             hatesCount,
             dislikesCount,
             likesCount,
-            superLikesCount
-            );
+            superLikesCount);
 
-        return new QueryResponse
-            (
+        return new QueryReferenceResponse<GetAllVotesByContentExternalIdResponseDto>(
             response,
             true,
             Messages.SuccessfullyRetrieved,
-            HttpStatusCode.OK
-            );
+            HttpStatusCode.OK);
     }
 }

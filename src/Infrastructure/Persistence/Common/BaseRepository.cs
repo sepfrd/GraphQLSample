@@ -12,7 +12,7 @@ public class BaseRepository<TEntity> : IRepository<TEntity>
 {
     private readonly IMongoCollection<TEntity> _mongoDbCollection;
 
-    public BaseRepository(IOptions<MongoDbSettings> databaseSettings)
+    protected BaseRepository(IOptions<MongoDbSettings> databaseSettings)
     {
         var mongoClient = new MongoClient(databaseSettings.Value.ConnectionString);
 
@@ -58,7 +58,7 @@ public class BaseRepository<TEntity> : IRepository<TEntity>
         }
 
         aggregate.IncludeRelations(includes);
-
+        
         var result = await aggregate.ToListAsync(cancellationToken);
 
         return result;

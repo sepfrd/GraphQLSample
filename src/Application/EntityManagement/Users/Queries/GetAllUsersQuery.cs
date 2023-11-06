@@ -9,4 +9,4 @@ public sealed record GetAllUsersQuery
 (
     Pagination Pagination,
     Expression<Func<User, object?>>[] RelationsToInclude
-) : IRequest<QueryResponse>;
+) : IRequest<QueryReferenceResponse<IEnumerable<User>>>;
