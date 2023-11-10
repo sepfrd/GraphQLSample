@@ -20,6 +20,7 @@
 
     <ItemGroup>
       <Folder Include="GraphQL\Resolvers\Mutations\" />
+      <Folder Include="GraphQL\Resolvers\Queries\" />
     </ItemGroup>
 
 </Project>

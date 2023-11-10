@@ -20,7 +20,7 @@ public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, QueryRe
     {
         var users = await _unitOfWork
             .UserRepository
-            .GetAllAsync(null, cancellationToken, request.RelationsToInclude);
+            .GetAllAsync(request.Filter, cancellationToken, request.RelationsToInclude);
 
         return new QueryReferenceResponse<IEnumerable<User>>(
             users.Paginate(request.Pagination),

@@ -1,8 +1,12 @@
 using Application.Common;
-using Application.EntityManagement.Categories.Dtos;
+using Application.Common.Queries;
 using Domain.Entities;
-using MediatR;
+using System.Linq.Expressions;
 
 namespace Application.EntityManagement.Categories.Queries;
 
-public record GetAllCategoriesQuery : IRequest<QueryReferenceResponse<IEnumerable<CategoryDto>>>;
+public record GetAllCategoriesQuery(
+        Pagination Pagination,
+        Expression<Func<Category, object?>>[]? RelationsToInclude = null,
+        Expression<Func<Category, bool>>? Filter = null)
+    : BaseGetAllQuery<Category>(Pagination, RelationsToInclude, Filter);
