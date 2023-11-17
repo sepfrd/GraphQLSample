@@ -1,9 +1,10 @@
 using Application;
 using Infrastructure;
+using Infrastructure.Services.Logging;
 using Serilog;
 using Serilog.Settings.Configuration;
 using Web;
-
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Logging.ClearProviders();
@@ -26,11 +27,9 @@ try
         .InjectApplicationLayer()
         .InjectInfrastructureLayer(builder.Configuration)
         .AddAllGraphQlServices()
-        .AddLogger(builder.Configuration);
+        .AddSingleton<ILogger, CustomLogger>();
 
     var app = builder.Build();
-
-    app.MapGraphQL();
 
     if (app.Environment.IsDevelopment())
     {
@@ -39,15 +38,17 @@ try
         app.UseGraphQLVoyager("/graphql-voyager");
     }
 
-/*
     app
-        .UseHttpsRedirection();
-        .UseCors("AllowAnyOrigin")
+        // .UseHttpsRedirection()
+        // .UseCors("AllowAnyOrigin")
         .UseRouting()
-        .UseAuthentication()
-        .UseAuthorization()
-        .UseEndpoints(endpoints => endpoints.MapControllers());
-*/
+        // .UseAuthentication()
+        // .UseAuthorization()
+        .UseEndpoints(endpoints =>
+        {
+            endpoints.MapGraphQL();
+        });
+
     app.Run();
 }
 catch (Exception exception)

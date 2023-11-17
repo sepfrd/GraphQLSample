@@ -1,8 +1,21 @@
-using Infrastructure.Services.Logging;
-using Serilog;
+using Application.Common;
+using Application.EntityManagement.Addresses.Dtos;
+using Application.EntityManagement.Answers.Dtos;
+using Application.EntityManagement.CartItems.Dtos;
+using Application.EntityManagement.Carts.Dtos;
+using Application.EntityManagement.Categories.Dtos;
+using Application.EntityManagement.Comments.Dtos;
+using Application.EntityManagement.OrderItems.Dtos;
+using Application.EntityManagement.Orders.Dtos;
+using Application.EntityManagement.Payments.Dtos;
+using Application.EntityManagement.Persons.Dtos;
+using Application.EntityManagement.PhoneNumbers.Dtos;
+using Application.EntityManagement.Products.Dtos;
+using Application.EntityManagement.Questions.Dtos;
+using Application.EntityManagement.Shipments.Dtos;
+using Application.EntityManagement.Users.Dtos;
 using Web.GraphQL;
 using Web.GraphQL.Types;
-using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace Web;
 
@@ -13,6 +26,7 @@ public static class DependencyInjectionHelper
         services
             .AddGraphQLServer()
             .AddQueryType<Query>()
+            .AddMutationType<Mutation>()
             .AddType<AddressType>()
             .AddType<AnswerType>()
             .AddType<CartItemType>()
@@ -30,20 +44,25 @@ public static class DependencyInjectionHelper
             .AddType<RoleType>()
             .AddType<ShipmentType>()
             .AddType<UserType>()
-            .AddType<VoteType>();
+            .AddType<VoteType>()
+            .AddType<CommandResult>()
+            .AddInputObjectType<AddressDto>()
+            .AddInputObjectType<AnswerDto>()
+            .AddInputObjectType<CartItemDto>()
+            .AddInputObjectType<CartDto>()
+            .AddInputObjectType<CategoryDto>()
+            .AddInputObjectType<CommentDto>()
+            .AddInputObjectType<OrderItemDto>()
+            .AddInputObjectType<OrderDto>()
+            .AddInputObjectType<PaymentDto>()
+            .AddInputObjectType<PersonDto>()
+            .AddInputObjectType<PhoneNumberDto>()
+            .AddInputObjectType<ProductDto>()
+            .AddInputObjectType<QuestionDto>()
+            .AddInputObjectType<ShipmentDto>()
+            .AddInputObjectType<UserDto>()
+            .AddInputObjectType<CreateUserDto>();
 
         return services;
-    }
-
-    public static IServiceCollection AddLogger(this IServiceCollection services, IConfiguration configuration)
-    {
-        var logger = new LoggerConfiguration()
-            .ReadFrom
-            .Configuration(configuration)
-            .CreateLogger();
-
-        var customLogger = new CustomLogger(logger);
-
-        return services.AddSingleton<ILogger>(customLogger);
     }
 }

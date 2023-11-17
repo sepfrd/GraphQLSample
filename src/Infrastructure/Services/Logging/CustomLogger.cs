@@ -1,13 +1,36 @@
 using Microsoft.Extensions.Logging;
+using Serilog;
 using Serilog.Context;
+using Serilog.Core;
 using Serilog.Core.Enrichers;
+using Serilog.Enrichers;
 using Serilog.Events;
-using ILogger = Serilog.ILogger;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
+using RollingInterval = Serilog.Sinks.MongoDB.RollingInterval;
 
 namespace Infrastructure.Services.Logging;
 
-public class CustomLogger(ILogger logger) : Microsoft.Extensions.Logging.ILogger
+public class CustomLogger : ILogger
 {
+    private readonly Logger _logger = new LoggerConfiguration()
+        .MinimumLevel.Debug()
+        .WriteTo
+        .MongoDBBson(configuration =>
+        {
+            configuration.SetConnectionString("mongodb://localhost:27017/OnlineShopSample");
+            configuration.SetCollectionName("Logs");
+            configuration.SetCreateCappedCollection(1024, 50_000);
+            configuration.SetRollingInternal(RollingInterval.Day);
+        })
+        .Enrich
+        .FromLogContext()
+        .Enrich
+        .With(
+            new MachineNameEnricher(),
+            new EnvironmentNameEnricher(),
+            new EnvironmentUserNameEnricher())
+        .CreateLogger();
+
     public void Log<TState>(
         LogLevel logLevel,
         EventId eventId,
@@ -38,7 +61,7 @@ public class CustomLogger(ILogger logger) : Microsoft.Extensions.Logging.ILogger
             _ => LogEventLevel.Information
         };
 
-        logger.Write(serilogLogLevel, exception, message);
+        _logger.Write(serilogLogLevel, exception, message);
     }
 
     public bool IsEnabled(LogLevel logLevel) =>
