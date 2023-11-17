@@ -3,12 +3,14 @@ using Application.EntityManagement.Addresses.Commands;
 using Application.EntityManagement.Addresses.Dtos;
 using Application.EntityManagement.Answers.Commands;
 using Application.EntityManagement.Answers.Dtos;
+using Application.EntityManagement.Answers.Queries;
 using Application.EntityManagement.CartItems.Commands;
 using Application.EntityManagement.CartItems.Dtos;
 using Application.EntityManagement.Categories.Commands;
 using Application.EntityManagement.Categories.Dtos;
 using Application.EntityManagement.Comments.Commands;
 using Application.EntityManagement.Comments.Dtos;
+using Application.EntityManagement.Comments.Queries;
 using Application.EntityManagement.OrderItems.Commands;
 using Application.EntityManagement.OrderItems.Dtos;
 using Application.EntityManagement.Orders.Commands;
@@ -21,15 +23,20 @@ using Application.EntityManagement.PhoneNumbers.Commands;
 using Application.EntityManagement.PhoneNumbers.Dtos;
 using Application.EntityManagement.Products.Commands;
 using Application.EntityManagement.Products.Dtos;
+using Application.EntityManagement.Products.Queries;
 using Application.EntityManagement.Questions.Commands;
 using Application.EntityManagement.Questions.Dtos;
+using Application.EntityManagement.Questions.Queries;
 using Application.EntityManagement.Shipments.Commands;
 using Application.EntityManagement.Shipments.Dtos;
 using Application.EntityManagement.Users.Commands;
 using Application.EntityManagement.Users.Dtos;
 using Application.EntityManagement.Votes.Commands;
 using Application.EntityManagement.Votes.Dtos;
+using Domain.Entities;
 using MediatR;
+using System.Linq.Expressions;
+using Web.GraphQL.Types.InputTypes;
 
 namespace Web.GraphQL;
 
@@ -360,13 +367,107 @@ public class Mutation(ISender sender)
     }
 
     // TODO: Figure it out. 
-    
-    public async Task<CommandResult> AddVoteAsync(VoteDto voteDto, CancellationToken cancellationToken)
+
+    public async Task<CommandResult> AddAnswerVoteAsync(AddAnswerVoteInputType answerVoteInput, CancellationToken cancellationToken)
     {
-        var createCommand = new CreateVoteCommand(voteDto);
-    
-        var result = await sender.Send(createCommand, cancellationToken);
-    
+        var answerQuery = new GetAllAnswersQuery(
+            new Pagination(),
+            new Expression<Func<Answer, object?>>[]
+            {
+                answer => answer.Votes
+            },
+            answer => answer.ExternalId == answerVoteInput.AnswerExternalId);
+
+        var answerResult = await sender.Send(answerQuery, cancellationToken);
+
+        var answer = answerResult.Data?.FirstOrDefault();
+
+        if (answer is null)
+        {
+            return CommandResult.Failure(Messages.NotFound);
+        }
+
+        var voteDto = new VoteDto(answerVoteInput.VoteType, answer);
+
+        var createVoteCommand = new CreateVoteCommand(voteDto);
+
+        var result = await sender.Send(createVoteCommand, cancellationToken);
+
+        return result;
+    }
+
+    public async Task<CommandResult> AddCommentVoteAsync(AddCommentVoteInputType commentVoteInput, CancellationToken cancellationToken)
+    {
+        var commentQuery = new GetAllCommentsQuery(
+            new Pagination(),
+            null,
+            comment => comment.ExternalId == commentVoteInput.CommentExternalId);
+
+        var commentResult = await sender.Send(commentQuery, cancellationToken);
+
+        var comment = commentResult.Data?.FirstOrDefault();
+
+        if (comment is null)
+        {
+            return CommandResult.Failure(Messages.NotFound);
+        }
+
+        var voteDto = new VoteDto(commentVoteInput.VoteType, comment);
+
+        var createVoteCommand = new CreateVoteCommand(voteDto);
+
+        var result = await sender.Send(createVoteCommand, cancellationToken);
+
+        return result;
+    }
+
+    public async Task<CommandResult> AddProductVoteAsync(AddProductVoteInputType productVoteInput, CancellationToken cancellationToken)
+    {
+        var productQuery = new GetAllProductsQuery(
+            new Pagination(),
+            null,
+            product => product.ExternalId == productVoteInput.ProductExternalId);
+
+        var productResult = await sender.Send(productQuery, cancellationToken);
+
+        var product = productResult.Data?.FirstOrDefault();
+
+        if (product is null)
+        {
+            return CommandResult.Failure(Messages.NotFound);
+        }
+
+        var voteDto = new VoteDto(productVoteInput.VoteType, product);
+
+        var createVoteCommand = new CreateVoteCommand(voteDto);
+
+        var result = await sender.Send(createVoteCommand, cancellationToken);
+
+        return result;
+    }
+
+    public async Task<CommandResult> AddQuestionVoteAsync(AddQuestionVoteInputType questionVoteInput, CancellationToken cancellationToken)
+    {
+        var questionQuery = new GetAllQuestionsQuery(
+            new Pagination(),
+            null,
+            question => question.ExternalId == questionVoteInput.QuestionExternalId);
+
+        var questionResult = await sender.Send(questionQuery, cancellationToken);
+
+        var question = questionResult.Data?.FirstOrDefault();
+
+        if (question is null)
+        {
+            return CommandResult.Failure(Messages.NotFound);
+        }
+
+        var voteDto = new VoteDto(questionVoteInput.VoteType, question);
+
+        var createVoteCommand = new CreateVoteCommand(voteDto);
+
+        var result = await sender.Send(createVoteCommand, cancellationToken);
+
         return result;
     }
 

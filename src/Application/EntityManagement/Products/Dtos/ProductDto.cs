@@ -12,5 +12,4 @@ public record ProductDto(
     int StockQuantity,
     IEnumerable<string>? ImageUrls,
     CategoryDto Category,
-    IEnumerable<CommentDto> Comments,
-    IEnumerable<VoteDto> Votes);
+    IEnumerable<CommentDto> Comments);

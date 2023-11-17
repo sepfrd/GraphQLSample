@@ -30,23 +30,4 @@
       <_ContentIncludedByDefault Remove="logs\development\log-.json" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="GraphQL\Types\AnswerTypes\" />
-      <Folder Include="GraphQL\Types\CartItemTypes\" />
-      <Folder Include="GraphQL\Types\CartTypes\" />
-      <Folder Include="GraphQL\Types\CategoryTypes\" />
-      <Folder Include="GraphQL\Types\CommentTypes\" />
-      <Folder Include="GraphQL\Types\OrderItemTypes\" />
-      <Folder Include="GraphQL\Types\OrderTypes\" />
-      <Folder Include="GraphQL\Types\PaymentTypes\" />
-      <Folder Include="GraphQL\Types\PersonTypes\" />
-      <Folder Include="GraphQL\Types\PhoneNumberTypes\" />
-      <Folder Include="GraphQL\Types\ProductTypes\" />
-      <Folder Include="GraphQL\Types\QuestionTypes\" />
-      <Folder Include="GraphQL\Types\RoleTypes\" />
-      <Folder Include="GraphQL\Types\ShipmentTypes\" />
-      <Folder Include="GraphQL\Types\UserTypes\" />
-      <Folder Include="GraphQL\Types\VoteTypes\" />
-    </ItemGroup>
-
 </Project>

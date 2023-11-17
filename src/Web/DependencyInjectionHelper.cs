@@ -16,6 +16,7 @@ using Application.EntityManagement.Shipments.Dtos;
 using Application.EntityManagement.Users.Dtos;
 using Web.GraphQL;
 using Web.GraphQL.Types;
+using Web.GraphQL.Types.InputTypes;
 
 namespace Web;
 
@@ -61,7 +62,11 @@ public static class DependencyInjectionHelper
             .AddInputObjectType<QuestionDto>()
             .AddInputObjectType<ShipmentDto>()
             .AddInputObjectType<UserDto>()
-            .AddInputObjectType<CreateUserDto>();
+            .AddInputObjectType<CreateUserDto>()
+            .AddInputObjectType<AddAnswerVoteInputType>()
+            .AddInputObjectType<AddCommentVoteInputType>()
+            .AddInputObjectType<AddProductVoteInputType>()
+            .AddInputObjectType<AddQuestionVoteInputType>();
 
         return services;
     }

@@ -8,5 +8,4 @@ public record QuestionDto(
     int UserExternalId,
     string Title,
     string Description,
-    IEnumerable<AnswerDto> Answers,
-    IEnumerable<VoteDto> Votes);
+    IEnumerable<AnswerDto> Answers);

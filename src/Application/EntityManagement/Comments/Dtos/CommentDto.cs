@@ -6,5 +6,4 @@ public record CommentDto(
     int ExternalId,
     int UserExternalId,
     int ProductExternalId,
-    string Description,
-    ICollection<VoteDto> Votes);
+    string Description);
