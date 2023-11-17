@@ -10,7 +10,7 @@ public sealed class Question : BaseEntity, IVotableContent
     public required string Description { get; set; }
 
     public User? User { get; set; }
-    
+
     public Guid UserId { get; set; }
 
     public ICollection<Answer>? Answers { get; set; }

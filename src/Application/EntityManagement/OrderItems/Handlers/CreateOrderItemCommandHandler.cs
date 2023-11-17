@@ -7,9 +7,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.OrderItems.Handlers;
 
-public class CreateOrderItemCommandHandler : BaseCreateCommandHandler<OrderItem, OrderItemDto>
-{
-    public CreateOrderItemCommandHandler(IUnitOfWork unitOfWork, IMappingService mappingService, ILogger logger) : base(unitOfWork, mappingService, logger)
-    {
-    }
-}
+public class CreateOrderItemCommandHandler(
+        IRepository<OrderItem> repository,
+        IMappingService mappingService,
+        ILogger logger)
+    : BaseCreateCommandHandler<OrderItem, OrderItemDto>(repository, mappingService, logger);

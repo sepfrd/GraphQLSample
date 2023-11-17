@@ -4,9 +4,5 @@ using Domain.Entities;
 
 namespace Application.EntityManagement.Products.Handlers;
 
-public class GetAllProductsQueryHandler : BaseGetAllQueryHandler<Product>
-{
-    public GetAllProductsQueryHandler(IUnitOfWork unitOfWork) : base(unitOfWork)
-    {
-    }
-}
+public class GetAllProductsQueryHandler(IRepository<Product> productRepository)
+    : BaseGetAllQueryHandler<Product>(productRepository);

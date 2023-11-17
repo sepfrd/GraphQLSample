@@ -13,6 +13,6 @@ public sealed class Vote : BaseEntity
     public Guid UserId { get; set; }
 
     public IVotableContent? Content { get; set; }
-    
+
     public Guid ContentId { get; set; }
 }

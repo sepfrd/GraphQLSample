@@ -5,9 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.PhoneNumbers.Handlers;
 
-public class DeletePhoneNumberByExternalIdCommandHandler : BaseDeleteByExternalIdCommandHandler<PhoneNumber>
-{
-    public DeletePhoneNumberByExternalIdCommandHandler(IUnitOfWork unitOfWork, ILogger logger) : base(unitOfWork, logger)
-    {
-    }
-}
+public class DeletePhoneNumberByExternalIdCommandHandler(
+        IRepository<PhoneNumber> phoneNumberRepository,
+        ILogger logger)
+    : BaseDeleteByExternalIdCommandHandler<PhoneNumber>(phoneNumberRepository, logger);

@@ -1,10 +1,7 @@
 using Application.Common;
 using Application.EntityManagement.Addresses.Queries;
 using Application.EntityManagement.Orders.Queries;
-using Application.EntityManagement.Users.Queries;
 using Domain.Entities;
-using HotChocolate;
-using HotChocolate.Types;
 using MediatR;
 
 namespace Web.GraphQL.Types;
@@ -24,7 +21,7 @@ public class ShipmentType : ObjectType<Shipment>
             .ResolveWith<Resolvers>(
                 resolvers =>
                     resolvers.GetDestinationAddressAsync(default!, default!));
-        
+
         descriptor
             .Field(shipment => shipment.OriginAddressId)
             .ResolveWith<Resolvers>(

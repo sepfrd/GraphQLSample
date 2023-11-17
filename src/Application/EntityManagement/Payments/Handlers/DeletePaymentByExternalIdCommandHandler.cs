@@ -5,9 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.Payments.Handlers;
 
-public class DeletePaymentByExternalIdCommandHandler : BaseDeleteByExternalIdCommandHandler<Payment>
-{
-    public DeletePaymentByExternalIdCommandHandler(IUnitOfWork unitOfWork, ILogger logger) : base(unitOfWork, logger)
-    {
-    }
-}
+public class DeletePaymentByExternalIdCommandHandler(
+        IRepository<Payment> paymentRepository,
+        ILogger logger)
+    : BaseDeleteByExternalIdCommandHandler<Payment>(paymentRepository, logger);

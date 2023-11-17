@@ -4,9 +4,5 @@ using Domain.Entities;
 
 namespace Application.EntityManagement.Persons.Handlers;
 
-public class GetAllPersonsQueryHandler : BaseGetAllQueryHandler<Person>
-{
-    public GetAllPersonsQueryHandler(IUnitOfWork unitOfWork) : base(unitOfWork)
-    {
-    }
-}
+public class GetAllPersonsQueryHandler(IRepository<Person> personRepository)
+    : BaseGetAllQueryHandler<Person>(personRepository);

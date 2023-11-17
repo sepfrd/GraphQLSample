@@ -4,9 +4,5 @@ using Domain.Entities;
 
 namespace Application.EntityManagement.Shipments.Handlers;
 
-public class GetAllShipmentsQueryHandler : BaseGetAllQueryHandler<Shipment>
-{
-    public GetAllShipmentsQueryHandler(IUnitOfWork unitOfWork) : base(unitOfWork)
-    {
-    }
-}
+public class GetAllShipmentsQueryHandler(IRepository<Shipment> shipmentRepository)
+    : BaseGetAllQueryHandler<Shipment>(shipmentRepository);

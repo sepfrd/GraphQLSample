@@ -1,5 +1,4 @@
 using Domain.Entities;
-using HotChocolate.Types;
 
 namespace Web.GraphQL.Types;
 

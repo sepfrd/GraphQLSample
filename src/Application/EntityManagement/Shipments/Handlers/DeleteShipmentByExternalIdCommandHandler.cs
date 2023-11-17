@@ -5,9 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.Shipments.Handlers;
 
-public class DeleteShipmentByExternalIdCommandHandler : BaseDeleteByExternalIdCommandHandler<Shipment>
-{
-    public DeleteShipmentByExternalIdCommandHandler(IUnitOfWork unitOfWork, ILogger logger) : base(unitOfWork, logger)
-    {
-    }
-}
+public class DeleteShipmentByExternalIdCommandHandler(
+        IRepository<Shipment> shipmentRepository,
+        ILogger logger)
+    : BaseDeleteByExternalIdCommandHandler<Shipment>(shipmentRepository, logger);

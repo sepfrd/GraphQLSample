@@ -8,28 +8,17 @@ using System.Net;
 
 namespace Application.Common.Handlers;
 
-public abstract class BaseGetAllDtosQueryHandler<TEntity, TDto>
+public abstract class BaseGetAllDtosQueryHandler<TEntity, TDto>(
+        IRepository<TEntity> repository,
+        IMappingService mappingService,
+        ILogger logger)
     : IRequestHandler<BaseGetAllDtosQuery<TEntity, TDto>, QueryReferenceResponse<IEnumerable<TDto>>>
     where TEntity : BaseEntity
 {
-    private readonly IRepository<TEntity> _repository;
-    private readonly IMappingService _mappingService;
-    private readonly ILogger _logger;
-
-    protected BaseGetAllDtosQueryHandler(IUnitOfWork unitOfWork, IMappingService mappingService, ILogger logger)
-    {
-        var repositoryInterface = unitOfWork
-            .Repositories
-            .First(repository => repository is IRepository<TEntity>);
-
-        _repository = (IRepository<TEntity>)repositoryInterface;
-        _mappingService = mappingService;
-        _logger = logger;
-    }
 
     public virtual async Task<QueryReferenceResponse<IEnumerable<TDto>>> Handle(BaseGetAllDtosQuery<TEntity, TDto> request, CancellationToken cancellationToken)
     {
-        var entities = await _repository.GetAllAsync(null, cancellationToken, request.RelationsToInclude);
+        var entities = await repository.GetAllAsync(null, cancellationToken, request.RelationsToInclude);
 
         var paginatedEntities = entities.Paginate(request.Pagination);
 
@@ -44,9 +33,9 @@ public abstract class BaseGetAllDtosQueryHandler<TEntity, TDto>
                 );
         }
 
-        var dtos = _mappingService.Map<List<TEntity>, List<TDto>>(paginatedEntities);
+        var dtos = mappingService.Map<List<TEntity>, List<TDto>>(paginatedEntities);
 
-        if (dtos is not null && dtos.Any())
+        if (dtos is not null && dtos.Count != 0)
         {
             return new QueryReferenceResponse<IEnumerable<TDto>>
                 (
@@ -57,7 +46,7 @@ public abstract class BaseGetAllDtosQueryHandler<TEntity, TDto>
                 );
         }
 
-        _logger.LogError(Messages.MappingFailed, DateTime.UtcNow, typeof(TEntity), typeof(BaseGetAllDtosQueryHandler<TEntity, TDto>));
+        logger.LogError(Messages.MappingFailed, DateTime.UtcNow, typeof(TEntity), typeof(BaseGetAllDtosQueryHandler<TEntity, TDto>));
 
         return new QueryReferenceResponse<IEnumerable<TDto>>
             (

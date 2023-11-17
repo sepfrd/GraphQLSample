@@ -16,7 +16,7 @@ public class CreateUserDtoValidator : AbstractValidator<CreateUserDto>
             .NotEmpty()
             .Matches(RegexPatterns.UsernamePattern);
 
-        RuleForEach(model => model.PhoneNumberDtos)
+        RuleForEach(model => model.PhoneNumbers)
             .SetValidator(new PhoneNumberDtoValidator());
 
         RuleFor(model => model.Password)
@@ -24,10 +24,10 @@ public class CreateUserDtoValidator : AbstractValidator<CreateUserDto>
             .NotEmpty()
             .Matches(RegexPatterns.PasswordPattern);
 
-        RuleFor(model => model.AddressDtos)
+        RuleFor(model => model.Addresses)
             .NotEmpty();
 
-        RuleFor(model => model.PhoneNumberDtos)
+        RuleFor(model => model.PhoneNumbers)
             .NotEmpty();
     }
 }

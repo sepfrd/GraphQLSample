@@ -6,24 +6,13 @@ using System.Net;
 
 namespace Application.Common.Handlers;
 
-public abstract class BaseGetByInternalIdQueryHandler<TEntity>
+public abstract class BaseGetByInternalIdQueryHandler<TEntity>(IRepository<TEntity> repository)
     : IRequestHandler<BaseGetByInternalIdQuery<TEntity>, QueryReferenceResponse<TEntity>>
     where TEntity : BaseEntity
 {
-    private readonly IRepository<TEntity> _repository;
-
-    protected BaseGetByInternalIdQueryHandler(IUnitOfWork unitOfWork)
-    {
-        var repositoryInterface = unitOfWork
-            .Repositories
-            .First(repository => repository is IRepository<TEntity>);
-
-        _repository = (IRepository<TEntity>)repositoryInterface;
-    }
-
     public virtual async Task<QueryReferenceResponse<TEntity>> Handle(BaseGetByInternalIdQuery<TEntity> request, CancellationToken cancellationToken)
     {
-        var entity = await _repository.GetByInternalIdAsync(request.InternalId, cancellationToken, request.RelationsToInclude);
+        var entity = await repository.GetByInternalIdAsync(request.InternalId, cancellationToken, request.RelationsToInclude);
 
         if (entity is null)
         {

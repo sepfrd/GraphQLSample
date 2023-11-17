@@ -17,9 +17,9 @@ public sealed class User : BaseEntity
     public Person? Person { get; set; }
 
     public Guid PersonId { get; set; }
-    
+
     public Cart? Cart { get; set; }
-    
+
     public Guid CartId { get; set; }
 
     public ICollection<Order>? Orders { get; set; }
@@ -33,10 +33,10 @@ public sealed class User : BaseEntity
     public ICollection<Answer>? Answers { get; set; }
 
     public ICollection<Vote>? Votes { get; set; }
-    
+
     public ICollection<Payment>? Payments { get; set; }
-    
+
     public ICollection<Comment>? Comments { get; set; }
-    
+
     public ICollection<Role>? Roles { get; set; }
 }

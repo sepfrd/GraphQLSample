@@ -4,9 +4,5 @@ using Domain.Entities;
 
 namespace Application.EntityManagement.OrderItems.Handlers;
 
-public class GetAllOrderItemsQueryHandler : BaseGetAllQueryHandler<OrderItem>
-{
-    public GetAllOrderItemsQueryHandler(IUnitOfWork unitOfWork) : base(unitOfWork)
-    {
-    }
-}
+public class GetAllOrderItemsQueryHandler(IRepository<OrderItem> orderItemRepository)
+    : BaseGetAllQueryHandler<OrderItem>(orderItemRepository);

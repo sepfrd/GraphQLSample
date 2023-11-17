@@ -2,8 +2,6 @@ using Application.Common;
 using Application.EntityManagement.Carts.Queries;
 using Application.EntityManagement.Persons.Queries;
 using Domain.Entities;
-using HotChocolate;
-using HotChocolate.Types;
 using MediatR;
 
 namespace Web.GraphQL.Types;

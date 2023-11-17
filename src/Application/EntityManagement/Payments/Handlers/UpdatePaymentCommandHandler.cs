@@ -7,9 +7,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.Payments.Handlers;
 
-public class UpdatePaymentCommandHandler : BaseUpdateCommandHandler<Payment, PaymentDto>
-{
-    public UpdatePaymentCommandHandler(IUnitOfWork unitOfWork, IMappingService mappingService, ILogger logger) : base(unitOfWork, mappingService, logger)
-    {
-    }
-}
+public class UpdatePaymentCommandHandler(
+        IRepository<Payment> paymentRepository,
+        IMappingService mappingService,
+        ILogger logger)
+    : BaseUpdateCommandHandler<Payment, PaymentDto>(paymentRepository, mappingService, logger);

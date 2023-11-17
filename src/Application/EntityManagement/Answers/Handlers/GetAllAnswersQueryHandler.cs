@@ -4,9 +4,5 @@ using Domain.Entities;
 
 namespace Application.EntityManagement.Answers.Handlers;
 
-public class GetAllAnswersQueryHandler : BaseGetAllQueryHandler<Answer>
-{
-    public GetAllAnswersQueryHandler(IUnitOfWork unitOfWork) : base(unitOfWork)
-    {
-    }
-}
+public class GetAllAnswersQueryHandler(IRepository<Answer> answerRepository)
+    : BaseGetAllQueryHandler<Answer>(answerRepository);

@@ -1,7 +1,4 @@
 using Domain.Entities;
-using HotChocolate;
-using HotChocolate.Types;
-using MongoDB.Driver;
 
 namespace Web.GraphQL.Types;
 
@@ -14,7 +11,7 @@ public class AddressType : ObjectType<Address>
         descriptor
             .Field(address => address.InternalId)
             .Ignore();
-        
+
         descriptor
             .Field(address => address.UserId)
             .Ignore();

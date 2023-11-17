@@ -5,10 +5,5 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.Answers.Handlers;
 
-public class DeleteAnswerByInternalIdCommandHandler : BaseDeleteByInternalIdCommandHandler<Answer>
-{
-    public DeleteAnswerByInternalIdCommandHandler(IUnitOfWork unitOfWork, ILogger logger)
-        : base(unitOfWork, logger)
-    {
-    }
-}
+public class DeleteAnswerByInternalIdCommandHandler(IRepository<Answer> answerRepository, ILogger logger)
+    : BaseDeleteByInternalIdCommandHandler<Answer>(answerRepository, logger);

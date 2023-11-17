@@ -7,9 +7,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.Persons.Handlers;
 
-public class UpdatePersonCommandHandler : BaseUpdateCommandHandler<Person, PersonDto>
-{
-    public UpdatePersonCommandHandler(IUnitOfWork unitOfWork, IMappingService mappingService, ILogger logger) : base(unitOfWork, mappingService, logger)
-    {
-    }
-}
+public class UpdatePersonCommandHandler(
+        IRepository<Person> personRepository,
+        IMappingService mappingService,
+        ILogger logger)
+    : BaseUpdateCommandHandler<Person, PersonDto>(personRepository, mappingService, logger);

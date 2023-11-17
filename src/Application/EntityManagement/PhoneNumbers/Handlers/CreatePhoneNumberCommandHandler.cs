@@ -7,9 +7,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.PhoneNumbers.Handlers;
 
-public class CreatePhoneNumberCommandHandler : BaseCreateCommandHandler<PhoneNumber, PhoneNumberDto>
-{
-    public CreatePhoneNumberCommandHandler(IUnitOfWork unitOfWork, IMappingService mappingService, ILogger logger) : base(unitOfWork, mappingService, logger)
-    {
-    }
-}
+public class CreatePhoneNumberCommandHandler(
+        IRepository<PhoneNumber> phoneNumberRepository,
+        IMappingService mappingService,
+        ILogger logger)
+    : BaseCreateCommandHandler<PhoneNumber, PhoneNumberDto>(phoneNumberRepository, mappingService, logger);

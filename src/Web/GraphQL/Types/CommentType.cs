@@ -3,8 +3,6 @@ using Application.EntityManagement.Products.Queries;
 using Application.EntityManagement.Users.Queries;
 using Application.EntityManagement.Votes.Queries;
 using Domain.Entities;
-using HotChocolate;
-using HotChocolate.Types;
 using MediatR;
 
 namespace Web.GraphQL.Types;
@@ -32,14 +30,14 @@ public class CommentType : ObjectType<Comment>
             .ResolveWith<Resolvers>(
                 resolvers =>
                     resolvers.GetUserAsync(default!, default!));
-        
+
         descriptor
             .Field(comment => comment.Votes)
             .Description("The Votes Submitted for This Comment")
             .ResolveWith<Resolvers>(
                 resolvers =>
                     resolvers.GetVotesAsync(default!, default!));
-        
+
         descriptor
             .Field(comment => comment.DateCreated)
             .Description("The Creation Date");
@@ -78,7 +76,7 @@ public class CommentType : ObjectType<Comment>
 
             return result.Data?.FirstOrDefault();
         }
-        
+
         public async Task<User?> GetUserAsync([Parent] Comment comment, [Service] ISender sender)
         {
             var usersQuery = new GetAllUsersQuery(
@@ -90,7 +88,7 @@ public class CommentType : ObjectType<Comment>
 
             return result.Data?.FirstOrDefault();
         }
-        
+
         public async Task<IEnumerable<Vote>?> GetVotesAsync([Parent] Comment comment, [Service] ISender sender)
         {
             var votesQuery = new GetAllVotesQuery(

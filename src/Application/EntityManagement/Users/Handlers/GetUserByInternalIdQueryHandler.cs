@@ -7,20 +7,11 @@ using System.Net;
 
 namespace Application.EntityManagement.Users.Handlers;
 
-public class GetUserByInternalIdQueryHandler : IRequestHandler<GetUserByInternalIdQuery, QueryReferenceResponse<User>>
+public class GetUserByInternalIdQueryHandler(IRepository<User> userRepository) : IRequestHandler<GetUserByInternalIdQuery, QueryReferenceResponse<User>>
 {
-    private readonly IUnitOfWork _unitOfWork;
-
-    public GetUserByInternalIdQueryHandler(IUnitOfWork unitOfWork)
-    {
-        _unitOfWork = unitOfWork;
-    }
-
     public async Task<QueryReferenceResponse<User>> Handle(GetUserByInternalIdQuery request, CancellationToken cancellationToken)
     {
-        var user = await _unitOfWork
-            .UserRepository
-            .GetByInternalIdAsync(request.InternalId, cancellationToken, request.RelationsToInclude);
+        var user = await userRepository.GetByInternalIdAsync(request.InternalId, cancellationToken, request.RelationsToInclude);
 
         if (user is null)
         {

@@ -7,9 +7,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.Addresses.Handlers;
 
-public class CreateAddressCommandHandler : BaseCreateCommandHandler<Address, AddressDto>
-{
-    public CreateAddressCommandHandler(IUnitOfWork unitOfWork, IMappingService mappingService, ILogger logger) : base(unitOfWork, mappingService, logger)
-    {
-    }
-}
+public class CreateAddressCommandHandler(
+        IRepository<Address> addressRepository,
+        IMappingService mappingService,
+        ILogger logger)
+    : BaseCreateCommandHandler<Address, AddressDto>(addressRepository, mappingService, logger);

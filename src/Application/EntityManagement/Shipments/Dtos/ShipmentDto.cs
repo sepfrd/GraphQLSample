@@ -3,8 +3,7 @@ using Domain.Enums;
 
 namespace Application.EntityManagement.Shipments.Dtos;
 
-public record ShipmentDto
-(
+public record ShipmentDto(
     int ExternalId,
     int OrderExternalId,
     Guid TraceId,
@@ -14,5 +13,4 @@ public record ShipmentDto
     DateTime? DateDelivered,
     decimal ShippingCost,
     AddressDto DestinationAddress,
-    AddressDto OriginAddress
-);
+    AddressDto OriginAddress);

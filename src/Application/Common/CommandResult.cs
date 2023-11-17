@@ -13,8 +13,8 @@ public sealed record CommandResult
     public string Message { get; } = string.Empty;
 
     public static CommandResult Success(string message) =>
-        new (true, message);
+        new(true, message);
 
     public static CommandResult Failure(string message) =>
-        new (false, message);
+        new(false, message);
 }

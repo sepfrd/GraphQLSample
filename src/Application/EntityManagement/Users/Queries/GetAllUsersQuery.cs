@@ -1,7 +1,6 @@
 using Application.Common;
 using Application.Common.Queries;
 using Domain.Entities;
-using MediatR;
 using System.Linq.Expressions;
 
 namespace Application.EntityManagement.Users.Queries;

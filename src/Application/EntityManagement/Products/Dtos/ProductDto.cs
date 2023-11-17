@@ -4,15 +4,13 @@ using Application.EntityManagement.Votes.Dtos;
 
 namespace Application.EntityManagement.Products.Dtos;
 
-public record ProductDto
-(
+public record ProductDto(
     int ExternalId,
     string? Name,
     string? Description,
     decimal Price,
     int StockQuantity,
-    ICollection<string>? ImageUrls,
-    CategoryDto CategoryDto,
-    ICollection<CommentDto> CommentDtos,
-    ICollection<VoteDto> VoteDtos
-);
+    IEnumerable<string>? ImageUrls,
+    CategoryDto Category,
+    IEnumerable<CommentDto> Comments,
+    IEnumerable<VoteDto> Votes);

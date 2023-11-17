@@ -5,9 +5,5 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.Persons.Handlers;
 
-public class DeletePersonByInternalCommandHandler : BaseDeleteByInternalIdCommandHandler<Person>
-{
-    public DeletePersonByInternalCommandHandler(IUnitOfWork unitOfWork, ILogger logger) : base(unitOfWork, logger)
-    {
-    }
-}
+public class DeletePersonByInternalCommandHandler(IRepository<Person> personRepository, ILogger logger)
+    : BaseDeleteByInternalIdCommandHandler<Person>(personRepository, logger);

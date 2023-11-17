@@ -1,31 +1,24 @@
 using Application.Common;
 using Application.EntityManagement.CartItems.Commands;
 using Domain.Abstractions;
+using Domain.Entities;
 using MediatR;
 
 namespace Application.EntityManagement.CartItems.Handlers;
 
-public class DeleteCartItemByExternalICommandHandler : IRequestHandler<DeleteCartItemByExternalICommand, CommandResult>
+public class DeleteCartItemByExternalICommandHandler(IRepository<CartItem> cartItemRepository)
+    : IRequestHandler<DeleteCartItemByExternalICommand, CommandResult>
 {
-    private readonly IUnitOfWork _unitOfWork;
-
-    public DeleteCartItemByExternalICommandHandler(IUnitOfWork unitOfWork)
-    {
-        _unitOfWork = unitOfWork;
-    }
-
     public async Task<CommandResult> Handle(DeleteCartItemByExternalICommand request, CancellationToken cancellationToken)
     {
-        var cartItem = await _unitOfWork.CartItemRepository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
+        var cartItem = await cartItemRepository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
 
         if (cartItem is null)
         {
             return CommandResult.Failure(Messages.NotFound);
         }
 
-        await _unitOfWork.CartItemRepository.DeleteAsync(cartItem, cancellationToken);
-
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await cartItemRepository.DeleteAsync(cartItem, cancellationToken);
 
         return CommandResult.Success(Messages.SuccessfullyDeleted);
     }

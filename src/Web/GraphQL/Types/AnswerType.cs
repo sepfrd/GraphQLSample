@@ -3,8 +3,6 @@ using Application.EntityManagement.Questions.Queries;
 using Application.EntityManagement.Users.Queries;
 using Application.EntityManagement.Votes.Queries;
 using Domain.Entities;
-using HotChocolate;
-using HotChocolate.Types;
 using MediatR;
 
 namespace Web.GraphQL.Types;
@@ -59,7 +57,7 @@ public class AnswerType : ObjectType<Answer>
             .ResolveWith<Resolvers>(
                 resolvers =>
                     resolvers.GetVotesAsync(default!, default!));
-        
+
         descriptor
             .Field(answer => answer.DateCreated)
             .Description("The Creation Date");
@@ -98,7 +96,7 @@ public class AnswerType : ObjectType<Answer>
 
             return result.Data?.FirstOrDefault();
         }
-        
+
         public async Task<IEnumerable<Vote>?> GetVotesAsync([Parent] Answer answer, [Service] ISender sender)
         {
             var votesQuery = new GetAllVotesQuery(

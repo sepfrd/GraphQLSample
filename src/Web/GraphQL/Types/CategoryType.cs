@@ -1,8 +1,6 @@
 using Application.Common;
 using Application.EntityManagement.Products.Queries;
 using Domain.Entities;
-using HotChocolate;
-using HotChocolate.Types;
 using MediatR;
 
 namespace Web.GraphQL.Types;

@@ -1,8 +1,8 @@
 namespace Infrastructure.Persistence.Common;
 
 public record MongoDbSettings
-(
-    string ConnectionString,
-    string DatabaseName,
-    string CollectionName
-);
+{
+    public required string ConnectionString { get; set; }
+
+    public required string DatabaseName { get; set; }
+}

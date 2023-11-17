@@ -7,36 +7,26 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.Users.Handlers;
 
-public class DeleteUserByExternalIdCommandHandler : IRequestHandler<DeleteUserByExternalIdCommand, CommandResult>
+public class DeleteUserByExternalIdCommandHandler(IRepository<User> userRepository, ILogger logger)
+    : IRequestHandler<DeleteUserByExternalIdCommand, CommandResult>
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly ILogger _logger;
-
-    public DeleteUserByExternalIdCommandHandler(IUnitOfWork unitOfWork, ILogger logger)
-    {
-        _unitOfWork = unitOfWork;
-        _logger = logger;
-    }
-
     public async Task<CommandResult> Handle(DeleteUserByExternalIdCommand request, CancellationToken cancellationToken)
     {
-        var user = await _unitOfWork
-            .UserRepository
-            .GetByExternalIdAsync(request.ExternalId, cancellationToken);
+        var user = await userRepository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
 
         if (user is null)
         {
             return CommandResult.Success(Messages.NotFound);
         }
 
-        var deletedUser = await _unitOfWork.UserRepository.DeleteAsync(user, cancellationToken);
+        var deletedUser = await userRepository.DeleteAsync(user, cancellationToken);
 
         if (deletedUser is not null)
         {
             return CommandResult.Success(Messages.SuccessfullyDeleted);
         }
 
-        _logger.LogError(Messages.EntityDeletionFailed, DateTime.UtcNow, typeof(User), typeof(DeleteUserByExternalIdCommandHandler));
+        logger.LogError(Messages.EntityDeletionFailed, DateTime.UtcNow, typeof(User), typeof(DeleteUserByExternalIdCommandHandler));
 
         return CommandResult.Failure(Messages.InternalServerError);
     }

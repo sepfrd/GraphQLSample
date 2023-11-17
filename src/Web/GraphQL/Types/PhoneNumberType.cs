@@ -1,8 +1,6 @@
 using Application.Common;
 using Application.EntityManagement.Users.Queries;
 using Domain.Entities;
-using HotChocolate;
-using HotChocolate.Types;
 using MediatR;
 
 namespace Web.GraphQL.Types;
@@ -16,7 +14,7 @@ public class PhoneNumberType : ObjectType<PhoneNumber>
             .ResolveWith<Resolvers>(
                 resolvers =>
                     resolvers.GetUserAsync(default!, default!));
-        
+
         descriptor
             .Field(phoneNumber => phoneNumber.DateCreated)
             .Description("The Creation Date");
@@ -32,14 +30,14 @@ public class PhoneNumberType : ObjectType<PhoneNumber>
         descriptor
             .Field(phoneNumber => phoneNumber.InternalId)
             .Ignore();
-        
+
         descriptor
             .Field(phoneNumber => phoneNumber.UserId)
             .Ignore();
     }
-    
+
     private sealed class Resolvers
-    { 
+    {
         public async Task<User?> GetUserAsync([Parent] PhoneNumber phoneNumber, [Service] ISender sender)
         {
             var usersQuery = new GetAllUsersQuery(

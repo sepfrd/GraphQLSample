@@ -1,25 +1,62 @@
+using Application;
+using Infrastructure;
+using Serilog;
+using Serilog.Settings.Configuration;
+using Web;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Logging.ClearProviders();
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom
+    .Configuration(
+        builder.Configuration,
+        new ConfigurationReaderOptions
+        {
+            SectionName = "InternalSerilog"
+        })
+    .CreateBootstrapLogger();
 
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+try
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    builder
+        .Services
+        .AddEndpointsApiExplorer()
+        .InjectApplicationLayer()
+        .InjectInfrastructureLayer(builder.Configuration)
+        .AddAllGraphQlServices()
+        .AddLogger(builder.Configuration);
+
+    var app = builder.Build();
+
+    app.MapGraphQL();
+
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseDeveloperExceptionPage();
+
+        app.UseGraphQLVoyager("/graphql-voyager");
+    }
+
+/*
+    app
+        .UseHttpsRedirection();
+        .UseCors("AllowAnyOrigin")
+        .UseRouting()
+        .UseAuthentication()
+        .UseAuthorization()
+        .UseEndpoints(endpoints => endpoints.MapControllers());
+*/
+    app.Run();
 }
+catch (Exception exception)
+{
+    Log.Error(exception, "Program stopped due to a {ExceptionType} exception", exception.GetType());
 
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
+    throw;
+}
+finally
+{
+    Log.CloseAndFlush();
+}

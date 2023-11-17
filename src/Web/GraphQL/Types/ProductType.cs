@@ -1,10 +1,7 @@
 using Application.Common;
 using Application.EntityManagement.Categories.Queries;
-using Application.EntityManagement.Users.Queries;
 using Application.EntityManagement.Votes.Queries;
 using Domain.Entities;
-using HotChocolate;
-using HotChocolate.Types;
 using MediatR;
 
 namespace Web.GraphQL.Types;
@@ -24,7 +21,7 @@ public class ProductType : ObjectType<Product>
             .ResolveWith<Resolvers>(
                 resolvers =>
                     resolvers.GetVotesAsync(default!, default!));
-        
+
         descriptor
             .Field(product => product.DateCreated)
             .Description("The Creation Date");
@@ -59,7 +56,7 @@ public class ProductType : ObjectType<Product>
 
             return result.Data?.FirstOrDefault();
         }
-        
+
         public async Task<IEnumerable<Vote>?> GetVotesAsync([Parent] Product product, [Service] ISender sender)
         {
             var votesQuery = new GetAllVotesQuery(

@@ -7,9 +7,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.Comments.Handlers;
 
-public class CreateCommentCommandHandler : BaseCreateCommandHandler<Comment, CommentDto>
-{
-    public CreateCommentCommandHandler(IUnitOfWork unitOfWork, IMappingService mappingService, ILogger logger) : base(unitOfWork, mappingService, logger)
-    {
-    }
-}
+public class CreateCommentCommandHandler(
+        IRepository<Comment> commentRepository,
+        IMappingService mappingService,
+        ILogger logger)
+    : BaseCreateCommandHandler<Comment, CommentDto>(commentRepository, mappingService, logger);

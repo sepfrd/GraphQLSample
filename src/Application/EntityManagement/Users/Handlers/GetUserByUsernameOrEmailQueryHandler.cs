@@ -7,18 +7,11 @@ using System.Net;
 
 namespace Application.EntityManagement.Users.Handlers;
 
-public class GetUserByUsernameOrEmailQueryHandler : IRequestHandler<GetUserByUsernameOrEmailQuery, QueryReferenceResponse<User>>
+public class GetUserByUsernameOrEmailQueryHandler(IRepository<User> userRepository) : IRequestHandler<GetUserByUsernameOrEmailQuery, QueryReferenceResponse<User>>
 {
-    private readonly IUnitOfWork _unitOfWork;
-
-    public GetUserByUsernameOrEmailQueryHandler(IUnitOfWork unitOfWork)
-    {
-        _unitOfWork = unitOfWork;
-    }
-
     public async Task<QueryReferenceResponse<User>> Handle(GetUserByUsernameOrEmailQuery request, CancellationToken cancellationToken)
     {
-        var users = await _unitOfWork.UserRepository
+        var users = await userRepository
             .GetAllAsync(user =>
                     user.Username == request.UsernameOrEmail ||
                     user.Email == request.UsernameOrEmail,

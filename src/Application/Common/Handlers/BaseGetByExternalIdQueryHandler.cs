@@ -8,29 +8,17 @@ using System.Net;
 
 namespace Application.Common.Handlers;
 
-public abstract class BaseGetByExternalIdQueryHandler<TEntity, TDto>
+public abstract class BaseGetByExternalIdQueryHandler<TEntity, TDto>(
+        IRepository<TEntity> repository,
+        IMappingService mappingService,
+        ILogger logger)
     : IRequestHandler<BaseGetByExternalIdQuery<TEntity, TDto>, QueryReferenceResponse<TDto>>
     where TEntity : BaseEntity
     where TDto : class
 {
-    private readonly IRepository<TEntity> _repository;
-    private readonly IMappingService _mappingService;
-    private readonly ILogger _logger;
-
-    protected BaseGetByExternalIdQueryHandler(IUnitOfWork unitOfWork, IMappingService mappingService, ILogger logger)
-    {
-        var repositoryInterface = unitOfWork
-            .Repositories
-            .First(repository => repository is IRepository<TEntity>);
-
-        _repository = (IRepository<TEntity>)repositoryInterface;
-        _mappingService = mappingService;
-        _logger = logger;
-    }
-
     public virtual async Task<QueryReferenceResponse<TDto>> Handle(BaseGetByExternalIdQuery<TEntity, TDto> request, CancellationToken cancellationToken)
     {
-        var entity = await _repository.GetByExternalIdAsync(request.ExternalId, cancellationToken, request.RelationsToInclude);
+        var entity = await repository.GetByExternalIdAsync(request.ExternalId, cancellationToken, request.RelationsToInclude);
 
         if (entity is null)
         {
@@ -43,7 +31,7 @@ public abstract class BaseGetByExternalIdQueryHandler<TEntity, TDto>
                 );
         }
 
-        var dto = _mappingService.Map<TEntity, TDto>(entity);
+        var dto = mappingService.Map<TEntity, TDto>(entity);
 
         if (dto is not null)
         {
@@ -56,7 +44,7 @@ public abstract class BaseGetByExternalIdQueryHandler<TEntity, TDto>
                 );
         }
 
-        _logger.LogError(message: Messages.MappingFailed, DateTime.UtcNow, typeof(TEntity), typeof(BaseGetByExternalIdQueryHandler<TEntity, TDto>));
+        logger.LogError(message: Messages.MappingFailed, DateTime.UtcNow, typeof(TEntity), typeof(BaseGetByExternalIdQueryHandler<TEntity, TDto>));
 
         return new QueryReferenceResponse<TDto>(Message: Messages.InternalServerError, HttpStatusCode: HttpStatusCode.InternalServerError);
     }

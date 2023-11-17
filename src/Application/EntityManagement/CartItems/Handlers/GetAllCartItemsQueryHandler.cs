@@ -4,9 +4,5 @@ using Domain.Entities;
 
 namespace Application.EntityManagement.CartItems.Handlers;
 
-public class GetAllCartItemsQueryHandler : BaseGetAllQueryHandler<CartItem>
-{
-    public GetAllCartItemsQueryHandler(IUnitOfWork unitOfWork) : base(unitOfWork)
-    {
-    }
-}
+public class GetAllCartItemsQueryHandler(IRepository<CartItem> cartItemRepository)
+    : BaseGetAllQueryHandler<CartItem>(cartItemRepository);

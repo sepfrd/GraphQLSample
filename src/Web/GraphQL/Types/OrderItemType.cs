@@ -2,8 +2,6 @@ using Application.Common;
 using Application.EntityManagement.Orders.Queries;
 using Application.EntityManagement.Products.Queries;
 using Domain.Entities;
-using HotChocolate;
-using HotChocolate.Types;
 using MediatR;
 
 namespace Web.GraphQL.Types;
@@ -35,11 +33,11 @@ public class OrderItemType : ObjectType<OrderItem>
         descriptor
             .Field(orderItem => orderItem.UnitPrice)
             .Description("The Price of a Single Unit of The Product This Item Represents");
-        
+
         descriptor
             .Field(orderItem => orderItem.SubTotalPrice)
             .Description("The Total Price of This Item");
-        
+
         descriptor
             .Field(orderItem => orderItem.DateCreated)
             .Description("The Creation Date");
@@ -64,7 +62,7 @@ public class OrderItemType : ObjectType<OrderItem>
             .Field(orderItem => orderItem.ProductId)
             .Ignore();
     }
-    
+
     private sealed class Resolvers
     {
         public async Task<Product?> GetProductAsync([Parent] OrderItem orderItem, [Service] ISender sender)
@@ -78,7 +76,7 @@ public class OrderItemType : ObjectType<OrderItem>
 
             return result.Data?.FirstOrDefault();
         }
-        
+
         public async Task<Order?> GetOrderAsync([Parent] OrderItem orderItem, [Service] ISender sender)
         {
             var ordersQuery = new GetAllOrdersQuery(

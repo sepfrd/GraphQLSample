@@ -7,9 +7,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.Shipments.Handlers;
 
-public class UpdateShipmentCommandHandler : BaseUpdateCommandHandler<Shipment, ShipmentDto>
-{
-    public UpdateShipmentCommandHandler(IUnitOfWork unitOfWork, IMappingService mappingService, ILogger logger) : base(unitOfWork, mappingService, logger)
-    {
-    }
-}
+public class UpdateShipmentCommandHandler(
+        IRepository<Shipment> shipmentRepository,
+        IMappingService mappingService,
+        ILogger logger)
+    : BaseUpdateCommandHandler<Shipment, ShipmentDto>(shipmentRepository, mappingService, logger);

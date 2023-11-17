@@ -7,20 +7,12 @@ using System.Net;
 
 namespace Application.EntityManagement.Users.Handlers;
 
-public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, QueryReferenceResponse<IEnumerable<User>>>
+public class GetAllUsersQueryHandler(IRepository<User> userRepository)
+    : IRequestHandler<GetAllUsersQuery, QueryReferenceResponse<IEnumerable<User>>>
 {
-    private readonly IUnitOfWork _unitOfWork;
-
-    public GetAllUsersQueryHandler(IUnitOfWork unitOfWork)
-    {
-        _unitOfWork = unitOfWork;
-    }
-
     public async Task<QueryReferenceResponse<IEnumerable<User>>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
     {
-        var users = await _unitOfWork
-            .UserRepository
-            .GetAllAsync(request.Filter, cancellationToken, request.RelationsToInclude);
+        var users = await userRepository.GetAllAsync(request.Filter, cancellationToken, request.RelationsToInclude);
 
         return new QueryReferenceResponse<IEnumerable<User>>(
             users.Paginate(request.Pagination),

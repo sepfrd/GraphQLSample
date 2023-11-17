@@ -10,24 +10,17 @@ using System.Net;
 
 namespace Application.EntityManagement.Categories.Handlers;
 
-public class GetAllCategoryDtosQueryHandler : IRequestHandler<GetAllCategoryDtosQuery, QueryReferenceResponse<IEnumerable<CategoryDto>>>
+public class GetAllCategoryDtosQueryHandler(
+        IRepository<Category> categoryRepository,
+        IMappingService mappingService,
+        ILogger logger)
+    : IRequestHandler<GetAllCategoryDtosQuery, QueryReferenceResponse<IEnumerable<CategoryDto>>>
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IMappingService _mappingService;
-    private readonly ILogger _logger;
-
-    public GetAllCategoryDtosQueryHandler(IUnitOfWork unitOfWork, IMappingService mappingService, ILogger logger)
-    {
-        _unitOfWork = unitOfWork;
-        _mappingService = mappingService;
-        _logger = logger;
-    }
-
     public async Task<QueryReferenceResponse<IEnumerable<CategoryDto>>> Handle(GetAllCategoryDtosQuery request, CancellationToken cancellationToken)
     {
-        var categories = await _unitOfWork.CategoryRepository.GetAllAsync(null, cancellationToken);
+        var categories = await categoryRepository.GetAllAsync(null, cancellationToken);
 
-        var categoryDtos = _mappingService.Map<IEnumerable<Category>, IEnumerable<CategoryDto>>(categories);
+        var categoryDtos = mappingService.Map<IEnumerable<Category>, IEnumerable<CategoryDto>>(categories);
 
         if (categoryDtos is not null)
         {
@@ -39,7 +32,7 @@ public class GetAllCategoryDtosQueryHandler : IRequestHandler<GetAllCategoryDtos
                 );
         }
 
-        _logger.LogError(Messages.MappingFailed, DateTime.UtcNow, typeof(IEnumerable<Category>), typeof(GetAllCategoryDtosQueryHandler));
+        logger.LogError(Messages.MappingFailed, DateTime.UtcNow, typeof(IEnumerable<Category>), typeof(GetAllCategoryDtosQueryHandler));
 
         return new QueryReferenceResponse<IEnumerable<CategoryDto>>(
             null,

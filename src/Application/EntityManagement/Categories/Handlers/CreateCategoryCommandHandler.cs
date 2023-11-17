@@ -9,38 +9,25 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.Categories.Handlers;
 
-public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, CommandResult>
+public class CreateCategoryCommandHandler(IRepository<Category> categoryRepository, IMappingService mappingService, ILogger logger)
+    : IRequestHandler<CreateCategoryCommand, CommandResult>
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IMappingService _mappingService;
-    private readonly ILogger _logger;
-
-    public CreateCategoryCommandHandler(IUnitOfWork unitOfWork, IMappingService mappingService, ILogger logger)
-    {
-        _unitOfWork = unitOfWork;
-        _mappingService = mappingService;
-        _logger = logger;
-
-    }
-
     public async Task<CommandResult> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
     {
-        var category = _mappingService.Map<CategoryDto, Category>(request.CategoryDto);
+        var category = mappingService.Map<CategoryDto, Category>(request.CategoryDto);
 
         if (category is null)
         {
-            _logger.LogError(Messages.MappingFailed, DateTime.UtcNow, typeof(Category), typeof(CreateCategoryCommandHandler));
+            logger.LogError(Messages.MappingFailed, DateTime.UtcNow, typeof(Category), typeof(CreateCategoryCommandHandler));
 
             return CommandResult.Failure(Messages.InternalServerError);
         }
 
-        var externalId = await _unitOfWork.CategoryRepository.GenerateUniqueExternalIdAsync(cancellationToken);
+        var externalId = await categoryRepository.GenerateUniqueExternalIdAsync(cancellationToken);
 
         category.ExternalId = externalId;
 
-        await _unitOfWork.CategoryRepository.CreateAsync(category, cancellationToken);
-
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await categoryRepository.CreateAsync(category, cancellationToken);
 
         return CommandResult.Success(Messages.SuccessfullyCreated);
     }

@@ -7,9 +7,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.OrderItems.Handlers;
 
-public class UpdateOrderItemCommandHandler : BaseUpdateCommandHandler<OrderItem, OrderItemDto>
-{
-    public UpdateOrderItemCommandHandler(IUnitOfWork unitOfWork, IMappingService mappingService, ILogger logger) : base(unitOfWork, mappingService, logger)
-    {
-    }
-}
+public class UpdateOrderItemCommandHandler(
+        IRepository<OrderItem> orderItemRepository,
+        IMappingService mappingService,
+        ILogger logger)
+    : BaseUpdateCommandHandler<OrderItem, OrderItemDto>(orderItemRepository, mappingService, logger);

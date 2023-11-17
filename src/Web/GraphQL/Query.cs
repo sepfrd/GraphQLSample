@@ -3,7 +3,6 @@ using Application.EntityManagement.Categories.Queries;
 using Application.EntityManagement.Products.Queries;
 using Application.EntityManagement.Users.Queries;
 using Domain.Entities;
-using HotChocolate;
 using MediatR;
 using System.Linq.Expressions;
 
@@ -19,7 +18,7 @@ public class Query
         {
             category => category.Products
         };
-        
+
         var categoryQuery = new GetAllCategoriesQuery(pagination, relationsToInclude);
 
         var result = await sender.Send(categoryQuery, cancellationToken);

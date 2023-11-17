@@ -7,10 +7,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.Answers.Handlers;
 
-public class UpdateAnswerCommandHandler : BaseUpdateCommandHandler<Answer, AnswerDto>
-{
-    public UpdateAnswerCommandHandler(IUnitOfWork unitOfWork, IMappingService mappingService, ILogger logger)
-        : base(unitOfWork, mappingService, logger)
-    {
-    }
-}
+public class UpdateAnswerCommandHandler(
+        IRepository<Answer> answerRepository,
+        IMappingService mappingService,
+        ILogger logger)
+    : BaseUpdateCommandHandler<Answer, AnswerDto>(answerRepository, mappingService, logger);

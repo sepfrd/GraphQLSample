@@ -1,22 +1,40 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-        <Folder Include="Persistence\Abstractions\" />
+        <Folder Include="Persistence\Abstractions\"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Domain\Domain.csproj" />
+        <ProjectReference Include="..\Application\Application.csproj"/>
+        <ProjectReference Include="..\Domain\Domain.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1" />
-      <PackageReference Include="MongoDB.Driver" Version="2.22.0" />
+        <PackageReference Include="Mapster" Version="7.4.0"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.0"/>
+        <PackageReference Include="MongoDB.Driver" Version="2.22.0"/>
+        <PackageReference Include="Serilog.AspNetCore" Version="8.0.0"/>
+        <PackageReference Include="Serilog.Enrichers.Environment" Version="2.3.0"/>
+        <PackageReference Include="Serilog.Sinks.MongoDB" Version="5.3.1"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Remove="Services\MappingService\MapperlyMappers\**"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Remove="Services\MappingService\MapperlyMappers\**"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Remove="Services\MappingService\MapperlyMappers\**"/>
     </ItemGroup>
 
 </Project>

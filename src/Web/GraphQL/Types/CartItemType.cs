@@ -1,10 +1,7 @@
 using Application.Common;
 using Application.EntityManagement.Carts.Queries;
 using Application.EntityManagement.Products.Queries;
-using Application.EntityManagement.Users.Queries;
 using Domain.Entities;
-using HotChocolate;
-using HotChocolate.Types;
 using MediatR;
 
 namespace Web.GraphQL.Types;

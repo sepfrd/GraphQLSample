@@ -5,9 +5,5 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.Comments.Handlers;
 
-public class DeleteCommentCommandHandler : BaseDeleteByExternalIdCommandHandler<Comment>
-{
-    public DeleteCommentCommandHandler(IUnitOfWork unitOfWork, ILogger logger) : base(unitOfWork, logger)
-    {
-    }
-}
+public class DeleteCommentCommandHandler(IRepository<Comment> commentRepository, ILogger logger)
+    : BaseDeleteByExternalIdCommandHandler<Comment>(commentRepository, logger);

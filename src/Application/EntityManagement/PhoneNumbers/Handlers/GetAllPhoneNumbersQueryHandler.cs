@@ -4,9 +4,5 @@ using Domain.Entities;
 
 namespace Application.EntityManagement.PhoneNumbers.Handlers;
 
-public class GetAllPhoneNumbersQueryHandler : BaseGetAllQueryHandler<PhoneNumber>
-{
-    public GetAllPhoneNumbersQueryHandler(IUnitOfWork unitOfWork) : base(unitOfWork)
-    {
-    }
-}
+public class GetAllPhoneNumbersQueryHandler(IRepository<PhoneNumber> phoneNumberRepository)
+    : BaseGetAllQueryHandler<PhoneNumber>(phoneNumberRepository);

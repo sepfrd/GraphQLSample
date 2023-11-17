@@ -5,9 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.OrderItems.Handlers;
 
-public class DeleteOrderItemByExternalIdCommandHandler : BaseDeleteByExternalIdCommandHandler<OrderItem>
-{
-    public DeleteOrderItemByExternalIdCommandHandler(IUnitOfWork unitOfWork, ILogger logger) : base(unitOfWork, logger)
-    {
-    }
-}
+public class DeleteOrderItemByExternalIdCommandHandler(
+        IRepository<OrderItem> orderItemRepository,
+        ILogger logger)
+    : BaseDeleteByExternalIdCommandHandler<OrderItem>(orderItemRepository, logger);

@@ -11,11 +11,11 @@ public interface
     Task<int> GenerateUniqueExternalIdAsync(CancellationToken cancellationToken = default);
 
     Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter = null, CancellationToken cancellationToken = default,
-        params Expression<Func<TEntity, object?>>[] includes);
+        params Expression<Func<TEntity, object?>>[]? includes);
 
-    Task<TEntity?> GetByInternalIdAsync(Guid internalId, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object?>>[] includes);
+    Task<TEntity?> GetByInternalIdAsync(Guid internalId, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object?>>[]? includes);
 
-    Task<TEntity?> GetByExternalIdAsync(int externalId, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object?>>[] includes);
+    Task<TEntity?> GetByExternalIdAsync(int externalId, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object?>>[]? includes);
 
     Task<TEntity?> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default);
 

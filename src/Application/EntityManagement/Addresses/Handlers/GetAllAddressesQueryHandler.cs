@@ -4,9 +4,5 @@ using Domain.Entities;
 
 namespace Application.EntityManagement.Addresses.Handlers;
 
-public class GetAllAddressesQueryHandler : BaseGetAllQueryHandler<Address>
-{
-    public GetAllAddressesQueryHandler(IUnitOfWork unitOfWork) : base(unitOfWork)
-    {
-    }
-}
+public class GetAllAddressesQueryHandler(IRepository<Address> addressRepository)
+    : BaseGetAllQueryHandler<Address>(addressRepository);

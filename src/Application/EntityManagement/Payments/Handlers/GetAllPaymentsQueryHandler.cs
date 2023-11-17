@@ -4,9 +4,5 @@ using Domain.Entities;
 
 namespace Application.EntityManagement.Payments.Handlers;
 
-public class GetAllPaymentsQueryHandler : BaseGetAllQueryHandler<Payment>
-{
-    public GetAllPaymentsQueryHandler(IUnitOfWork unitOfWork) : base(unitOfWork)
-    {
-    }
-}
+public class GetAllPaymentsQueryHandler(IRepository<Payment> paymentRepository)
+    : BaseGetAllQueryHandler<Payment>(paymentRepository);

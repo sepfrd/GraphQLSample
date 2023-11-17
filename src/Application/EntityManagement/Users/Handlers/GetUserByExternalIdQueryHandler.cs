@@ -10,24 +10,15 @@ using System.Net;
 
 namespace Application.EntityManagement.Users.Handlers;
 
-public class GetUserByExternalIdQueryHandler : IRequestHandler<GetUserByExternalIdQuery, QueryReferenceResponse<UserDto>>
+public class GetUserByExternalIdQueryHandler(
+        IRepository<User> userRepository,
+        IMappingService mappingService,
+        ILogger logger)
+    : IRequestHandler<GetUserByExternalIdQuery, QueryReferenceResponse<UserDto>>
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IMappingService _mappingService;
-    private readonly ILogger _logger;
-
-    public GetUserByExternalIdQueryHandler(IUnitOfWork unitOfWork, IMappingService mappingService, ILogger logger)
-    {
-        _unitOfWork = unitOfWork;
-        _mappingService = mappingService;
-        _logger = logger;
-    }
-
     public async Task<QueryReferenceResponse<UserDto>> Handle(GetUserByExternalIdQuery request, CancellationToken cancellationToken)
     {
-        var user = await _unitOfWork
-            .UserRepository
-            .GetByExternalIdAsync(request.ExternalId, cancellationToken, request.RelationsToInclude);
+        var user = await userRepository.GetByExternalIdAsync(request.ExternalId, cancellationToken, request.RelationsToInclude);
 
         if (user is null)
         {
@@ -38,7 +29,7 @@ public class GetUserByExternalIdQueryHandler : IRequestHandler<GetUserByExternal
                 HttpStatusCode.NoContent);
         }
 
-        var userDto = _mappingService.Map<User, UserDto>(user);
+        var userDto = mappingService.Map<User, UserDto>(user);
 
         if (userDto is not null)
         {
@@ -49,7 +40,7 @@ public class GetUserByExternalIdQueryHandler : IRequestHandler<GetUserByExternal
                 HttpStatusCode.OK);
         }
 
-        _logger.LogError(Messages.MappingFailed, DateTime.UtcNow, typeof(User), typeof(GetUserByExternalIdQueryHandler));
+        logger.LogError(Messages.MappingFailed, DateTime.UtcNow, typeof(User), typeof(GetUserByExternalIdQueryHandler));
 
         return new QueryReferenceResponse<UserDto>(
             null,

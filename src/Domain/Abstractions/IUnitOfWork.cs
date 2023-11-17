@@ -1,45 +1,46 @@
-using Domain.Common;
-using Domain.Entities;
+// using Domain.Common;
+// using Domain.Entities;
+//
+// namespace Domain.Abstractions;
+//
+// public interface IUnitOfWork
+// {
+//     IRepository<Address> AddressRepository { get;  }
+//
+//     IRepository<Answer> AnswerRepository { get;  }
+//
+//     IRepository<Cart> CartRepository { get;  }
+//
+//     IRepository<CartItem> CartItemRepository { get;  }
+//
+//     IRepository<Category> CategoryRepository { get;  }
+//
+//     IRepository<Comment> CommentRepository { get;  }
+//
+//     IRepository<Order> OrderRepository { get;  }
+//
+//     IRepository<OrderItem> OrderItemRepository { get;  }
+//
+//     IRepository<Payment> PaymentRepository { get;  }
+//
+//     IRepository<Person> PersonRepository { get;  }
+//
+//     IRepository<PhoneNumber> PhoneNumberRepository { get;  }
+//
+//     IRepository<Product> ProductRepository { get;  }
+//
+//     IRepository<Question> QuestionRepository { get;  }
+//
+//     IRepository<Shipment> ShipmentRepository { get;  }
+//
+//     IRepository<User> UserRepository { get;  }
+//
+//     IRepository<Vote> VoteRepository { get;  }
+//
+//     IEnumerable<IRepository<BaseEntity>> Repositories { get;  }
+//     
+//     int SaveChanges();
+//     
+//     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+// }
 
-namespace Domain.Abstractions;
-
-public interface IUnitOfWork
-{
-    IRepository<Address> AddressRepository { get; set; }
-
-    IRepository<Answer> AnswerRepository { get; set; }
-
-    IRepository<Cart> CartRepository { get; set; }
-
-    IRepository<CartItem> CartItemRepository { get; set; }
-
-    IRepository<Category> CategoryRepository { get; set; }
-
-    IRepository<Comment> CommentRepository { get; set; }
-
-    IRepository<Order> OrderRepository { get; set; }
-
-    IRepository<OrderItem> OrderItemRepository { get; set; }
-
-    IRepository<Payment> PaymentRepository { get; set; }
-
-    IRepository<Person> PersonRepository { get; set; }
-
-    IRepository<PhoneNumber> PhoneNumberRepository { get; set; }
-
-    IRepository<Product> ProductRepository { get; set; }
-
-    IRepository<Question> QuestionRepository { get; set; }
-
-    IRepository<Shipment> ShipmentRepository { get; set; }
-
-    IRepository<User> UserRepository { get; set; }
-
-    IRepository<Vote> VoteRepository { get; set; }
-
-    ICollection<IRepository<BaseEntity>> Repositories { get; set; }
-    
-    int SaveChanges();
-    
-    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
-}

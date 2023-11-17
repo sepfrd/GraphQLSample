@@ -10,6 +10,6 @@ public sealed class Cart : BaseEntity
 
     public ICollection<CartItem>? CartItems { get; set; }
 
-    public decimal TotalPrice => 
+    public decimal TotalPrice =>
         CartItems?.Sum(item => item.SubTotalPrice) ?? 0;
 }

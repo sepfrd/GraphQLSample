@@ -7,9 +7,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.Votes.Handlers;
 
-public class CreateVoteCommandHandler : BaseCreateCommandHandler<Vote, VoteDto>
-{
-    public CreateVoteCommandHandler(IUnitOfWork unitOfWork, IMappingService mappingService, ILogger logger) : base(unitOfWork, mappingService, logger)
-    {
-    }
-}
+public class CreateVoteCommandHandler(
+        IRepository<Vote> voteRepository,
+        IMappingService mappingService,
+        ILogger logger)
+    : BaseCreateCommandHandler<Vote, VoteDto>(voteRepository, mappingService, logger);

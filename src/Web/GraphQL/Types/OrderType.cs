@@ -1,11 +1,8 @@
 using Application.Common;
 using Application.EntityManagement.OrderItems.Queries;
-using Application.EntityManagement.Orders.Queries;
 using Application.EntityManagement.Payments.Queries;
 using Application.EntityManagement.Shipments.Queries;
 using Domain.Entities;
-using HotChocolate;
-using HotChocolate.Types;
 using MediatR;
 
 namespace Web.GraphQL.Types;
@@ -19,7 +16,7 @@ public class OrderType : ObjectType<Order>
             .ResolveWith<Resolvers>(
                 resolvers =>
                     resolvers.GetPaymentAsync(default!, default!));
-        
+
         descriptor
             .Field(order => order.Shipment)
             .ResolveWith<Resolvers>(
@@ -31,7 +28,7 @@ public class OrderType : ObjectType<Order>
             .ResolveWith<Resolvers>(
                 resolvers =>
                     resolvers.GetOrderItemsAsync(default!, default!));
-        
+
         descriptor
             .Field(order => order.DateCreated)
             .Description("The Creation Date");
@@ -47,16 +44,16 @@ public class OrderType : ObjectType<Order>
         descriptor
             .Field(order => order.InternalId)
             .Ignore();
-        
+
         descriptor
             .Field(order => order.PaymentId)
             .Ignore();
-        
+
         descriptor
             .Field(order => order.ShipmentId)
             .Ignore();
     }
-    
+
     private sealed class Resolvers
     {
         public async Task<Payment?> GetPaymentAsync([Parent] Order order, [Service] ISender sender)
@@ -70,7 +67,7 @@ public class OrderType : ObjectType<Order>
 
             return result.Data?.FirstOrDefault();
         }
-        
+
         public async Task<Shipment?> GetShipmentAsync([Parent] Order order, [Service] ISender sender)
         {
             var shipmentsQuery = new GetAllShipmentsQuery(

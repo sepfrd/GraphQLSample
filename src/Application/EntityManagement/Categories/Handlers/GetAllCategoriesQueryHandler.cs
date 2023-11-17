@@ -4,9 +4,5 @@ using Domain.Entities;
 
 namespace Application.EntityManagement.Categories.Handlers;
 
-public class GetAllCategoriesQueryHandler : BaseGetAllQueryHandler<Category>
-{
-    public GetAllCategoriesQueryHandler(IUnitOfWork unitOfWork) : base(unitOfWork)
-    {
-    }
-}
+public class GetAllCategoriesQueryHandler(IRepository<Category> categoryRepository)
+    : BaseGetAllQueryHandler<Category>(categoryRepository);
