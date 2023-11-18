@@ -1,5 +1,6 @@
 using Application;
 using Infrastructure;
+using Infrastructure.Persistence.Common.Helpers;
 using Infrastructure.Services.Logging;
 using Serilog;
 using Serilog.Settings.Configuration;
@@ -31,6 +32,13 @@ try
 
     var app = builder.Build();
 
+    if (builder.Configuration.GetSection("EnableDataSeed").Value == "True")
+    {
+        var dataSeeder = new DatabaseSeeder(
+            builder.Configuration.GetSection("MongoDb").GetSection("ConnectionString").Value!,
+            builder.Configuration.GetSection("MongoDb").GetSection("DatabaseName").Value!);
+    }
+    
     if (app.Environment.IsDevelopment())
     {
         app.UseDeveloperExceptionPage();

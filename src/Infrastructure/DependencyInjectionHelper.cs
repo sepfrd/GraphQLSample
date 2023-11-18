@@ -1,6 +1,7 @@
 ﻿using Application.Abstractions;
 using Application.EntityManagement.Users.Dtos;
 using Domain.Abstractions;
+using Domain.Common;
 using Domain.Entities;
 using Infrastructure.Persistence.Common;
 using Infrastructure.Persistence.Repositories;
@@ -8,6 +9,8 @@ using Infrastructure.Services.Mapping;
 using Mapster;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.IdGenerators;
 
 namespace Infrastructure;
 
@@ -43,7 +46,16 @@ public static class DependencyInjectionHelper
             .AddScoped<IRepository<User>, UserRepository>()
             .AddScoped<IRepository<Vote>, VoteRepository>();
 
-    private static IServiceCollection AddMongoDb(this IServiceCollection services, IConfiguration configuration) =>
+    private static IServiceCollection AddMongoDb(this IServiceCollection services, IConfiguration configuration)
+    {
+        // BsonClassMap.RegisterClassMap<BaseEntity>(classMap =>
+        // {
+        //     classMap.AutoMap();
+        //     classMap.MapIdProperty(c => c.InternalId).SetIdGenerator(GuidGenerator.Instance);
+        //     classMap.MapIdMember(c => c.InternalId).SetIdGenerator(GuidGenerator.Instance);
+        //     classMap.MapIdField(c => c.InternalId).SetIdGenerator(GuidGenerator.Instance);
+        // });
+
         services.Configure<MongoDbSettings>(mongoDbSettings =>
         {
             mongoDbSettings.ConnectionString = configuration
@@ -56,6 +68,9 @@ public static class DependencyInjectionHelper
                 .GetSection("DatabaseName")
                 .Value!;
         });
+
+        return services;
+    }
 
     private static void ConfigureMapster()
     {

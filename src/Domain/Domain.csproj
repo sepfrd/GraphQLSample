@@ -7,9 +7,4 @@
         <LangVersion>12</LangVersion>
     </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="MongoDB.Bson" Version="2.22.0"/>
-        <PackageReference Include="MongoDB.Driver" Version="2.22.0"/>
-    </ItemGroup>
-
 </Project>

@@ -133,8 +133,10 @@ public class CreateUserCommandHandler(
     {
         var externalId = await phoneNumberRepository.GenerateUniqueExternalIdAsync(cancellationToken);
 
-        var phoneNumber = new PhoneNumber(phoneNumberDto.Number, phoneNumberDto.Type)
+        var phoneNumber = new PhoneNumber
         {
+            Number = phoneNumberDto.Number,
+            Type = phoneNumberDto.Type,
             ExternalId = externalId,
             UserId = userInternalId
         };
