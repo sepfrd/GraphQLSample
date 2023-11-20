@@ -45,6 +45,7 @@ public static class DependencyInjectionHelper
             .AddScoped<IRepository<Role>, RoleRepository>()
             .AddScoped<IRepository<Shipment>, ShipmentRepository>()
             .AddScoped<IRepository<User>, UserRepository>()
+            .AddScoped<IRepository<UserRole>, UserRoleRepository>()
             .AddScoped<IRepository<Vote>, VoteRepository>();
 
     private static IServiceCollection AddMongoDb(this IServiceCollection services, IConfiguration configuration)

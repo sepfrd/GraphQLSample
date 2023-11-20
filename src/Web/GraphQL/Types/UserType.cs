@@ -8,7 +8,6 @@ using Application.EntityManagement.Payments.Queries;
 using Application.EntityManagement.Persons.Queries;
 using Application.EntityManagement.PhoneNumbers.Queries;
 using Application.EntityManagement.Questions.Queries;
-using Application.EntityManagement.Roles.Queries;
 using Application.EntityManagement.UserRoles.Queries;
 using Application.EntityManagement.Votes.Queries;
 using Domain.Entities;
@@ -31,6 +30,61 @@ public class UserType : ObjectType<User>
             .ResolveWith<Resolvers>(
                 resolvers =>
                     Resolvers.GetPersonAsync(default!, default!));
+        
+        descriptor
+            .Field(user => user.Addresses)
+            .ResolveWith<Resolvers>(
+                resolvers =>
+                    Resolvers.GetAddressesAsync(default!, default!));
+        
+        descriptor
+            .Field(user => user.Answers)
+            .ResolveWith<Resolvers>(
+                resolvers =>
+                    Resolvers.GetAnswersAsync(default!, default!));
+        
+        descriptor
+            .Field(user => user.Comments)
+            .ResolveWith<Resolvers>(
+                resolvers =>
+                    Resolvers.GetCommentsAsync(default!, default!));
+        
+        descriptor
+            .Field(user => user.Orders)
+            .ResolveWith<Resolvers>(
+                resolvers =>
+                    Resolvers.GetOrdersAsync(default!, default!));
+        
+        descriptor
+            .Field(user => user.UserRoles)
+            .ResolveWith<Resolvers>(
+                resolvers =>
+                    Resolvers.GetUserRolesAsync(default!, default!));
+        
+        descriptor
+            .Field(user => user.Payments)
+            .ResolveWith<Resolvers>(
+                resolvers =>
+                    Resolvers.GetPaymentsAsync(default!, default!));
+        
+        descriptor
+            .Field(user => user.Questions)
+            .ResolveWith<Resolvers>(
+                resolvers =>
+                    Resolvers.GetQuestionsAsync(default!, default!));
+        
+        descriptor
+            .Field(user => user.Votes)
+            .ResolveWith<Resolvers>(
+                resolvers =>
+                    Resolvers.GetVotesAsync(default!, default!));
+        
+        descriptor
+            .Field(user => user.PhoneNumbers)
+            .ResolveWith<Resolvers>(
+                resolvers =>
+                    Resolvers.GetPhoneNumbersAsync(default!, default!));
+        
         descriptor
             .Field(user => user.DateCreated)
             .Description("The Creation Date");
@@ -56,7 +110,7 @@ public class UserType : ObjectType<User>
             .Ignore();
     }
 
-    private abstract class Resolvers
+    private class Resolvers
     {
         public static async Task<Person?> GetPersonAsync([Parent] User user, [Service] ISender sender)
         {
@@ -154,31 +208,14 @@ public class UserType : ObjectType<User>
             return result.Data;
         }
 
-        public static async Task<IEnumerable<Role>?> GetRolesAsync([Parent] User user, [Service] ISender sender)
+        public static async Task<IEnumerable<UserRole>?> GetUserRolesAsync([Parent] User user, [Service] ISender sender)
         {
             var userRolesQuery = new GetAllUserRolesQuery(
                 new Pagination(1, int.MaxValue),
                 null,
                 userRole => userRole.UserId == user.InternalId);
 
-            var userRolesResult = await sender.Send(userRolesQuery);
-
-            var userRoles = userRolesResult.Data?.ToList();
-
-            if (userRoles is null || userRoles.Count == 0)
-            {
-                return null;
-            }
-
-            var roleIds = userRoles.Select(userRole => userRole.RoleId);
-
-            var rolesQuery = new GetAllRolesQuery(
-                new Pagination(1, int.MaxValue),
-                null,
-                role => roleIds.Contains(role.InternalId)
-            );
-
-            var result = await sender.Send(rolesQuery);
+            var result = await sender.Send(userRolesQuery);
 
             return result.Data;
         }
@@ -195,7 +232,6 @@ public class UserType : ObjectType<User>
             return result.Data;
         }
 
-
         public static async Task<IEnumerable<PhoneNumber>?> GetPhoneNumbersAsync([Parent] User user, [Service] ISender sender)
         {
             var phoneNumbersQuery = new GetAllPhoneNumbersQuery(
@@ -208,16 +244,4 @@ public class UserType : ObjectType<User>
             return result.Data;
         }
     }
-    //
-    // user => user.Addresses,
-    // user => user.Answers,
-    // user => user.Cart,
-    // user => user.Comments,
-    // user => user.Orders,
-    // user => user.Payments,
-    // user => user.Person,
-    // user => user.Questions,
-    // user => user.Roles,
-    // user => user.Votes,
-    // user => user.PhoneNumbers
 }

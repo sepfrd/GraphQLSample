@@ -48,23 +48,8 @@ public class Query
     public async Task<IEnumerable<User>?> GetUsersAsync([Service] ISender sender, CancellationToken cancellationToken)
     {
         var pagination = new Pagination(1, int.MaxValue);
-
-        var relationsToInclude = new Expression<Func<User, object?>>[]
-        {
-            user => user.Addresses,
-            user => user.Answers,
-            user => user.Cart,
-            user => user.Comments,
-            user => user.Orders,
-            user => user.Payments,
-            user => user.Person,
-            user => user.Questions,
-            user => user.UserRoles,
-            user => user.Votes,
-            user => user.PhoneNumbers
-        };
-
-        var usersQuery = new GetAllUsersQuery(pagination, relationsToInclude);
+        
+        var usersQuery = new GetAllUsersQuery(pagination);
 
         var result = await sender.Send(usersQuery, cancellationToken);
 

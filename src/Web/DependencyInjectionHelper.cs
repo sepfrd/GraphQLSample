@@ -47,6 +47,7 @@ public static class DependencyInjectionHelper
             .AddType<UserType>()
             .AddType<VoteType>()
             .AddType<CommandResult>()
+            .AddType<UserRoleType>()
             .AddInputObjectType<AddressDto>()
             .AddInputObjectType<AnswerDto>()
             .AddInputObjectType<CartItemDto>()
