@@ -38,5 +38,5 @@ public sealed class User : BaseEntity
 
     public ICollection<Comment>? Comments { get; set; }
 
-    public ICollection<Role>? Roles { get; set; }
+    public ICollection<UserRole>? UserRoles { get; set; }
 }

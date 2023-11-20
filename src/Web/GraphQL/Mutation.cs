@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Application.Common;
 using Application.EntityManagement.Addresses.Commands;
 using Application.EntityManagement.Addresses.Dtos;
@@ -35,14 +36,13 @@ using Application.EntityManagement.Votes.Commands;
 using Application.EntityManagement.Votes.Dtos;
 using Domain.Entities;
 using MediatR;
-using System.Linq.Expressions;
 using Web.GraphQL.Types.InputTypes;
 
 namespace Web.GraphQL;
 
-public class Mutation(ISender sender)
+public class Mutation
 {
-    public async Task<CommandResult> AddAddressAsync(AddressDto addressDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> AddAddressAsync([Service] ISender sender, AddressDto addressDto, CancellationToken cancellationToken)
     {
         var createCommand = new CreateAddressCommand(addressDto);
 
@@ -51,7 +51,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> UpdateAddressAsync(int externalId, AddressDto addressDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> UpdateAddressAsync([Service] ISender sender, int externalId, AddressDto addressDto, CancellationToken cancellationToken)
     {
         var updateCommand = new UpdateAddressCommand(externalId, addressDto);
 
@@ -60,7 +60,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> DeleteAddressAsync(int externalId, CancellationToken cancellationToken)
+    public async Task<CommandResult> DeleteAddressAsync([Service] ISender sender, int externalId, CancellationToken cancellationToken)
     {
         var deleteCommand = new DeleteAddressByExternalIdCommand(externalId);
 
@@ -69,7 +69,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> AddAnswerAsync(AnswerDto answerDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> AddAnswerAsync([Service] ISender sender, AnswerDto answerDto, CancellationToken cancellationToken)
     {
         var createCommand = new CreateAnswerCommand(answerDto);
 
@@ -78,7 +78,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> UpdateAnswerAsync(int externalId, AnswerDto answerDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> UpdateAnswerAsync([Service] ISender sender, int externalId, AnswerDto answerDto, CancellationToken cancellationToken)
     {
         var updateCommand = new UpdateAnswerCommand(externalId, answerDto);
 
@@ -87,7 +87,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> DeleteAnswerAsync(int externalId, CancellationToken cancellationToken)
+    public async Task<CommandResult> DeleteAnswerAsync([Service] ISender sender, int externalId, CancellationToken cancellationToken)
     {
         var deleteCommand = new DeleteAnswerByExternalIdCommand(externalId);
 
@@ -96,7 +96,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> AddCartItemAsync(CartItemDto cartItemDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> AddCartItemAsync([Service] ISender sender, CartItemDto cartItemDto, CancellationToken cancellationToken)
     {
         var createCommand = new CreateCartItemCommand(cartItemDto);
 
@@ -105,7 +105,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> AddCategoryAsync(CategoryDto categoryDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> AddCategoryAsync([Service] ISender sender, CategoryDto categoryDto, CancellationToken cancellationToken)
     {
         var createCommand = new CreateCategoryCommand(categoryDto);
 
@@ -114,7 +114,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> AddCommentAsync(CommentDto commentDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> AddCommentAsync([Service] ISender sender, CommentDto commentDto, CancellationToken cancellationToken)
     {
         var createCommand = new CreateCommentCommand(commentDto);
 
@@ -123,7 +123,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> DeleteCommentAsync(int externalId, CancellationToken cancellationToken)
+    public async Task<CommandResult> DeleteCommentAsync([Service] ISender sender, int externalId, CancellationToken cancellationToken)
     {
         var deleteCommand = new DeleteCommentByExternalIdCommand(externalId);
 
@@ -132,7 +132,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> AddOrderItemAsync(OrderItemDto orderItemDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> AddOrderItemAsync([Service] ISender sender, OrderItemDto orderItemDto, CancellationToken cancellationToken)
     {
         var createCommand = new CreateOrderItemCommand(orderItemDto);
 
@@ -141,7 +141,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> UpdateOrderItemAsync(int externalId, OrderItemDto orderItemDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> UpdateOrderItemAsync([Service] ISender sender, int externalId, OrderItemDto orderItemDto, CancellationToken cancellationToken)
     {
         var updateCommand = new UpdateOrderItemCommand(externalId, orderItemDto);
 
@@ -150,7 +150,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> DeleteOrderItemAsync(int externalId, CancellationToken cancellationToken)
+    public async Task<CommandResult> DeleteOrderItemAsync([Service] ISender sender, int externalId, CancellationToken cancellationToken)
     {
         var deleteCommand = new DeleteOrderItemByExternalIdCommand(externalId);
 
@@ -159,7 +159,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> AddOrderAsync(OrderDto orderDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> AddOrderAsync([Service] ISender sender, OrderDto orderDto, CancellationToken cancellationToken)
     {
         var createCommand = new CreateOrderCommand(orderDto);
 
@@ -168,7 +168,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> UpdateOrderAsync(int externalId, OrderDto orderDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> UpdateOrderAsync([Service] ISender sender, int externalId, OrderDto orderDto, CancellationToken cancellationToken)
     {
         var updateCommand = new UpdateOrderCommand(externalId, orderDto);
 
@@ -177,7 +177,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> DeleteOrderAsync(int externalId, CancellationToken cancellationToken)
+    public async Task<CommandResult> DeleteOrderAsync([Service] ISender sender, int externalId, CancellationToken cancellationToken)
     {
         var deleteCommand = new DeleteOrderByExternalIdCommand(externalId);
 
@@ -186,7 +186,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> AddPaymentAsync(PaymentDto paymentDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> AddPaymentAsync([Service] ISender sender, PaymentDto paymentDto, CancellationToken cancellationToken)
     {
         var createCommand = new CreatePaymentCommand(paymentDto);
 
@@ -195,7 +195,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> UpdatePaymentAsync(int externalId, PaymentDto paymentDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> UpdatePaymentAsync([Service] ISender sender, int externalId, PaymentDto paymentDto, CancellationToken cancellationToken)
     {
         var updateCommand = new UpdatePaymentCommand(externalId, paymentDto);
 
@@ -204,7 +204,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> DeletePaymentAsync(int externalId, CancellationToken cancellationToken)
+    public async Task<CommandResult> DeletePaymentAsync([Service] ISender sender, int externalId, CancellationToken cancellationToken)
     {
         var deleteCommand = new DeletePaymentByExternalIdCommand(externalId);
 
@@ -213,7 +213,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> AddPersonAsync(PersonDto personDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> AddPersonAsync([Service] ISender sender, PersonDto personDto, CancellationToken cancellationToken)
     {
         var createCommand = new CreatePersonCommand(personDto);
 
@@ -222,7 +222,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> UpdatePersonAsync(int externalId, PersonDto personDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> UpdatePersonAsync([Service] ISender sender, int externalId, PersonDto personDto, CancellationToken cancellationToken)
     {
         var updateCommand = new UpdatePersonCommand(externalId, personDto);
 
@@ -231,7 +231,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> DeletePersonAsync(int externalId, CancellationToken cancellationToken)
+    public async Task<CommandResult> DeletePersonAsync([Service] ISender sender, int externalId, CancellationToken cancellationToken)
     {
         var deleteCommand = new DeletePersonByExternalIdCommand(externalId);
 
@@ -240,7 +240,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> AddPhoneNumberAsync(PhoneNumberDto phoneNumberDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> AddPhoneNumberAsync([Service] ISender sender, PhoneNumberDto phoneNumberDto, CancellationToken cancellationToken)
     {
         var createCommand = new CreatePhoneNumberCommand(phoneNumberDto);
 
@@ -249,7 +249,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> UpdatePhoneNumberAsync(int externalId, PhoneNumberDto phoneNumberDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> UpdatePhoneNumberAsync([Service] ISender sender, int externalId, PhoneNumberDto phoneNumberDto, CancellationToken cancellationToken)
     {
         var updateCommand = new UpdatePhoneNumberCommand(externalId, phoneNumberDto);
 
@@ -258,7 +258,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> DeletePhoneNumberAsync(int externalId, CancellationToken cancellationToken)
+    public async Task<CommandResult> DeletePhoneNumberAsync([Service] ISender sender, int externalId, CancellationToken cancellationToken)
     {
         var deleteCommand = new DeletePhoneNumberByExternalIdCommand(externalId);
 
@@ -267,7 +267,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> AddProductAsync(ProductDto productDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> AddProductAsync([Service] ISender sender, ProductDto productDto, CancellationToken cancellationToken)
     {
         var createCommand = new CreateProductCommand(productDto);
 
@@ -276,7 +276,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> UpdateProductAsync(int externalId, ProductDto productDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> UpdateProductAsync([Service] ISender sender, int externalId, ProductDto productDto, CancellationToken cancellationToken)
     {
         var updateCommand = new UpdateProductCommand(externalId, productDto);
 
@@ -285,7 +285,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> DeleteProductAsync(int externalId, CancellationToken cancellationToken)
+    public async Task<CommandResult> DeleteProductAsync([Service] ISender sender, int externalId, CancellationToken cancellationToken)
     {
         var deleteCommand = new DeleteProductByExternalIdCommand(externalId);
 
@@ -294,7 +294,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> AddQuestionAsync(QuestionDto questionDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> AddQuestionAsync([Service] ISender sender, QuestionDto questionDto, CancellationToken cancellationToken)
     {
         var createCommand = new CreateQuestionCommand(questionDto);
 
@@ -303,7 +303,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> DeleteQuestionAsync(int externalId, CancellationToken cancellationToken)
+    public async Task<CommandResult> DeleteQuestionAsync([Service] ISender sender, int externalId, CancellationToken cancellationToken)
     {
         var deleteCommand = new DeleteQuestionByExternalIdCommand(externalId);
 
@@ -312,7 +312,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> AddShipmentAsync(ShipmentDto shipmentDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> AddShipmentAsync([Service] ISender sender, ShipmentDto shipmentDto, CancellationToken cancellationToken)
     {
         var createCommand = new CreateShipmentCommand(shipmentDto);
 
@@ -321,7 +321,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> UpdateShipmentAsync(int externalId, ShipmentDto shipmentDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> UpdateShipmentAsync([Service] ISender sender, int externalId, ShipmentDto shipmentDto, CancellationToken cancellationToken)
     {
         var updateCommand = new UpdateShipmentCommand(externalId, shipmentDto);
 
@@ -330,7 +330,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> DeleteShipmentAsync(int externalId, CancellationToken cancellationToken)
+    public async Task<CommandResult> DeleteShipmentAsync([Service] ISender sender, int externalId, CancellationToken cancellationToken)
     {
         var deleteCommand = new DeleteShipmentByExternalIdCommand(externalId);
 
@@ -339,7 +339,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> AddUserAsync(CreateUserDto userDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> AddUserAsync([Service] ISender sender, CreateUserDto userDto, CancellationToken cancellationToken)
     {
         var createCommand = new CreateUserCommand(userDto);
 
@@ -348,7 +348,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> UpdateUserAsync(UserDto userDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> UpdateUserAsync([Service] ISender sender, UserDto userDto, CancellationToken cancellationToken)
     {
         var updateCommand = new UpdateUserCommand(userDto);
 
@@ -357,7 +357,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> DeleteUserAsync(int externalId, CancellationToken cancellationToken)
+    public async Task<CommandResult> DeleteUserAsync([Service] ISender sender, int externalId, CancellationToken cancellationToken)
     {
         var deleteCommand = new DeleteUserByExternalIdCommand(externalId);
 
@@ -368,7 +368,7 @@ public class Mutation(ISender sender)
 
     // TODO: Figure it out. 
 
-    public async Task<CommandResult> AddAnswerVoteAsync(AddAnswerVoteInputType answerVoteInput, CancellationToken cancellationToken)
+    public async Task<CommandResult> AddAnswerVoteAsync([Service] ISender sender, AddAnswerVoteInputType answerVoteInput, CancellationToken cancellationToken)
     {
         var answerQuery = new GetAllAnswersQuery(
             new Pagination(),
@@ -396,7 +396,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> AddCommentVoteAsync(AddCommentVoteInputType commentVoteInput, CancellationToken cancellationToken)
+    public async Task<CommandResult> AddCommentVoteAsync([Service] ISender sender, AddCommentVoteInputType commentVoteInput, CancellationToken cancellationToken)
     {
         var commentQuery = new GetAllCommentsQuery(
             new Pagination(),
@@ -421,7 +421,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> AddProductVoteAsync(AddProductVoteInputType productVoteInput, CancellationToken cancellationToken)
+    public async Task<CommandResult> AddProductVoteAsync([Service] ISender sender, AddProductVoteInputType productVoteInput, CancellationToken cancellationToken)
     {
         var productQuery = new GetAllProductsQuery(
             new Pagination(),
@@ -446,7 +446,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> AddQuestionVoteAsync(AddQuestionVoteInputType questionVoteInput, CancellationToken cancellationToken)
+    public async Task<CommandResult> AddQuestionVoteAsync([Service] ISender sender, AddQuestionVoteInputType questionVoteInput, CancellationToken cancellationToken)
     {
         var questionQuery = new GetAllQuestionsQuery(
             new Pagination(),
@@ -471,7 +471,7 @@ public class Mutation(ISender sender)
         return result;
     }
 
-    public async Task<CommandResult> DeleteVoteAsync(int externalId, CancellationToken cancellationToken)
+    public async Task<CommandResult> DeleteVoteAsync([Service] ISender sender, int externalId, CancellationToken cancellationToken)
     {
         var deleteCommand = new DeleteVoteByExternalIdCommand(externalId);
 

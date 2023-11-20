@@ -59,7 +59,7 @@ public class Query
             user => user.Payments,
             user => user.Person,
             user => user.Questions,
-            user => user.Roles,
+            user => user.UserRoles,
             user => user.Votes,
             user => user.PhoneNumbers
         };

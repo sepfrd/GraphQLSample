@@ -16,7 +16,7 @@ public class GetUserByUsernameOrEmailQueryHandler(IRepository<User> userReposito
                     user.Username == request.UsernameOrEmail ||
                     user.Email == request.UsernameOrEmail,
                 cancellationToken,
-                user => user.Roles,
+                user => user.UserRoles,
                 user => user.Person);
 
         var user = users.FirstOrDefault();
