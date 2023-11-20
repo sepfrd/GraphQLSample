@@ -1,6 +1,7 @@
-using Application.Common.Commands;
+using Application.Common;
 using Application.EntityManagement.Comments.Dtos;
+using MediatR;
 
 namespace Application.EntityManagement.Comments.Commands;
 
-public record CreateCommentCommand(CommentDto CommentDto) : BaseCreateCommand<CommentDto>(CommentDto);
+public record CreateCommentCommand(CommentDto CommentDto) : IRequest<CommandResult>;

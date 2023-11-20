@@ -1,8 +1,25 @@
-using Application.Common.Handlers;
+using Application.Common;
+using Application.EntityManagement.Answers.Queries;
 using Domain.Abstractions;
 using Domain.Entities;
+using MediatR;
+using System.Net;
 
 namespace Application.EntityManagement.Answers.Handlers;
 
-public class GetAllAnswersQueryHandler(IRepository<Answer> answerRepository)
-    : BaseGetAllQueryHandler<Answer>(answerRepository);
+public class GetAllAnswersQueryHandler(IRepository<Answer> repository)
+    : IRequestHandler<GetAllAnswersQuery, QueryReferenceResponse<IEnumerable<Answer>>>
+{
+    public virtual async Task<QueryReferenceResponse<IEnumerable<Answer>>> Handle(GetAllAnswersQuery request, CancellationToken cancellationToken)
+    {
+        var entities = await repository.GetAllAsync(null, cancellationToken, request.RelationsToInclude);
+
+        return new QueryReferenceResponse<IEnumerable<Answer>>
+            (
+            entities.Paginate(request.Pagination),
+            true,
+            Messages.SuccessfullyRetrieved,
+            HttpStatusCode.OK
+            );
+    }
+}

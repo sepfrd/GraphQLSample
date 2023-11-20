@@ -1,6 +1,7 @@
-using Application.Common.Commands;
+using Application.Common;
 using Application.EntityManagement.Persons.Dtos;
+using MediatR;
 
 namespace Application.EntityManagement.Persons.Commands;
 
-public record UpdatePersonCommand(int ExternalId, PersonDto Dto) : BaseUpdateCommand<PersonDto>(ExternalId, Dto);
+public record UpdatePersonCommand(int ExternalId, PersonDto PersonDto) : IRequest<CommandResult>;

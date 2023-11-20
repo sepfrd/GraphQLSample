@@ -1,5 +1,6 @@
-using Application.Common.Commands;
+using Application.Common;
+using MediatR;
 
 namespace Application.EntityManagement.Persons.Commands;
 
-public record DeletePersonByInternalIdCommand(Guid InternalId) : BaseDeleteByInternalIdCommand(InternalId);
+public record DeletePersonByInternalIdCommand(Guid InternalId) : IRequest<CommandResult>;

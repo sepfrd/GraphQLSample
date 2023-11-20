@@ -1,16 +1,16 @@
 using Application.Common;
-using Application.EntityManagement.Answers.Commands;
+using Application.EntityManagement.Persons.Commands;
 using Domain.Abstractions;
 using Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Application.EntityManagement.Answers.Handlers;
+namespace Application.EntityManagement.Persons.Handlers;
 
-public class DeleteAnswerByInternalIdCommandHandler(IRepository<Answer> repository, ILogger logger)
-    : IRequestHandler<DeleteAnswerByInternalIdCommand, CommandResult>
+public class DeletePersonByInternalIdCommandHandler(IRepository<Person> repository, ILogger logger)
+    : IRequestHandler<DeletePersonByInternalIdCommand, CommandResult>
 {
-    public virtual async Task<CommandResult> Handle(DeleteAnswerByInternalIdCommand request, CancellationToken cancellationToken)
+    public virtual async Task<CommandResult> Handle(DeletePersonByInternalIdCommand request, CancellationToken cancellationToken)
     {
         var entity = await repository.GetByInternalIdAsync(request.InternalId, cancellationToken);
 
@@ -26,7 +26,7 @@ public class DeleteAnswerByInternalIdCommandHandler(IRepository<Answer> reposito
             return CommandResult.Success(Messages.SuccessfullyDeleted);
         }
 
-        logger.LogError(Messages.EntityDeletionFailed, DateTime.UtcNow, typeof(Answer), typeof(DeleteAnswerByInternalIdCommandHandler));
+        logger.LogError(Messages.EntityDeletionFailed, DateTime.UtcNow, typeof(Person), typeof(DeletePersonByInternalIdCommandHandler));
 
         return CommandResult.Failure(Messages.InternalServerError);
     }

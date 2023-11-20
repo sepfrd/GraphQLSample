@@ -1,5 +1,6 @@
-using Application.Common.Commands;
+using Application.Common;
+using MediatR;
 
 namespace Application.EntityManagement.Products.Commands;
 
-public record DeleteProductByExternalIdCommand(int ExternalId) : BaseDeleteByExternalIdCommand(ExternalId);
+public record DeleteProductByExternalIdCommand(int ExternalId) : IRequest<CommandResult>;

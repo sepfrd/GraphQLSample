@@ -1,5 +1,6 @@
-using Application.Common.Commands;
+using Application.Common;
+using MediatR;
 
 namespace Application.EntityManagement.OrderItems.Commands;
 
-public record DeleteOrderItemByExternalIdCommand(int ExternalId) : BaseDeleteByExternalIdCommand(ExternalId);
+public record DeleteOrderItemByExternalIdCommand(int ExternalId) : IRequest<CommandResult>;

@@ -1,6 +1,7 @@
-using Application.Common.Commands;
+using Application.Common;
 using Application.EntityManagement.Addresses.Dtos;
+using MediatR;
 
 namespace Application.EntityManagement.Addresses.Commands;
 
-public record CreateAddressCommand(AddressDto AddressDto) : BaseCreateCommand<AddressDto>(AddressDto);
+public record CreateAddressCommand(AddressDto AddressDto) : IRequest<CommandResult>;

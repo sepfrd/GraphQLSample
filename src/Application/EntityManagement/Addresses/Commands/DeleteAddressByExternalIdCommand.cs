@@ -1,5 +1,6 @@
-using Application.Common.Commands;
+using Application.Common;
+using MediatR;
 
 namespace Application.EntityManagement.Addresses.Commands;
 
-public record DeleteAddressByExternalIdCommand(int ExternalId) : BaseDeleteByExternalIdCommand(ExternalId);
+public record DeleteAddressByExternalIdCommand(int ExternalId) : IRequest<CommandResult>;

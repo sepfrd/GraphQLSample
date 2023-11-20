@@ -1,6 +1,7 @@
-﻿using Application.Common.Commands;
+﻿using Application.Common;
 using Application.EntityManagement.Roles.Dtos;
+using MediatR;
 
 namespace Application.EntityManagement.Roles.Commands;
 
-public record CreateRoleCommand(RoleDto Dto) : BaseCreateCommand<RoleDto>(Dto);
+public record CreateRoleCommand(RoleDto RoleDto) : IRequest<CommandResult>;

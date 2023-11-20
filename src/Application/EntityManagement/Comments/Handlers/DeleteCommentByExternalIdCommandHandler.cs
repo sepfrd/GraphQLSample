@@ -1,17 +1,17 @@
 using Application.Common;
-using Application.EntityManagement.Addresses.Commands;
 using Application.EntityManagement.Answers.Commands;
+using Application.EntityManagement.Comments.Commands;
 using Domain.Abstractions;
 using Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Application.EntityManagement.Addresses.Handlers;
+namespace Application.EntityManagement.Comments.Handlers;
 
-public class DeleteAddressByExternalIdCommandHandler(IRepository<Address> repository, ILogger logger)
-    : IRequestHandler<DeleteAddressByExternalIdCommand, CommandResult>
+public class DeleteCommentByExternalIdCommandHandler(IRepository<Comment> repository, ILogger logger)
+    : IRequestHandler<DeleteCommentByExternalIdCommand, CommandResult>
 {
-    public virtual async Task<CommandResult> Handle(DeleteAddressByExternalIdCommand request, CancellationToken cancellationToken)
+    public virtual async Task<CommandResult> Handle(DeleteCommentByExternalIdCommand request, CancellationToken cancellationToken)
     {
         var entity = await repository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
 
@@ -27,7 +27,7 @@ public class DeleteAddressByExternalIdCommandHandler(IRepository<Address> reposi
             return CommandResult.Success(Messages.SuccessfullyDeleted);
         }
 
-        logger.LogError(Messages.EntityDeletionFailed, DateTime.UtcNow, typeof(Address), typeof(DeleteAnswerByExternalIdCommand));
+        logger.LogError(Messages.EntityDeletionFailed, DateTime.UtcNow, typeof(Comment), typeof(DeleteAnswerByExternalIdCommand));
 
         return CommandResult.Failure(Messages.InternalServerError);
     }

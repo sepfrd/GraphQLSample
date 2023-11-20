@@ -38,6 +38,7 @@ public class DatabaseSeeder
         var fakeRoles = GetFakeRoles();
         var fakeShipments = GetFakeShipments();
         var fakeUsers = GetFakeUsers();
+        var fakeUserRoles = GetFakeUserRoles();
         var fakeVotes = GetFakeVotes();
 
         var fakeContents = new List<BaseEntity>();
@@ -127,12 +128,18 @@ public class DatabaseSeeder
             user.PersonId = fakePersons.ElementAt(Random.Shared.Next(0, fakePersons.Count)).InternalId;
         }
 
+        foreach (var userRole in fakeUserRoles)
+        {
+            userRole.UserId = fakeUsers.ElementAt(Random.Shared.Next(0, fakeUsers.Count)).InternalId;
+            userRole.RoleId = fakeRoles.ElementAt(Random.Shared.Next(0, fakeRoles.Count)).InternalId;
+        }
+        
         foreach (var vote in fakeVotes)
         {
             vote.UserId = fakeUsers.ElementAt(Random.Shared.Next(0, fakeUsers.Count)).InternalId;
             vote.ContentId = fakeContents.ElementAt(Random.Shared.Next(0, fakeContents.Count)).InternalId;
         }
-
+        
         // ------------------------------------------------
 
         _mongoDatabase.GetCollection<Address>("Addresses").InsertMany(fakeAddresses);
@@ -151,6 +158,7 @@ public class DatabaseSeeder
         _mongoDatabase.GetCollection<Role>("Roles").InsertMany(fakeRoles);
         _mongoDatabase.GetCollection<Shipment>("Shipments").InsertMany(fakeShipments);
         _mongoDatabase.GetCollection<User>("Users").InsertMany(fakeUsers);
+        _mongoDatabase.GetCollection<UserRole>("UserRoles").InsertMany(fakeUserRoles);
         _mongoDatabase.GetCollection<Vote>("Votes").InsertMany(fakeVotes);
     }
 
@@ -497,5 +505,22 @@ public class DatabaseSeeder
         }
 
         return fakeUsers;
+    }
+    
+    private static List<UserRole> GetFakeUserRoles()
+    {
+        var externalId = 0;
+
+        var userRoleFaker = new Faker<UserRole>()
+            .RuleFor(user => user.ExternalId, _ => externalId++);
+
+        var fakeUserRoles = new List<UserRole>();
+
+        for (var i = 0; i < 100; i++)
+        {
+            fakeUserRoles.Add(userRoleFaker.Generate());
+        }
+
+        return fakeUserRoles;
     }
 }

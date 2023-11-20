@@ -1,5 +1,6 @@
-using Application.Common.Commands;
+using Application.Common;
+using MediatR;
 
 namespace Application.EntityManagement.Questions.Commands;
 
-public record DeleteQuestionByExternalIdCommand(int ExternalId) : BaseDeleteByExternalIdCommand(ExternalId);
+public record DeleteQuestionByExternalIdCommand(int ExternalId) : IRequest<CommandResult>;

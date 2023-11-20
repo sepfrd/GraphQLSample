@@ -1,7 +1,7 @@
-using Application.Common.Commands;
+using Application.Common;
 using Application.EntityManagement.PhoneNumbers.Dtos;
+using MediatR;
 
 namespace Application.EntityManagement.PhoneNumbers.Commands;
 
-public record UpdatePhoneNumberCommand(int ExternalId, PhoneNumberDto PhoneNumberDto)
-    : BaseUpdateCommand<PhoneNumberDto>(ExternalId, PhoneNumberDto);
+public record UpdatePhoneNumberCommand(int ExternalId, PhoneNumberDto PhoneNumberDto) : IRequest<CommandResult>;

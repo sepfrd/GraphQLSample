@@ -13,6 +13,10 @@ public sealed class Question : BaseEntity, IVotableContent
 
     public Guid UserId { get; set; }
 
+    public Product? Product { get; set; }
+    
+    public Guid ProductId { get; set; }
+    
     public ICollection<Answer>? Answers { get; set; }
 
     public ICollection<Vote>? Votes { get; set; }

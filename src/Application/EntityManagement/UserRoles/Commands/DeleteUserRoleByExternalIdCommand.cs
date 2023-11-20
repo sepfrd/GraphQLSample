@@ -1,5 +1,6 @@
-﻿using Application.Common.Commands;
+﻿using Application.Common;
+using MediatR;
 
 namespace Application.EntityManagement.UserRoles.Commands;
 
-public record DeleteUserRoleByExternalIdCommand(int ExternalId) : BaseDeleteByExternalIdCommand(ExternalId);
+public record DeleteUserRoleByExternalIdCommand(int ExternalId) : IRequest<CommandResult>;

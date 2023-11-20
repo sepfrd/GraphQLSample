@@ -25,13 +25,13 @@ try
     builder
         .Services
         .AddEndpointsApiExplorer()
+        .AddSingleton<ILogger, CustomLogger>()
         .InjectApplicationLayer()
         .InjectInfrastructureLayer(builder.Configuration)
-        .AddAllGraphQlServices()
-        .AddSingleton<ILogger, CustomLogger>();
-
+        .AddAllGraphQlServices();
+    
     var app = builder.Build();
-
+    
     if (builder.Configuration.GetSection("EnableDataSeed").Value == "True")
     {
         var dataSeeder = new DatabaseSeeder(

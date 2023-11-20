@@ -1,3 +1,4 @@
+using Humanizer;
 using MongoDB.Driver;
 using System.Linq.Expressions;
 
@@ -10,9 +11,9 @@ public static class AggregateFluentExtensions
     {
         foreach (var include in includes)
         {
-            var foreignCollectionName = include.ReturnType + "s";
-            var localFieldName = include.ReturnType + "Id";
-            var foreignFieldName = include.ReturnType.ToString();
+            var foreignCollectionName = include.ReturnType.Name.Pluralize();
+            var localFieldName = include.ReturnType.Name + "ExternalId";
+            var foreignFieldName = include.ReturnType.Name;
 
             aggregateFluent.Lookup(foreignCollectionName, localFieldName, "_id", foreignFieldName);
         }

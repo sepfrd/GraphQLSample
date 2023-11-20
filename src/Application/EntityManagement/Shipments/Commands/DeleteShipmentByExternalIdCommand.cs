@@ -1,5 +1,6 @@
-using Application.Common.Commands;
+using Application.Common;
+using MediatR;
 
 namespace Application.EntityManagement.Shipments.Commands;
 
-public record DeleteShipmentByExternalIdCommand(int ExternalId) : BaseDeleteByExternalIdCommand(ExternalId);
+public record DeleteShipmentByExternalIdCommand(int ExternalId) : IRequest<CommandResult>;

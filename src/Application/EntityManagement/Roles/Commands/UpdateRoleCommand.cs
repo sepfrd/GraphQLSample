@@ -1,6 +1,7 @@
-﻿using Application.Common.Commands;
+﻿using Application.Common;
 using Application.EntityManagement.Roles.Dtos;
+using MediatR;
 
 namespace Application.EntityManagement.Roles.Commands;
 
-public record UpdateRoleCommand(int ExternalId, RoleDto Dto) : BaseUpdateCommand<RoleDto>(ExternalId, Dto);
+public record UpdateRoleCommand(int ExternalId, RoleDto RoleDto) : IRequest<CommandResult>;

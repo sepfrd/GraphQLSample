@@ -67,7 +67,10 @@ public static class DependencyInjectionHelper
             .AddInputObjectType<AddAnswerVoteInputType>()
             .AddInputObjectType<AddCommentVoteInputType>()
             .AddInputObjectType<AddProductVoteInputType>()
-            .AddInputObjectType<AddQuestionVoteInputType>();
+            .AddInputObjectType<AddQuestionVoteInputType>()
+            .AddInputObjectType<Pagination>()
+            .AddSorting()
+            .AddFiltering();
 
         return services;
     }
