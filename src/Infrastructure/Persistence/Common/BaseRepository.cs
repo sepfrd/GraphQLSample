@@ -20,6 +20,8 @@ public class BaseRepository<TEntity> : IRepository<TEntity>
 
         var collectionName = typeof(TEntity).Name.Pluralize();
 
+        collectionName = collectionName == "People" ? "Persons" : collectionName;
+
         _mongoDbCollection = mongoDatabase.GetCollection<TEntity>(collectionName);
     }
 

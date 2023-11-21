@@ -27,6 +27,7 @@ public static class DependencyInjectionHelper
             .AddGraphQLServer()
             .AddQueryType<QueryType>()
             .AddMutationType<MutationType>()
+            .AddMaxExecutionDepthRule(10)
             .AddType<AddressType>()
             .AddType<AnswerType>()
             .AddType<CartItemType>()

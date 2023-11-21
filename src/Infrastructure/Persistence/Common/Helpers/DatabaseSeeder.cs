@@ -246,7 +246,7 @@ public class DatabaseSeeder
         var categoryFaker = new Faker<Category>()
             .RuleFor(category => category.ExternalId, _ => externalId++)
             .RuleFor(category => category.Description, faker => faker.Lorem.Sentences(5))
-            .RuleFor(category => category.Name, faker => faker.Commerce.Categories(1).ToString())
+            .RuleFor(category => category.Name, faker => faker.Lorem.Word())
             .RuleFor(category => category.IconUrl, faker => faker.Image.PicsumUrl())
             .RuleFor(category => category.ImageUrl, faker => faker.Image.PicsumUrl());
 
