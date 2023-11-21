@@ -21,13 +21,17 @@ public class QuestionType : ObjectType<Question>
             .Field(question => question.Answers)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetAnswersAsync(default!, default!));
+                    resolvers.GetAnswersAsync(default!, default!))
+            .UseFiltering()
+            .UseSorting();
 
         descriptor
             .Field(question => question.Votes)
             .ResolveWith<Resolvers>(
                 resolvers =>
                     resolvers.GetVotesAsync(default!, default!));
+        // .UseFiltering()
+        // .UseSorting();
 
         descriptor
             .Field(question => question.DateCreated)

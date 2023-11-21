@@ -58,159 +58,159 @@ public static class DependencyInjectionHelper
                 .SetIdGenerator(GuidGenerator.Instance)
                 .SetSerializer(GuidSerializer.StandardInstance);
         });
-        
+
         BsonClassMap.RegisterClassMap<Address>(classMap =>
         {
             classMap.AutoMap();
-            classMap 
+            classMap
                 .MapMember(address => address.UserId)
                 .SetSerializer(GuidSerializer.StandardInstance);
         });
-        
+
         BsonClassMap.RegisterClassMap<Answer>(classMap =>
         {
             classMap.AutoMap();
-            classMap 
+            classMap
                 .MapMember(answer => answer.UserId)
                 .SetSerializer(GuidSerializer.StandardInstance);
-            classMap 
+            classMap
                 .MapMember(answer => answer.QuestionId)
                 .SetSerializer(GuidSerializer.StandardInstance);
         });
-        
+
         BsonClassMap.RegisterClassMap<Cart>(classMap =>
         {
             classMap.AutoMap();
-            classMap 
+            classMap
                 .MapMember(cart => cart.UserId)
                 .SetSerializer(GuidSerializer.StandardInstance);
         });
-        
+
         BsonClassMap.RegisterClassMap<CartItem>(classMap =>
         {
             classMap.AutoMap();
-            classMap 
+            classMap
                 .MapMember(cartItem => cartItem.CartId)
                 .SetSerializer(GuidSerializer.StandardInstance);
-            classMap 
+            classMap
                 .MapMember(cartItem => cartItem.ProductId)
                 .SetSerializer(GuidSerializer.StandardInstance);
         });
-        
+
         BsonClassMap.RegisterClassMap<Comment>(classMap =>
         {
             classMap.AutoMap();
-            classMap 
+            classMap
                 .MapMember(comment => comment.ProductId)
                 .SetSerializer(GuidSerializer.StandardInstance);
-            classMap 
+            classMap
                 .MapMember(comment => comment.UserId)
                 .SetSerializer(GuidSerializer.StandardInstance);
         });
-        
+
         BsonClassMap.RegisterClassMap<Order>(classMap =>
         {
             classMap.AutoMap();
-            classMap 
+            classMap
                 .MapMember(order => order.PaymentId)
                 .SetSerializer(GuidSerializer.StandardInstance);
-            classMap 
+            classMap
                 .MapMember(order => order.ShipmentId)
                 .SetSerializer(GuidSerializer.StandardInstance);
-            classMap 
+            classMap
                 .MapMember(order => order.UserId)
                 .SetSerializer(GuidSerializer.StandardInstance);
         });
-        
+
         BsonClassMap.RegisterClassMap<OrderItem>(classMap =>
         {
             classMap.AutoMap();
-            classMap 
+            classMap
                 .MapMember(orderItem => orderItem.OrderId)
                 .SetSerializer(GuidSerializer.StandardInstance);
-            classMap 
+            classMap
                 .MapMember(orderItem => orderItem.ProductId)
                 .SetSerializer(GuidSerializer.StandardInstance);
         });
-        
+
         BsonClassMap.RegisterClassMap<Payment>(classMap =>
         {
             classMap.AutoMap();
-            classMap 
+            classMap
                 .MapMember(payment => payment.OrderId)
                 .SetSerializer(GuidSerializer.StandardInstance);
-            classMap 
+            classMap
                 .MapMember(payment => payment.UserId)
                 .SetSerializer(GuidSerializer.StandardInstance);
         });
-        
+
         BsonClassMap.RegisterClassMap<Person>(classMap =>
         {
             classMap.AutoMap();
-            classMap 
+            classMap
                 .MapMember(person => person.UserId)
                 .SetSerializer(GuidSerializer.StandardInstance);
         });
-        
+
         BsonClassMap.RegisterClassMap<PhoneNumber>(classMap =>
         {
             classMap.AutoMap();
-            classMap 
+            classMap
                 .MapMember(phoneNumber => phoneNumber.UserId)
                 .SetSerializer(GuidSerializer.StandardInstance);
         });
-        
+
         BsonClassMap.RegisterClassMap<Product>(classMap =>
         {
             classMap.AutoMap();
-            classMap 
+            classMap
                 .MapMember(product => product.CategoryId)
                 .SetSerializer(GuidSerializer.StandardInstance);
         });
-        
+
         BsonClassMap.RegisterClassMap<Question>(classMap =>
         {
             classMap.AutoMap();
-            classMap 
+            classMap
                 .MapMember(question => question.UserId)
                 .SetSerializer(GuidSerializer.StandardInstance);
         });
-        
+
         BsonClassMap.RegisterClassMap<Shipment>(classMap =>
         {
             classMap.AutoMap();
-            classMap 
+            classMap
                 .MapMember(shipment => shipment.OrderId)
                 .SetSerializer(GuidSerializer.StandardInstance);
-            classMap 
+            classMap
                 .MapMember(shipment => shipment.DestinationAddressId)
                 .SetSerializer(GuidSerializer.StandardInstance);
-            classMap 
+            classMap
                 .MapMember(shipment => shipment.OriginAddressId)
                 .SetSerializer(GuidSerializer.StandardInstance);
-            classMap 
+            classMap
                 .MapMember(shipment => shipment.TraceId)
                 .SetSerializer(GuidSerializer.StandardInstance);
         });
-        
+
         BsonClassMap.RegisterClassMap<User>(classMap =>
         {
             classMap.AutoMap();
-            classMap 
+            classMap
                 .MapMember(user => user.CartId)
                 .SetSerializer(GuidSerializer.StandardInstance);
-            classMap 
+            classMap
                 .MapMember(user => user.PersonId)
                 .SetSerializer(GuidSerializer.StandardInstance);
         });
-        
+
         BsonClassMap.RegisterClassMap<Vote>(classMap =>
         {
             classMap.AutoMap();
-            classMap 
+            classMap
                 .MapMember(vote => vote.UserId)
                 .SetSerializer(GuidSerializer.StandardInstance);
-            classMap 
+            classMap
                 .MapMember(vote => vote.ContentId)
                 .SetSerializer(GuidSerializer.StandardInstance);
         });

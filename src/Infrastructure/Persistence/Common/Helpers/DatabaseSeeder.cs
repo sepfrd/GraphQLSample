@@ -14,13 +14,11 @@ public class DatabaseSeeder
     public DatabaseSeeder(string connectionString, string databaseName)
     {
         var mongoClient = new MongoClient(connectionString);
-        
+
         _mongoDatabase = mongoClient.GetDatabase(databaseName);
-        
-        SeedData();
     }
 
-    private void SeedData()
+    public void SeedData()
     {
         var fakeAddresses = GetFakeAddresses();
         var fakeAnswers = GetFakeAnswers();
@@ -133,13 +131,13 @@ public class DatabaseSeeder
             userRole.UserId = fakeUsers.ElementAt(Random.Shared.Next(0, fakeUsers.Count)).InternalId;
             userRole.RoleId = fakeRoles.ElementAt(Random.Shared.Next(0, fakeRoles.Count)).InternalId;
         }
-        
+
         foreach (var vote in fakeVotes)
         {
             vote.UserId = fakeUsers.ElementAt(Random.Shared.Next(0, fakeUsers.Count)).InternalId;
             vote.ContentId = fakeContents.ElementAt(Random.Shared.Next(0, fakeContents.Count)).InternalId;
         }
-        
+
         // ------------------------------------------------
 
         _mongoDatabase.GetCollection<Address>("Addresses").InsertMany(fakeAddresses);
@@ -506,7 +504,7 @@ public class DatabaseSeeder
 
         return fakeUsers;
     }
-    
+
     private static List<UserRole> GetFakeUserRoles()
     {
         var externalId = 0;

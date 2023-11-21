@@ -13,13 +13,11 @@ public class DeleteAllCartItemsByCartExternalIdCommandHandler(
         ILogger logger)
     : IRequestHandler<DeleteAllCartItemsByCartExternalIdCommand, CommandResult>
 {
-
     public async Task<CommandResult> Handle(DeleteAllCartItemsByCartExternalIdCommand request, CancellationToken cancellationToken)
     {
         var cart = await cartRepository.GetByExternalIdAsync(
             request.ExternalId,
-            cancellationToken,
-            cartEntity => cartEntity.CartItems);
+            cancellationToken);
 
         if (cart is null)
         {

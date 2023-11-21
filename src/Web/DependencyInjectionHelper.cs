@@ -14,7 +14,6 @@ using Application.EntityManagement.Products.Dtos;
 using Application.EntityManagement.Questions.Dtos;
 using Application.EntityManagement.Shipments.Dtos;
 using Application.EntityManagement.Users.Dtos;
-using Web.GraphQL;
 using Web.GraphQL.Types;
 using Web.GraphQL.Types.InputTypes;
 
@@ -26,8 +25,8 @@ public static class DependencyInjectionHelper
     {
         services
             .AddGraphQLServer()
-            .AddQueryType<Query>()
-            .AddMutationType<Mutation>()
+            .AddQueryType<QueryType>()
+            .AddMutationType<MutationType>()
             .AddType<AddressType>()
             .AddType<AnswerType>()
             .AddType<CartItemType>()
@@ -68,9 +67,8 @@ public static class DependencyInjectionHelper
             .AddInputObjectType<AddCommentVoteInputType>()
             .AddInputObjectType<AddProductVoteInputType>()
             .AddInputObjectType<AddQuestionVoteInputType>()
-            .AddInputObjectType<Pagination>()
-            .AddSorting()
-            .AddFiltering();
+            .AddFiltering()
+            .AddSorting();
 
         return services;
     }

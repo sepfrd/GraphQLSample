@@ -10,8 +10,8 @@
         <PackageReference Include="GraphQL.Server.Ui.Voyager" Version="7.6.0"/>
         <PackageReference Include="HotChocolate" Version="13.7.0"/>
         <PackageReference Include="HotChocolate.AspNetCore" Version="13.7.0"/>
-        <PackageReference Include="HotChocolate.Data" Version="13.7.0" />
-        <PackageReference Include="MediatR" Version="12.2.0" />
+        <PackageReference Include="HotChocolate.Data" Version="13.7.0"/>
+        <PackageReference Include="MediatR" Version="12.2.0"/>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0"/>
         <PackageReference Include="Serilog.AspNetCore" Version="8.0.0"/>
         <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0"/>
@@ -28,7 +28,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <_ContentIncludedByDefault Remove="logs\development\log-.json" />
+        <_ContentIncludedByDefault Remove="logs\development\log-.json"/>
     </ItemGroup>
 
 </Project>

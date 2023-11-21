@@ -23,18 +23,24 @@ public class ProductType : ObjectType<Product>
             .ResolveWith<Resolvers>(
                 resolvers =>
                     resolvers.GetVotesAsync(default!, default!));
+        // .UseFiltering()
+        // .UseSorting();
 
         descriptor
             .Field(product => product.Comments)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetCommentsAsync(default!, default!));
+                    resolvers.GetCommentsAsync(default!, default!))
+            .UseFiltering()
+            .UseSorting();
 
         descriptor
             .Field(product => product.Questions)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetQuestionsAsync(default!, default!));
+                    resolvers.GetQuestionsAsync(default!, default!))
+            .UseFiltering()
+            .UseSorting();
 
         descriptor
             .Field(product => product.DateCreated)

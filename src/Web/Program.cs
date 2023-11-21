@@ -6,6 +6,7 @@ using Serilog;
 using Serilog.Settings.Configuration;
 using Web;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Logging.ClearProviders();
@@ -29,16 +30,18 @@ try
         .InjectApplicationLayer()
         .InjectInfrastructureLayer(builder.Configuration)
         .AddAllGraphQlServices();
-    
+
     var app = builder.Build();
-    
+
     if (builder.Configuration.GetSection("EnableDataSeed").Value == "True")
     {
         var dataSeeder = new DatabaseSeeder(
             builder.Configuration.GetSection("MongoDb").GetSection("ConnectionString").Value!,
             builder.Configuration.GetSection("MongoDb").GetSection("DatabaseName").Value!);
+
+        dataSeeder.SeedData();
     }
-    
+
     if (app.Environment.IsDevelopment())
     {
         app.UseDeveloperExceptionPage();
@@ -52,10 +55,7 @@ try
         .UseRouting()
         // .UseAuthentication()
         // .UseAuthorization()
-        .UseEndpoints(endpoints =>
-        {
-            endpoints.MapGraphQL();
-        });
+        .UseEndpoints(endpoints => { endpoints.MapGraphQL(); });
 
     app.Run();
 }

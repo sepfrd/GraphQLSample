@@ -1,3 +1,4 @@
+using System.Net;
 using Application.Abstractions;
 using Application.Common;
 using Application.EntityManagement.Users.Dtos;
@@ -6,7 +7,6 @@ using Domain.Abstractions;
 using Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System.Net;
 
 namespace Application.EntityManagement.Users.Handlers;
 
@@ -18,7 +18,7 @@ public class GetAllUserDtosQueryHandler(
 {
     public async Task<QueryReferenceResponse<IEnumerable<UserDto>>> Handle(GetAllUserDtosQuery request, CancellationToken cancellationToken)
     {
-        var users = await userRepository.GetAllAsync(null, cancellationToken, request.RelationsToInclude);
+        var users = await userRepository.GetAllAsync(null, cancellationToken);
 
         var usersList = users.Paginate(request.Pagination);
 

@@ -1,3 +1,4 @@
+using System.Net;
 using Application.Abstractions;
 using Application.Common;
 using Application.EntityManagement.Users.Dtos;
@@ -6,7 +7,6 @@ using Domain.Abstractions;
 using Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System.Net;
 
 namespace Application.EntityManagement.Users.Handlers;
 
@@ -18,7 +18,7 @@ public class GetUserByExternalIdQueryHandler(
 {
     public async Task<QueryReferenceResponse<UserDto>> Handle(GetUserByExternalIdQuery request, CancellationToken cancellationToken)
     {
-        var user = await userRepository.GetByExternalIdAsync(request.ExternalId, cancellationToken, request.RelationsToInclude);
+        var user = await userRepository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
 
         if (user is null)
         {

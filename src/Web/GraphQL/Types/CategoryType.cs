@@ -32,7 +32,9 @@ public class CategoryType : ObjectType<Category>
             .Description("All Products of This Category")
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetProductsAsync(default!, default!));
+                    resolvers.GetProductsAsync(default!, default!))
+            .UseFiltering()
+            .UseSorting();
 
         descriptor
             .Field(category => category.DateCreated)

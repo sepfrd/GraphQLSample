@@ -67,7 +67,7 @@ public class CustomLogger : ILogger
     public bool IsEnabled(LogLevel logLevel) =>
         logLevel != LogLevel.None;
 
-    public IDisposable? BeginScope<TState>(TState state)
+    public IDisposable BeginScope<TState>(TState state)
         where TState : notnull =>
         LogContext.Push(new PropertyEnricher(nameof(state), state));
 }

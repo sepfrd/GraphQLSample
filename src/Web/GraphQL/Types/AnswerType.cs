@@ -57,6 +57,8 @@ public class AnswerType : ObjectType<Answer>
             .ResolveWith<Resolvers>(
                 resolvers =>
                     resolvers.GetVotesAsync(default!, default!));
+        // .UseFiltering()
+        // .UseSorting();
 
         descriptor
             .Field(answer => answer.DateCreated)

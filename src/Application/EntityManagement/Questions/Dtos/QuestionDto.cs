@@ -1,5 +1,4 @@
 using Application.EntityManagement.Answers.Dtos;
-using Application.EntityManagement.Votes.Dtos;
 
 namespace Application.EntityManagement.Questions.Dtos;
 

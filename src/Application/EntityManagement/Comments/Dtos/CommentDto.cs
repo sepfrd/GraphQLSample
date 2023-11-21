@@ -1,5 +1,3 @@
-using Application.EntityManagement.Votes.Dtos;
-
 namespace Application.EntityManagement.Comments.Dtos;
 
 public record CommentDto(

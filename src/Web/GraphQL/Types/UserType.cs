@@ -30,61 +30,79 @@ public class UserType : ObjectType<User>
             .ResolveWith<Resolvers>(
                 resolvers =>
                     Resolvers.GetPersonAsync(default!, default!));
-        
+
         descriptor
             .Field(user => user.Addresses)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetAddressesAsync(default!, default!));
-        
+                    Resolvers.GetAddressesAsync(default!, default!))
+            .UseFiltering()
+            .UseSorting();
+
         descriptor
             .Field(user => user.Answers)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetAnswersAsync(default!, default!));
-        
+                    Resolvers.GetAnswersAsync(default!, default!))
+            .UseFiltering()
+            .UseSorting();
+
         descriptor
             .Field(user => user.Comments)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetCommentsAsync(default!, default!));
-        
+                    Resolvers.GetCommentsAsync(default!, default!))
+            .UseFiltering()
+            .UseSorting();
+
         descriptor
             .Field(user => user.Orders)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetOrdersAsync(default!, default!));
-        
+                    Resolvers.GetOrdersAsync(default!, default!))
+            .UseFiltering()
+            .UseSorting();
+
         descriptor
             .Field(user => user.UserRoles)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetUserRolesAsync(default!, default!));
-        
+                    Resolvers.GetUserRolesAsync(default!, default!))
+            .UseFiltering()
+            .UseSorting();
+
         descriptor
             .Field(user => user.Payments)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetPaymentsAsync(default!, default!));
-        
+                    Resolvers.GetPaymentsAsync(default!, default!))
+            .UseFiltering()
+            .UseSorting();
+
         descriptor
             .Field(user => user.Questions)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetQuestionsAsync(default!, default!));
-        
+                    Resolvers.GetQuestionsAsync(default!, default!))
+            .UseFiltering()
+            .UseSorting();
+
         descriptor
             .Field(user => user.Votes)
             .ResolveWith<Resolvers>(
                 resolvers =>
                     Resolvers.GetVotesAsync(default!, default!));
-        
+        // .UseFiltering()
+        // .UseSorting();
+
         descriptor
             .Field(user => user.PhoneNumbers)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetPhoneNumbersAsync(default!, default!));
-        
+                    Resolvers.GetPhoneNumbersAsync(default!, default!))
+            .UseFiltering()
+            .UseSorting();
+
         descriptor
             .Field(user => user.DateCreated)
             .Description("The Creation Date");

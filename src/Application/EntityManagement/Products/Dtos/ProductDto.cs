@@ -1,6 +1,5 @@
 using Application.EntityManagement.Categories.Dtos;
 using Application.EntityManagement.Comments.Dtos;
-using Application.EntityManagement.Votes.Dtos;
 
 namespace Application.EntityManagement.Products.Dtos;
 

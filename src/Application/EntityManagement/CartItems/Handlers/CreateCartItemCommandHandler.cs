@@ -21,8 +21,7 @@ public class CreateCartItemCommandHandler(
     {
         var cartEntity = await cartRepository.GetByExternalIdAsync(
             request.CartItemDto.CartExternalId,
-            cancellationToken,
-            cart => cart.CartItems);
+            cancellationToken);
 
         if (cartEntity is null)
         {

@@ -1,3 +1,4 @@
+using System.Net;
 using Application.Abstractions;
 using Application.Common;
 using Application.EntityManagement.Categories.Dtos;
@@ -6,7 +7,6 @@ using Domain.Abstractions;
 using Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System.Net;
 
 namespace Application.EntityManagement.Categories.Handlers;
 
@@ -29,7 +29,7 @@ public class GetAllCategoryDtosQueryHandler(
                 true,
                 Messages.SuccessfullyRetrieved,
                 HttpStatusCode.OK
-                );
+            );
         }
 
         logger.LogError(Messages.MappingFailed, DateTime.UtcNow, typeof(IEnumerable<Category>), typeof(GetAllCategoryDtosQueryHandler));
@@ -39,6 +39,6 @@ public class GetAllCategoryDtosQueryHandler(
             false,
             Messages.InternalServerError,
             HttpStatusCode.InternalServerError
-            );
+        );
     }
 }

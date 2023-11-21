@@ -1,9 +1,9 @@
+using System.Net;
 using Application.Common;
 using Application.EntityManagement.Users.Queries;
 using Domain.Abstractions;
 using Domain.Entities;
 using MediatR;
-using System.Net;
 
 namespace Application.EntityManagement.Users.Handlers;
 
@@ -11,7 +11,7 @@ public class GetUserByInternalIdQueryHandler(IRepository<User> userRepository) :
 {
     public async Task<QueryReferenceResponse<User>> Handle(GetUserByInternalIdQuery request, CancellationToken cancellationToken)
     {
-        var user = await userRepository.GetByInternalIdAsync(request.InternalId, cancellationToken, request.RelationsToInclude);
+        var user = await userRepository.GetByInternalIdAsync(request.InternalId, cancellationToken);
 
         if (user is null)
         {

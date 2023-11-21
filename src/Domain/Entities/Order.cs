@@ -7,9 +7,9 @@ public sealed class Order : BaseEntity
     public decimal TotalPrice { get; set; }
 
     public User? User { get; set; }
-    
+
     public Guid UserId { get; set; }
-    
+
     public Payment? Payment { get; set; }
 
     public Guid PaymentId { get; set; }

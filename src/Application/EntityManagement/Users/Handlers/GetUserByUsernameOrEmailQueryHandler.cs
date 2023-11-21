@@ -1,9 +1,9 @@
+using System.Net;
 using Application.Common;
 using Application.EntityManagement.Users.Queries;
 using Domain.Abstractions;
 using Domain.Entities;
 using MediatR;
-using System.Net;
 
 namespace Application.EntityManagement.Users.Handlers;
 
@@ -15,9 +15,7 @@ public class GetUserByUsernameOrEmailQueryHandler(IRepository<User> userReposito
             .GetAllAsync(user =>
                     user.Username == request.UsernameOrEmail ||
                     user.Email == request.UsernameOrEmail,
-                cancellationToken,
-                user => user.UserRoles,
-                user => user.Person);
+                cancellationToken);
 
         var user = users.FirstOrDefault();
 

@@ -1,9 +1,9 @@
+using System.Net;
 using Application.Common;
 using Application.EntityManagement.Users.Dtos;
 using Application.EntityManagement.Users.Queries;
 using Domain.Entities;
 using MediatR;
-using System.Net;
 
 namespace Application.EntityManagement.Users;
 
@@ -27,9 +27,7 @@ public class UserService
             return new QueryReferenceResponse<User>(
                 null,
                 false,
-                Messages.InvalidCredentials,
-                HttpStatusCode.BadRequest
-                );
+                Messages.InvalidCredentials);
         }
 
         var user = queryResponse.Data;
@@ -39,8 +37,7 @@ public class UserService
             return new QueryReferenceResponse<User>(
                 null,
                 false,
-                Messages.InvalidCredentials,
-                HttpStatusCode.BadRequest);
+                Messages.InvalidCredentials);
         }
 
         return new QueryReferenceResponse<User>(

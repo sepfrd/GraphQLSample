@@ -27,7 +27,9 @@ public class OrderType : ObjectType<Order>
             .Field(order => order.OrderItems)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetOrderItemsAsync(default!, default!));
+                    resolvers.GetOrderItemsAsync(default!, default!))
+            .UseFiltering()
+            .UseSorting();
 
         descriptor
             .Field(order => order.DateCreated)

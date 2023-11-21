@@ -100,6 +100,5 @@ public class CartItemType : ObjectType<CartItem>
 
             return result.Data?.FirstOrDefault();
         }
-
     }
 }

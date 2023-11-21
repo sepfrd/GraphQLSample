@@ -1,11 +1,9 @@
+using System.Linq.Expressions;
 using Domain.Abstractions;
 using Domain.Common;
 using Humanizer;
-using Infrastructure.Persistence.Common.Extensions;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using System.Linq.Expressions;
-using System.Reflection;
 
 namespace Infrastructure.Persistence.Common;
 
@@ -21,7 +19,7 @@ public class BaseRepository<TEntity> : IRepository<TEntity>
         var mongoDatabase = mongoClient.GetDatabase(databaseSettings.Value.DatabaseName);
 
         var collectionName = typeof(TEntity).Name.Pluralize();
-        
+
         _mongoDbCollection = mongoDatabase.GetCollection<TEntity>(collectionName);
     }
 
@@ -51,23 +49,13 @@ public class BaseRepository<TEntity> : IRepository<TEntity>
         return document is null ? 0 : document.ExternalId + 1;
     }
 
-    public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter = null, CancellationToken cancellationToken = default,
-        params Expression<Func<TEntity, object?>>[]? includes)
+    public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter = null, CancellationToken cancellationToken = default)
     {
         var aggregate = _mongoDbCollection.Aggregate();
-        var allData = _mongoDbCollection.Find(_ => true);
-        // var dataList1 = await allData.ToListAsync(cancellationToken);
-        var dataList = (await allData.ToCursorAsync(cancellationToken)).ToList();
-        var count = await allData.CountDocumentsAsync(cancellationToken);
 
         if (filter is not null)
         {
             aggregate = aggregate.Match(filter);
-        }
-
-        if (includes is not null && includes.Length > 0)
-        {
-            aggregate.IncludeRelations(includes);
         }
 
         var result = await aggregate.ToListAsync(cancellationToken);
@@ -75,7 +63,7 @@ public class BaseRepository<TEntity> : IRepository<TEntity>
         return result;
     }
 
-    public async Task<TEntity?> GetByInternalIdAsync(Guid internalId, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object?>>[]? includes)
+    public async Task<TEntity?> GetByInternalIdAsync(Guid internalId, CancellationToken cancellationToken = default)
     {
         var aggregate = _mongoDbCollection.Aggregate();
         var filterDefinition = new FilterDefinitionBuilder<TEntity>()
@@ -83,17 +71,12 @@ public class BaseRepository<TEntity> : IRepository<TEntity>
 
         aggregate.Match(filterDefinition);
 
-        if (includes is not null && includes.Length > 0)
-        {
-            aggregate.IncludeRelations(includes);
-        }
-
         var result = await aggregate.FirstOrDefaultAsync(cancellationToken);
 
         return result;
     }
 
-    public async Task<TEntity?> GetByExternalIdAsync(int externalId, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object?>>[]? includes)
+    public async Task<TEntity?> GetByExternalIdAsync(int externalId, CancellationToken cancellationToken = default)
     {
         var aggregate = _mongoDbCollection.Aggregate();
 
@@ -101,11 +84,6 @@ public class BaseRepository<TEntity> : IRepository<TEntity>
             .Eq(document => document.ExternalId, externalId);
 
         aggregate.Match(filterDefinition);
-
-        if (includes is not null && includes.Length > 0)
-        {
-            aggregate.IncludeRelations(includes);
-        }
 
         var result = await aggregate.FirstOrDefaultAsync(cancellationToken);
 

@@ -12,7 +12,7 @@ public class Query
     public async Task<IEnumerable<Category>?> GetCategoriesAsync(Pagination? pagination, [Service] ISender sender, CancellationToken cancellationToken)
     {
         pagination ??= new Pagination();
-        
+
         var categoryQuery = new GetAllCategoriesQuery(pagination);
 
         var result = await sender.Send(categoryQuery, cancellationToken);
@@ -34,7 +34,7 @@ public class Query
     public async Task<IEnumerable<User>?> GetUsersAsync(Pagination? pagination, [Service] ISender sender, CancellationToken cancellationToken)
     {
         pagination ??= new Pagination();
-        
+
         var usersQuery = new GetAllUsersQuery(pagination);
 
         var result = await sender.Send(usersQuery, cancellationToken);
