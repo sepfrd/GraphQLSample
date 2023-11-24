@@ -2,7 +2,6 @@ using Application.Common;
 using Application.EntityManagement.Addresses.Dtos;
 using Application.EntityManagement.Answers.Dtos;
 using Application.EntityManagement.CartItems.Dtos;
-using Application.EntityManagement.Carts.Dtos;
 using Application.EntityManagement.Categories.Dtos;
 using Application.EntityManagement.Comments.Dtos;
 using Application.EntityManagement.OrderItems.Dtos;
@@ -14,7 +13,6 @@ using Application.EntityManagement.Products.Dtos;
 using Application.EntityManagement.Questions.Dtos;
 using Application.EntityManagement.Shipments.Dtos;
 using Application.EntityManagement.Users.Dtos;
-using Domain.Filters;
 using Web.GraphQL.Types;
 using Web.GraphQL.Types.InputTypes;
 
@@ -52,7 +50,6 @@ public static class DependencyInjectionHelper
             .AddInputObjectType<AddressDto>()
             .AddInputObjectType<AnswerDto>()
             .AddInputObjectType<CartItemDto>()
-            .AddInputObjectType<CartDto>()
             .AddInputObjectType<CategoryDto>()
             .AddInputObjectType<CommentDto>()
             .AddInputObjectType<OrderItemDto>()

@@ -7,12 +7,18 @@ using MediatR;
 
 namespace Application.EntityManagement.CartItems.Handlers;
 
-public class GetAllCartItemsQueryHandler(IRepository<CartItem> repository)
-    : IRequestHandler<GetAllCartItemsQuery, QueryReferenceResponse<IEnumerable<CartItem>>>
+public class GetAllCartItemsQueryHandler : IRequestHandler<GetAllCartItemsQuery, QueryReferenceResponse<IEnumerable<CartItem>>>
 {
+    private readonly IRepository<CartItem> _repository;
+
+    public GetAllCartItemsQueryHandler(IRepository<CartItem> repository)
+    {
+        _repository = repository;
+    }
+
     public virtual async Task<QueryReferenceResponse<IEnumerable<CartItem>>> Handle(GetAllCartItemsQuery request, CancellationToken cancellationToken)
     {
-        var entities = await repository.GetAllAsync(null, request.Pagination, cancellationToken);
+        var entities = await _repository.GetAllAsync(null, request.Pagination, cancellationToken);
 
         return new QueryReferenceResponse<IEnumerable<CartItem>>
             (

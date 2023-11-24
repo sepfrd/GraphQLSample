@@ -1,7 +1,8 @@
 namespace Application.EntityManagement.CartItems.Dtos;
 
-public record CartItemDto(
-    int ExternalId,
+public record CreateCartItemDto(
+    int CartExternalId,
+    int ProductExternalId,
     int Quantity,
     decimal UnitPrice,
     decimal SubTotalPrice);

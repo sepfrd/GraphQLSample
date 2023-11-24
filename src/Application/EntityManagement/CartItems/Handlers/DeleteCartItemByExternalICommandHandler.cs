@@ -6,19 +6,25 @@ using MediatR;
 
 namespace Application.EntityManagement.CartItems.Handlers;
 
-public class DeleteCartItemByExternalICommandHandler(IRepository<CartItem> cartItemRepository)
-    : IRequestHandler<DeleteCartItemByExternalICommand, CommandResult>
+public class DeleteCartItemByExternalICommandHandler : IRequestHandler<DeleteCartItemByExternalICommand, CommandResult>
 {
+    private readonly IRepository<CartItem> _cartItemRepository;
+
+    public DeleteCartItemByExternalICommandHandler(IRepository<CartItem> cartItemRepository)
+    {
+        _cartItemRepository = cartItemRepository;
+    }
+
     public async Task<CommandResult> Handle(DeleteCartItemByExternalICommand request, CancellationToken cancellationToken)
     {
-        var cartItem = await cartItemRepository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
+        var cartItem = await _cartItemRepository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
 
         if (cartItem is null)
         {
             return CommandResult.Failure(Messages.NotFound);
         }
 
-        await cartItemRepository.DeleteAsync(cartItem, cancellationToken);
+        await _cartItemRepository.DeleteAsync(cartItem, cancellationToken);
 
         return CommandResult.Success(Messages.SuccessfullyDeleted);
     }

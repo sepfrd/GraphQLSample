@@ -7,12 +7,18 @@ using System.Net;
 
 namespace Application.EntityManagement.Carts.Handlers;
 
-public sealed class GetAllCartsQueryHandler(IRepository<Cart> repository)
-    : IRequestHandler<GetAllCartsQuery, QueryReferenceResponse<IEnumerable<Cart>>>
+public sealed class GetAllCartsQueryHandler : IRequestHandler<GetAllCartsQuery, QueryReferenceResponse<IEnumerable<Cart>>>
 {
+    private readonly IRepository<Cart> _repository;
+
+    public GetAllCartsQueryHandler(IRepository<Cart> repository)
+    {
+        _repository = repository;
+    }
+
     public async Task<QueryReferenceResponse<IEnumerable<Cart>>> Handle(GetAllCartsQuery request, CancellationToken cancellationToken)
     {
-        var entities = await repository.GetAllAsync(null, request.Pagination, cancellationToken);
+        var entities = await _repository.GetAllAsync(null, request.Pagination, cancellationToken);
 
         return new QueryReferenceResponse<IEnumerable<Cart>>(
             entities,

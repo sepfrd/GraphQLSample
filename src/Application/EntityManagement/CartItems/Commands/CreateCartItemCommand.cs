@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Application.EntityManagement.CartItems.Commands;
 
-public record CreateCartItemCommand(CartItemDto CartItemDto) : IRequest<CommandResult>;
+public record CreateCartItemCommand(CreateCartItemDto CreateCartItemDto) : IRequest<CommandResult>;

@@ -70,7 +70,7 @@ public class Mutation
         return result;
     }
 
-    public async Task<CommandResult> AddAnswerAsync([Service] ISender sender, AnswerDto answerDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> AddAnswerAsync([Service] ISender sender, CreateAnswerDto answerDto, CancellationToken cancellationToken)
     {
         var createCommand = new CreateAnswerCommand(answerDto);
 
@@ -97,9 +97,9 @@ public class Mutation
         return result;
     }
 
-    public async Task<CommandResult> AddCartItemAsync([Service] ISender sender, CartItemDto cartItemDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> AddCartItemAsync([Service] ISender sender, CreateCartItemDto createCartItemDto, CancellationToken cancellationToken)
     {
-        var createCommand = new CreateCartItemCommand(cartItemDto);
+        var createCommand = new CreateCartItemCommand(createCartItemDto);
 
         var result = await sender.Send(createCommand, cancellationToken);
 
@@ -133,9 +133,9 @@ public class Mutation
         return result;
     }
 
-    public async Task<CommandResult> AddOrderItemAsync([Service] ISender sender, OrderItemDto orderItemDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> AddOrderItemAsync([Service] ISender sender, CreateOrderItemDto createOrderItemDto, CancellationToken cancellationToken)
     {
-        var createCommand = new CreateOrderItemCommand(orderItemDto);
+        var createCommand = new CreateOrderItemCommand(createOrderItemDto);
 
         var result = await sender.Send(createCommand, cancellationToken);
 

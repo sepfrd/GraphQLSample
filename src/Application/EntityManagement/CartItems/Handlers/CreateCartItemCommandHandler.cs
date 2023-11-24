@@ -9,69 +9,81 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.CartItems.Handlers;
 
-public class CreateCartItemCommandHandler(
-        IRepository<CartItem> cartItemRepository,
+public class CreateCartItemCommandHandler : IRequestHandler<CreateCartItemCommand, CommandResult>
+{
+    private readonly IRepository<CartItem> _cartItemRepository;
+    private readonly IRepository<Cart> _cartRepository;
+    private readonly IRepository<Product> _productRepository;
+    private readonly IMappingService _mappingService;
+    private readonly ILogger _logger;
+
+    public CreateCartItemCommandHandler(IRepository<CartItem> cartItemRepository,
         IRepository<Cart> cartRepository,
         IRepository<Product> productRepository,
         IMappingService mappingService,
         ILogger logger)
-    : IRequestHandler<CreateCartItemCommand, CommandResult>
-{
+    {
+        _cartItemRepository = cartItemRepository;
+        _cartRepository = cartRepository;
+        _productRepository = productRepository;
+        _mappingService = mappingService;
+        _logger = logger;
+    }
+
     public async Task<CommandResult> Handle(CreateCartItemCommand request, CancellationToken cancellationToken)
     {
-        var cartEntity = await cartRepository.GetByExternalIdAsync(
-            request.CartItemDto.CartExternalId,
+        var cartEntity = await _cartRepository.GetByExternalIdAsync(
+            request.CreateCartItemDto.CartExternalId,
             cancellationToken);
 
         if (cartEntity is null)
         {
-            return CommandResult.Failure(Messages.NotFound);
+            return CommandResult.Failure(Messages.BadRequest);
+        }
+
+        var product = await _productRepository.GetByExternalIdAsync(request.CreateCartItemDto.ProductExternalId, cancellationToken);
+
+        if (product is null)
+        {
+            return CommandResult.Failure(Messages.BadRequest);
         }
 
         if (cartEntity.CartItems is null)
         {
-            logger.LogError(Messages.EntityRelationshipsRetrievalFailed, DateTime.UtcNow, typeof(Cart), typeof(CreateCartItemCommandHandler));
+            _logger.LogError(Messages.EntityRelationshipsRetrievalFailed, DateTime.UtcNow, typeof(Cart), typeof(CreateCartItemCommandHandler));
 
             return CommandResult.Failure(Messages.InternalServerError);
         }
 
-        var existingCartItem = cartEntity.CartItems.FirstOrDefault(item => item.Product?.ExternalId == request.CartItemDto.Product.ExternalId);
+        var existingCartItem = cartEntity.CartItems.FirstOrDefault(item => item.Product?.ExternalId == product.ExternalId);
 
         if (existingCartItem is not null)
         {
-            existingCartItem.Quantity += request.CartItemDto.Quantity;
+            existingCartItem.Quantity += request.CreateCartItemDto.Quantity;
 
             return CommandResult.Success(Messages.SuccessfullyUpdated);
         }
 
-        var cartItem = mappingService.Map<CartItemDto, CartItem>(request.CartItemDto);
+        var cartItem = _mappingService.Map<CreateCartItemDto, CartItem>(request.CreateCartItemDto);
 
         if (cartItem is null)
         {
-            logger.LogError(Messages.MappingFailed, DateTime.UtcNow, typeof(CartItem), typeof(CreateCartItemCommandHandler));
+            _logger.LogError(Messages.MappingFailed, DateTime.UtcNow, typeof(CartItem), typeof(CreateCartItemCommandHandler));
 
             return CommandResult.Failure(Messages.InternalServerError);
         }
 
-        var productEntity = await productRepository
-            .GetByExternalIdAsync(request.CartItemDto.Product.ExternalId, cancellationToken);
-
-        if (productEntity is null)
-        {
-            return CommandResult.Failure(Messages.NotFound);
-        }
-
         cartItem.CartId = cartEntity.InternalId;
-        cartItem.ProductId = productEntity.InternalId;
+        cartItem.ProductId = product.InternalId;
 
-        var createdCartItem = await cartItemRepository.CreateAsync(cartItem, cancellationToken);
+        var createdCartItem = await _cartItemRepository.CreateAsync(cartItem, cancellationToken);
 
         if (createdCartItem is not null)
         {
             return CommandResult.Success(Messages.SuccessfullyCreated);
         }
 
-        logger.LogError(Messages.EntityCreationFailed, DateTime.UtcNow, typeof(CartItem), typeof(CreateCartItemCommandHandler));
+        _logger.LogError(Messages.EntityCreationFailed, DateTime.UtcNow, typeof(CartItem), typeof(CreateCartItemCommandHandler));
 
         return CommandResult.Failure(Messages.InternalServerError);
     }

@@ -9,31 +9,64 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.Comments.Handlers;
 
-public class CreateCommentCommandHandler(
-        IRepository<Comment> repository,
+public class CreateCommentCommandHandler : IRequestHandler<CreateCommentCommand, CommandResult>
+{
+    private readonly IRepository<Comment> _commentRepository;
+    private readonly IRepository<User> _userRepository;
+    private readonly IRepository<Product> _productRepository;
+    private readonly IMappingService _mappingService;
+    private readonly ILogger _logger;
+
+    public CreateCommentCommandHandler(
+        IRepository<Comment> commentRepository,
+        IRepository<User> userRepository,
+        IRepository<Product> productRepository,
         IMappingService mappingService,
         ILogger logger)
-    : IRequestHandler<CreateCommentCommand, CommandResult>
-{
+    {
+        _commentRepository = commentRepository;
+        _userRepository = userRepository;
+        _productRepository = productRepository;
+        _mappingService = mappingService;
+        _logger = logger;
+    }
+
     public async Task<CommandResult> Handle(CreateCommentCommand request, CancellationToken cancellationToken)
     {
-        var entity = mappingService.Map<CommentDto, Comment>(request.CommentDto);
+        var user = await _userRepository.GetByExternalIdAsync(request.CommentDto.UserExternalId, cancellationToken);
+
+        if (user is null)
+        {
+            return CommandResult.Failure(Messages.BadRequest);
+        }
+
+        var product = await _productRepository.GetByExternalIdAsync(request.CommentDto.ProductExternalId, cancellationToken);
+
+        if (product is null)
+        {
+            return CommandResult.Failure(Messages.BadRequest);
+        }
+
+        var entity = _mappingService.Map<CommentDto, Comment>(request.CommentDto);
 
         if (entity is null)
         {
-            logger.LogError(message: Messages.MappingFailed, DateTime.UtcNow, typeof(Comment), typeof(CreateCommentCommandHandler));
+            _logger.LogError(message: Messages.MappingFailed, DateTime.UtcNow, typeof(Comment), typeof(CreateCommentCommandHandler));
 
             return CommandResult.Failure(Messages.InternalServerError);
         }
 
-        var createdEntity = await repository.CreateAsync(entity, cancellationToken);
+        entity.UserId = user.InternalId;
+        entity.ProductId = product.InternalId;
+
+        var createdEntity = await _commentRepository.CreateAsync(entity, cancellationToken);
 
         if (createdEntity is not null)
         {
             return CommandResult.Success(Messages.SuccessfullyCreated);
         }
 
-        logger.LogError(message: Messages.EntityCreationFailed, DateTime.UtcNow, typeof(Comment), typeof(CreateCommentCommandHandler));
+        _logger.LogError(message: Messages.EntityCreationFailed, DateTime.UtcNow, typeof(Comment), typeof(CreateCommentCommandHandler));
 
         return CommandResult.Failure(Messages.InternalServerError);
     }

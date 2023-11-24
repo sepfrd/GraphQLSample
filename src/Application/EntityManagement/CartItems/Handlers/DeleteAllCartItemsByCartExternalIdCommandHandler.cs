@@ -7,15 +7,24 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.CartItems.Handlers;
 
-public class DeleteAllCartItemsByCartExternalIdCommandHandler(
-        IRepository<CartItem> cartItemRepository,
+public class DeleteAllCartItemsByCartExternalIdCommandHandler : IRequestHandler<DeleteAllCartItemsByCartExternalIdCommand, CommandResult>
+{
+    private readonly IRepository<CartItem> _cartItemRepository;
+    private readonly IRepository<Cart> _cartRepository;
+    private readonly ILogger _logger;
+
+    public DeleteAllCartItemsByCartExternalIdCommandHandler(IRepository<CartItem> cartItemRepository,
         IRepository<Cart> cartRepository,
         ILogger logger)
-    : IRequestHandler<DeleteAllCartItemsByCartExternalIdCommand, CommandResult>
-{
+    {
+        _cartItemRepository = cartItemRepository;
+        _cartRepository = cartRepository;
+        _logger = logger;
+    }
+
     public async Task<CommandResult> Handle(DeleteAllCartItemsByCartExternalIdCommand request, CancellationToken cancellationToken)
     {
-        var cart = await cartRepository.GetByExternalIdAsync(
+        var cart = await _cartRepository.GetByExternalIdAsync(
             request.ExternalId,
             cancellationToken);
 
@@ -28,7 +37,7 @@ public class DeleteAllCartItemsByCartExternalIdCommandHandler(
 
         if (cartItems is null)
         {
-            logger.LogError(Messages.EntityRelationshipsRetrievalFailed, DateTime.UtcNow, typeof(Cart), typeof(DeleteAllCartItemsByCartExternalIdCommandHandler));
+            _logger.LogError(Messages.EntityRelationshipsRetrievalFailed, DateTime.UtcNow, typeof(Cart), typeof(DeleteAllCartItemsByCartExternalIdCommandHandler));
 
             return CommandResult.Failure(Messages.InternalServerError);
         }
@@ -40,7 +49,7 @@ public class DeleteAllCartItemsByCartExternalIdCommandHandler(
 
         foreach (var cartItem in cartItems)
         {
-            await cartItemRepository.DeleteAsync(cartItem, cancellationToken);
+            await _cartItemRepository.DeleteAsync(cartItem, cancellationToken);
         }
 
         return CommandResult.Success(Messages.SuccessfullyDeleted);
