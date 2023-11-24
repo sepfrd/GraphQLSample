@@ -18,5 +18,5 @@ public sealed record UserDto(
     PersonDto? Person,
     IEnumerable<AddressDto>? Addresses,
     IEnumerable<PhoneNumberDto>? PhoneNumbers,
-    IEnumerable<PaymentDto>? Payments,
+    IEnumerable<CreatePaymentDto>? Payments,
     IEnumerable<CommentDto>? Comments);

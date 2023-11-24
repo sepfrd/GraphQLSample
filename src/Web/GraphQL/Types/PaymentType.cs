@@ -1,6 +1,4 @@
-using Application.Common;
 using Application.EntityManagement.Orders.Queries;
-using Application.EntityManagement.Users.Queries;
 using Domain.Common;
 using Domain.Entities;
 using MediatR;
@@ -16,12 +14,6 @@ public class PaymentType : ObjectType<Payment>
             .ResolveWith<Resolvers>(
                 resolvers =>
                     resolvers.GetOrderAsync(default!, default!));
-
-        descriptor
-            .Field(payment => payment.User)
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    resolvers.GetUserAsync(default!, default!));
 
         descriptor
             .Field(payment => payment.DateCreated)
@@ -42,10 +34,6 @@ public class PaymentType : ObjectType<Payment>
         descriptor
             .Field(payment => payment.OrderId)
             .Ignore();
-
-        descriptor
-            .Field(payment => payment.UserId)
-            .Ignore();
     }
 
     private sealed class Resolvers
@@ -58,18 +46,6 @@ public class PaymentType : ObjectType<Payment>
                 x => x.InternalId == payment.OrderId);
 
             var result = await sender.Send(ordersQuery);
-
-            return result.Data?.FirstOrDefault();
-        }
-
-        public async Task<User?> GetUserAsync([Parent] Payment payment, [Service] ISender sender)
-        {
-            var usersQuery = new GetAllUsersQuery(
-                new Pagination(),
-                null,
-                x => x.InternalId == payment.UserId);
-
-            var result = await sender.Send(usersQuery);
 
             return result.Data?.FirstOrDefault();
         }

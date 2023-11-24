@@ -11,8 +11,6 @@ using Application.EntityManagement.Categories.Dtos;
 using Application.EntityManagement.Comments.Commands;
 using Application.EntityManagement.Comments.Dtos;
 using Application.EntityManagement.Comments.Queries;
-using Application.EntityManagement.OrderItems.Commands;
-using Application.EntityManagement.OrderItems.Dtos;
 using Application.EntityManagement.Orders.Commands;
 using Application.EntityManagement.Orders.Dtos;
 using Application.EntityManagement.Payments.Commands;
@@ -43,6 +41,8 @@ namespace Web.GraphQL;
 
 public class Mutation
 {
+    // ------------------------------------------ Address --------------------------------------->
+
     public async Task<CommandResult> AddAddressAsync([Service] ISender sender, CreateAddressDto createAddressDto, CancellationToken cancellationToken)
     {
         var createCommand = new CreateAddressCommand(createAddressDto);
@@ -69,6 +69,10 @@ public class Mutation
 
         return result;
     }
+
+    // <-------------------------------------------------------------------------------------------
+
+    // ------------------------------------------ Answer --------------------------------------->
 
     public async Task<CommandResult> AddAnswerAsync([Service] ISender sender, CreateAnswerDto answerDto, CancellationToken cancellationToken)
     {
@@ -97,6 +101,10 @@ public class Mutation
         return result;
     }
 
+    // <-------------------------------------------------------------------------------------------
+
+    // ------------------------------------------ CartItem --------------------------------------->
+
     public async Task<CommandResult> AddCartItemAsync([Service] ISender sender, CreateCartItemDto createCartItemDto, CancellationToken cancellationToken)
     {
         var createCommand = new CreateCartItemCommand(createCartItemDto);
@@ -106,6 +114,10 @@ public class Mutation
         return result;
     }
 
+    // <-------------------------------------------------------------------------------------------
+
+    // ------------------------------------------ Category --------------------------------------->
+
     public async Task<CommandResult> AddCategoryAsync([Service] ISender sender, CategoryDto categoryDto, CancellationToken cancellationToken)
     {
         var createCommand = new CreateCategoryCommand(categoryDto);
@@ -114,6 +126,10 @@ public class Mutation
 
         return result;
     }
+
+    // <-------------------------------------------------------------------------------------------
+
+    // ------------------------------------------ Comment --------------------------------------->
 
     public async Task<CommandResult> AddCommentAsync([Service] ISender sender, CommentDto commentDto, CancellationToken cancellationToken)
     {
@@ -133,45 +149,22 @@ public class Mutation
         return result;
     }
 
-    public async Task<CommandResult> AddOrderItemAsync([Service] ISender sender, CreateOrderItemDto createOrderItemDto, CancellationToken cancellationToken)
+    // <-------------------------------------------------------------------------------------------
+
+    // ------------------------------------------ Order --------------------------------------->
+
+    public async Task<CommandResult> AddOrderAsync([Service] ISender sender, CreateOrderDto createOrderDto, CancellationToken cancellationToken)
     {
-        var createCommand = new CreateOrderItemCommand(createOrderItemDto);
+        var createCommand = new CreateOrderCommand(createOrderDto);
 
         var result = await sender.Send(createCommand, cancellationToken);
 
         return result;
     }
 
-    public async Task<CommandResult> UpdateOrderItemAsync([Service] ISender sender, int externalId, OrderItemDto orderItemDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> UpdateOrderAsync([Service] ISender sender, int externalId, CreateOrderDto createOrderDto, CancellationToken cancellationToken)
     {
-        var updateCommand = new UpdateOrderItemCommand(externalId, orderItemDto);
-
-        var result = await sender.Send(updateCommand, cancellationToken);
-
-        return result;
-    }
-
-    public async Task<CommandResult> DeleteOrderItemAsync([Service] ISender sender, int externalId, CancellationToken cancellationToken)
-    {
-        var deleteCommand = new DeleteOrderItemByExternalIdCommand(externalId);
-
-        var result = await sender.Send(deleteCommand, cancellationToken);
-
-        return result;
-    }
-
-    public async Task<CommandResult> AddOrderAsync([Service] ISender sender, OrderDto orderDto, CancellationToken cancellationToken)
-    {
-        var createCommand = new CreateOrderCommand(orderDto);
-
-        var result = await sender.Send(createCommand, cancellationToken);
-
-        return result;
-    }
-
-    public async Task<CommandResult> UpdateOrderAsync([Service] ISender sender, int externalId, OrderDto orderDto, CancellationToken cancellationToken)
-    {
-        var updateCommand = new UpdateOrderCommand(externalId, orderDto);
+        var updateCommand = new UpdateOrderCommand(externalId, createOrderDto);
 
         var result = await sender.Send(updateCommand, cancellationToken);
 
@@ -187,18 +180,22 @@ public class Mutation
         return result;
     }
 
-    public async Task<CommandResult> AddPaymentAsync([Service] ISender sender, PaymentDto paymentDto, CancellationToken cancellationToken)
+    // <-------------------------------------------------------------------------------------------
+
+    // ------------------------------------------ Payment --------------------------------------->
+
+    public async Task<CommandResult> AddPaymentAsync([Service] ISender sender, CreatePaymentDto createPaymentDto, CancellationToken cancellationToken)
     {
-        var createCommand = new CreatePaymentCommand(paymentDto);
+        var createCommand = new CreatePaymentCommand(createPaymentDto);
 
         var result = await sender.Send(createCommand, cancellationToken);
 
         return result;
     }
 
-    public async Task<CommandResult> UpdatePaymentAsync([Service] ISender sender, int externalId, PaymentDto paymentDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> UpdatePaymentAsync([Service] ISender sender, int externalId, CreatePaymentDto createPaymentDto, CancellationToken cancellationToken)
     {
-        var updateCommand = new UpdatePaymentCommand(externalId, paymentDto);
+        var updateCommand = new UpdatePaymentCommand(externalId, createPaymentDto);
 
         var result = await sender.Send(updateCommand, cancellationToken);
 
@@ -214,14 +211,9 @@ public class Mutation
         return result;
     }
 
-    public async Task<CommandResult> AddPersonAsync([Service] ISender sender, PersonDto personDto, CancellationToken cancellationToken)
-    {
-        var createCommand = new CreatePersonCommand(personDto);
+    // <-------------------------------------------------------------------------------------------
 
-        var result = await sender.Send(createCommand, cancellationToken);
-
-        return result;
-    }
+    // ------------------------------------------ Person --------------------------------------->
 
     public async Task<CommandResult> UpdatePersonAsync([Service] ISender sender, int externalId, PersonDto personDto, CancellationToken cancellationToken)
     {
@@ -232,14 +224,9 @@ public class Mutation
         return result;
     }
 
-    public async Task<CommandResult> DeletePersonAsync([Service] ISender sender, int externalId, CancellationToken cancellationToken)
-    {
-        var deleteCommand = new DeletePersonByExternalIdCommand(externalId);
+    // <-------------------------------------------------------------------------------------------
 
-        var result = await sender.Send(deleteCommand, cancellationToken);
-
-        return result;
-    }
+    // ------------------------------------------ PhoneNumber --------------------------------------->
 
     public async Task<CommandResult> AddPhoneNumberAsync([Service] ISender sender, PhoneNumberDto phoneNumberDto, CancellationToken cancellationToken)
     {
@@ -268,6 +255,9 @@ public class Mutation
         return result;
     }
 
+    // <-------------------------------------------------------------------------------------------
+
+    // ------------------------------------------ Product --------------------------------------->
     public async Task<CommandResult> AddProductAsync([Service] ISender sender, CreateProductDto createProductDto, CancellationToken cancellationToken)
     {
         var createCommand = new CreateProductCommand(createProductDto);
@@ -295,6 +285,9 @@ public class Mutation
         return result;
     }
 
+    // <-------------------------------------------------------------------------------------------
+
+    // ------------------------------------------ Question --------------------------------------->
     public async Task<CommandResult> AddQuestionAsync([Service] ISender sender, QuestionDto questionDto, CancellationToken cancellationToken)
     {
         var createCommand = new CreateQuestionCommand(questionDto);
@@ -313,14 +306,9 @@ public class Mutation
         return result;
     }
 
-    public async Task<CommandResult> AddShipmentAsync([Service] ISender sender, ShipmentDto shipmentDto, CancellationToken cancellationToken)
-    {
-        var createCommand = new CreateShipmentCommand(shipmentDto);
+    // <-------------------------------------------------------------------------------------------
 
-        var result = await sender.Send(createCommand, cancellationToken);
-
-        return result;
-    }
+    // ------------------------------------------ Shipment --------------------------------------->
 
     public async Task<CommandResult> UpdateShipmentAsync([Service] ISender sender, int externalId, ShipmentDto shipmentDto, CancellationToken cancellationToken)
     {
@@ -339,6 +327,10 @@ public class Mutation
 
         return result;
     }
+
+    // <-------------------------------------------------------------------------------------------
+
+    // ------------------------------------------ User --------------------------------------->
 
     public async Task<CommandResult> AddUserAsync([Service] ISender sender, CreateUserDto userDto, CancellationToken cancellationToken)
     {
@@ -366,6 +358,10 @@ public class Mutation
 
         return result;
     }
+
+    // <-------------------------------------------------------------------------------------------
+
+    // ------------------------------------------ Vote --------------------------------------->
 
     public async Task<CommandResult> AddAnswerVoteAsync([Service] ISender sender, AddAnswerVoteInputType answerVoteInput, CancellationToken cancellationToken)
     {
@@ -478,4 +474,6 @@ public class Mutation
 
         return result;
     }
+
+    // <-------------------------------------------------------------------------------------------
 }

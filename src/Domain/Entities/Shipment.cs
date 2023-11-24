@@ -5,15 +5,15 @@ namespace Domain.Entities;
 
 public sealed class Shipment : BaseEntity
 {
-    public Guid TraceId { get; set; }
+    public Guid TraceId { get; } = Guid.NewGuid();
 
-    public ShipmentStatus ShipmentStatus { get; set; }
+    public ShipmentStatus ShipmentStatus { get; set; } = ShipmentStatus.Pending;
 
     public ShippingMethod ShippingMethod { get; set; }
 
-    public DateTime DateShipped { get; set; }
+    public DateTime DateToBeShipped { get; set; }
 
-    public DateTime? DateDelivered { get; set; }
+    public DateTime? DateToBeDelivered { get; set; }
 
     public decimal ShippingCost { get; set; }
 

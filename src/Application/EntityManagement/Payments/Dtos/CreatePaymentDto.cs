@@ -2,11 +2,7 @@ using Domain.Enums;
 
 namespace Application.EntityManagement.Payments.Dtos;
 
-public record PaymentDto
-(
-    int OrderExternalId,
-    int UserExternalId,
+public record CreatePaymentDto(
     decimal Amount,
     PaymentMethod PaymentMethod,
-    PaymentStatus PaymentStatus
-);
+    PaymentStatus PaymentStatus);

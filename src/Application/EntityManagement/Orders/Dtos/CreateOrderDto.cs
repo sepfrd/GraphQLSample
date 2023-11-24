@@ -4,8 +4,8 @@ using Application.EntityManagement.Shipments.Dtos;
 
 namespace Application.EntityManagement.Orders.Dtos;
 
-public record OrderDto(
-    decimal TotalPrice,
-    PaymentDto Payment,
-    ShipmentDto Shipment,
-    ICollection<OrderItemDto> OrderItems);
+public record CreateOrderDto(
+    int UserExternalId,
+    CreatePaymentDto CreatePaymentDto,
+    CreateShipmentDto CreateShipmentDto,
+    IEnumerable<CreateOrderItemDto> CreateOrderItemDtos);

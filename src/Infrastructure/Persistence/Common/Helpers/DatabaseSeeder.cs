@@ -10,9 +10,9 @@ namespace Infrastructure.Persistence.Common.Helpers;
 public class DatabaseSeeder
 {
     private readonly IMongoDatabase _mongoDatabase;
-    private const int DefaultHugeNumber = 100000;
-    private const int DefaultNormalNumber = 50000;
-    private const int DefaultSmallNumber = 10000;
+    private const int DefaultHugeNumber = 10000;
+    private const int DefaultNormalNumber = 5000;
+    private const int DefaultSmallNumber = 1000;
 
     public DatabaseSeeder(string connectionString, string databaseName)
     {
@@ -92,7 +92,6 @@ public class DatabaseSeeder
 
         foreach (var payment in fakePayments)
         {
-            payment.UserId = fakeUsers.ElementAt(Random.Shared.Next(0, fakeUsers.Count)).InternalId;
             payment.OrderId = fakeOrders.ElementAt(Random.Shared.Next(0, fakeOrders.Count)).InternalId;
         }
 
@@ -431,8 +430,8 @@ public class DatabaseSeeder
 
         var shipmentFaker = new Faker<Shipment>()
             .RuleFor(shipment => shipment.ExternalId, _ => externalId++)
-            .RuleFor(shipment => shipment.DateDelivered, faker => faker.Date.Soon())
-            .RuleFor(shipment => shipment.DateShipped, faker => faker.Date.Recent())
+            .RuleFor(shipment => shipment.DateToBeDelivered, faker => faker.Date.Soon())
+            .RuleFor(shipment => shipment.DateToBeShipped, faker => faker.Date.Recent())
             .RuleFor(shipment => shipment.ShipmentStatus, faker => Enum.GetValues<ShipmentStatus>()[faker.Random.Number(9)])
             .RuleFor(shipment => shipment.ShippingMethod, faker => Enum.GetValues<ShippingMethod>()[faker.Random.Number(9)])
             .RuleFor(shipment => shipment.ShippingCost, faker => faker.Random.Decimal())

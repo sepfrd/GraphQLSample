@@ -3,7 +3,6 @@ using Application.EntityManagement.Answers.Queries;
 using Application.EntityManagement.Carts.Queries;
 using Application.EntityManagement.Comments.Queries;
 using Application.EntityManagement.Orders.Queries;
-using Application.EntityManagement.Payments.Queries;
 using Application.EntityManagement.Persons.Queries;
 using Application.EntityManagement.PhoneNumbers.Queries;
 using Application.EntityManagement.Questions.Queries;
@@ -72,14 +71,6 @@ public class UserType : ObjectType<User>
             .UseSorting();
 
         descriptor
-            .Field(user => user.Payments)
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetPaymentsAsync(default!, default!))
-            .UseFiltering()
-            .UseSorting();
-
-        descriptor
             .Field(user => user.Questions)
             .ResolveWith<Resolvers>(
                 resolvers =>
@@ -117,7 +108,7 @@ public class UserType : ObjectType<User>
         descriptor
             .Field(user => user.InternalId)
             .Ignore();
-        
+
         descriptor
             .Field(user => user.Password)
             .Ignore();
@@ -201,18 +192,6 @@ public class UserType : ObjectType<User>
                 order => order.UserId == user.InternalId);
 
             var result = await sender.Send(ordersQuery);
-
-            return result.Data;
-        }
-
-        public static async Task<IEnumerable<Payment>?> GetPaymentsAsync([Parent] User user, [Service] ISender sender)
-        {
-            var paymentsQuery = new GetAllPaymentsQuery(
-                new Pagination(1, int.MaxValue),
-                null,
-                payment => payment.UserId == user.InternalId);
-
-            var result = await sender.Send(paymentsQuery);
 
             return result.Data;
         }

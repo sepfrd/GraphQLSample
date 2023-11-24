@@ -33,7 +33,7 @@ public class CreateOrderItemCommandHandler : IRequestHandler<CreateOrderItemComm
 
     public async Task<CommandResult> Handle(CreateOrderItemCommand request, CancellationToken cancellationToken)
     {
-        var order = await _orderRepository.GetByExternalIdAsync(request.CreateOrderItemDto.OrderExternalId, cancellationToken);
+        var order = await _orderRepository.GetByExternalIdAsync(request.OrderExternalId, cancellationToken);
 
         if (order is null)
         {

@@ -17,7 +17,7 @@ public class CreatePaymentCommandHandler(
 {
     public async Task<CommandResult> Handle(CreatePaymentCommand request, CancellationToken cancellationToken)
     {
-        var entity = mappingService.Map<PaymentDto, Payment>(request.PaymentDto);
+        var entity = mappingService.Map<CreatePaymentDto, Payment>(request.CreatePaymentDto);
 
         if (entity is null)
         {

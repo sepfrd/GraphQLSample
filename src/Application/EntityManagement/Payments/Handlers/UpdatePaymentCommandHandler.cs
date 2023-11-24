@@ -23,7 +23,7 @@ public class UpdatePaymentCommandHandler(
             return CommandResult.Success(Messages.NotFound);
         }
 
-        var newEntity = mappingService.Map(request.PaymentDto, entity);
+        var newEntity = mappingService.Map(request.CreatePaymentDto, entity);
 
         if (newEntity is null)
         {

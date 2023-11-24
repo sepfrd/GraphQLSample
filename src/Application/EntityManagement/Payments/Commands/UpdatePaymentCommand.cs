@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Application.EntityManagement.Payments.Commands;
 
-public record UpdatePaymentCommand(int ExternalId, PaymentDto PaymentDto) : IRequest<CommandResult>;
+public record UpdatePaymentCommand(int ExternalId, CreatePaymentDto CreatePaymentDto) : IRequest<CommandResult>;
