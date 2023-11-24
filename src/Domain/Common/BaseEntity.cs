@@ -10,7 +10,7 @@ public abstract class BaseEntity
 
     public Guid InternalId { get; init; }
 
-    public required int ExternalId { get; set; }
+    public int ExternalId { get; set; }
 
     public DateTime DateCreated { get; set; }
 

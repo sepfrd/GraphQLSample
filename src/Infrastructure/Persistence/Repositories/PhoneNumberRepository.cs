@@ -4,9 +4,4 @@ using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Persistence.Repositories;
 
-public class PhoneNumberRepository : BaseRepository<PhoneNumber>
-{
-    public PhoneNumberRepository(IOptions<MongoDbSettings> databaseSettings) : base(databaseSettings)
-    {
-    }
-}
+public class PhoneNumberRepository(IOptions<MongoDbSettings> databaseSettings) : BaseRepository<PhoneNumber>(databaseSettings);

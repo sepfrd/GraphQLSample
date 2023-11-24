@@ -61,11 +61,8 @@ public class CreateCartItemCommandHandler(
             return CommandResult.Failure(Messages.NotFound);
         }
 
-        var externalId = await cartItemRepository.GenerateUniqueExternalIdAsync(cancellationToken);
-
         cartItem.CartId = cartEntity.InternalId;
         cartItem.ProductId = productEntity.InternalId;
-        cartItem.ExternalId = externalId;
 
         var createdCartItem = await cartItemRepository.CreateAsync(cartItem, cancellationToken);
 

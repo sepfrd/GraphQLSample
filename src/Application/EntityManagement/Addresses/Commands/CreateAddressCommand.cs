@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Application.EntityManagement.Addresses.Commands;
 
-public record CreateAddressCommand(AddressDto AddressDto) : IRequest<CommandResult>;
+public record CreateAddressCommand(CreateAddressDto CreateAddressDto) : IRequest<CommandResult>;

@@ -4,9 +4,4 @@ using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Persistence.Repositories;
 
-public class OrderItemRepository : BaseRepository<OrderItem>
-{
-    public OrderItemRepository(IOptions<MongoDbSettings> databaseSettings) : base(databaseSettings)
-    {
-    }
-}
+public class OrderItemRepository(IOptions<MongoDbSettings> databaseSettings) : BaseRepository<OrderItem>(databaseSettings);

@@ -65,14 +65,11 @@ public class CreateUserCommandHandler(
 
     private async Task<Person?> CreatePersonAsync(CreateUserDto userDto, Guid userId, CancellationToken cancellationToken = default)
     {
-        var externalId = await personRepository.GenerateUniqueExternalIdAsync(cancellationToken);
-
         var person = new Person
         {
             FirstName = userDto.FirstName,
             LastName = userDto.LastName,
             BirthDate = userDto.BirthDate,
-            ExternalId = externalId,
             UserId = userId
         };
 
@@ -83,8 +80,6 @@ public class CreateUserCommandHandler(
 
     private async Task<User?> CreateUserAsync(CreateUserDto userDto, Guid userInternalId, Guid personId, CancellationToken cancellationToken = default)
     {
-        var externalId = await userRepository.GenerateUniqueExternalIdAsync(cancellationToken);
-
         var phoneNumberEntities = new List<PhoneNumber>();
 
         foreach (var phoneNumber in userDto.PhoneNumbers)
@@ -112,7 +107,6 @@ public class CreateUserCommandHandler(
         var user = new User
         {
             InternalId = userInternalId,
-            ExternalId = externalId,
             Username = userDto.Username,
             Password = userDto.Password,
             Email = userDto.Email,
@@ -135,13 +129,10 @@ public class CreateUserCommandHandler(
 
     private async Task<PhoneNumber?> CreatePhoneNumberAsync(PhoneNumberDto phoneNumberDto, Guid userInternalId, CancellationToken cancellationToken = default)
     {
-        var externalId = await phoneNumberRepository.GenerateUniqueExternalIdAsync(cancellationToken);
-
         var phoneNumber = new PhoneNumber
         {
             Number = phoneNumberDto.Number,
             Type = phoneNumberDto.Type,
-            ExternalId = externalId,
             UserId = userInternalId
         };
 
@@ -152,8 +143,6 @@ public class CreateUserCommandHandler(
 
     private async Task<Address?> CreateAddressAsync(AddressDto addressDto, Guid userInternalId, CancellationToken cancellationToken = default)
     {
-        var externalId = await addressRepository.GenerateUniqueExternalIdAsync(cancellationToken);
-
         var address = new Address
         {
             Street = addressDto.Street,
@@ -163,7 +152,6 @@ public class CreateUserCommandHandler(
             Country = addressDto.Country,
             UnitNumber = addressDto.UnitNumber,
             BuildingNumber = addressDto.BuildingNumber,
-            ExternalId = externalId,
             UserId = userInternalId
         };
 

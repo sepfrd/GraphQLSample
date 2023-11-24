@@ -4,9 +4,4 @@ using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Persistence.Repositories;
 
-public class CartItemRepository : BaseRepository<CartItem>
-{
-    public CartItemRepository(IOptions<MongoDbSettings> databaseSettings) : base(databaseSettings)
-    {
-    }
-}
+public class CartItemRepository(IOptions<MongoDbSettings> databaseSettings) : BaseRepository<CartItem>(databaseSettings);

@@ -27,6 +27,10 @@ public class BaseRepository<TEntity> : IRepository<TEntity>
 
     public async Task<TEntity?> CreateAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
+        var externalId = await GenerateUniqueExternalIdAsync(cancellationToken);
+
+        entity.ExternalId = externalId;
+        
         await _mongoDbCollection.InsertOneAsync(entity, null, cancellationToken);
 
         var filterDefinition = Builders<TEntity>.Filter.Eq(document => document.InternalId, entity.InternalId);

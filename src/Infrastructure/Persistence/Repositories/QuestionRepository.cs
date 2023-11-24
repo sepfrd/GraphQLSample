@@ -4,9 +4,4 @@ using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Persistence.Repositories;
 
-public class QuestionRepository : BaseRepository<Question>
-{
-    public QuestionRepository(IOptions<MongoDbSettings> databaseSettings) : base(databaseSettings)
-    {
-    }
-}
+public class QuestionRepository(IOptions<MongoDbSettings> databaseSettings) : BaseRepository<Question>(databaseSettings);

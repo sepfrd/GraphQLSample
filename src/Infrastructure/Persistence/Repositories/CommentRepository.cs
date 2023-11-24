@@ -4,9 +4,4 @@ using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Persistence.Repositories;
 
-public class CommentRepository : BaseRepository<Comment>
-{
-    public CommentRepository(IOptions<MongoDbSettings> databaseSettings) : base(databaseSettings)
-    {
-    }
-}
+public class CommentRepository(IOptions<MongoDbSettings> databaseSettings) : BaseRepository<Comment>(databaseSettings);

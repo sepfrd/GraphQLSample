@@ -22,11 +22,7 @@ public class CreateCategoryCommandHandler(IRepository<Category> categoryReposito
 
             return CommandResult.Failure(Messages.InternalServerError);
         }
-
-        var externalId = await categoryRepository.GenerateUniqueExternalIdAsync(cancellationToken);
-
-        category.ExternalId = externalId;
-
+        
         await categoryRepository.CreateAsync(category, cancellationToken);
 
         return CommandResult.Success(Messages.SuccessfullyCreated);
