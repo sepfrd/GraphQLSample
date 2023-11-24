@@ -10,6 +10,9 @@ namespace Infrastructure.Persistence.Common.Helpers;
 public class DatabaseSeeder
 {
     private readonly IMongoDatabase _mongoDatabase;
+    private const int DefaultHugeNumber = 100000;
+    private const int DefaultNormalNumber = 50000;
+    private const int DefaultSmallNumber = 10000;
 
     public DatabaseSeeder(string connectionString, string databaseName)
     {
@@ -176,7 +179,7 @@ public class DatabaseSeeder
 
         var fakeAddresses = new List<Address>();
 
-        for (var i = 0; i < 100; i++)
+        for (var i = 0; i < DefaultHugeNumber; i++)
         {
             fakeAddresses.Add(addressFaker.Generate());
         }
@@ -195,7 +198,7 @@ public class DatabaseSeeder
 
         var fakeAnswers = new List<Answer>();
 
-        for (var i = 0; i < 100; i++)
+        for (var i = 0; i < DefaultSmallNumber; i++)
         {
             fakeAnswers.Add(answerFaker.Generate());
         }
@@ -212,7 +215,7 @@ public class DatabaseSeeder
 
         var fakeCarts = new List<Cart>();
 
-        for (var i = 0; i < 100; i++)
+        for (var i = 0; i < DefaultHugeNumber; i++)
         {
             fakeCarts.Add(cartFaker.Generate());
         }
@@ -231,7 +234,7 @@ public class DatabaseSeeder
 
         var fakeCartItems = new List<CartItem>();
 
-        for (var i = 0; i < 100; i++)
+        for (var i = 0; i < DefaultHugeNumber; i++)
         {
             fakeCartItems.Add(cartItemFaker.Generate());
         }
@@ -270,7 +273,7 @@ public class DatabaseSeeder
 
         var fakeComments = new List<Comment>();
 
-        for (var i = 0; i < 100; i++)
+        for (var i = 0; i < DefaultSmallNumber; i++)
         {
             fakeComments.Add(commentFaker.Generate());
         }
@@ -288,7 +291,7 @@ public class DatabaseSeeder
 
         var fakeOrders = new List<Order>();
 
-        for (var i = 0; i < 100; i++)
+        for (var i = 0; i < DefaultNormalNumber; i++)
         {
             fakeOrders.Add(orderFaker.Generate());
         }
@@ -307,7 +310,7 @@ public class DatabaseSeeder
 
         var fakeOrderItems = new List<OrderItem>();
 
-        for (var i = 0; i < 500; i++)
+        for (var i = 0; i < DefaultHugeNumber; i++)
         {
             fakeOrderItems.Add(orderItemFaker.Generate());
         }
@@ -327,7 +330,7 @@ public class DatabaseSeeder
 
         var fakePayments = new List<Payment>();
 
-        for (var i = 0; i < 100; i++)
+        for (var i = 0; i < DefaultNormalNumber; i++)
         {
             fakePayments.Add(paymentFaker.Generate());
         }
@@ -347,7 +350,7 @@ public class DatabaseSeeder
 
         var fakePhoneNumbers = new List<PhoneNumber>();
 
-        for (var i = 0; i < 100; i++)
+        for (var i = 0; i < DefaultHugeNumber; i++)
         {
             fakePhoneNumbers.Add(phoneNumberFaker.Generate());
         }
@@ -376,7 +379,7 @@ public class DatabaseSeeder
 
         var fakeProducts = new List<Product>();
 
-        for (var i = 0; i < 500; i++)
+        for (var i = 0; i < DefaultHugeNumber; i++)
         {
             fakeProducts.Add(productFaker.Generate());
         }
@@ -395,7 +398,7 @@ public class DatabaseSeeder
 
         var fakeQuestions = new List<Question>();
 
-        for (var i = 0; i < 200; i++)
+        for (var i = 0; i < DefaultNormalNumber; i++)
         {
             fakeQuestions.Add(questionFaker.Generate());
         }
@@ -437,7 +440,7 @@ public class DatabaseSeeder
 
         var fakeShipments = new List<Shipment>();
 
-        for (var i = 0; i < 100; i++)
+        for (var i = 0; i < DefaultNormalNumber; i++)
         {
             fakeShipments.Add(shipmentFaker.Generate());
         }
@@ -455,7 +458,7 @@ public class DatabaseSeeder
 
         var fakeVotes = new List<Vote>();
 
-        for (var i = 0; i < 200; i++)
+        for (var i = 0; i < DefaultNormalNumber; i++)
         {
             fakeVotes.Add(voteFaker.Generate());
         }
@@ -475,7 +478,7 @@ public class DatabaseSeeder
 
         var fakePeople = new List<Person>();
 
-        for (var i = 0; i < 100; i++)
+        for (var i = 0; i < DefaultHugeNumber; i++)
         {
             fakePeople.Add(personFaker.Generate());
         }
@@ -497,7 +500,7 @@ public class DatabaseSeeder
 
         var fakeUsers = new List<User>();
 
-        for (var i = 0; i < 100; i++)
+        for (var i = 0; i < DefaultHugeNumber; i++)
         {
             fakeUsers.Add(userFaker.Generate());
         }
@@ -514,7 +517,7 @@ public class DatabaseSeeder
 
         var fakeUserRoles = new List<UserRole>();
 
-        for (var i = 0; i < 100; i++)
+        for (var i = 0; i < DefaultHugeNumber; i++)
         {
             fakeUserRoles.Add(userRoleFaker.Generate());
         }

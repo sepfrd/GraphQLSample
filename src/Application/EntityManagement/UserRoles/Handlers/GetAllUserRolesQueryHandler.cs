@@ -1,25 +1,23 @@
-﻿using System.Net;
-using Application.Common;
+﻿using Application.Common;
 using Application.EntityManagement.UserRoles.Queries;
 using Domain.Abstractions;
 using Domain.Entities;
 using MediatR;
+using System.Net;
 
 namespace Application.EntityManagement.UserRoles.Handlers;
 
-public class GetAllUserRolesQueryHandler(IRepository<UserRole> repository)
+public sealed class GetAllUserRolesQueryHandler(IRepository<UserRole> repository)
     : IRequestHandler<GetAllUserRolesQuery, QueryReferenceResponse<IEnumerable<UserRole>>>
 {
-    public virtual async Task<QueryReferenceResponse<IEnumerable<UserRole>>> Handle(GetAllUserRolesQuery request, CancellationToken cancellationToken)
+    public async Task<QueryReferenceResponse<IEnumerable<UserRole>>> Handle(GetAllUserRolesQuery request, CancellationToken cancellationToken)
     {
-        var entities = await repository.GetAllAsync(null, cancellationToken);
+        var entities = await repository.GetAllAsync(null, request.Pagination, cancellationToken);
 
-        return new QueryReferenceResponse<IEnumerable<UserRole>>
-        (
-            entities.Paginate(request.Pagination),
+        return new QueryReferenceResponse<IEnumerable<UserRole>>(
+            entities,
             true,
             Messages.SuccessfullyRetrieved,
-            HttpStatusCode.OK
-        );
+            HttpStatusCode.OK);
     }
 }

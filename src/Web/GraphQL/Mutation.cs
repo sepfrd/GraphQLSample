@@ -1,4 +1,3 @@
-using System.Linq.Expressions;
 using Application.Common;
 using Application.EntityManagement.Addresses.Commands;
 using Application.EntityManagement.Addresses.Dtos;
@@ -34,8 +33,10 @@ using Application.EntityManagement.Users.Commands;
 using Application.EntityManagement.Users.Dtos;
 using Application.EntityManagement.Votes.Commands;
 using Application.EntityManagement.Votes.Dtos;
+using Domain.Common;
 using Domain.Entities;
 using MediatR;
+using System.Linq.Expressions;
 using Web.GraphQL.Types.InputTypes;
 
 namespace Web.GraphQL;
@@ -267,9 +268,9 @@ public class Mutation
         return result;
     }
 
-    public async Task<CommandResult> AddProductAsync([Service] ISender sender, ProductDto productDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> AddProductAsync([Service] ISender sender, CreateProductDto createProductDto, CancellationToken cancellationToken)
     {
-        var createCommand = new CreateProductCommand(productDto);
+        var createCommand = new CreateProductCommand(createProductDto);
 
         var result = await sender.Send(createCommand, cancellationToken);
 
@@ -365,8 +366,6 @@ public class Mutation
 
         return result;
     }
-
-    // TODO: Figure it out. 
 
     public async Task<CommandResult> AddAnswerVoteAsync([Service] ISender sender, AddAnswerVoteInputType answerVoteInput, CancellationToken cancellationToken)
     {

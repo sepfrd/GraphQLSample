@@ -2,6 +2,7 @@ using Application.Common;
 using Application.EntityManagement.Answers.Queries;
 using Application.EntityManagement.Users.Queries;
 using Application.EntityManagement.Votes.Queries;
+using Domain.Common;
 using Domain.Entities;
 using MediatR;
 

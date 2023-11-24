@@ -4,7 +4,6 @@ using Domain.Enums;
 namespace Application.EntityManagement.Shipments.Dtos;
 
 public record ShipmentDto(
-    int ExternalId,
     int OrderExternalId,
     Guid TraceId,
     ShipmentStatus ShipmentStatus,

@@ -17,7 +17,7 @@ public class CreateProductCommandHandler(
 {
     public async Task<CommandResult> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
-        var entity = mappingService.Map<ProductDto, Product>(request.ProductDto);
+        var entity = mappingService.Map<CreateProductDto, Product>(request.CreateProductDto);
 
         if (entity is null)
         {

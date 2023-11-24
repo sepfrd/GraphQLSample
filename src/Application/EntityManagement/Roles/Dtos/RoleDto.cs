@@ -2,5 +2,4 @@
 
 public record RoleDto(
     string? Title,
-    string? Description,
-    int ExternalId);
+    string? Description);

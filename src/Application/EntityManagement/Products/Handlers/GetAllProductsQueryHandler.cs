@@ -1,25 +1,23 @@
-using System.Net;
 using Application.Common;
 using Application.EntityManagement.Products.Queries;
 using Domain.Abstractions;
 using Domain.Entities;
 using MediatR;
+using System.Net;
 
 namespace Application.EntityManagement.Products.Handlers;
 
-public class GetAllProductsQueryHandler(IRepository<Product> repository)
+public sealed class GetAllProductsQueryHandler(IRepository<Product> repository)
     : IRequestHandler<GetAllProductsQuery, QueryReferenceResponse<IEnumerable<Product>>>
 {
-    public virtual async Task<QueryReferenceResponse<IEnumerable<Product>>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
+    public async Task<QueryReferenceResponse<IEnumerable<Product>>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
     {
-        var entities = await repository.GetAllAsync(null, cancellationToken);
+        var entities = await repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
 
-        return new QueryReferenceResponse<IEnumerable<Product>>
-        (
-            entities.Paginate(request.Pagination),
+        return new QueryReferenceResponse<IEnumerable<Product>>(
+            entities,
             true,
             Messages.SuccessfullyRetrieved,
-            HttpStatusCode.OK
-        );
+            HttpStatusCode.OK);
     }
 }

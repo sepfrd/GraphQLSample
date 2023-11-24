@@ -1,25 +1,23 @@
-using System.Net;
 using Application.Common;
 using Application.EntityManagement.Payments.Queries;
 using Domain.Abstractions;
 using Domain.Entities;
 using MediatR;
+using System.Net;
 
 namespace Application.EntityManagement.Payments.Handlers;
 
-public class GetAllPaymentsQueryHandler(IRepository<Payment> repository)
+public sealed class GetAllPaymentsQueryHandler(IRepository<Payment> repository)
     : IRequestHandler<GetAllPaymentsQuery, QueryReferenceResponse<IEnumerable<Payment>>>
 {
-    public virtual async Task<QueryReferenceResponse<IEnumerable<Payment>>> Handle(GetAllPaymentsQuery request, CancellationToken cancellationToken)
+    public async Task<QueryReferenceResponse<IEnumerable<Payment>>> Handle(GetAllPaymentsQuery request, CancellationToken cancellationToken)
     {
-        var entities = await repository.GetAllAsync(null, cancellationToken);
+        var entities = await repository.GetAllAsync(null, request.Pagination, cancellationToken);
 
-        return new QueryReferenceResponse<IEnumerable<Payment>>
-        (
-            entities.Paginate(request.Pagination),
+        return new QueryReferenceResponse<IEnumerable<Payment>>(
+            entities,
             true,
             Messages.SuccessfullyRetrieved,
-            HttpStatusCode.OK
-        );
+            HttpStatusCode.OK);
     }
 }

@@ -1,13 +1,13 @@
-using System.Net;
 using Application.Common;
 using Application.EntityManagement.Users.Queries;
 using Domain.Abstractions;
 using Domain.Entities;
 using MediatR;
+using System.Net;
 
 namespace Application.EntityManagement.Users.Handlers;
 
-public class GetUserByUsernameOrEmailQueryHandler(IRepository<User> userRepository) : IRequestHandler<GetUserByUsernameOrEmailQuery, QueryReferenceResponse<User>>
+public sealed class GetUserByUsernameOrEmailQueryHandler(IRepository<User> userRepository) : IRequestHandler<GetUserByUsernameOrEmailQuery, QueryReferenceResponse<User>>
 {
     public async Task<QueryReferenceResponse<User>> Handle(GetUserByUsernameOrEmailQuery request, CancellationToken cancellationToken)
     {
@@ -15,6 +15,7 @@ public class GetUserByUsernameOrEmailQueryHandler(IRepository<User> userReposito
             .GetAllAsync(user =>
                     user.Username == request.UsernameOrEmail ||
                     user.Email == request.UsernameOrEmail,
+                null,
                 cancellationToken);
 
         var user = users.FirstOrDefault();

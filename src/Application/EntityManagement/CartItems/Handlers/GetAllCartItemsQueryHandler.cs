@@ -12,14 +12,14 @@ public class GetAllCartItemsQueryHandler(IRepository<CartItem> repository)
 {
     public virtual async Task<QueryReferenceResponse<IEnumerable<CartItem>>> Handle(GetAllCartItemsQuery request, CancellationToken cancellationToken)
     {
-        var entities = await repository.GetAllAsync(null, cancellationToken);
+        var entities = await repository.GetAllAsync(null, request.Pagination, cancellationToken);
 
         return new QueryReferenceResponse<IEnumerable<CartItem>>
-        (
-            entities.Paginate(request.Pagination),
+            (
+            entities,
             true,
             Messages.SuccessfullyRetrieved,
             HttpStatusCode.OK
-        );
+            );
     }
 }

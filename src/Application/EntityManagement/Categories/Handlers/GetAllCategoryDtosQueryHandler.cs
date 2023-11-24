@@ -18,18 +18,16 @@ public class GetAllCategoryDtosQueryHandler(
 {
     public async Task<QueryReferenceResponse<IEnumerable<CategoryDto>>> Handle(GetAllCategoryDtosQuery request, CancellationToken cancellationToken)
     {
-        var categories = await categoryRepository.GetAllAsync(null, cancellationToken);
+        var categories = await categoryRepository.GetAllAsync(null, request.Pagination, cancellationToken);
 
         var categoryDtos = mappingService.Map<IEnumerable<Category>, IEnumerable<CategoryDto>>(categories);
 
         if (categoryDtos is not null)
         {
-            return new QueryReferenceResponse<IEnumerable<CategoryDto>>(
-                categoryDtos,
+            return new QueryReferenceResponse<IEnumerable<CategoryDto>>(categoryDtos,
                 true,
                 Messages.SuccessfullyRetrieved,
-                HttpStatusCode.OK
-            );
+                HttpStatusCode.OK);
         }
 
         logger.LogError(Messages.MappingFailed, DateTime.UtcNow, typeof(IEnumerable<Category>), typeof(GetAllCategoryDtosQueryHandler));
@@ -39,6 +37,6 @@ public class GetAllCategoryDtosQueryHandler(
             false,
             Messages.InternalServerError,
             HttpStatusCode.InternalServerError
-        );
+            );
     }
 }

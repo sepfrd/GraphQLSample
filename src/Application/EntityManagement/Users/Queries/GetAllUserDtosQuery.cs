@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
 using Application.Common;
 using Application.EntityManagement.Users.Dtos;
+using Domain.Common;
 using Domain.Entities;
 using MediatR;
 

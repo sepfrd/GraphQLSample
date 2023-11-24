@@ -9,8 +9,8 @@ using Infrastructure.Services.Mapping;
 using Mapster;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
-using MongoDB.Bson.Serialization.IdGenerators;
 using MongoDB.Bson.Serialization.Serializers;
 
 namespace Infrastructure;
@@ -50,184 +50,17 @@ public static class DependencyInjectionHelper
 
     private static IServiceCollection AddMongoDb(this IServiceCollection services, IConfiguration configuration)
     {
+        BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
+        
         BsonClassMap.RegisterClassMap<BaseEntity>(classMap =>
         {
             classMap.AutoMap();
             classMap
-                .MapIdMember(baseEntity => baseEntity.InternalId)
-                .SetIdGenerator(GuidGenerator.Instance)
-                .SetSerializer(GuidSerializer.StandardInstance);
+                .MapIdMember(baseEntity => baseEntity.InternalId);
         });
 
-        BsonClassMap.RegisterClassMap<Address>(classMap =>
-        {
-            classMap.AutoMap();
-            classMap
-                .MapMember(address => address.UserId)
-                .SetSerializer(GuidSerializer.StandardInstance);
-        });
-
-        BsonClassMap.RegisterClassMap<Answer>(classMap =>
-        {
-            classMap.AutoMap();
-            classMap
-                .MapMember(answer => answer.UserId)
-                .SetSerializer(GuidSerializer.StandardInstance);
-            classMap
-                .MapMember(answer => answer.QuestionId)
-                .SetSerializer(GuidSerializer.StandardInstance);
-        });
-
-        BsonClassMap.RegisterClassMap<Cart>(classMap =>
-        {
-            classMap.AutoMap();
-            classMap
-                .MapMember(cart => cart.UserId)
-                .SetSerializer(GuidSerializer.StandardInstance);
-        });
-
-        BsonClassMap.RegisterClassMap<CartItem>(classMap =>
-        {
-            classMap.AutoMap();
-            classMap
-                .MapMember(cartItem => cartItem.CartId)
-                .SetSerializer(GuidSerializer.StandardInstance);
-            classMap
-                .MapMember(cartItem => cartItem.ProductId)
-                .SetSerializer(GuidSerializer.StandardInstance);
-        });
-
-        BsonClassMap.RegisterClassMap<Comment>(classMap =>
-        {
-            classMap.AutoMap();
-            classMap
-                .MapMember(comment => comment.ProductId)
-                .SetSerializer(GuidSerializer.StandardInstance);
-            classMap
-                .MapMember(comment => comment.UserId)
-                .SetSerializer(GuidSerializer.StandardInstance);
-        });
-
-        BsonClassMap.RegisterClassMap<Order>(classMap =>
-        {
-            classMap.AutoMap();
-            classMap
-                .MapMember(order => order.PaymentId)
-                .SetSerializer(GuidSerializer.StandardInstance);
-            classMap
-                .MapMember(order => order.ShipmentId)
-                .SetSerializer(GuidSerializer.StandardInstance);
-            classMap
-                .MapMember(order => order.UserId)
-                .SetSerializer(GuidSerializer.StandardInstance);
-        });
-
-        BsonClassMap.RegisterClassMap<OrderItem>(classMap =>
-        {
-            classMap.AutoMap();
-            classMap
-                .MapMember(orderItem => orderItem.OrderId)
-                .SetSerializer(GuidSerializer.StandardInstance);
-            classMap
-                .MapMember(orderItem => orderItem.ProductId)
-                .SetSerializer(GuidSerializer.StandardInstance);
-        });
-
-        BsonClassMap.RegisterClassMap<Payment>(classMap =>
-        {
-            classMap.AutoMap();
-            classMap
-                .MapMember(payment => payment.OrderId)
-                .SetSerializer(GuidSerializer.StandardInstance);
-            classMap
-                .MapMember(payment => payment.UserId)
-                .SetSerializer(GuidSerializer.StandardInstance);
-        });
-
-        BsonClassMap.RegisterClassMap<Person>(classMap =>
-        {
-            classMap.AutoMap();
-            classMap
-                .MapMember(person => person.UserId)
-                .SetSerializer(GuidSerializer.StandardInstance);
-        });
-
-        BsonClassMap.RegisterClassMap<PhoneNumber>(classMap =>
-        {
-            classMap.AutoMap();
-            classMap
-                .MapMember(phoneNumber => phoneNumber.UserId)
-                .SetSerializer(GuidSerializer.StandardInstance);
-        });
-
-        BsonClassMap.RegisterClassMap<Product>(classMap =>
-        {
-            classMap.AutoMap();
-            classMap
-                .MapMember(product => product.CategoryId)
-                .SetSerializer(GuidSerializer.StandardInstance);
-        });
-
-        BsonClassMap.RegisterClassMap<Question>(classMap =>
-        {
-            classMap.AutoMap();
-            classMap
-                .MapMember(question => question.UserId)
-                .SetSerializer(GuidSerializer.StandardInstance);
-        });
-
-        BsonClassMap.RegisterClassMap<Shipment>(classMap =>
-        {
-            classMap.AutoMap();
-            classMap
-                .MapMember(shipment => shipment.OrderId)
-                .SetSerializer(GuidSerializer.StandardInstance);
-            classMap
-                .MapMember(shipment => shipment.DestinationAddressId)
-                .SetSerializer(GuidSerializer.StandardInstance);
-            classMap
-                .MapMember(shipment => shipment.OriginAddressId)
-                .SetSerializer(GuidSerializer.StandardInstance);
-            classMap
-                .MapMember(shipment => shipment.TraceId)
-                .SetSerializer(GuidSerializer.StandardInstance);
-        });
-
-        BsonClassMap.RegisterClassMap<User>(classMap =>
-        {
-            classMap.AutoMap();
-            classMap
-                .MapMember(user => user.CartId)
-                .SetSerializer(GuidSerializer.StandardInstance);
-            classMap
-                .MapMember(user => user.PersonId)
-                .SetSerializer(GuidSerializer.StandardInstance);
-        });
-
-        BsonClassMap.RegisterClassMap<Vote>(classMap =>
-        {
-            classMap.AutoMap();
-            classMap
-                .MapMember(vote => vote.UserId)
-                .SetSerializer(GuidSerializer.StandardInstance);
-            classMap
-                .MapMember(vote => vote.ContentId)
-                .SetSerializer(GuidSerializer.StandardInstance);
-        });
-
-        services.Configure<MongoDbSettings>(mongoDbSettings =>
-        {
-            mongoDbSettings.ConnectionString = configuration
-                .GetSection("MongoDb")
-                .GetSection("ConnectionString")
-                .Value!;
-
-            mongoDbSettings.DatabaseName = configuration
-                .GetSection("MongoDb")
-                .GetSection("DatabaseName")
-                .Value!;
-        });
-
+        services.Configure<MongoDbSettings>(configuration.GetSection("MongoDb"));
+        
         return services;
     }
 

@@ -7,19 +7,17 @@ using MediatR;
 
 namespace Application.EntityManagement.Questions.Handlers;
 
-public class GetAllQuestionsQueryHandler(IRepository<Question> repository)
+public sealed class GetAllQuestionsQueryHandler(IRepository<Question> repository)
     : IRequestHandler<GetAllQuestionsQuery, QueryReferenceResponse<IEnumerable<Question>>>
 {
-    public virtual async Task<QueryReferenceResponse<IEnumerable<Question>>> Handle(GetAllQuestionsQuery request, CancellationToken cancellationToken)
+    public async Task<QueryReferenceResponse<IEnumerable<Question>>> Handle(GetAllQuestionsQuery request, CancellationToken cancellationToken)
     {
-        var entities = await repository.GetAllAsync(null, cancellationToken);
+        var entities = await repository.GetAllAsync(null, request.Pagination, cancellationToken);
 
-        return new QueryReferenceResponse<IEnumerable<Question>>
-        (
-            entities.Paginate(request.Pagination),
+        return new QueryReferenceResponse<IEnumerable<Question>>(
+            entities,
             true,
             Messages.SuccessfullyRetrieved,
-            HttpStatusCode.OK
-        );
+            HttpStatusCode.OK);
     }
 }

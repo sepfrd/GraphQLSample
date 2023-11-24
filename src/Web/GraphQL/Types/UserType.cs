@@ -1,4 +1,3 @@
-using Application.Common;
 using Application.EntityManagement.Addresses.Queries;
 using Application.EntityManagement.Answers.Queries;
 using Application.EntityManagement.Carts.Queries;
@@ -10,6 +9,7 @@ using Application.EntityManagement.PhoneNumbers.Queries;
 using Application.EntityManagement.Questions.Queries;
 using Application.EntityManagement.UserRoles.Queries;
 using Application.EntityManagement.Votes.Queries;
+using Domain.Common;
 using Domain.Entities;
 using MediatR;
 
@@ -92,8 +92,6 @@ public class UserType : ObjectType<User>
             .ResolveWith<Resolvers>(
                 resolvers =>
                     Resolvers.GetVotesAsync(default!, default!));
-        // .UseFiltering()
-        // .UseSorting();
 
         descriptor
             .Field(user => user.PhoneNumbers)
@@ -113,10 +111,15 @@ public class UserType : ObjectType<User>
 
         descriptor
             .Field(user => user.ExternalId)
-            .Description("The External ID for Client Interactions");
+            .Description("The External ID for Client Interactions")
+            .UseFiltering();
 
         descriptor
             .Field(user => user.InternalId)
+            .Ignore();
+        
+        descriptor
+            .Field(user => user.Password)
             .Ignore();
 
         descriptor

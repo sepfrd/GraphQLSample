@@ -4,6 +4,7 @@ using Application.EntityManagement.PhoneNumbers.Dtos;
 using Application.EntityManagement.Users.Commands;
 using Application.EntityManagement.Users.Dtos;
 using Domain.Abstractions;
+using Domain.Common;
 using Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -52,8 +53,11 @@ public class CreateUserCommandHandler(
 
     private async Task<bool> IsUsernameUniqueAsync(string username, CancellationToken cancellationToken = default)
     {
+        var pagination = new Pagination(1, 1);
+
         var users = await userRepository.GetAllAsync(
             user => user.Username == username,
+            pagination,
             cancellationToken);
 
         return !users.Any();

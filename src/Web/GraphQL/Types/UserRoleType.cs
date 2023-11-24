@@ -1,6 +1,7 @@
 ﻿using Application.Common;
 using Application.EntityManagement.Roles.Queries;
 using Application.EntityManagement.Users.Queries;
+using Domain.Common;
 using Domain.Entities;
 using MediatR;
 

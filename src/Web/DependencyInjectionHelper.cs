@@ -14,6 +14,7 @@ using Application.EntityManagement.Products.Dtos;
 using Application.EntityManagement.Questions.Dtos;
 using Application.EntityManagement.Shipments.Dtos;
 using Application.EntityManagement.Users.Dtos;
+using Domain.Filters;
 using Web.GraphQL.Types;
 using Web.GraphQL.Types.InputTypes;
 
@@ -27,7 +28,7 @@ public static class DependencyInjectionHelper
             .AddGraphQLServer()
             .AddQueryType<QueryType>()
             .AddMutationType<MutationType>()
-            .AddMaxExecutionDepthRule(10)
+            .AddMaxExecutionDepthRule(15)
             .AddType<AddressType>()
             .AddType<AnswerType>()
             .AddType<CartItemType>()
@@ -59,7 +60,7 @@ public static class DependencyInjectionHelper
             .AddInputObjectType<PaymentDto>()
             .AddInputObjectType<PersonDto>()
             .AddInputObjectType<PhoneNumberDto>()
-            .AddInputObjectType<ProductDto>()
+            .AddInputObjectType<CreateProductDto>()
             .AddInputObjectType<QuestionDto>()
             .AddInputObjectType<ShipmentDto>()
             .AddInputObjectType<UserDto>()

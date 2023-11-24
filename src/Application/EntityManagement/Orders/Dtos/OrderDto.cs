@@ -5,7 +5,6 @@ using Application.EntityManagement.Shipments.Dtos;
 namespace Application.EntityManagement.Orders.Dtos;
 
 public record OrderDto(
-    int ExternalId,
     decimal TotalPrice,
     PaymentDto Payment,
     ShipmentDto Shipment,
