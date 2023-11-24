@@ -8,38 +8,47 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.Answers.Handlers;
 
-public class UpdateAnswerCommandHandler(
-        IRepository<Answer> repository,
+public class UpdateAnswerCommandHandler : IRequestHandler<UpdateAnswerCommand, CommandResult>
+{
+    private readonly IRepository<Answer> _repository;
+    private readonly IMappingService _mappingService;
+    private readonly ILogger _logger;
+
+    public UpdateAnswerCommandHandler(IRepository<Answer> repository,
         IMappingService mappingService,
         ILogger logger)
-    : IRequestHandler<UpdateAnswerCommand, CommandResult>
-{
+    {
+        _repository = repository;
+        _mappingService = mappingService;
+        _logger = logger;
+    }
+
     public virtual async Task<CommandResult> Handle(UpdateAnswerCommand request, CancellationToken cancellationToken)
     {
-        var entity = await repository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
+        var entity = await _repository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
 
         if (entity is null)
         {
             return CommandResult.Success(Messages.NotFound);
         }
 
-        var newEntity = mappingService.Map(request.AnswerDto, entity);
+        var newEntity = _mappingService.Map(request.AnswerDto, entity);
 
         if (newEntity is null)
         {
-            logger.LogError(message: Messages.MappingFailed, DateTime.UtcNow, typeof(Answer), typeof(UpdateAnswerCommandHandler));
+            _logger.LogError(message: Messages.MappingFailed, DateTime.UtcNow, typeof(Answer), typeof(UpdateAnswerCommandHandler));
 
             return CommandResult.Failure(Messages.InternalServerError);
         }
 
-        var updatedEntity = await repository.UpdateAsync(newEntity, cancellationToken);
+        var updatedEntity = await _repository.UpdateAsync(newEntity, cancellationToken);
 
         if (updatedEntity is not null)
         {
             return CommandResult.Success(Messages.SuccessfullyUpdated);
         }
 
-        logger.LogError(message: Messages.EntityUpdateFailed, DateTime.UtcNow, typeof(Answer), typeof(UpdateAnswerCommandHandler));
+        _logger.LogError(message: Messages.EntityUpdateFailed, DateTime.UtcNow, typeof(Answer), typeof(UpdateAnswerCommandHandler));
 
         return CommandResult.Failure(Messages.InternalServerError);
     }

@@ -37,7 +37,7 @@ public class CreateAddressCommandHandler : IRequestHandler<CreateAddressCommand,
         }
 
         var entity = _mappingService.Map<CreateAddressDto, Address>(request.CreateAddressDto);
-        
+
         if (entity is null)
         {
             _logger.LogError(message: Messages.MappingFailed, DateTime.UtcNow, typeof(Address), typeof(CreateAddressCommandHandler));
@@ -46,7 +46,7 @@ public class CreateAddressCommandHandler : IRequestHandler<CreateAddressCommand,
         }
 
         entity.UserId = user.InternalId;
-        
+
         var createdEntity = await _addressRepository.CreateAsync(entity, cancellationToken);
 
         if (createdEntity is not null)
