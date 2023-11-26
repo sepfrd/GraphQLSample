@@ -1,4 +1,3 @@
-using Application.Common;
 using Application.EntityManagement.Products.Queries;
 using Application.EntityManagement.Users.Queries;
 using Application.EntityManagement.Votes.Queries;
@@ -72,7 +71,6 @@ public class CommentType : ObjectType<Comment>
         {
             var productsQuery = new GetAllProductsQuery(
                 new Pagination(),
-                null,
                 x => x.InternalId == comment.ProductId);
 
             var result = await sender.Send(productsQuery);
@@ -84,7 +82,6 @@ public class CommentType : ObjectType<Comment>
         {
             var usersQuery = new GetAllUsersQuery(
                 new Pagination(),
-                null,
                 x => x.InternalId == comment.UserId);
 
             var result = await sender.Send(usersQuery);
@@ -96,7 +93,6 @@ public class CommentType : ObjectType<Comment>
         {
             var votesQuery = new GetAllVotesQuery(
                 new Pagination(),
-                null,
                 x => x.ContentId == comment.InternalId && x.Content is Comment);
 
             var result = await sender.Send(votesQuery);

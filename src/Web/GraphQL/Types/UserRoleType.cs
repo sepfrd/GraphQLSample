@@ -1,5 +1,4 @@
-﻿using Application.Common;
-using Application.EntityManagement.Roles.Queries;
+﻿using Application.EntityManagement.Roles.Queries;
 using Application.EntityManagement.Users.Queries;
 using Domain.Common;
 using Domain.Entities;
@@ -30,9 +29,8 @@ public class UserRoleType : ObjectType<UserRole>
         {
             var rolesQuery = new GetAllRolesQuery(
                 new Pagination(1, int.MaxValue),
-                null,
                 role => role.InternalId == userRole.RoleId
-            );
+                );
 
             var result = await sender.Send(rolesQuery);
 
@@ -41,7 +39,7 @@ public class UserRoleType : ObjectType<UserRole>
 
         public static async Task<User?> GetUserAsync([Parent] UserRole userRole, [Service] ISender sender)
         {
-            var userQuery = new GetUserByInternalIdQuery(userRole.UserId, null);
+            var userQuery = new GetUserByInternalIdQuery(userRole.UserId);
 
             var result = await sender.Send(userQuery);
 

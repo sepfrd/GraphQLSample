@@ -1,4 +1,3 @@
-using Application.Common;
 using Application.EntityManagement.Addresses.Queries;
 using Application.EntityManagement.Orders.Queries;
 using Domain.Common;
@@ -64,7 +63,6 @@ public class ShipmentType : ObjectType<Shipment>
         {
             var ordersQuery = new GetAllOrdersQuery(
                 new Pagination(),
-                null,
                 x => x.InternalId == shipment.OrderId);
 
             var result = await sender.Send(ordersQuery);
@@ -76,7 +74,6 @@ public class ShipmentType : ObjectType<Shipment>
         {
             var addressesQuery = new GetAllAddressesQuery(
                 new Pagination(),
-                null,
                 x => x.InternalId == shipment.DestinationAddressId);
 
             var result = await sender.Send(addressesQuery);
@@ -88,7 +85,6 @@ public class ShipmentType : ObjectType<Shipment>
         {
             var addressesQuery = new GetAllAddressesQuery(
                 new Pagination(),
-                null,
                 x => x.InternalId == shipment.OriginAddressId);
 
             var result = await sender.Send(addressesQuery);

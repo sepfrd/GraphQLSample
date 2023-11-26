@@ -32,8 +32,8 @@ public class Query
         {
             filter = BuildProductFilterExpression(productFilter);
         }
-        
-        var productQuery = new GetAllProductsQuery(pagination, null, filter);
+
+        var productQuery = new GetAllProductsQuery(pagination, filter);
 
         var result = await sender.Send(productQuery, cancellationToken);
 
@@ -51,7 +51,7 @@ public class Query
             filter = BuildUserFilterExpression(userFilter);
         }
 
-        var usersQuery = new GetAllUsersQuery(pagination, null, filter);
+        var usersQuery = new GetAllUsersQuery(pagination, filter);
 
         var result = await sender.Send(usersQuery, cancellationToken);
 
@@ -108,7 +108,7 @@ public class Query
 
         return lambda;
     }
-    
+
     private static Expression<Func<Product, bool>>? BuildProductFilterExpression(CustomProductFilter productFilter)
     {
         var product = Expression.Parameter(typeof(Product), "product");
@@ -146,7 +146,7 @@ public class Query
 
             expressions.Add(Expression.Equal(productPriceMember, productPriceConstant));
         }
-        
+
         BinaryExpression? baseExpression = null;
 
         foreach (var expressionItem in expressions)
@@ -167,5 +167,5 @@ public class Query
 
         return lambda;
     }
-    
+
 }

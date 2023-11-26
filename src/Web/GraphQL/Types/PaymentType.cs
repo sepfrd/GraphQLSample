@@ -42,7 +42,6 @@ public class PaymentType : ObjectType<Payment>
         {
             var ordersQuery = new GetAllOrdersQuery(
                 new Pagination(),
-                null,
                 x => x.InternalId == payment.OrderId);
 
             var result = await sender.Send(ordersQuery);

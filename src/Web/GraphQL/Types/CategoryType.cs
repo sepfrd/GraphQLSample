@@ -1,4 +1,3 @@
-using Application.Common;
 using Application.EntityManagement.Products.Queries;
 using Domain.Common;
 using Domain.Entities;
@@ -60,7 +59,6 @@ public class CategoryType : ObjectType<Category>
         {
             var productsQuery = new GetAllProductsQuery(
                 new Pagination(),
-                null,
                 x => x.CategoryId == category.InternalId);
 
             var result = await sender.Send(productsQuery);

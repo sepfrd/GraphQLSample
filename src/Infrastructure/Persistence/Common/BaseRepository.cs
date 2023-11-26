@@ -10,27 +10,29 @@ namespace Infrastructure.Persistence.Common;
 public class BaseRepository<TEntity> : IRepository<TEntity>
     where TEntity : BaseEntity
 {
+    public readonly IMongoDatabase MongoDatabase;
+
     private readonly IMongoCollection<TEntity> _mongoDbCollection;
 
     protected BaseRepository(IOptions<MongoDbSettings> databaseSettings)
     {
         var mongoClient = new MongoClient(databaseSettings.Value.ConnectionString);
 
-        var mongoDatabase = mongoClient.GetDatabase(databaseSettings.Value.DatabaseName);
+        MongoDatabase = mongoClient.GetDatabase(databaseSettings.Value.DatabaseName);
 
         var collectionName = typeof(TEntity).Name.Pluralize();
 
         collectionName = collectionName == "People" ? "Persons" : collectionName;
 
-        _mongoDbCollection = mongoDatabase.GetCollection<TEntity>(collectionName);
+        _mongoDbCollection = MongoDatabase.GetCollection<TEntity>(collectionName);
     }
 
-    public async Task<TEntity?> CreateAsync(TEntity entity, CancellationToken cancellationToken = default)
+    public virtual async Task<TEntity?> CreateAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         var externalId = await GenerateUniqueExternalIdAsync(cancellationToken);
 
         entity.ExternalId = externalId;
-        
+
         await _mongoDbCollection.InsertOneAsync(entity, null, cancellationToken);
 
         var filterDefinition = Builders<TEntity>.Filter.Eq(document => document.InternalId, entity.InternalId);
@@ -40,7 +42,7 @@ public class BaseRepository<TEntity> : IRepository<TEntity>
         return await documentCursor.FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<int> GenerateUniqueExternalIdAsync(CancellationToken cancellationToken = default)
+    public virtual async Task<int> GenerateUniqueExternalIdAsync(CancellationToken cancellationToken = default)
     {
         var findOptions = new FindOptions<TEntity>
         {
@@ -55,7 +57,7 @@ public class BaseRepository<TEntity> : IRepository<TEntity>
         return document is null ? 0 : document.ExternalId + 1;
     }
 
-    public async Task<IEnumerable<TEntity>> GetAllAsync(
+    public virtual async Task<IEnumerable<TEntity>> GetAllAsync(
         Expression<Func<TEntity, bool>>? filter = null,
         Pagination? pagination = null,
         CancellationToken cancellationToken = default)
@@ -63,7 +65,7 @@ public class BaseRepository<TEntity> : IRepository<TEntity>
         var filterDefinition = filter is null ? FilterDefinition<TEntity>.Empty : Builders<TEntity>.Filter.Where(filter);
 
         pagination ??= new Pagination();
-        
+
         var findOptions = new FindOptions<TEntity>
         {
             Skip = (pagination.PageNumber - 1) * pagination.PageSize,
@@ -78,7 +80,7 @@ public class BaseRepository<TEntity> : IRepository<TEntity>
         return await documentCursor.ToListAsync(cancellationToken);
     }
 
-    public async Task<TEntity?> GetByInternalIdAsync(Guid internalId, CancellationToken cancellationToken = default)
+    public virtual async Task<TEntity?> GetByInternalIdAsync(Guid internalId, CancellationToken cancellationToken = default)
     {
         var filterDefinition = Builders<TEntity>.Filter.Eq(document => document.InternalId, internalId);
 
@@ -95,7 +97,7 @@ public class BaseRepository<TEntity> : IRepository<TEntity>
         return await documentCursor.FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<TEntity?> GetByExternalIdAsync(int externalId, CancellationToken cancellationToken = default)
+    public virtual async Task<TEntity?> GetByExternalIdAsync(int externalId, CancellationToken cancellationToken = default)
     {
         var filterDefinition = Builders<TEntity>.Filter.Eq(document => document.ExternalId, externalId);
 
@@ -112,7 +114,7 @@ public class BaseRepository<TEntity> : IRepository<TEntity>
         return await documentCursor.FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<TEntity?> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
+    public virtual async Task<TEntity?> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         var filterDefinition = new FilterDefinitionBuilder<TEntity>()
             .Eq(document => document.InternalId, entity.InternalId);
@@ -122,7 +124,7 @@ public class BaseRepository<TEntity> : IRepository<TEntity>
         return result;
     }
 
-    public async Task<TEntity?> DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
+    public virtual async Task<TEntity?> DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         var filterDefinition = new FilterDefinitionBuilder<TEntity>()
             .Where(document => document.InternalId == entity.InternalId);

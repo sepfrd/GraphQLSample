@@ -1,4 +1,3 @@
-using Application.Common;
 using Application.EntityManagement.Answers.Queries;
 using Application.EntityManagement.Users.Queries;
 using Application.EntityManagement.Votes.Queries;
@@ -61,7 +60,6 @@ public class QuestionType : ObjectType<Question>
         {
             var usersQuery = new GetAllUsersQuery(
                 new Pagination(),
-                null,
                 x => x.InternalId == question.UserId);
 
             var result = await sender.Send(usersQuery);
@@ -73,7 +71,6 @@ public class QuestionType : ObjectType<Question>
         {
             var answersQuery = new GetAllAnswersQuery(
                 new Pagination(),
-                null,
                 x => x.QuestionId == question.InternalId);
 
             var result = await sender.Send(answersQuery);
@@ -85,7 +82,6 @@ public class QuestionType : ObjectType<Question>
         {
             var votesQuery = new GetAllVotesQuery(
                 new Pagination(),
-                null,
                 x => x.ContentId == question.InternalId && x.Content is Question);
 
             var result = await sender.Send(votesQuery);

@@ -1,4 +1,3 @@
-using Application.Common;
 using Application.EntityManagement.Users.Queries;
 using Domain.Common;
 using Domain.Entities;
@@ -43,7 +42,6 @@ public class PersonType : ObjectType<Person>
         {
             var usersQuery = new GetAllUsersQuery(
                 new Pagination(),
-                null,
                 x => x.InternalId == person.UserId);
 
             var result = await sender.Send(usersQuery);

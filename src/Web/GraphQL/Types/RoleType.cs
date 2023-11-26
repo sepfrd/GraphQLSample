@@ -1,4 +1,3 @@
-using Application.Common;
 using Application.EntityManagement.UserRoles.Queries;
 using Domain.Common;
 using Domain.Entities;
@@ -39,7 +38,6 @@ public class RoleType : ObjectType<Role>
         {
             var userRolesQuery = new GetAllUserRolesQuery(
                 new Pagination(1, int.MaxValue),
-                null,
                 userRole => userRole.RoleId == role.InternalId);
 
             var result = await sender.Send(userRolesQuery);

@@ -1,4 +1,3 @@
-using Application.Common;
 using Application.EntityManagement.Orders.Queries;
 using Application.EntityManagement.Products.Queries;
 using Domain.Common;
@@ -70,7 +69,6 @@ public class OrderItemType : ObjectType<OrderItem>
         {
             var productsQuery = new GetAllProductsQuery(
                 new Pagination(),
-                null,
                 x => x.InternalId == orderItem.ProductId);
 
             var result = await sender.Send(productsQuery);
@@ -82,7 +80,6 @@ public class OrderItemType : ObjectType<OrderItem>
         {
             var ordersQuery = new GetAllOrdersQuery(
                 new Pagination(),
-                null,
                 x => x.InternalId == orderItem.OrderId);
 
             var result = await sender.Send(ordersQuery);

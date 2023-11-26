@@ -32,9 +32,7 @@ using Application.EntityManagement.Users.Dtos;
 using Application.EntityManagement.Votes.Commands;
 using Application.EntityManagement.Votes.Dtos;
 using Domain.Common;
-using Domain.Entities;
 using MediatR;
-using System.Linq.Expressions;
 using Web.GraphQL.Types.InputTypes;
 
 namespace Web.GraphQL;
@@ -184,29 +182,11 @@ public class Mutation
 
     // ------------------------------------------ Payment --------------------------------------->
 
-    public async Task<CommandResult> AddPaymentAsync([Service] ISender sender, CreatePaymentDto createPaymentDto, CancellationToken cancellationToken)
-    {
-        var createCommand = new CreatePaymentCommand(createPaymentDto);
-
-        var result = await sender.Send(createCommand, cancellationToken);
-
-        return result;
-    }
-
     public async Task<CommandResult> UpdatePaymentAsync([Service] ISender sender, int externalId, CreatePaymentDto createPaymentDto, CancellationToken cancellationToken)
     {
         var updateCommand = new UpdatePaymentCommand(externalId, createPaymentDto);
 
         var result = await sender.Send(updateCommand, cancellationToken);
-
-        return result;
-    }
-
-    public async Task<CommandResult> DeletePaymentAsync([Service] ISender sender, int externalId, CancellationToken cancellationToken)
-    {
-        var deleteCommand = new DeletePaymentByExternalIdCommand(externalId);
-
-        var result = await sender.Send(deleteCommand, cancellationToken);
 
         return result;
     }
@@ -319,15 +299,6 @@ public class Mutation
         return result;
     }
 
-    public async Task<CommandResult> DeleteShipmentAsync([Service] ISender sender, int externalId, CancellationToken cancellationToken)
-    {
-        var deleteCommand = new DeleteShipmentByExternalIdCommand(externalId);
-
-        var result = await sender.Send(deleteCommand, cancellationToken);
-
-        return result;
-    }
-
     // <-------------------------------------------------------------------------------------------
 
     // ------------------------------------------ User --------------------------------------->
@@ -367,10 +338,6 @@ public class Mutation
     {
         var answerQuery = new GetAllAnswersQuery(
             new Pagination(),
-            new Expression<Func<Answer, object?>>[]
-            {
-                answer => answer.Votes
-            },
             answer => answer.ExternalId == answerVoteInput.AnswerExternalId);
 
         var answerResult = await sender.Send(answerQuery, cancellationToken);
@@ -395,7 +362,6 @@ public class Mutation
     {
         var commentQuery = new GetAllCommentsQuery(
             new Pagination(),
-            null,
             comment => comment.ExternalId == commentVoteInput.CommentExternalId);
 
         var commentResult = await sender.Send(commentQuery, cancellationToken);
@@ -420,7 +386,6 @@ public class Mutation
     {
         var productQuery = new GetAllProductsQuery(
             new Pagination(),
-            null,
             product => product.ExternalId == productVoteInput.ProductExternalId);
 
         var productResult = await sender.Send(productQuery, cancellationToken);
@@ -445,7 +410,6 @@ public class Mutation
     {
         var questionQuery = new GetAllQuestionsQuery(
             new Pagination(),
-            null,
             question => question.ExternalId == questionVoteInput.QuestionExternalId);
 
         var questionResult = await sender.Send(questionQuery, cancellationToken);

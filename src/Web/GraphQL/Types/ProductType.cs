@@ -1,4 +1,3 @@
-using Application.Common;
 using Application.EntityManagement.Categories.Queries;
 using Application.EntityManagement.Comments.Queries;
 using Application.EntityManagement.Questions.Queries;
@@ -24,8 +23,6 @@ public class ProductType : ObjectType<Product>
             .ResolveWith<Resolvers>(
                 resolvers =>
                     resolvers.GetVotesAsync(default!, default!));
-        // .UseFiltering()
-        // .UseSorting();
 
         descriptor
             .Field(product => product.Comments)
@@ -70,7 +67,6 @@ public class ProductType : ObjectType<Product>
         {
             var categoriesQuery = new GetAllCategoriesQuery(
                 new Pagination(),
-                null,
                 x => x.InternalId == product.CategoryId);
 
             var result = await sender.Send(categoriesQuery);
@@ -82,7 +78,6 @@ public class ProductType : ObjectType<Product>
         {
             var votesQuery = new GetAllVotesQuery(
                 new Pagination(),
-                null,
                 x => x.ContentId == product.InternalId && x.Content is Product);
 
             var result = await sender.Send(votesQuery);
@@ -94,7 +89,6 @@ public class ProductType : ObjectType<Product>
         {
             var commentsQuery = new GetAllCommentsQuery(
                 new Pagination(),
-                null,
                 x => x.ProductId == product.InternalId);
 
             var result = await sender.Send(commentsQuery);
@@ -106,7 +100,6 @@ public class ProductType : ObjectType<Product>
         {
             var questionsQuery = new GetAllQuestionsQuery(
                 new Pagination(),
-                null,
                 x => x.ProductId == product.InternalId);
 
             var result = await sender.Send(questionsQuery);

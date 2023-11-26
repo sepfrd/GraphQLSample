@@ -49,7 +49,6 @@ public static class DependencyInjectionHelper
             .AddType<UserRoleType>()
             .AddInputObjectType<AddressDto>()
             .AddInputObjectType<AnswerDto>()
-            .AddInputObjectType<CartItemDto>()
             .AddInputObjectType<CategoryDto>()
             .AddInputObjectType<CommentDto>()
             .AddInputObjectType<OrderItemDto>()

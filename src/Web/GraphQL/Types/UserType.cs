@@ -128,7 +128,6 @@ public class UserType : ObjectType<User>
         {
             var personsQuery = new GetAllPersonsQuery(
                 new Pagination(),
-                null,
                 x => x.InternalId == user.PersonId);
 
             var result = await sender.Send(personsQuery);
@@ -140,7 +139,6 @@ public class UserType : ObjectType<User>
         {
             var cartsQuery = new GetAllCartsQuery(
                 new Pagination(),
-                null,
                 x => x.InternalId == user.CartId);
 
             var result = await sender.Send(cartsQuery);
@@ -152,7 +150,6 @@ public class UserType : ObjectType<User>
         {
             var addressesQuery = new GetAllAddressesQuery(
                 new Pagination(1, int.MaxValue),
-                null,
                 address => address.UserId == user.InternalId);
 
             var result = await sender.Send(addressesQuery);
@@ -164,7 +161,6 @@ public class UserType : ObjectType<User>
         {
             var answersQuery = new GetAllAnswersQuery(
                 new Pagination(1, int.MaxValue),
-                null,
                 answer => answer.UserId == user.InternalId);
 
             var result = await sender.Send(answersQuery);
@@ -176,7 +172,6 @@ public class UserType : ObjectType<User>
         {
             var commentsQuery = new GetAllCommentsQuery(
                 new Pagination(1, int.MaxValue),
-                null,
                 comment => comment.UserId == user.InternalId);
 
             var result = await sender.Send(commentsQuery);
@@ -188,7 +183,6 @@ public class UserType : ObjectType<User>
         {
             var ordersQuery = new GetAllOrdersQuery(
                 new Pagination(1, int.MaxValue),
-                null,
                 order => order.UserId == user.InternalId);
 
             var result = await sender.Send(ordersQuery);
@@ -200,7 +194,6 @@ public class UserType : ObjectType<User>
         {
             var questionsQuery = new GetAllQuestionsQuery(
                 new Pagination(1, int.MaxValue),
-                null,
                 question => question.UserId == user.InternalId);
 
             var result = await sender.Send(questionsQuery);
@@ -212,7 +205,6 @@ public class UserType : ObjectType<User>
         {
             var userRolesQuery = new GetAllUserRolesQuery(
                 new Pagination(1, int.MaxValue),
-                null,
                 userRole => userRole.UserId == user.InternalId);
 
             var result = await sender.Send(userRolesQuery);
@@ -224,7 +216,6 @@ public class UserType : ObjectType<User>
         {
             var votesQuery = new GetAllVotesQuery(
                 new Pagination(1, int.MaxValue),
-                null,
                 vote => vote.UserId == user.InternalId);
 
             var result = await sender.Send(votesQuery);
@@ -236,7 +227,6 @@ public class UserType : ObjectType<User>
         {
             var phoneNumbersQuery = new GetAllPhoneNumbersQuery(
                 new Pagination(1, int.MaxValue),
-                null,
                 phoneNumber => phoneNumber.UserId == user.InternalId);
 
             var result = await sender.Send(phoneNumbersQuery);

@@ -1,4 +1,3 @@
-using Application.Common;
 using Application.EntityManagement.Carts.Queries;
 using Application.EntityManagement.Products.Queries;
 using Domain.Common;
@@ -82,7 +81,6 @@ public class CartItemType : ObjectType<CartItem>
         {
             var cartsQuery = new GetAllCartsQuery(
                 new Pagination(),
-                null,
                 x => x.InternalId == cartItem.CartId);
 
             var result = await sender.Send(cartsQuery);
@@ -94,7 +92,6 @@ public class CartItemType : ObjectType<CartItem>
         {
             var productsQuery = new GetAllProductsQuery(
                 new Pagination(),
-                null,
                 x => x.InternalId == cartItem.ProductId);
 
             var result = await sender.Send(productsQuery);

@@ -1,4 +1,3 @@
-using Application.Common;
 using Application.EntityManagement.OrderItems.Queries;
 using Application.EntityManagement.Payments.Queries;
 using Application.EntityManagement.Shipments.Queries;
@@ -63,7 +62,6 @@ public class OrderType : ObjectType<Order>
         {
             var paymentsQuery = new GetAllPaymentsQuery(
                 new Pagination(),
-                null,
                 x => x.OrderId == order.InternalId);
 
             var result = await sender.Send(paymentsQuery);
@@ -75,7 +73,6 @@ public class OrderType : ObjectType<Order>
         {
             var shipmentsQuery = new GetAllShipmentsQuery(
                 new Pagination(),
-                null,
                 x => x.OrderId == order.InternalId);
 
             var result = await sender.Send(shipmentsQuery);
@@ -87,7 +84,6 @@ public class OrderType : ObjectType<Order>
         {
             var orderItemsQuery = new GetAllOrderItemsQuery(
                 new Pagination(),
-                null,
                 x => x.OrderId == order.InternalId);
 
             var result = await sender.Send(orderItemsQuery);
