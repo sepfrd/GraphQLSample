@@ -1,3 +1,5 @@
+#region
+
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Context;
@@ -7,6 +9,8 @@ using Serilog.Enrichers;
 using Serilog.Events;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 using RollingInterval = Serilog.Sinks.MongoDB.RollingInterval;
+
+#endregion
 
 namespace Infrastructure.Services.Logging;
 

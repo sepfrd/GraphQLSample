@@ -1,4 +1,6 @@
-﻿using Application.Abstractions;
+﻿#region
+
+using Application.Abstractions;
 using Application.EntityManagement.Users.Dtos;
 using Domain.Abstractions;
 using Domain.Common;
@@ -12,6 +14,8 @@ using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
+
+#endregion
 
 namespace Infrastructure;
 
@@ -51,7 +55,7 @@ public static class DependencyInjectionHelper
     private static IServiceCollection AddMongoDb(this IServiceCollection services, IConfiguration configuration)
     {
         BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
-        
+
         BsonClassMap.RegisterClassMap<BaseEntity>(classMap =>
         {
             classMap.AutoMap();
@@ -60,7 +64,7 @@ public static class DependencyInjectionHelper
         });
 
         services.Configure<MongoDbSettings>(configuration.GetSection("MongoDb"));
-        
+
         return services;
     }
 

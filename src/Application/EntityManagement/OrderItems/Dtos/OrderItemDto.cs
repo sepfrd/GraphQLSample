@@ -1,5 +1,3 @@
-using Application.EntityManagement.Products.Dtos;
-
 namespace Application.EntityManagement.OrderItems.Dtos;
 
 public record OrderItemDto(

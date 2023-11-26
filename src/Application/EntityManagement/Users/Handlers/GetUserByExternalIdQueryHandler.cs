@@ -1,4 +1,5 @@
-using System.Net;
+#region
+
 using Application.Abstractions;
 using Application.Common;
 using Application.EntityManagement.Users.Dtos;
@@ -7,6 +8,9 @@ using Domain.Abstractions;
 using Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System.Net;
+
+#endregion
 
 namespace Application.EntityManagement.Users.Handlers;
 

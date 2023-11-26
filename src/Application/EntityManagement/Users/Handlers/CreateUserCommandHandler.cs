@@ -1,3 +1,5 @@
+#region
+
 using Application.Common;
 using Application.EntityManagement.Addresses.Dtos;
 using Application.EntityManagement.PhoneNumbers.Dtos;
@@ -8,6 +10,8 @@ using Domain.Common;
 using Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
+
+#endregion
 
 namespace Application.EntityManagement.Users.Handlers;
 

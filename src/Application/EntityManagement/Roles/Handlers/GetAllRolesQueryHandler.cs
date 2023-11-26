@@ -1,9 +1,13 @@
-﻿using Application.Common;
+﻿#region
+
+using Application.Common;
 using Application.EntityManagement.Roles.Queries;
 using Domain.Abstractions;
 using Domain.Entities;
 using MediatR;
 using System.Net;
+
+#endregion
 
 namespace Application.EntityManagement.Roles.Handlers;
 

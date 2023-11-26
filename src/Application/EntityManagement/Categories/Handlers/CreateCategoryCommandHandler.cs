@@ -1,3 +1,5 @@
+#region
+
 using Application.Abstractions;
 using Application.Common;
 using Application.EntityManagement.Categories.Commands;
@@ -6,6 +8,8 @@ using Domain.Abstractions;
 using Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
+
+#endregion
 
 namespace Application.EntityManagement.Categories.Handlers;
 
@@ -22,7 +26,7 @@ public class CreateCategoryCommandHandler(IRepository<Category> categoryReposito
 
             return CommandResult.Failure(Messages.InternalServerError);
         }
-        
+
         await categoryRepository.CreateAsync(category, cancellationToken);
 
         return CommandResult.Success(Messages.SuccessfullyCreated);

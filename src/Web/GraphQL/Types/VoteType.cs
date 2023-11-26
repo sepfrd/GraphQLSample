@@ -1,3 +1,5 @@
+#region
+
 using Application.EntityManagement.Answers.Queries;
 using Application.EntityManagement.Comments.Queries;
 using Application.EntityManagement.Products.Queries;
@@ -7,6 +9,8 @@ using Domain.Abstractions;
 using Domain.Common;
 using Domain.Entities;
 using MediatR;
+
+#endregion
 
 namespace Web.GraphQL.Types;
 

@@ -1,5 +1,9 @@
+#region
+
 using Domain.Common;
 using FluentValidation;
+
+#endregion
 
 namespace Application.Common;
 
@@ -10,7 +14,7 @@ public class PaginationValidator : AbstractValidator<Pagination>
         RuleFor(pagination => pagination.PageNumber)
             .GreaterThanOrEqualTo(1)
             .LessThanOrEqualTo(1000);
-        
+
         RuleFor(pagination => pagination.PageSize)
             .GreaterThanOrEqualTo(10)
             .LessThanOrEqualTo(100);

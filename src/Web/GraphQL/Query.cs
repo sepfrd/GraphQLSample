@@ -1,3 +1,5 @@
+#region
+
 using Application.EntityManagement.Categories.Queries;
 using Application.EntityManagement.Products.Queries;
 using Application.EntityManagement.Users.Queries;
@@ -6,6 +8,8 @@ using Domain.Entities;
 using Domain.Filters;
 using MediatR;
 using System.Linq.Expressions;
+
+#endregion
 
 namespace Web.GraphQL;
 

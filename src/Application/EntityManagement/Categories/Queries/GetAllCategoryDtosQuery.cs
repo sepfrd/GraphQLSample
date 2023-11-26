@@ -1,7 +1,11 @@
+#region
+
 using Application.Common;
 using Application.EntityManagement.Categories.Dtos;
 using Domain.Common;
 using MediatR;
+
+#endregion
 
 namespace Application.EntityManagement.Categories.Queries;
 

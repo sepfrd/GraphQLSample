@@ -1,5 +1,9 @@
+#region
+
 using Domain.Abstractions;
 using Domain.Enums;
+
+#endregion
 
 namespace Application.EntityManagement.Votes.Dtos;
 

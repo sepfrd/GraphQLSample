@@ -1,9 +1,13 @@
+#region
+
 using Application.Common;
 using Application.EntityManagement.Comments.Queries;
 using Domain.Abstractions;
 using Domain.Entities;
 using MediatR;
 using System.Net;
+
+#endregion
 
 namespace Application.EntityManagement.Comments.Handlers;
 

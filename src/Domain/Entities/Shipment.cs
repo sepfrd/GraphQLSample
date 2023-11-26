@@ -1,5 +1,9 @@
-﻿using Domain.Common;
+﻿#region
+
+using Domain.Common;
 using Domain.Enums;
+
+#endregion
 
 namespace Domain.Entities;
 

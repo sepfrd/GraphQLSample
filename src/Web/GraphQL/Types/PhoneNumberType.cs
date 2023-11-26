@@ -1,7 +1,11 @@
+#region
+
 using Application.EntityManagement.Users.Queries;
 using Domain.Common;
 using Domain.Entities;
 using MediatR;
+
+#endregion
 
 namespace Web.GraphQL.Types;
 

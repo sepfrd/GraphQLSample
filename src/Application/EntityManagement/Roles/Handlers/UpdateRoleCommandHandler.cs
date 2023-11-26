@@ -1,10 +1,14 @@
-﻿using Application.Abstractions;
+﻿#region
+
+using Application.Abstractions;
 using Application.Common;
 using Application.EntityManagement.Roles.Commands;
 using Domain.Abstractions;
 using Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
+
+#endregion
 
 namespace Application.EntityManagement.Roles.Handlers;
 

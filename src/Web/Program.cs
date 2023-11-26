@@ -1,3 +1,5 @@
+#region
+
 using Application;
 using Infrastructure;
 using Infrastructure.Persistence.Common.Helpers;
@@ -7,6 +9,7 @@ using Serilog.Settings.Configuration;
 using Web;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 
+#endregion
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Logging.ClearProviders();
@@ -55,7 +58,10 @@ try
         .UseRouting()
         // .UseAuthentication()
         // .UseAuthorization()
-        .UseEndpoints(endpoints => { endpoints.MapGraphQL(); });
+        .UseEndpoints(endpoints =>
+        {
+            endpoints.MapGraphQL();
+        });
 
     app.Run();
 }

@@ -1,4 +1,8 @@
-﻿using Domain.Entities;
+﻿#region
+
+using Domain.Entities;
+
+#endregion
 
 namespace Domain.Abstractions;
 

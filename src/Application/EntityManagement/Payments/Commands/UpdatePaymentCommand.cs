@@ -1,6 +1,10 @@
+#region
+
 using Application.Common;
 using Application.EntityManagement.Payments.Dtos;
 using MediatR;
+
+#endregion
 
 namespace Application.EntityManagement.Payments.Commands;
 

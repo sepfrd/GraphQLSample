@@ -1,3 +1,5 @@
+#region
+
 using Application.Abstractions;
 using Application.Common;
 using Application.EntityManagement.OrderItems.Dtos;
@@ -10,6 +12,8 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Net;
+
+#endregion
 
 namespace Application.EntityManagement.Orders.Handlers;
 
@@ -71,16 +75,16 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Com
         }
 
         var orderItems = (List<OrderItem>)orderItemsResult.Data!;
-        
+
         var paymentResult = await CreatePaymentAsync(request.CreateOrderDto.CreatePaymentDto, orderId, cancellationToken);
-        
+
         if (paymentResult.HttpStatusCode != HttpStatusCode.OK)
         {
             foreach (var orderItem in orderItems)
             {
                 await _orderItemRepository.DeleteAsync(orderItem, cancellationToken);
             }
-            
+
             return paymentResult.HttpStatusCode switch
             {
                 HttpStatusCode.BadRequest => CommandResult.Failure(Messages.BadRequest),
@@ -90,9 +94,9 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Com
         }
 
         var payment = (Payment)paymentResult.Data!;
-        
+
         var shipmentResult = await CreateShipmentAsync(request.CreateOrderDto.CreateShipmentDto, orderId, cancellationToken);
-        
+
         if (shipmentResult.HttpStatusCode != HttpStatusCode.OK)
         {
             foreach (var orderItem in orderItems)
@@ -101,7 +105,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Com
             }
 
             await _paymentRepository.DeleteAsync(payment, cancellationToken);
-            
+
             return shipmentResult.HttpStatusCode switch
             {
                 HttpStatusCode.BadRequest => CommandResult.Failure(Messages.BadRequest),
@@ -111,7 +115,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Com
         }
 
         var shipment = (Shipment)shipmentResult.Data!;
-        
+
         var order = new Order
         {
             InternalId = orderId,
@@ -137,7 +141,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Com
         await _paymentRepository.DeleteAsync(payment, cancellationToken);
 
         await _shipmentRepository.DeleteAsync(shipment, cancellationToken);
-        
+
         return CommandResult.Failure(Messages.InternalServerError);
     }
 

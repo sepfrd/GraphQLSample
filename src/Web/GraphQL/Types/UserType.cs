@@ -1,3 +1,5 @@
+#region
+
 using Application.EntityManagement.Addresses.Queries;
 using Application.EntityManagement.Answers.Queries;
 using Application.EntityManagement.Carts.Queries;
@@ -11,6 +13,8 @@ using Application.EntityManagement.Votes.Queries;
 using Domain.Common;
 using Domain.Entities;
 using MediatR;
+
+#endregion
 
 namespace Web.GraphQL.Types;
 

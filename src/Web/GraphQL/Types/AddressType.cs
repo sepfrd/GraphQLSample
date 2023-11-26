@@ -1,4 +1,8 @@
+#region
+
 using Domain.Entities;
+
+#endregion
 
 namespace Web.GraphQL.Types;
 

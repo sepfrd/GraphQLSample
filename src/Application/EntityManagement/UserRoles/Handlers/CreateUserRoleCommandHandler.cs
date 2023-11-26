@@ -1,4 +1,6 @@
-﻿using Application.Abstractions;
+﻿#region
+
+using Application.Abstractions;
 using Application.Common;
 using Application.EntityManagement.UserRoles.Commands;
 using Application.EntityManagement.UserRoles.Dtos;
@@ -6,6 +8,8 @@ using Domain.Abstractions;
 using Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
+
+#endregion
 
 namespace Application.EntityManagement.UserRoles.Handlers;
 

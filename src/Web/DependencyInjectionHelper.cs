@@ -1,7 +1,8 @@
+#region
+
 using Application.Common;
 using Application.EntityManagement.Addresses.Dtos;
 using Application.EntityManagement.Answers.Dtos;
-using Application.EntityManagement.CartItems.Dtos;
 using Application.EntityManagement.Categories.Dtos;
 using Application.EntityManagement.Comments.Dtos;
 using Application.EntityManagement.OrderItems.Dtos;
@@ -15,6 +16,8 @@ using Application.EntityManagement.Shipments.Dtos;
 using Application.EntityManagement.Users.Dtos;
 using Web.GraphQL.Types;
 using Web.GraphQL.Types.InputTypes;
+
+#endregion
 
 namespace Web;
 
