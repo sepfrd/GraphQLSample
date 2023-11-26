@@ -1,13 +1,9 @@
-#region
-
 using Application.Common;
 using Application.EntityManagement.Users.Dtos;
 using Application.EntityManagement.Users.Queries;
 using Domain.Entities;
 using MediatR;
 using System.Net;
-
-#endregion
 
 namespace Application.EntityManagement.Users;
 

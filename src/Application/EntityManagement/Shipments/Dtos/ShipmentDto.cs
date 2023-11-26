@@ -1,9 +1,5 @@
-#region
-
 using Application.EntityManagement.Addresses.Dtos;
 using Domain.Enums;
-
-#endregion
 
 namespace Application.EntityManagement.Shipments.Dtos;
 

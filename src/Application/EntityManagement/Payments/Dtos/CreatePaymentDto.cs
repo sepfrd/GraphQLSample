@@ -1,8 +1,4 @@
-#region
-
 using Domain.Enums;
-
-#endregion
 
 namespace Application.EntityManagement.Payments.Dtos;
 

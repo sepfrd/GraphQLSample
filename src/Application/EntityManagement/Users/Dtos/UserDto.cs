@@ -1,12 +1,8 @@
-#region
-
 using Application.EntityManagement.Addresses.Dtos;
 using Application.EntityManagement.Comments.Dtos;
 using Application.EntityManagement.Payments.Dtos;
 using Application.EntityManagement.Persons.Dtos;
 using Application.EntityManagement.PhoneNumbers.Dtos;
-
-#endregion
 
 namespace Application.EntityManagement.Users.Dtos;
 

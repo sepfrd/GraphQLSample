@@ -1,5 +1,3 @@
-#region
-
 using Application.Common;
 using Application.EntityManagement.Answers.Commands;
 using Application.EntityManagement.Payments.Commands;
@@ -7,8 +5,6 @@ using Domain.Abstractions;
 using Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
-
-#endregion
 
 namespace Application.EntityManagement.Payments.Handlers;
 

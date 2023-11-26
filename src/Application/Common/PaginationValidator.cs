@@ -1,9 +1,5 @@
-#region
-
 using Domain.Common;
 using FluentValidation;
-
-#endregion
 
 namespace Application.Common;
 

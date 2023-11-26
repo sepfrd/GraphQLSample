@@ -1,10 +1,6 @@
-#region
-
 using Application.Common;
 using Application.EntityManagement.Orders.Dtos;
 using MediatR;
-
-#endregion
 
 namespace Application.EntityManagement.Orders.Commands;
 

@@ -1,8 +1,4 @@
-#region
-
 using Domain.Common;
-
-#endregion
 
 namespace Application.Common;
 

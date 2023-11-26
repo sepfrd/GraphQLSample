@@ -1,13 +1,9 @@
-#region
-
 using Application.EntityManagement.Questions.Queries;
 using Application.EntityManagement.Users.Queries;
 using Application.EntityManagement.Votes.Queries;
 using Domain.Common;
 using Domain.Entities;
 using MediatR;
-
-#endregion
 
 namespace Web.GraphQL.Types;
 

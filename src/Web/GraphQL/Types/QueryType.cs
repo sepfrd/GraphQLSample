@@ -1,8 +1,4 @@
-﻿#region
-
-using MediatR;
-
-#endregion
+﻿using MediatR;
 
 namespace Web.GraphQL.Types;
 

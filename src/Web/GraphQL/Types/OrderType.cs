@@ -1,13 +1,9 @@
-#region
-
 using Application.EntityManagement.OrderItems.Queries;
 using Application.EntityManagement.Payments.Queries;
 using Application.EntityManagement.Shipments.Queries;
 using Domain.Common;
 using Domain.Entities;
 using MediatR;
-
-#endregion
 
 namespace Web.GraphQL.Types;
 

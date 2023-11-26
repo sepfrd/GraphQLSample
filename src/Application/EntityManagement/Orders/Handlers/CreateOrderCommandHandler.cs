@@ -1,5 +1,3 @@
-#region
-
 using Application.Abstractions;
 using Application.Common;
 using Application.EntityManagement.OrderItems.Dtos;
@@ -12,8 +10,6 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Net;
-
-#endregion
 
 namespace Application.EntityManagement.Orders.Handlers;
 

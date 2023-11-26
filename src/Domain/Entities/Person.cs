@@ -1,8 +1,4 @@
-﻿#region
-
-using Domain.Common;
-
-#endregion
+﻿using Domain.Common;
 
 namespace Domain.Entities;
 

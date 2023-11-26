@@ -1,9 +1,5 @@
-#region
-
 using Application.EntityManagement.Categories.Dtos;
 using Application.EntityManagement.Comments.Dtos;
-
-#endregion
 
 namespace Application.EntityManagement.Products.Dtos;
 

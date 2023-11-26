@@ -1,8 +1,4 @@
-#region
-
 using Application.EntityManagement.Answers.Dtos;
-
-#endregion
 
 namespace Application.EntityManagement.Questions.Dtos;
 

@@ -1,13 +1,9 @@
-#region
-
 using Bogus;
 using Domain.Common;
 using Domain.Entities;
 using Domain.Enums;
 using MongoDB.Driver;
 using Person = Domain.Entities.Person;
-
-#endregion
 
 namespace Infrastructure.Persistence.Common.Helpers;
 

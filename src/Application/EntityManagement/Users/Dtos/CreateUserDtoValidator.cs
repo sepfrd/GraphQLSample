@@ -1,10 +1,6 @@
-#region
-
 using Application.Common;
 using Application.EntityManagement.PhoneNumbers.Dtos;
 using FluentValidation;
-
-#endregion
 
 namespace Application.EntityManagement.Users.Dtos;
 

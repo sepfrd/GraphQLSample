@@ -1,9 +1,5 @@
-#region
-
 using Domain.Common;
 using System.Linq.Expressions;
-
-#endregion
 
 namespace Domain.Abstractions;
 

@@ -1,10 +1,6 @@
-﻿#region
-
-using Application.Common;
+﻿using Application.Common;
 using Application.EntityManagement.UserRoles.Dtos;
 using MediatR;
-
-#endregion
 
 namespace Application.EntityManagement.UserRoles.Commands;
 

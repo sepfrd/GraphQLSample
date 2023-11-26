@@ -1,5 +1,3 @@
-#region
-
 using Application.Abstractions;
 using Application.Common;
 using Application.EntityManagement.Persons.Commands;
@@ -8,8 +6,6 @@ using Domain.Abstractions;
 using Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
-
-#endregion
 
 namespace Application.EntityManagement.Persons.Handlers;
 

@@ -1,5 +1,3 @@
-#region
-
 using Application.Common;
 using Application.EntityManagement.Addresses.Commands;
 using Application.EntityManagement.Addresses.Dtos;
@@ -36,8 +34,6 @@ using Application.EntityManagement.Votes.Dtos;
 using Domain.Common;
 using MediatR;
 using Web.GraphQL.Types.InputTypes;
-
-#endregion
 
 namespace Web.GraphQL;
 

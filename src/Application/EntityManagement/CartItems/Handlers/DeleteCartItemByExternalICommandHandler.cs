@@ -1,12 +1,8 @@
-#region
-
 using Application.Common;
 using Application.EntityManagement.CartItems.Commands;
 using Domain.Abstractions;
 using Domain.Entities;
 using MediatR;
-
-#endregion
 
 namespace Application.EntityManagement.CartItems.Handlers;
 

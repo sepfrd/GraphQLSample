@@ -1,6 +1,4 @@
-﻿#region
-
-using Application.Abstractions;
+﻿using Application.Abstractions;
 using Application.EntityManagement.Users.Dtos;
 using Domain.Abstractions;
 using Domain.Common;
@@ -14,8 +12,6 @@ using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
-
-#endregion
 
 namespace Infrastructure;
 

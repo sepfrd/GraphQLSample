@@ -1,12 +1,8 @@
-﻿#region
-
-using Application.Common;
+﻿using Application.Common;
 using Application.EntityManagement.Answers.Dtos;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
-
-#endregion
 
 namespace Application;
 

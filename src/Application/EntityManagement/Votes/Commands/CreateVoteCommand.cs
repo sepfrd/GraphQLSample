@@ -1,10 +1,6 @@
-#region
-
 using Application.Common;
 using Application.EntityManagement.Votes.Dtos;
 using MediatR;
-
-#endregion
 
 namespace Application.EntityManagement.Votes.Commands;
 

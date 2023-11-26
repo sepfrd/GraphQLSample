@@ -1,13 +1,9 @@
-#region
-
 using Domain.Abstractions;
 using Domain.Common;
 using Humanizer;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using System.Linq.Expressions;
-
-#endregion
 
 namespace Infrastructure.Persistence.Common;
 

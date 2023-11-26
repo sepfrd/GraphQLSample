@@ -1,5 +1,3 @@
-#region
-
 using Application.Common;
 using Application.EntityManagement.Addresses.Dtos;
 using Application.EntityManagement.Answers.Dtos;
@@ -16,8 +14,6 @@ using Application.EntityManagement.Shipments.Dtos;
 using Application.EntityManagement.Users.Dtos;
 using Web.GraphQL.Types;
 using Web.GraphQL.Types.InputTypes;
-
-#endregion
 
 namespace Web;
 
