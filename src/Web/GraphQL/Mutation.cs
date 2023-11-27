@@ -1,6 +1,7 @@
 using Application.Common;
 using Application.EntityManagement.Addresses.Commands;
 using Application.EntityManagement.Addresses.Dtos;
+using Application.EntityManagement.Answers;
 using Application.EntityManagement.Answers.Commands;
 using Application.EntityManagement.Answers.Dtos;
 using Application.EntityManagement.Answers.Queries;
@@ -8,9 +9,11 @@ using Application.EntityManagement.CartItems.Commands;
 using Application.EntityManagement.CartItems.Dtos;
 using Application.EntityManagement.Categories.Commands;
 using Application.EntityManagement.Categories.Dtos;
+using Application.EntityManagement.Comments;
 using Application.EntityManagement.Comments.Commands;
 using Application.EntityManagement.Comments.Dtos;
 using Application.EntityManagement.Comments.Queries;
+using Application.EntityManagement.Orders;
 using Application.EntityManagement.Orders.Commands;
 using Application.EntityManagement.Orders.Dtos;
 using Application.EntityManagement.Payments.Commands;
@@ -19,14 +22,17 @@ using Application.EntityManagement.Persons.Commands;
 using Application.EntityManagement.Persons.Dtos;
 using Application.EntityManagement.PhoneNumbers.Commands;
 using Application.EntityManagement.PhoneNumbers.Dtos;
+using Application.EntityManagement.Products;
 using Application.EntityManagement.Products.Commands;
 using Application.EntityManagement.Products.Dtos;
 using Application.EntityManagement.Products.Queries;
+using Application.EntityManagement.Questions;
 using Application.EntityManagement.Questions.Commands;
 using Application.EntityManagement.Questions.Dtos;
 using Application.EntityManagement.Questions.Queries;
 using Application.EntityManagement.Shipments.Commands;
 using Application.EntityManagement.Shipments.Dtos;
+using Application.EntityManagement.Users;
 using Application.EntityManagement.Users.Commands;
 using Application.EntityManagement.Users.Dtos;
 using Application.EntityManagement.Votes.Commands;
@@ -90,14 +96,8 @@ public class Mutation
         return result;
     }
 
-    public async Task<CommandResult> DeleteAnswerAsync([Service] ISender sender, int externalId, CancellationToken cancellationToken)
-    {
-        var deleteCommand = new DeleteAnswerByExternalIdCommand(externalId);
-
-        var result = await sender.Send(deleteCommand, cancellationToken);
-
-        return result;
-    }
+    public async Task<CommandResult> DeleteAnswerAsync([Service] AnswerService answerService, int externalId, CancellationToken cancellationToken) =>
+        await answerService.DeleteByExternalIdAsync(externalId, cancellationToken);
 
     // <-------------------------------------------------------------------------------------------
 
@@ -138,14 +138,8 @@ public class Mutation
         return result;
     }
 
-    public async Task<CommandResult> DeleteCommentAsync([Service] ISender sender, int externalId, CancellationToken cancellationToken)
-    {
-        var deleteCommand = new DeleteCommentByExternalIdCommand(externalId);
-
-        var result = await sender.Send(deleteCommand, cancellationToken);
-
-        return result;
-    }
+    public async Task<CommandResult> DeleteCommentAsync([Service] CommentService commentService, int externalId, CancellationToken cancellationToken) =>
+        await commentService.DeleteByExternalIdAsync(externalId, cancellationToken);
 
     // <-------------------------------------------------------------------------------------------
 
@@ -169,14 +163,8 @@ public class Mutation
         return result;
     }
 
-    public async Task<CommandResult> DeleteOrderAsync([Service] ISender sender, int externalId, CancellationToken cancellationToken)
-    {
-        var deleteCommand = new DeleteOrderByExternalIdCommand(externalId);
-
-        var result = await sender.Send(deleteCommand, cancellationToken);
-
-        return result;
-    }
+    public async Task<CommandResult> DeleteOrderAsync([Service] OrderService orderService, int externalId, CancellationToken cancellationToken) =>
+        await orderService.DeleteByExternalIdAsync(externalId, cancellationToken);
 
     // <-------------------------------------------------------------------------------------------
 
@@ -256,14 +244,8 @@ public class Mutation
         return result;
     }
 
-    public async Task<CommandResult> DeleteProductAsync([Service] ISender sender, int externalId, CancellationToken cancellationToken)
-    {
-        var deleteCommand = new DeleteProductByExternalIdCommand(externalId);
-
-        var result = await sender.Send(deleteCommand, cancellationToken);
-
-        return result;
-    }
+    public async Task<CommandResult> DeleteProductAsync([Service] ProductService productService, int externalId, CancellationToken cancellationToken) =>
+        await productService.DeleteByExternalIdAsync(externalId, cancellationToken);
 
     // <-------------------------------------------------------------------------------------------
 
@@ -277,14 +259,8 @@ public class Mutation
         return result;
     }
 
-    public async Task<CommandResult> DeleteQuestionAsync([Service] ISender sender, int externalId, CancellationToken cancellationToken)
-    {
-        var deleteCommand = new DeleteQuestionByExternalIdCommand(externalId);
-
-        var result = await sender.Send(deleteCommand, cancellationToken);
-
-        return result;
-    }
+    public async Task<CommandResult> DeleteQuestionAsync([Service] QuestionService questionService, int externalId, CancellationToken cancellationToken) =>
+        await questionService.DeleteByExternalIdAsync(externalId, cancellationToken);
 
     // <-------------------------------------------------------------------------------------------
 
@@ -321,14 +297,8 @@ public class Mutation
         return result;
     }
 
-    public async Task<CommandResult> DeleteUserAsync([Service] ISender sender, int externalId, CancellationToken cancellationToken)
-    {
-        var deleteCommand = new DeleteUserByExternalIdCommand(externalId);
-
-        var result = await sender.Send(deleteCommand, cancellationToken);
-
-        return result;
-    }
+    public async Task<CommandResult> DeleteUserAsync([Service] UserService userService, int externalId, CancellationToken cancellationToken) =>
+        await userService.DeleteByExternalIdAsync(externalId, cancellationToken);
 
     // <-------------------------------------------------------------------------------------------
 
