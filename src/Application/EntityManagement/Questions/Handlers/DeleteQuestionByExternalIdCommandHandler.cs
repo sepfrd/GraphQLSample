@@ -8,26 +8,34 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.Questions.Handlers;
 
-public class DeleteQuestionByExternalIdCommandHandler(IRepository<Question> repository, ILogger logger)
-    : IRequestHandler<DeleteQuestionByExternalIdCommand, CommandResult>
+public class DeleteQuestionByExternalIdCommandHandler : IRequestHandler<DeleteQuestionByExternalIdCommand, CommandResult>
 {
+    private readonly IRepository<Question> _repository;
+    private readonly ILogger _logger;
+
+    public DeleteQuestionByExternalIdCommandHandler(IRepository<Question> repository, ILogger logger)
+    {
+        _repository = repository;
+        _logger = logger;
+    }
+
     public virtual async Task<CommandResult> Handle(DeleteQuestionByExternalIdCommand request, CancellationToken cancellationToken)
     {
-        var entity = await repository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
+        var entity = await _repository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
 
         if (entity is null)
         {
             return CommandResult.Failure(Messages.NotFound);
         }
 
-        var deletedEntity = await repository.DeleteAsync(entity, cancellationToken);
+        var deletedEntity = await _repository.DeleteOneAsync(entity, cancellationToken);
 
         if (deletedEntity is not null)
         {
             return CommandResult.Success(Messages.SuccessfullyDeleted);
         }
 
-        logger.LogError(Messages.EntityDeletionFailed, DateTime.UtcNow, typeof(Question), typeof(DeleteAnswerByExternalIdCommand));
+        _logger.LogError(Messages.EntityDeletionFailed, DateTime.UtcNow, typeof(Question), typeof(DeleteAnswerByExternalIdCommand));
 
         return CommandResult.Failure(Messages.InternalServerError);
     }

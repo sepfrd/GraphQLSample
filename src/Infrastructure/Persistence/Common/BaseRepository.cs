@@ -124,7 +124,7 @@ public class BaseRepository<TEntity> : IRepository<TEntity>
         return result;
     }
 
-    public virtual async Task<TEntity?> DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
+    public virtual async Task<TEntity?> DeleteOneAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         var filterDefinition = new FilterDefinitionBuilder<TEntity>()
             .Where(document => document.InternalId == entity.InternalId);
@@ -132,5 +132,14 @@ public class BaseRepository<TEntity> : IRepository<TEntity>
         var result = await _mongoDbCollection.FindOneAndDeleteAsync(filterDefinition, null, cancellationToken);
 
         return result;
+    }
+
+    public async Task DeleteManyAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
+    {
+        var idsToDelete = entities.Select(entity => entity.InternalId).ToList();
+        
+        await _mongoDbCollection.DeleteManyAsync(
+            entity => idsToDelete.Contains(entity.InternalId),
+            cancellationToken);
     }
 }

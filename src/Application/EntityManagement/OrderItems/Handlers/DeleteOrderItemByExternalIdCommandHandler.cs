@@ -28,7 +28,7 @@ public class DeleteOrderItemByExternalIdCommandHandler : IRequestHandler<DeleteO
             return CommandResult.Failure(Messages.NotFound);
         }
 
-        var deletedEntity = await _repository.DeleteAsync(entity, cancellationToken);
+        var deletedEntity = await _repository.DeleteOneAsync(entity, cancellationToken);
 
         if (deletedEntity is not null)
         {

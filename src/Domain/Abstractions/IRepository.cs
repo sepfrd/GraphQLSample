@@ -18,5 +18,7 @@ public interface
 
     Task<TEntity?> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default);
 
-    Task<TEntity?> DeleteAsync(TEntity entity, CancellationToken cancellationToken = default);
+    Task<TEntity?> DeleteOneAsync(TEntity entity, CancellationToken cancellationToken = default);
+
+    Task DeleteManyAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
 }

@@ -78,7 +78,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Com
         {
             foreach (var orderItem in orderItems)
             {
-                await _orderItemRepository.DeleteAsync(orderItem, cancellationToken);
+                await _orderItemRepository.DeleteOneAsync(orderItem, cancellationToken);
             }
 
             return paymentResult.HttpStatusCode switch
@@ -97,10 +97,10 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Com
         {
             foreach (var orderItem in orderItems)
             {
-                await _orderItemRepository.DeleteAsync(orderItem, cancellationToken);
+                await _orderItemRepository.DeleteOneAsync(orderItem, cancellationToken);
             }
 
-            await _paymentRepository.DeleteAsync(payment, cancellationToken);
+            await _paymentRepository.DeleteOneAsync(payment, cancellationToken);
 
             return shipmentResult.HttpStatusCode switch
             {
@@ -131,12 +131,12 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Com
 
         foreach (var orderItem in orderItems)
         {
-            await _orderItemRepository.DeleteAsync(orderItem, cancellationToken);
+            await _orderItemRepository.DeleteOneAsync(orderItem, cancellationToken);
         }
 
-        await _paymentRepository.DeleteAsync(payment, cancellationToken);
+        await _paymentRepository.DeleteOneAsync(payment, cancellationToken);
 
-        await _shipmentRepository.DeleteAsync(shipment, cancellationToken);
+        await _shipmentRepository.DeleteOneAsync(shipment, cancellationToken);
 
         return CommandResult.Failure(Messages.InternalServerError);
     }
@@ -174,7 +174,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Com
 
                 foreach (var item in orderItems)
                 {
-                    await _orderItemRepository.DeleteAsync(item, cancellationToken);
+                    await _orderItemRepository.DeleteOneAsync(item, cancellationToken);
                 }
 
                 return new OrderCreationResultDto(null, HttpStatusCode.InternalServerError);

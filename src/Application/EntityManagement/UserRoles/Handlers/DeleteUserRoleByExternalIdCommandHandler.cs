@@ -20,7 +20,7 @@ public class DeleteUserRoleByExternalIdCommandHandler(IRepository<UserRole> repo
             return CommandResult.Failure(Messages.NotFound);
         }
 
-        var deletedEntity = await repository.DeleteAsync(entity, cancellationToken);
+        var deletedEntity = await repository.DeleteOneAsync(entity, cancellationToken);
 
         if (deletedEntity is not null)
         {

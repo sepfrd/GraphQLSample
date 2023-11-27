@@ -49,7 +49,7 @@ public class DeleteAllCartItemsByCartExternalIdCommandHandler : IRequestHandler<
 
         foreach (var cartItem in cartItems)
         {
-            await _cartItemRepository.DeleteAsync(cartItem, cancellationToken);
+            await _cartItemRepository.DeleteOneAsync(cartItem, cancellationToken);
         }
 
         return CommandResult.Success(Messages.SuccessfullyDeleted);

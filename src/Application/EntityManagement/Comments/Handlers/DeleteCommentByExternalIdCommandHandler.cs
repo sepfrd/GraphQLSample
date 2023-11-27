@@ -28,7 +28,7 @@ public class DeleteCommentByExternalIdCommandHandler : IRequestHandler<DeleteCom
             return CommandResult.Failure(Messages.NotFound);
         }
 
-        var deletedEntity = await _repository.DeleteAsync(entity, cancellationToken);
+        var deletedEntity = await _repository.DeleteOneAsync(entity, cancellationToken);
 
         if (deletedEntity is not null)
         {

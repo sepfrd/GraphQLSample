@@ -19,7 +19,7 @@ public class DeleteUserByInternalIdCommandHandler(IRepository<User> userReposito
             return CommandResult.Success(Messages.NotFound);
         }
 
-        var deletedUser = await userRepository.DeleteAsync(user, cancellationToken);
+        var deletedUser = await userRepository.DeleteOneAsync(user, cancellationToken);
 
         if (deletedUser is not null)
         {

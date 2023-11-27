@@ -24,7 +24,7 @@ public class DeleteCartItemByExternalICommandHandler : IRequestHandler<DeleteCar
             return CommandResult.Failure(Messages.NotFound);
         }
 
-        await _cartItemRepository.DeleteAsync(cartItem, cancellationToken);
+        await _cartItemRepository.DeleteOneAsync(cartItem, cancellationToken);
 
         return CommandResult.Success(Messages.SuccessfullyDeleted);
     }

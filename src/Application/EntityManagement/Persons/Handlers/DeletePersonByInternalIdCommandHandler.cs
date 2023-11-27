@@ -19,7 +19,7 @@ public class DeletePersonByInternalIdCommandHandler(IRepository<Person> reposito
             return CommandResult.Failure(Messages.NotFound);
         }
 
-        var deletedEntity = await repository.DeleteAsync(entity, cancellationToken);
+        var deletedEntity = await repository.DeleteOneAsync(entity, cancellationToken);
 
         if (deletedEntity is not null)
         {
