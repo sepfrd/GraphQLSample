@@ -38,7 +38,7 @@ public class RoleService
         var roleDeletedEvent = new RoleDeletedEvent(roleResult.Data.First());
 
         await _mediator.Publish(roleDeletedEvent, cancellationToken);
-        
+
         return CommandResult.Success(Messages.SuccessfullyDeleted);
     }
 }

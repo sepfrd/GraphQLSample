@@ -8,6 +8,7 @@ namespace Application.EntityManagement.Products.Handlers;
 
 public class ProductDeletedEventHandler : INotificationHandler<ProductDeletedEvent>
 {
+    private readonly IRepository<Answer> _answerRepository;
     private readonly IRepository<Question> _questionRepository;
     private readonly IRepository<Comment> _commentRepository;
     private readonly IRepository<Vote> _voteRepository;
@@ -16,11 +17,13 @@ public class ProductDeletedEventHandler : INotificationHandler<ProductDeletedEve
     public ProductDeletedEventHandler(
         IRepository<Question> questionRepository,
         IRepository<Comment> commentRepository,
-        IRepository<Vote> voteRepository)
+        IRepository<Vote> voteRepository,
+        IRepository<Answer> answerRepository)
     {
         _questionRepository = questionRepository;
         _commentRepository = commentRepository;
         _voteRepository = voteRepository;
+        _answerRepository = answerRepository;
     }
 
     public async Task Handle(ProductDeletedEvent notification, CancellationToken cancellationToken)
@@ -47,6 +50,31 @@ public class ProductDeletedEventHandler : INotificationHandler<ProductDeletedEve
         if (questions.Count != 0)
         {
             await _questionRepository.DeleteManyAsync(questions, cancellationToken);
+
+            var questionInternalIds = questions.Select(question => question.InternalId).ToList();
+
+            var questionVotes = (await _voteRepository.GetAllAsync(
+                    vote => questionInternalIds.Contains(vote.ContentId) &&
+                            vote.Content is Question,
+                    pagination,
+                    cancellationToken))
+                .ToList();
+
+            if (questionVotes.Count != 0)
+            {
+                await _voteRepository.DeleteManyAsync(questionVotes, cancellationToken);
+            }
+
+            var questionAnswers = (await _answerRepository.GetAllAsync(
+                    answer => questionInternalIds.Contains(answer.QuestionId),
+                    pagination,
+                    cancellationToken))
+                .ToList();
+
+            if (questionAnswers.Count != 0)
+            {
+                await _answerRepository.DeleteManyAsync(questionAnswers, cancellationToken);
+            }
         }
 
         var comments = (await _commentRepository.GetAllAsync(
@@ -58,6 +86,20 @@ public class ProductDeletedEventHandler : INotificationHandler<ProductDeletedEve
         if (comments.Count != 0)
         {
             await _commentRepository.DeleteManyAsync(comments, cancellationToken);
+
+            var commentInternalIds = comments.Select(comment => comment.InternalId).ToList();
+
+            var commentVotes = (await _voteRepository.GetAllAsync(
+                    vote => commentInternalIds.Contains(vote.ContentId) &&
+                            vote.Content is Comment,
+                    pagination,
+                    cancellationToken))
+                .ToList();
+
+            if (commentVotes.Count != 0)
+            {
+                await _voteRepository.DeleteManyAsync(commentVotes, cancellationToken);
+            }
         }
     }
 }

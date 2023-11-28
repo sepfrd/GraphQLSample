@@ -15,21 +15,25 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
     private readonly IRepository<Vote> _voteRepository;
     private readonly IRepository<Person> _personRepository;
     private readonly IRepository<Cart> _cartRepository;
+    private readonly IRepository<CartItem> _cartItemRepository;
     private readonly IRepository<Order> _orderRepository;
+    private readonly IRepository<OrderItem> _orderItemRepository;
     private readonly IRepository<PhoneNumber> _phoneNumberRepository;
     private readonly IRepository<UserRole> _userRoleRepository;
 
     public UserDeletedEventHandler(
+        IRepository<Address> addressRepository,
         IRepository<Answer> answerRepository,
         IRepository<Question> questionRepository,
         IRepository<Comment> commentRepository,
         IRepository<Vote> voteRepository,
         IRepository<Person> personRepository,
         IRepository<Cart> cartRepository,
+        IRepository<CartItem> cartItemRepository,
         IRepository<Order> orderRepository,
+        IRepository<OrderItem> orderItemRepository,
         IRepository<PhoneNumber> phoneNumberRepository,
-        IRepository<UserRole> userRoleRepository,
-        IRepository<Address> addressRepository)
+        IRepository<UserRole> userRoleRepository)
     {
         _answerRepository = answerRepository;
         _questionRepository = questionRepository;
@@ -38,6 +42,8 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
         _personRepository = personRepository;
         _cartRepository = cartRepository;
         _orderRepository = orderRepository;
+        _orderItemRepository = orderItemRepository;
+        _cartItemRepository = cartItemRepository;
         _phoneNumberRepository = phoneNumberRepository;
         _userRoleRepository = userRoleRepository;
         _addressRepository = addressRepository;
@@ -46,6 +52,8 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
     public async Task Handle(UserDeletedEvent notification, CancellationToken cancellationToken)
     {
         var pagination = new Pagination(1, int.MaxValue);
+
+        // ------------------------------------------ Vote --------------------------------------->
 
         var votes = (await _voteRepository.GetAllAsync(
                 vote => vote.UserId == notification.Entity.InternalId,
@@ -58,6 +66,10 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
             await _voteRepository.DeleteManyAsync(votes, cancellationToken);
         }
 
+        // <-------------------------------------------------------------------------------------------
+
+        // ------------------------------------------ Answer --------------------------------------->
+
         var answers = (await _answerRepository.GetAllAsync(
                 answer => answer.UserId == notification.Entity.InternalId,
                 pagination,
@@ -68,6 +80,24 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
         {
             await _answerRepository.DeleteManyAsync(answers, cancellationToken);
         }
+
+        var answerInternalIds = answers.Select(answer => answer.InternalId).ToList();
+
+        var answerVotes = (await _voteRepository.GetAllAsync(
+                vote => answerInternalIds.Contains(vote.ContentId) &&
+                        vote.Content is Answer,
+                pagination,
+                cancellationToken))
+            .ToList();
+
+        if (answerVotes.Count != 0)
+        {
+            await _voteRepository.DeleteManyAsync(answerVotes, cancellationToken);
+        }
+
+        // <-------------------------------------------------------------------------------------------
+
+        // ------------------------------------------ UserRole --------------------------------------->
 
         var userRoles = (await _userRoleRepository.GetAllAsync(
                 userRole => userRole.UserId == notification.Entity.InternalId,
@@ -80,6 +110,10 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
             await _userRoleRepository.DeleteManyAsync(userRoles, cancellationToken);
         }
 
+        // <-------------------------------------------------------------------------------------------
+
+        // ------------------------------------------ Question --------------------------------------->
+
         var questions = (await _questionRepository.GetAllAsync(
                 question => question.UserId == notification.Entity.InternalId,
                 pagination,
@@ -89,7 +123,36 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
         if (questions.Count != 0)
         {
             await _questionRepository.DeleteManyAsync(questions, cancellationToken);
+
+            var questionInternalIds = questions.Select(question => question.InternalId).ToList();
+
+            var questionVotes = (await _voteRepository.GetAllAsync(
+                    vote => questionInternalIds.Contains(vote.ContentId) &&
+                            vote.Content is Question,
+                    pagination,
+                    cancellationToken))
+                .ToList();
+
+            if (questionVotes.Count != 0)
+            {
+                await _voteRepository.DeleteManyAsync(questionVotes, cancellationToken);
+            }
+
+            var questionAnswers = (await _answerRepository.GetAllAsync(
+                    answer => questionInternalIds.Contains(answer.QuestionId),
+                    pagination,
+                    cancellationToken))
+                .ToList();
+
+            if (questionAnswers.Count != 0)
+            {
+                await _answerRepository.DeleteManyAsync(questionAnswers, cancellationToken);
+            }
         }
+
+        // <-------------------------------------------------------------------------------------------
+
+        // ------------------------------------------ Comment --------------------------------------->
 
         var comments = (await _commentRepository.GetAllAsync(
                 comment => comment.UserId == notification.Entity.InternalId,
@@ -100,7 +163,25 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
         if (comments.Count != 0)
         {
             await _commentRepository.DeleteManyAsync(comments, cancellationToken);
+
+            var commentInternalIds = comments.Select(comment => comment.InternalId).ToList();
+
+            var commentVotes = (await _voteRepository.GetAllAsync(
+                    vote => commentInternalIds.Contains(vote.ContentId) &&
+                            vote.Content is Comment,
+                    pagination,
+                    cancellationToken))
+                .ToList();
+
+            if (commentVotes.Count != 0)
+            {
+                await _voteRepository.DeleteManyAsync(commentVotes, cancellationToken);
+            }
         }
+
+        // <-------------------------------------------------------------------------------------------
+
+        // ------------------------------------------ PhoneNumber --------------------------------------->
 
         var phoneNumbers = (await _phoneNumberRepository.GetAllAsync(
                 phoneNumber => phoneNumber.UserId == notification.Entity.InternalId,
@@ -113,6 +194,10 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
             await _phoneNumberRepository.DeleteManyAsync(phoneNumbers, cancellationToken);
         }
 
+        // <-------------------------------------------------------------------------------------------
+
+        // ------------------------------------------ Address --------------------------------------->
+
         var addresses = (await _addressRepository.GetAllAsync(
                 address => address.UserId == notification.Entity.InternalId,
                 pagination,
@@ -124,6 +209,10 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
             await _addressRepository.DeleteManyAsync(addresses, cancellationToken);
         }
 
+        // <-------------------------------------------------------------------------------------------
+
+        // ------------------------------------------ Order --------------------------------------->
+
         var orders = (await _orderRepository.GetAllAsync(
                 order => order.UserId == notification.Entity.InternalId,
                 pagination,
@@ -133,7 +222,24 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
         if (orders.Count != 0)
         {
             await _orderRepository.DeleteManyAsync(orders, cancellationToken);
+
+            var orderInternalIds = orders.Select(order => order.InternalId).ToList();
+
+            var orderItems = (await _orderItemRepository.GetAllAsync(
+                    orderItem => orderInternalIds.Contains(orderItem.OrderId),
+                    pagination,
+                    cancellationToken))
+                .ToList();
+
+            if (orderItems.Count != 0)
+            {
+                await _orderItemRepository.DeleteManyAsync(orderItems, cancellationToken);
+            }
         }
+
+        // <-------------------------------------------------------------------------------------------
+
+        // ------------------------------------------ Person --------------------------------------->
 
         var person = await _personRepository.GetByInternalIdAsync(notification.Entity.PersonId, cancellationToken);
 
@@ -142,19 +248,28 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
             await _personRepository.DeleteOneAsync(person, cancellationToken);
         }
 
+        // <-------------------------------------------------------------------------------------------
+
+        // ------------------------------------------ Cart --------------------------------------->
+
         var cart = await _cartRepository.GetByInternalIdAsync(notification.Entity.CartId, cancellationToken);
 
         if (cart is not null)
         {
             await _cartRepository.DeleteOneAsync(cart, cancellationToken);
+
+            var cartItems = (await _cartItemRepository.GetAllAsync(
+                    cartItem => cartItem.CartId == cart.InternalId,
+                    pagination,
+                    cancellationToken))
+                .ToList();
+
+            if (cartItems.Count != 0)
+            {
+                await _cartItemRepository.DeleteManyAsync(cartItems, cancellationToken);
+            }
         }
+
+        // <-------------------------------------------------------------------------------------------
     }
 }
-
-//
-// public Person? Person { get; set; }
-//
-//
-// public Cart? Cart { get; set; }
-//
-//

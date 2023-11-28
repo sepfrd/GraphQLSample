@@ -19,18 +19,15 @@ public class CommentDeletedEventHandler : INotificationHandler<CommentDeletedEve
     {
         var pagination = new Pagination(1, int.MaxValue);
 
-        var votes = await _repository.GetAllAsync(
-            vote => vote.ContentId == notification.Entity.InternalId && vote.Content is Comment,
-            pagination,
-            cancellationToken);
+        var votes = (await _repository.GetAllAsync(
+                vote => vote.ContentId == notification.Entity.InternalId && vote.Content is Comment,
+                pagination,
+                cancellationToken))
+            .ToList();
 
-        var votesList = votes.ToList();
-
-        if (votesList.Count == 0)
+        if (votes.Count != 0)
         {
-            return;
+            await _repository.DeleteManyAsync(votes, cancellationToken);
         }
-
-        await _repository.DeleteManyAsync(votesList, cancellationToken);
     }
 }

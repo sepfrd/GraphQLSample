@@ -1,5 +1,4 @@
-﻿using Application.Abstractions;
-using Application.Common;
+﻿using Application.Common;
 using Application.EntityManagement.Answers.Dtos;
 using Application.EntityManagement.Comments;
 using Application.EntityManagement.Orders;
@@ -7,7 +6,6 @@ using Application.EntityManagement.Products;
 using Application.EntityManagement.Questions;
 using Application.EntityManagement.Roles;
 using Application.EntityManagement.Users;
-using Domain.Entities;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;

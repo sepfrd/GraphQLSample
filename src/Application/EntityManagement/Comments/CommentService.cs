@@ -38,7 +38,7 @@ public class CommentService
         var commentDeletedEvent = new CommentDeletedEvent(commentResult.Data.First());
 
         await _mediator.Publish(commentDeletedEvent, cancellationToken);
-        
+
         return CommandResult.Success(Messages.SuccessfullyDeleted);
     }
 }

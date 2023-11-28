@@ -38,7 +38,7 @@ public class AnswerService
         var answerDeletedEvent = new AnswerDeletedEvent(answerResult.Data.First());
 
         await _mediator.Publish(answerDeletedEvent, cancellationToken);
-        
+
         return CommandResult.Success(Messages.SuccessfullyDeleted);
     }
 }

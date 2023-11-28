@@ -41,6 +41,20 @@ public class QuestionDeletedEventHandler : INotificationHandler<QuestionDeletedE
         if (answers.Count != 0)
         {
             await _answerRepository.DeleteManyAsync(answers, cancellationToken);
+
+            var answerInternalIds = answers.Select(answer => answer.InternalId).ToList();
+
+            var answerVotes = (await _voteRepository.GetAllAsync(
+                    vote => answerInternalIds.Contains(vote.ContentId) &&
+                            vote.Content is Answer,
+                    pagination,
+                    cancellationToken))
+                .ToList();
+
+            if (answerVotes.Count != 0)
+            {
+                await _voteRepository.DeleteManyAsync(answerVotes, cancellationToken);
+            }
         }
     }
 }

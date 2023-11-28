@@ -38,7 +38,7 @@ public class OrderService
         var orderDeletedEvent = new OrderDeletedEvent(orderResult.Data.First());
 
         await _mediator.Publish(orderDeletedEvent, cancellationToken);
-        
+
         return CommandResult.Success(Messages.SuccessfullyDeleted);
     }
 }

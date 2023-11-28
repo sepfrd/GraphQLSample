@@ -38,7 +38,7 @@ public class ProductService
         var productDeletedEvent = new ProductDeletedEvent(productResult.Data.First());
 
         await _mediator.Publish(productDeletedEvent, cancellationToken);
-        
+
         return CommandResult.Success(Messages.SuccessfullyDeleted);
     }
 }

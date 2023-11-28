@@ -41,7 +41,7 @@ public class UserService
         var userDeletedEvent = new UserDeletedEvent(userResult.Data.First());
 
         await _mediator.Publish(userDeletedEvent, cancellationToken);
-        
+
         return CommandResult.Success(Messages.SuccessfullyDeleted);
     }
 

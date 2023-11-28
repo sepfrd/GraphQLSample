@@ -137,7 +137,7 @@ public class BaseRepository<TEntity> : IRepository<TEntity>
     public async Task DeleteManyAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
     {
         var idsToDelete = entities.Select(entity => entity.InternalId).ToList();
-        
+
         await _mongoDbCollection.DeleteManyAsync(
             entity => idsToDelete.Contains(entity.InternalId),
             cancellationToken);

@@ -27,10 +27,10 @@ public class DeleteAnswerByExternalIdCommandHandler : IRequestHandler<DeleteAnsw
             return CommandResult.Failure(Messages.NotFound);
         }
 
-        
-        
+
+
         var deletedEntity = await _repository.DeleteOneAsync(entity, cancellationToken);
-        
+
         if (deletedEntity is not null)
         {
             return CommandResult.Success(Messages.SuccessfullyDeleted);
