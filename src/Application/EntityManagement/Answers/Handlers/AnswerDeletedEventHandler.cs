@@ -20,7 +20,7 @@ public class AnswerDeletedEventHandler : INotificationHandler<AnswerDeletedEvent
         var pagination = new Pagination(1, int.MaxValue);
 
         var votes = (await _repository.GetAllAsync(
-                vote => vote.ContentId == notification.Entity.InternalId && vote.Content is Answer,
+                vote => vote.ContentId == notification.Entity.InternalId,
                 pagination,
                 cancellationToken))
             .ToList();

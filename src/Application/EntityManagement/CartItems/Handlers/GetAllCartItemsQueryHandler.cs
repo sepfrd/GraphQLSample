@@ -18,7 +18,7 @@ public class GetAllCartItemsQueryHandler : IRequestHandler<GetAllCartItemsQuery,
 
     public virtual async Task<QueryReferenceResponse<IEnumerable<CartItem>>> Handle(GetAllCartItemsQuery request, CancellationToken cancellationToken)
     {
-        var entities = await _repository.GetAllAsync(null, request.Pagination, cancellationToken);
+        var entities = await _repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
 
         return new QueryReferenceResponse<IEnumerable<CartItem>>
             (

@@ -18,7 +18,7 @@ public sealed class GetAllOrdersQueryHandler : IRequestHandler<GetAllOrdersQuery
 
     public async Task<QueryReferenceResponse<IEnumerable<Order>>> Handle(GetAllOrdersQuery request, CancellationToken cancellationToken)
     {
-        var entities = await _repository.GetAllAsync(null, request.Pagination, cancellationToken);
+        var entities = await _repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
 
         return new QueryReferenceResponse<IEnumerable<Order>>
             (

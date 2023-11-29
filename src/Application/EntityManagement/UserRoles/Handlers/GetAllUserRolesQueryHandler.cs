@@ -12,7 +12,7 @@ public sealed class GetAllUserRolesQueryHandler(IRepository<UserRole> repository
 {
     public async Task<QueryReferenceResponse<IEnumerable<UserRole>>> Handle(GetAllUserRolesQuery request, CancellationToken cancellationToken)
     {
-        var entities = await repository.GetAllAsync(null, request.Pagination, cancellationToken);
+        var entities = await repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
 
         return new QueryReferenceResponse<IEnumerable<UserRole>>(
             entities,

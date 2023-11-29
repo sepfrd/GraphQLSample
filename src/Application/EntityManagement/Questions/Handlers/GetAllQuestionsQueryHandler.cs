@@ -12,7 +12,7 @@ public sealed class GetAllQuestionsQueryHandler(IRepository<Question> repository
 {
     public async Task<QueryReferenceResponse<IEnumerable<Question>>> Handle(GetAllQuestionsQuery request, CancellationToken cancellationToken)
     {
-        var entities = await repository.GetAllAsync(null, request.Pagination, cancellationToken);
+        var entities = await repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
 
         return new QueryReferenceResponse<IEnumerable<Question>>(
             entities,

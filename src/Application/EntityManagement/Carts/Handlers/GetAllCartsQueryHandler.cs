@@ -18,7 +18,7 @@ public sealed class GetAllCartsQueryHandler : IRequestHandler<GetAllCartsQuery, 
 
     public async Task<QueryReferenceResponse<IEnumerable<Cart>>> Handle(GetAllCartsQuery request, CancellationToken cancellationToken)
     {
-        var entities = await _repository.GetAllAsync(null, request.Pagination, cancellationToken);
+        var entities = await _repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
 
         return new QueryReferenceResponse<IEnumerable<Cart>>(
             entities,

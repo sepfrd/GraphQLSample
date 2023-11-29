@@ -22,7 +22,7 @@ public class QuestionDeletedEventHandler : INotificationHandler<QuestionDeletedE
         var pagination = new Pagination(1, int.MaxValue);
 
         var votes = (await _voteRepository.GetAllAsync(
-                vote => vote.ContentId == notification.Entity.InternalId && vote.Content is Question,
+                vote => vote.ContentId == notification.Entity.InternalId,
                 pagination,
                 cancellationToken))
             .ToList();
@@ -45,8 +45,7 @@ public class QuestionDeletedEventHandler : INotificationHandler<QuestionDeletedE
             var answerInternalIds = answers.Select(answer => answer.InternalId).ToList();
 
             var answerVotes = (await _voteRepository.GetAllAsync(
-                    vote => answerInternalIds.Contains(vote.ContentId) &&
-                            vote.Content is Answer,
+                    vote => answerInternalIds.Contains(vote.ContentId),
                     pagination,
                     cancellationToken))
                 .ToList();

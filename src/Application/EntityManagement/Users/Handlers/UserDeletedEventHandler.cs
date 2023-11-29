@@ -84,8 +84,7 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
         var answerInternalIds = answers.Select(answer => answer.InternalId).ToList();
 
         var answerVotes = (await _voteRepository.GetAllAsync(
-                vote => answerInternalIds.Contains(vote.ContentId) &&
-                        vote.Content is Answer,
+                vote => answerInternalIds.Contains(vote.ContentId),
                 pagination,
                 cancellationToken))
             .ToList();
@@ -127,8 +126,7 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
             var questionInternalIds = questions.Select(question => question.InternalId).ToList();
 
             var questionVotes = (await _voteRepository.GetAllAsync(
-                    vote => questionInternalIds.Contains(vote.ContentId) &&
-                            vote.Content is Question,
+                    vote => questionInternalIds.Contains(vote.ContentId),
                     pagination,
                     cancellationToken))
                 .ToList();
@@ -147,6 +145,19 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
             if (questionAnswers.Count != 0)
             {
                 await _answerRepository.DeleteManyAsync(questionAnswers, cancellationToken);
+            }
+
+            var questionAnswersInternalIds = questionAnswers.Select(questionAnswer => questionAnswer.InternalId).ToList();
+
+            var questionAnswersVotes = (await _voteRepository.GetAllAsync(
+                    vote => questionAnswersInternalIds.Contains(vote.ContentId),
+                    pagination,
+                    cancellationToken))
+                .ToList();
+
+            if (questionAnswersVotes.Count != 0)
+            {
+                await _voteRepository.DeleteManyAsync(questionAnswersVotes, cancellationToken);
             }
         }
 
@@ -167,8 +178,7 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
             var commentInternalIds = comments.Select(comment => comment.InternalId).ToList();
 
             var commentVotes = (await _voteRepository.GetAllAsync(
-                    vote => commentInternalIds.Contains(vote.ContentId) &&
-                            vote.Content is Comment,
+                    vote => commentInternalIds.Contains(vote.ContentId),
                     pagination,
                     cancellationToken))
                 .ToList();

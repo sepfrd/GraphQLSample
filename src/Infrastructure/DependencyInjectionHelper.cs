@@ -3,6 +3,7 @@ using Application.EntityManagement.Users.Dtos;
 using Domain.Abstractions;
 using Domain.Common;
 using Domain.Entities;
+using Humanizer;
 using Infrastructure.Persistence.Common;
 using Infrastructure.Persistence.Repositories;
 using Infrastructure.Services.Mapping;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Driver;
 
 namespace Infrastructure;
 
@@ -59,9 +61,56 @@ public static class DependencyInjectionHelper
                 .MapIdMember(baseEntity => baseEntity.InternalId);
         });
 
+        var connectionString = configuration.GetSection("MongoDb").GetValue<string>("ConnectionString");
+        var databaseName = configuration.GetSection("MongoDb").GetValue<string>("DatabaseName");
+
+        var mongoClient = new MongoClient(connectionString);
+
+        var mongoDatabase = mongoClient.GetDatabase(databaseName);
+
+        CreateIndexes(mongoDatabase);
+
         services.Configure<MongoDbSettings>(configuration.GetSection("MongoDb"));
 
         return services;
+    }
+
+    private static void CreateIndexes(IMongoDatabase database)
+    {
+        CreateIndexForCollection<Address>(database);
+        CreateIndexForCollection<Answer>(database);
+        CreateIndexForCollection<Cart>(database);
+        CreateIndexForCollection<CartItem>(database);
+        CreateIndexForCollection<Category>(database);
+        CreateIndexForCollection<Comment>(database);
+        CreateIndexForCollection<Order>(database);
+        CreateIndexForCollection<OrderItem>(database);
+        CreateIndexForCollection<Payment>(database);
+        CreateIndexForCollection<Person>(database);
+        CreateIndexForCollection<PhoneNumber>(database);
+        CreateIndexForCollection<Product>(database);
+        CreateIndexForCollection<Question>(database);
+        CreateIndexForCollection<Role>(database);
+        CreateIndexForCollection<Shipment>(database);
+        CreateIndexForCollection<User>(database);
+        CreateIndexForCollection<UserRole>(database);
+        CreateIndexForCollection<Vote>(database);
+    }
+
+    private static void CreateIndexForCollection<TEntity>(IMongoDatabase database)
+        where TEntity : BaseEntity
+    {
+        var collectionName = typeof(TEntity).Name.Pluralize();
+
+        collectionName = collectionName == "People" ? "Persons" : collectionName;
+
+        var collection = database.GetCollection<TEntity>(collectionName);
+
+        var indexKeysDefinition = Builders<TEntity>.IndexKeys.Ascending(entity => entity.ExternalId);
+
+        var indexModel = new CreateIndexModel<TEntity>(indexKeysDefinition);
+
+        collection.Indexes.CreateOne(indexModel);
     }
 
     private static void ConfigureMapster()

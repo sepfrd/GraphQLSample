@@ -10,9 +10,9 @@ namespace Infrastructure.Persistence.Common.Helpers;
 public class DatabaseSeeder
 {
     private readonly IMongoDatabase _mongoDatabase;
-    private const int DefaultHugeNumber = 10000;
-    private const int DefaultNormalNumber = 5000;
-    private const int DefaultSmallNumber = 1000;
+    private const int DefaultHugeNumber = 1_000_000;
+    private const int DefaultNormalNumber = 500_000;
+    private const int DefaultSmallNumber = 100_000;
 
     public DatabaseSeeder(string connectionString, string databaseName)
     {
@@ -113,6 +113,7 @@ public class DatabaseSeeder
         foreach (var question in fakeQuestions)
         {
             question.UserId = fakeUsers.ElementAt(Random.Shared.Next(0, fakeUsers.Count)).InternalId;
+            question.ProductId = fakeProducts.ElementAt(Random.Shared.Next(0, fakeProducts.Count)).InternalId;
         }
 
         foreach (var shipment in fakeShipments)

@@ -12,7 +12,7 @@ public sealed class GetAllPhoneNumbersQueryHandler(IRepository<PhoneNumber> repo
 {
     public async Task<QueryReferenceResponse<IEnumerable<PhoneNumber>>> Handle(GetAllPhoneNumbersQuery request, CancellationToken cancellationToken)
     {
-        var entities = await repository.GetAllAsync(null, request.Pagination, cancellationToken);
+        var entities = await repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
 
         return new QueryReferenceResponse<IEnumerable<PhoneNumber>>(
             entities,
