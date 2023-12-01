@@ -1,5 +1,4 @@
 using Bogus;
-using Domain.Common;
 using Domain.Entities;
 using Domain.Enums;
 using MongoDB.Driver;
@@ -10,9 +9,9 @@ namespace Infrastructure.Persistence.Common.Helpers;
 public class DatabaseSeeder
 {
     private readonly IMongoDatabase _mongoDatabase;
-    private const int DefaultHugeNumber = 1_000_000;
-    private const int DefaultNormalNumber = 500_000;
-    private const int DefaultSmallNumber = 100_000;
+    private const int DefaultHugeNumber = 100_000;
+    private const int DefaultNormalNumber = 50_000;
+    private const int DefaultSmallNumber = 10_000;
 
     public DatabaseSeeder(string connectionString, string databaseName)
     {
@@ -40,14 +39,10 @@ public class DatabaseSeeder
         var fakeShipments = GetFakeShipments();
         var fakeUsers = GetFakeUsers();
         var fakeUserRoles = GetFakeUserRoles();
-        var fakeVotes = GetFakeVotes();
-
-        var fakeContents = new List<BaseEntity>();
-
-        fakeContents.AddRange(fakeAnswers);
-        fakeContents.AddRange(fakeComments);
-        fakeContents.AddRange(fakeProducts);
-        fakeContents.AddRange(fakeQuestions);
+        var fakeAnswerVotes = GetFakeAnswerVotes();
+        var fakeCommentVotes = GetFakeCommentVotes();
+        var fakeProductVotes = GetFakeProductVotes();
+        var fakeQuestionVotes = GetFakeQuestionVotes();
 
         foreach (var address in fakeAddresses)
         {
@@ -135,11 +130,36 @@ public class DatabaseSeeder
             userRole.RoleId = fakeRoles.ElementAt(Random.Shared.Next(0, fakeRoles.Count)).InternalId;
         }
 
-        foreach (var vote in fakeVotes)
+        foreach (var vote in fakeAnswerVotes)
         {
             vote.UserId = fakeUsers.ElementAt(Random.Shared.Next(0, fakeUsers.Count)).InternalId;
-            vote.ContentId = fakeContents.ElementAt(Random.Shared.Next(0, fakeContents.Count)).InternalId;
+            vote.ContentId = fakeAnswers.ElementAt(Random.Shared.Next(0, fakeAnswers.Count)).InternalId;
         }
+
+        foreach (var vote in fakeCommentVotes)
+        {
+            vote.UserId = fakeUsers.ElementAt(Random.Shared.Next(0, fakeUsers.Count)).InternalId;
+            vote.ContentId = fakeComments.ElementAt(Random.Shared.Next(0, fakeComments.Count)).InternalId;
+        }
+
+        foreach (var vote in fakeProductVotes)
+        {
+            vote.UserId = fakeUsers.ElementAt(Random.Shared.Next(0, fakeUsers.Count)).InternalId;
+            vote.ContentId = fakeProducts.ElementAt(Random.Shared.Next(0, fakeProducts.Count)).InternalId;
+        }
+
+        foreach (var vote in fakeQuestionVotes)
+        {
+            vote.UserId = fakeUsers.ElementAt(Random.Shared.Next(0, fakeUsers.Count)).InternalId;
+            vote.ContentId = fakeQuestions.ElementAt(Random.Shared.Next(0, fakeQuestions.Count)).InternalId;
+        }
+
+        var fakeVotes = new List<Vote>();
+
+        fakeVotes.AddRange(fakeAnswerVotes);
+        fakeVotes.AddRange(fakeCommentVotes);
+        fakeVotes.AddRange(fakeProductVotes);
+        fakeVotes.AddRange(fakeQuestionVotes);
 
         // ------------------------------------------------
 
@@ -448,22 +468,80 @@ public class DatabaseSeeder
         return fakeShipments;
     }
 
-    private static List<Vote> GetFakeVotes()
+    private static List<Vote> GetFakeAnswerVotes()
     {
         var externalId = 0;
 
         var voteFaker = new Faker<Vote>()
             .RuleFor(vote => vote.ExternalId, _ => externalId++)
-            .RuleFor(vote => vote.Type, faker => Enum.GetValues<VoteType>()[faker.Random.Number(3)]);
+            .RuleFor(vote => vote.Type, faker => Enum.GetValues<VoteType>()[faker.Random.Number(3)])
+            .RuleFor(vote => vote.ContentType, _ => VotableContentType.Answer);
 
-        var fakeVotes = new List<Vote>();
+        var fakeAnswerVotes = new List<Vote>();
 
         for (var i = 0; i < DefaultNormalNumber; i++)
         {
-            fakeVotes.Add(voteFaker.Generate());
+            fakeAnswerVotes.Add(voteFaker.Generate());
         }
 
-        return fakeVotes;
+        return fakeAnswerVotes;
+    }
+
+    private static List<Vote> GetFakeCommentVotes()
+    {
+        var externalId = DefaultNormalNumber;
+
+        var voteFaker = new Faker<Vote>()
+            .RuleFor(vote => vote.ExternalId, _ => externalId++)
+            .RuleFor(vote => vote.Type, faker => Enum.GetValues<VoteType>()[faker.Random.Number(3)])
+            .RuleFor(vote => vote.ContentType, _ => VotableContentType.Comment);
+
+        var fakeCommentVotes = new List<Vote>();
+
+        for (var i = 0; i < DefaultNormalNumber; i++)
+        {
+            fakeCommentVotes.Add(voteFaker.Generate());
+        }
+
+        return fakeCommentVotes;
+    }
+
+    private static List<Vote> GetFakeProductVotes()
+    {
+        var externalId = DefaultNormalNumber * 2;
+
+        var voteFaker = new Faker<Vote>()
+            .RuleFor(vote => vote.ExternalId, _ => externalId++)
+            .RuleFor(vote => vote.Type, faker => Enum.GetValues<VoteType>()[faker.Random.Number(3)])
+            .RuleFor(vote => vote.ContentType, _ => VotableContentType.Product);
+
+        var fakeProductVotes = new List<Vote>();
+
+        for (var i = 0; i < DefaultNormalNumber; i++)
+        {
+            fakeProductVotes.Add(voteFaker.Generate());
+        }
+
+        return fakeProductVotes;
+    }
+
+    private static List<Vote> GetFakeQuestionVotes()
+    {
+        var externalId = DefaultNormalNumber * 3;
+
+        var voteFaker = new Faker<Vote>()
+            .RuleFor(vote => vote.ExternalId, _ => externalId++)
+            .RuleFor(vote => vote.Type, faker => Enum.GetValues<VoteType>()[faker.Random.Number(3)])
+            .RuleFor(vote => vote.ContentType, _ => VotableContentType.Question);
+
+        var fakeQuestionVotes = new List<Vote>();
+
+        for (var i = 0; i < DefaultNormalNumber; i++)
+        {
+            fakeQuestionVotes.Add(voteFaker.Generate());
+        }
+
+        return fakeQuestionVotes;
     }
 
     private static List<Person> GetFakePersons()

@@ -8,6 +8,8 @@ public sealed class Vote : BaseEntity
 {
     public VoteType Type { get; set; }
 
+    public VotableContentType ContentType { get; set; }
+
     public User? User { get; set; }
 
     public Guid UserId { get; set; }

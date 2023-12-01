@@ -4,7 +4,6 @@ using Application.EntityManagement.Addresses.Dtos;
 using Application.EntityManagement.Answers;
 using Application.EntityManagement.Answers.Commands;
 using Application.EntityManagement.Answers.Dtos;
-using Application.EntityManagement.Answers.Queries;
 using Application.EntityManagement.CartItems.Commands;
 using Application.EntityManagement.CartItems.Dtos;
 using Application.EntityManagement.Categories.Commands;
@@ -12,7 +11,6 @@ using Application.EntityManagement.Categories.Dtos;
 using Application.EntityManagement.Comments;
 using Application.EntityManagement.Comments.Commands;
 using Application.EntityManagement.Comments.Dtos;
-using Application.EntityManagement.Comments.Queries;
 using Application.EntityManagement.Orders;
 using Application.EntityManagement.Orders.Commands;
 using Application.EntityManagement.Orders.Dtos;
@@ -25,11 +23,9 @@ using Application.EntityManagement.PhoneNumbers.Dtos;
 using Application.EntityManagement.Products;
 using Application.EntityManagement.Products.Commands;
 using Application.EntityManagement.Products.Dtos;
-using Application.EntityManagement.Products.Queries;
 using Application.EntityManagement.Questions;
 using Application.EntityManagement.Questions.Commands;
 using Application.EntityManagement.Questions.Dtos;
-using Application.EntityManagement.Questions.Queries;
 using Application.EntityManagement.Shipments.Commands;
 using Application.EntityManagement.Shipments.Dtos;
 using Application.EntityManagement.Users;
@@ -37,9 +33,7 @@ using Application.EntityManagement.Users.Commands;
 using Application.EntityManagement.Users.Dtos;
 using Application.EntityManagement.Votes.Commands;
 using Application.EntityManagement.Votes.Dtos;
-using Domain.Common;
 using MediatR;
-using Web.GraphQL.Types.InputTypes;
 
 namespace Web.GraphQL;
 
@@ -304,96 +298,9 @@ public class Mutation
 
     // ------------------------------------------ Vote --------------------------------------->
 
-    public async Task<CommandResult> AddAnswerVoteAsync([Service] ISender sender, AddAnswerVoteInputType answerVoteInput, CancellationToken cancellationToken)
+    public async Task<CommandResult> AddVoteAsync([Service] ISender sender, CreateVoteDto createVoteDto, CancellationToken cancellationToken)
     {
-        var answerQuery = new GetAllAnswersQuery(
-            new Pagination(),
-            answer => answer.ExternalId == answerVoteInput.AnswerExternalId);
-
-        var answerResult = await sender.Send(answerQuery, cancellationToken);
-
-        var answer = answerResult.Data?.FirstOrDefault();
-
-        if (answer is null)
-        {
-            return CommandResult.Failure(Messages.NotFound);
-        }
-
-        var voteDto = new VoteDto(answerVoteInput.VoteType, answer);
-
-        var createVoteCommand = new CreateVoteCommand(voteDto);
-
-        var result = await sender.Send(createVoteCommand, cancellationToken);
-
-        return result;
-    }
-
-    public async Task<CommandResult> AddCommentVoteAsync([Service] ISender sender, AddCommentVoteInputType commentVoteInput, CancellationToken cancellationToken)
-    {
-        var commentQuery = new GetAllCommentsQuery(
-            new Pagination(),
-            comment => comment.ExternalId == commentVoteInput.CommentExternalId);
-
-        var commentResult = await sender.Send(commentQuery, cancellationToken);
-
-        var comment = commentResult.Data?.FirstOrDefault();
-
-        if (comment is null)
-        {
-            return CommandResult.Failure(Messages.NotFound);
-        }
-
-        var voteDto = new VoteDto(commentVoteInput.VoteType, comment);
-
-        var createVoteCommand = new CreateVoteCommand(voteDto);
-
-        var result = await sender.Send(createVoteCommand, cancellationToken);
-
-        return result;
-    }
-
-    public async Task<CommandResult> AddProductVoteAsync([Service] ISender sender, AddProductVoteInputType productVoteInput, CancellationToken cancellationToken)
-    {
-        var productQuery = new GetAllProductsQuery(
-            new Pagination(),
-            product => product.ExternalId == productVoteInput.ProductExternalId);
-
-        var productResult = await sender.Send(productQuery, cancellationToken);
-
-        var product = productResult.Data?.FirstOrDefault();
-
-        if (product is null)
-        {
-            return CommandResult.Failure(Messages.NotFound);
-        }
-
-        var voteDto = new VoteDto(productVoteInput.VoteType, product);
-
-        var createVoteCommand = new CreateVoteCommand(voteDto);
-
-        var result = await sender.Send(createVoteCommand, cancellationToken);
-
-        return result;
-    }
-
-    public async Task<CommandResult> AddQuestionVoteAsync([Service] ISender sender, AddQuestionVoteInputType questionVoteInput, CancellationToken cancellationToken)
-    {
-        var questionQuery = new GetAllQuestionsQuery(
-            new Pagination(),
-            question => question.ExternalId == questionVoteInput.QuestionExternalId);
-
-        var questionResult = await sender.Send(questionQuery, cancellationToken);
-
-        var question = questionResult.Data?.FirstOrDefault();
-
-        if (question is null)
-        {
-            return CommandResult.Failure(Messages.NotFound);
-        }
-
-        var voteDto = new VoteDto(questionVoteInput.VoteType, question);
-
-        var createVoteCommand = new CreateVoteCommand(voteDto);
+        var createVoteCommand = new CreateVoteCommand(createVoteDto);
 
         var result = await sender.Send(createVoteCommand, cancellationToken);
 

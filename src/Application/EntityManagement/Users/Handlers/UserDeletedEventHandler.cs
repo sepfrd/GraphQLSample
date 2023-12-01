@@ -2,6 +2,7 @@ using Application.EntityManagement.Users.Events;
 using Domain.Abstractions;
 using Domain.Common;
 using Domain.Entities;
+using Domain.Enums;
 using MediatR;
 
 namespace Application.EntityManagement.Users.Handlers;
@@ -84,7 +85,8 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
         var answerInternalIds = answers.Select(answer => answer.InternalId).ToList();
 
         var answerVotes = (await _voteRepository.GetAllAsync(
-                vote => answerInternalIds.Contains(vote.ContentId),
+                vote => answerInternalIds.Contains(vote.ContentId) &&
+                        vote.ContentType == VotableContentType.Answer,
                 pagination,
                 cancellationToken))
             .ToList();
@@ -126,7 +128,8 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
             var questionInternalIds = questions.Select(question => question.InternalId).ToList();
 
             var questionVotes = (await _voteRepository.GetAllAsync(
-                    vote => questionInternalIds.Contains(vote.ContentId),
+                    vote => questionInternalIds.Contains(vote.ContentId) &&
+                            vote.ContentType == VotableContentType.Question,
                     pagination,
                     cancellationToken))
                 .ToList();
@@ -150,7 +153,8 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
             var questionAnswersInternalIds = questionAnswers.Select(questionAnswer => questionAnswer.InternalId).ToList();
 
             var questionAnswersVotes = (await _voteRepository.GetAllAsync(
-                    vote => questionAnswersInternalIds.Contains(vote.ContentId),
+                    vote => questionAnswersInternalIds.Contains(vote.ContentId) &&
+                            vote.ContentType == VotableContentType.Answer,
                     pagination,
                     cancellationToken))
                 .ToList();
@@ -178,7 +182,8 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
             var commentInternalIds = comments.Select(comment => comment.InternalId).ToList();
 
             var commentVotes = (await _voteRepository.GetAllAsync(
-                    vote => commentInternalIds.Contains(vote.ContentId),
+                    vote => commentInternalIds.Contains(vote.ContentId) &&
+                            vote.ContentType == VotableContentType.Comment,
                     pagination,
                     cancellationToken))
                 .ToList();
