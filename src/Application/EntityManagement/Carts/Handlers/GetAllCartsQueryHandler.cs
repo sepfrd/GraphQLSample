@@ -23,7 +23,7 @@ public sealed class GetAllCartsQueryHandler : IRequestHandler<GetAllCartsQuery, 
         return new QueryReferenceResponse<IEnumerable<Cart>>(
             entities,
             true,
-            Messages.SuccessfullyRetrieved,
+            MessageConstants.SuccessfullyRetrieved,
             HttpStatusCode.OK);
     }
 }

@@ -28,7 +28,7 @@ public class OrderService
             orderResult.Data is null ||
             !orderResult.Data.Any())
         {
-            return CommandResult.Failure(Messages.NotFound);
+            return CommandResult.Failure(MessageConstants.NotFound);
         }
 
         var deleteOrderCommand = new DeleteOrderByExternalIdCommand(externalId);
@@ -39,6 +39,6 @@ public class OrderService
 
         await _mediator.Publish(orderDeletedEvent, cancellationToken);
 
-        return CommandResult.Success(Messages.SuccessfullyDeleted);
+        return CommandResult.Success(MessageConstants.SuccessfullyDeleted);
     }
 }

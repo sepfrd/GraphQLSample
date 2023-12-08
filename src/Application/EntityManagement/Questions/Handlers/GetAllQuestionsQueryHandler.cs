@@ -17,7 +17,7 @@ public sealed class GetAllQuestionsQueryHandler(IRepository<Question> repository
         return new QueryReferenceResponse<IEnumerable<Question>>(
             entities,
             true,
-            Messages.SuccessfullyRetrieved,
+            MessageConstants.SuccessfullyRetrieved,
             HttpStatusCode.OK);
     }
 }

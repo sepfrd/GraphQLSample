@@ -33,16 +33,16 @@ public class CreateAddressCommandHandler : IRequestHandler<CreateAddressCommand,
 
         if (user is null)
         {
-            return CommandResult.Failure(Messages.BadRequest);
+            return CommandResult.Failure(MessageConstants.BadRequest);
         }
 
         var entity = _mappingService.Map<CreateAddressDto, Address>(request.CreateAddressDto);
 
         if (entity is null)
         {
-            _logger.LogError(message: Messages.MappingFailed, DateTime.UtcNow, typeof(Address), typeof(CreateAddressCommandHandler));
+            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Address), typeof(CreateAddressCommandHandler));
 
-            return CommandResult.Failure(Messages.InternalServerError);
+            return CommandResult.Failure(MessageConstants.InternalServerError);
         }
 
         entity.UserId = user.InternalId;
@@ -51,11 +51,11 @@ public class CreateAddressCommandHandler : IRequestHandler<CreateAddressCommand,
 
         if (createdEntity is not null)
         {
-            return CommandResult.Success(Messages.SuccessfullyCreated);
+            return CommandResult.Success(MessageConstants.SuccessfullyCreated);
         }
 
-        _logger.LogError(message: Messages.EntityCreationFailed, DateTime.UtcNow, typeof(Address), typeof(CreateAddressCommandHandler));
+        _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(Address), typeof(CreateAddressCommandHandler));
 
-        return CommandResult.Failure(Messages.InternalServerError);
+        return CommandResult.Failure(MessageConstants.InternalServerError);
     }
 }

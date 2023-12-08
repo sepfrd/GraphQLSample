@@ -1,6 +1,6 @@
 namespace Application.Common;
 
-public static class Messages
+public static class MessageConstants
 {
     /* --------------------------------- 200 --------------------------------- */
 
@@ -25,5 +25,4 @@ public static class Messages
     public const string EntityDeletionFailed = "{time} - Internal Server Error - {entity} deletion failed inside : {class}";
     public const string EntityUpdateFailed = "{time} - Internal Server Error - {entity} update failed inside : {class}";
     public const string EntityRelationshipsRetrievalFailed = "{time} - Internal Server Error - {entity} relationships retrieval failed inside : {class}";
-    public const string UnitOfWorkSavingChangesFailed = "{time} - Internal Server Error - UnitOfWork saving changes failed inside : {class}";
 }

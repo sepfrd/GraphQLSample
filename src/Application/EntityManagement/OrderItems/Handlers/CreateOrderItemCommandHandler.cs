@@ -37,23 +37,23 @@ public class CreateOrderItemCommandHandler : IRequestHandler<CreateOrderItemComm
 
         if (order is null)
         {
-            return CommandResult.Failure(Messages.BadRequest);
+            return CommandResult.Failure(MessageConstants.BadRequest);
         }
 
         var product = await _productRepository.GetByExternalIdAsync(request.CreateOrderItemDto.ProductExternalId, cancellationToken);
 
         if (product is null)
         {
-            return CommandResult.Failure(Messages.BadRequest);
+            return CommandResult.Failure(MessageConstants.BadRequest);
         }
 
         var entity = _mappingService.Map<CreateOrderItemDto, OrderItem>(request.CreateOrderItemDto);
 
         if (entity is null)
         {
-            _logger.LogError(message: Messages.MappingFailed, DateTime.UtcNow, typeof(OrderItem), typeof(CreateOrderItemCommandHandler));
+            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(OrderItem), typeof(CreateOrderItemCommandHandler));
 
-            return CommandResult.Failure(Messages.InternalServerError);
+            return CommandResult.Failure(MessageConstants.InternalServerError);
         }
 
         entity.OrderId = order.InternalId;
@@ -63,11 +63,11 @@ public class CreateOrderItemCommandHandler : IRequestHandler<CreateOrderItemComm
 
         if (createdEntity is not null)
         {
-            return CommandResult.Success(Messages.SuccessfullyCreated);
+            return CommandResult.Success(MessageConstants.SuccessfullyCreated);
         }
 
-        _logger.LogError(message: Messages.EntityCreationFailed, DateTime.UtcNow, typeof(OrderItem), typeof(CreateOrderItemCommandHandler));
+        _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(OrderItem), typeof(CreateOrderItemCommandHandler));
 
-        return CommandResult.Failure(Messages.InternalServerError);
+        return CommandResult.Failure(MessageConstants.InternalServerError);
     }
 }

@@ -25,7 +25,7 @@ public class GetUserByExternalIdQueryHandler(
             return new QueryReferenceResponse<UserDto>(
                 null,
                 true,
-                Messages.NotFound,
+                MessageConstants.NotFound,
                 HttpStatusCode.NoContent);
         }
 
@@ -36,16 +36,16 @@ public class GetUserByExternalIdQueryHandler(
             return new QueryReferenceResponse<UserDto>(
                 userDto,
                 true,
-                Messages.SuccessfullyRetrieved,
+                MessageConstants.SuccessfullyRetrieved,
                 HttpStatusCode.OK);
         }
 
-        logger.LogError(Messages.MappingFailed, DateTime.UtcNow, typeof(User), typeof(GetUserByExternalIdQueryHandler));
+        logger.LogError(MessageConstants.MappingFailed, DateTime.UtcNow, typeof(User), typeof(GetUserByExternalIdQueryHandler));
 
         return new QueryReferenceResponse<UserDto>(
             null,
             false,
-            Messages.InternalServerError,
+            MessageConstants.InternalServerError,
             HttpStatusCode.InternalServerError);
     }
 }

@@ -32,8 +32,7 @@ public static class DependencyInjectionHelper
             .AddRepositories()
             .AddSingleton<IMappingService, MappingService>()
             .AddScoped<IAuthenticationService, AuthenticationService>()
-            .AddAuthentication(configuration)
-            .AddAuthorization();
+            .AddAuth(configuration);
     }
 
     private static IServiceCollection AddRepositories(this IServiceCollection services) =>
@@ -82,7 +81,7 @@ public static class DependencyInjectionHelper
         return services;
     }
 
-    private static IServiceCollection AddAuthentication(this IServiceCollection services, IConfiguration configuration) =>
+    private static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration) =>
         services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -109,8 +108,8 @@ public static class DependencyInjectionHelper
                     ValidateLifetime = true,
                     RequireExpirationTime = true,
                     IssuerSigningKey = securityKey,
-                    ValidIssuer = "SSP Labels Server",
-                    ValidAudience = "SSP Labels Client"
+                    ValidIssuer = DomainConstants.ApplicationUrl,
+                    ValidAudience = DomainConstants.ApplicationUrl
                 };
             })
             .Services

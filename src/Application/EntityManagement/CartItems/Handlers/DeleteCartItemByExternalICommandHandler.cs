@@ -21,11 +21,11 @@ public class DeleteCartItemByExternalICommandHandler : IRequestHandler<DeleteCar
 
         if (cartItem is null)
         {
-            return CommandResult.Failure(Messages.NotFound);
+            return CommandResult.Failure(MessageConstants.NotFound);
         }
 
         await _cartItemRepository.DeleteOneAsync(cartItem, cancellationToken);
 
-        return CommandResult.Success(Messages.SuccessfullyDeleted);
+        return CommandResult.Success(MessageConstants.SuccessfullyDeleted);
     }
 }

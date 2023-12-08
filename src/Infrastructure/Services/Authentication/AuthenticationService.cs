@@ -67,8 +67,8 @@ public class AuthenticationService : IAuthenticationService
 
         var claims = new ClaimsIdentity(new[]
         {
-            new Claim(JwtRegisteredClaimNames.Iss, "http://localhost:5000"),
-            new Claim(JwtRegisteredClaimNames.Aud, "http://localhost:5000"),
+            new Claim(JwtRegisteredClaimNames.Iss, DomainConstants.ApplicationUrl),
+            new Claim(JwtRegisteredClaimNames.Aud, DomainConstants.ApplicationUrl),
             new Claim(JwtRegisteredClaimNames.Iat,
                 DateTime.Now.ToUniversalTime()
                     .ToString(CultureInfo.InvariantCulture)),

@@ -17,7 +17,7 @@ public sealed class GetAllProductsQueryHandler(IRepository<Product> repository)
         return new QueryReferenceResponse<IEnumerable<Product>>(
             entities,
             true,
-            Messages.SuccessfullyRetrieved,
+            MessageConstants.SuccessfullyRetrieved,
             HttpStatusCode.OK);
     }
 }

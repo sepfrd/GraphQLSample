@@ -21,20 +21,20 @@ public class CreatePersonCommandHandler(
 
         if (entity is null)
         {
-            logger.LogError(message: Messages.MappingFailed, DateTime.UtcNow, typeof(Person), typeof(CreatePersonCommandHandler));
+            logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Person), typeof(CreatePersonCommandHandler));
 
-            return CommandResult.Failure(Messages.InternalServerError);
+            return CommandResult.Failure(MessageConstants.InternalServerError);
         }
 
         var createdEntity = await repository.CreateAsync(entity, cancellationToken);
 
         if (createdEntity is not null)
         {
-            return CommandResult.Success(Messages.SuccessfullyCreated);
+            return CommandResult.Success(MessageConstants.SuccessfullyCreated);
         }
 
-        logger.LogError(message: Messages.EntityCreationFailed, DateTime.UtcNow, typeof(Person), typeof(CreatePersonCommandHandler));
+        logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(Person), typeof(CreatePersonCommandHandler));
 
-        return CommandResult.Failure(Messages.InternalServerError);
+        return CommandResult.Failure(MessageConstants.InternalServerError);
     }
 }

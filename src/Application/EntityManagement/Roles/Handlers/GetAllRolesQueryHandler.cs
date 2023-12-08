@@ -17,7 +17,7 @@ public sealed class GetAllRolesQueryHandler(IRepository<Role> repository)
         return new QueryReferenceResponse<IEnumerable<Role>>(
             entities,
             true,
-            Messages.SuccessfullyRetrieved,
+            MessageConstants.SuccessfullyRetrieved,
             HttpStatusCode.OK);
     }
 }

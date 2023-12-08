@@ -17,7 +17,7 @@ public sealed class GetAllPaymentsQueryHandler(IRepository<Payment> repository)
         return new QueryReferenceResponse<IEnumerable<Payment>>(
             entities,
             true,
-            Messages.SuccessfullyRetrieved,
+            MessageConstants.SuccessfullyRetrieved,
             HttpStatusCode.OK);
     }
 }

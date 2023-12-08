@@ -28,7 +28,7 @@ public class AnswerService
             answerResult.Data is null ||
             !answerResult.Data.Any())
         {
-            return CommandResult.Failure(Messages.NotFound);
+            return CommandResult.Failure(MessageConstants.NotFound);
         }
 
         var deleteAnswerCommand = new DeleteAnswerByExternalIdCommand(externalId);
@@ -39,6 +39,6 @@ public class AnswerService
 
         await _mediator.Publish(answerDeletedEvent, cancellationToken);
 
-        return CommandResult.Success(Messages.SuccessfullyDeleted);
+        return CommandResult.Success(MessageConstants.SuccessfullyDeleted);
     }
 }

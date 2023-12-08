@@ -16,18 +16,18 @@ public class DeleteUserByInternalIdCommandHandler(IRepository<User> userReposito
 
         if (user is null)
         {
-            return CommandResult.Success(Messages.NotFound);
+            return CommandResult.Success(MessageConstants.NotFound);
         }
 
         var deletedUser = await userRepository.DeleteOneAsync(user, cancellationToken);
 
         if (deletedUser is not null)
         {
-            return CommandResult.Success(Messages.SuccessfullyDeleted);
+            return CommandResult.Success(MessageConstants.SuccessfullyDeleted);
         }
 
-        logger.LogError(Messages.EntityDeletionFailed, DateTime.UtcNow, typeof(User), typeof(DeleteUserByInternalIdCommandHandler));
+        logger.LogError(MessageConstants.EntityDeletionFailed, DateTime.UtcNow, typeof(User), typeof(DeleteUserByInternalIdCommandHandler));
 
-        return CommandResult.Failure(Messages.InternalServerError);
+        return CommandResult.Failure(MessageConstants.InternalServerError);
     }
 }

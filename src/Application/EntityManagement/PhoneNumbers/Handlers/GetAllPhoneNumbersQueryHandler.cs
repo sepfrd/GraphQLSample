@@ -17,7 +17,7 @@ public sealed class GetAllPhoneNumbersQueryHandler(IRepository<PhoneNumber> repo
         return new QueryReferenceResponse<IEnumerable<PhoneNumber>>(
             entities,
             true,
-            Messages.SuccessfullyRetrieved,
+            MessageConstants.SuccessfullyRetrieved,
             HttpStatusCode.OK);
     }
 }

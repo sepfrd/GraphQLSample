@@ -30,18 +30,18 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, CommandResult>
 
         if (user is null)
         {
-            return CommandResult.Failure(Messages.InvalidCredentials);
+            return CommandResult.Failure(MessageConstants.InvalidCredentials);
         }
 
         var isPasswordValid = request.LoginDto.Password == user.Password;
 
         if (!isPasswordValid)
         {
-            return CommandResult.Failure(Messages.InvalidCredentials);
+            return CommandResult.Failure(MessageConstants.InvalidCredentials);
         }
 
         var jwt = await _authenticationService.CreateJwtAsync(user, cancellationToken);
 
-        return CommandResult.Success(Messages.SuccessfullyLoggedIn, jwt);
+        return CommandResult.Success(MessageConstants.SuccessfullyLoggedIn, jwt);
     }
 }

@@ -17,7 +17,7 @@ public sealed class GetAllCategoriesQueryHandler(IRepository<Category> repositor
         return new QueryReferenceResponse<IEnumerable<Category>>(
             entities,
             true,
-            Messages.SuccessfullyRetrieved,
+            MessageConstants.SuccessfullyRetrieved,
             HttpStatusCode.OK);
     }
 }

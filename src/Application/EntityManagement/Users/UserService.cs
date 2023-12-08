@@ -31,7 +31,7 @@ public class UserService
             userResult.Data is null ||
             !userResult.Data.Any())
         {
-            return CommandResult.Failure(Messages.NotFound);
+            return CommandResult.Failure(MessageConstants.NotFound);
         }
 
         var deleteUserCommand = new DeleteUserByExternalIdCommand(externalId);
@@ -42,7 +42,7 @@ public class UserService
 
         await _mediator.Publish(userDeletedEvent, cancellationToken);
 
-        return CommandResult.Success(Messages.SuccessfullyDeleted);
+        return CommandResult.Success(MessageConstants.SuccessfullyDeleted);
     }
 
     public async Task<QueryReferenceResponse<User>> LoginAsync(LoginDto dto, CancellationToken cancellationToken = default)
@@ -56,7 +56,7 @@ public class UserService
             return new QueryReferenceResponse<User>(
                 null,
                 false,
-                Messages.InvalidCredentials);
+                MessageConstants.InvalidCredentials);
         }
 
         var user = queryResponse.Data;
@@ -66,13 +66,13 @@ public class UserService
             return new QueryReferenceResponse<User>(
                 null,
                 false,
-                Messages.InvalidCredentials);
+                MessageConstants.InvalidCredentials);
         }
 
         return new QueryReferenceResponse<User>(
             user,
             true,
-            Messages.SuccessfullyRetrieved,
+            MessageConstants.SuccessfullyRetrieved,
             HttpStatusCode.OK);
     }
 }

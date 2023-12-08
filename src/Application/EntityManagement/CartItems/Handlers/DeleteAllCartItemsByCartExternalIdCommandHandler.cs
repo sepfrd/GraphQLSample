@@ -30,21 +30,21 @@ public class DeleteAllCartItemsByCartExternalIdCommandHandler : IRequestHandler<
 
         if (cart is null)
         {
-            return CommandResult.Failure(Messages.BadRequest);
+            return CommandResult.Failure(MessageConstants.BadRequest);
         }
 
         var cartItems = cart.CartItems?.ToList();
 
         if (cartItems is null)
         {
-            _logger.LogError(Messages.EntityRelationshipsRetrievalFailed, DateTime.UtcNow, typeof(Cart), typeof(DeleteAllCartItemsByCartExternalIdCommandHandler));
+            _logger.LogError(MessageConstants.EntityRelationshipsRetrievalFailed, DateTime.UtcNow, typeof(Cart), typeof(DeleteAllCartItemsByCartExternalIdCommandHandler));
 
-            return CommandResult.Failure(Messages.InternalServerError);
+            return CommandResult.Failure(MessageConstants.InternalServerError);
         }
 
         if (cartItems.Count == 0)
         {
-            return CommandResult.Success(Messages.SuccessfullyDeleted);
+            return CommandResult.Success(MessageConstants.SuccessfullyDeleted);
         }
 
         foreach (var cartItem in cartItems)
@@ -52,6 +52,6 @@ public class DeleteAllCartItemsByCartExternalIdCommandHandler : IRequestHandler<
             await _cartItemRepository.DeleteOneAsync(cartItem, cancellationToken);
         }
 
-        return CommandResult.Success(Messages.SuccessfullyDeleted);
+        return CommandResult.Success(MessageConstants.SuccessfullyDeleted);
     }
 }

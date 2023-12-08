@@ -23,7 +23,7 @@ public sealed class GetAllAnswersQueryHandler : IRequestHandler<GetAllAnswersQue
         return new QueryReferenceResponse<IEnumerable<Answer>>(
             entities,
             true,
-            Messages.SuccessfullyRetrieved,
+            MessageConstants.SuccessfullyRetrieved,
             HttpStatusCode.OK);
     }
 }

@@ -24,7 +24,7 @@ public class UpdateCartItemQuantityCommandHandler : IRequestHandler<UpdateCartIt
 
         if (cartItem is null || cartItem.Quantity == request.NewQuantity)
         {
-            return CommandResult.Failure(Messages.BadRequest);
+            return CommandResult.Failure(MessageConstants.BadRequest);
         }
 
         cartItem.Quantity = request.NewQuantity;
@@ -33,11 +33,11 @@ public class UpdateCartItemQuantityCommandHandler : IRequestHandler<UpdateCartIt
 
         if (newCartItem is not null)
         {
-            return CommandResult.Success(Messages.SuccessfullyUpdated);
+            return CommandResult.Success(MessageConstants.SuccessfullyUpdated);
         }
 
-        _logger.LogError(Messages.EntityUpdateFailed, DateTime.UtcNow, typeof(CartItem), typeof(UpdateCartItemQuantityCommandHandler));
+        _logger.LogError(MessageConstants.EntityUpdateFailed, DateTime.UtcNow, typeof(CartItem), typeof(UpdateCartItemQuantityCommandHandler));
 
-        return CommandResult.Failure(Messages.InternalServerError);
+        return CommandResult.Failure(MessageConstants.InternalServerError);
     }
 }

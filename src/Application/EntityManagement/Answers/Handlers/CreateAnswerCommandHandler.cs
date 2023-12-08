@@ -36,23 +36,23 @@ public class CreateAnswerCommandHandler : IRequestHandler<CreateAnswerCommand, C
 
         if (question is null)
         {
-            return CommandResult.Failure(Messages.BadRequest);
+            return CommandResult.Failure(MessageConstants.BadRequest);
         }
 
         var user = await _userRepository.GetByExternalIdAsync(request.CreateAnswerDto.UserExternalId, cancellationToken);
 
         if (user is null)
         {
-            return CommandResult.Failure(Messages.BadRequest);
+            return CommandResult.Failure(MessageConstants.BadRequest);
         }
 
         var entity = _mappingService.Map<CreateAnswerDto, Answer>(request.CreateAnswerDto);
 
         if (entity is null)
         {
-            _logger.LogError(message: Messages.MappingFailed, DateTime.UtcNow, typeof(Answer), typeof(CreateAnswerCommandHandler));
+            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Answer), typeof(CreateAnswerCommandHandler));
 
-            return CommandResult.Failure(Messages.InternalServerError);
+            return CommandResult.Failure(MessageConstants.InternalServerError);
         }
 
         entity.QuestionId = question.InternalId;
@@ -62,11 +62,11 @@ public class CreateAnswerCommandHandler : IRequestHandler<CreateAnswerCommand, C
 
         if (createdEntity is not null)
         {
-            return CommandResult.Success(Messages.SuccessfullyCreated);
+            return CommandResult.Success(MessageConstants.SuccessfullyCreated);
         }
 
-        _logger.LogError(message: Messages.EntityCreationFailed, DateTime.UtcNow, typeof(Answer), typeof(CreateAnswerCommandHandler));
+        _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(Answer), typeof(CreateAnswerCommandHandler));
 
-        return CommandResult.Failure(Messages.InternalServerError);
+        return CommandResult.Failure(MessageConstants.InternalServerError);
     }
 }

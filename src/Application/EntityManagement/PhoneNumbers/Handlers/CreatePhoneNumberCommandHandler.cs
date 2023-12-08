@@ -21,20 +21,20 @@ public class CreatePhoneNumberCommandHandler(
 
         if (entity is null)
         {
-            logger.LogError(message: Messages.MappingFailed, DateTime.UtcNow, typeof(PhoneNumber), typeof(CreatePhoneNumberCommandHandler));
+            logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(PhoneNumber), typeof(CreatePhoneNumberCommandHandler));
 
-            return CommandResult.Failure(Messages.InternalServerError);
+            return CommandResult.Failure(MessageConstants.InternalServerError);
         }
 
         var createdEntity = await repository.CreateAsync(entity, cancellationToken);
 
         if (createdEntity is not null)
         {
-            return CommandResult.Success(Messages.SuccessfullyCreated);
+            return CommandResult.Success(MessageConstants.SuccessfullyCreated);
         }
 
-        logger.LogError(message: Messages.EntityCreationFailed, DateTime.UtcNow, typeof(PhoneNumber), typeof(CreatePhoneNumberCommandHandler));
+        logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(PhoneNumber), typeof(CreatePhoneNumberCommandHandler));
 
-        return CommandResult.Failure(Messages.InternalServerError);
+        return CommandResult.Failure(MessageConstants.InternalServerError);
     }
 }

@@ -23,7 +23,7 @@ public sealed class GetAllOrderItemsQueryHandler : IRequestHandler<GetAllOrderIt
         return new QueryReferenceResponse<IEnumerable<OrderItem>>(
             entities,
             true,
-            Messages.SuccessfullyRetrieved,
+            MessageConstants.SuccessfullyRetrieved,
             HttpStatusCode.OK);
     }
 }

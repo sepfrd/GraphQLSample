@@ -24,18 +24,18 @@ public class DeleteAnswerByInternalIdCommandHandler : IRequestHandler<DeleteAnsw
 
         if (entity is null)
         {
-            return CommandResult.Failure(Messages.NotFound);
+            return CommandResult.Failure(MessageConstants.NotFound);
         }
 
         var deletedEntity = await _repository.DeleteOneAsync(entity, cancellationToken);
 
         if (deletedEntity is not null)
         {
-            return CommandResult.Success(Messages.SuccessfullyDeleted);
+            return CommandResult.Success(MessageConstants.SuccessfullyDeleted);
         }
 
-        _logger.LogError(Messages.EntityDeletionFailed, DateTime.UtcNow, typeof(Answer), typeof(DeleteAnswerByInternalIdCommandHandler));
+        _logger.LogError(MessageConstants.EntityDeletionFailed, DateTime.UtcNow, typeof(Answer), typeof(DeleteAnswerByInternalIdCommandHandler));
 
-        return CommandResult.Failure(Messages.InternalServerError);
+        return CommandResult.Failure(MessageConstants.InternalServerError);
     }
 }

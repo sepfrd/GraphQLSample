@@ -18,13 +18,13 @@ public class CreateCategoryCommandHandler(IRepository<Category> categoryReposito
 
         if (category is null)
         {
-            logger.LogError(Messages.MappingFailed, DateTime.UtcNow, typeof(Category), typeof(CreateCategoryCommandHandler));
+            logger.LogError(MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Category), typeof(CreateCategoryCommandHandler));
 
-            return CommandResult.Failure(Messages.InternalServerError);
+            return CommandResult.Failure(MessageConstants.InternalServerError);
         }
 
         await categoryRepository.CreateAsync(category, cancellationToken);
 
-        return CommandResult.Success(Messages.SuccessfullyCreated);
+        return CommandResult.Success(MessageConstants.SuccessfullyCreated);
     }
 }

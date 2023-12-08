@@ -23,7 +23,7 @@ public sealed class GetAllCommentsQueryHandler : IRequestHandler<GetAllCommentsQ
         return new QueryReferenceResponse<IEnumerable<Comment>>(
             entities,
             true,
-            Messages.SuccessfullyRetrieved,
+            MessageConstants.SuccessfullyRetrieved,
             HttpStatusCode.OK);
     }
 }

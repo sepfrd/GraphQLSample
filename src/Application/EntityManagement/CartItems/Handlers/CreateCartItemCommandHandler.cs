@@ -38,21 +38,21 @@ public class CreateCartItemCommandHandler : IRequestHandler<CreateCartItemComman
 
         if (cartEntity is null)
         {
-            return CommandResult.Failure(Messages.BadRequest);
+            return CommandResult.Failure(MessageConstants.BadRequest);
         }
 
         var product = await _productRepository.GetByExternalIdAsync(request.CreateCartItemDto.ProductExternalId, cancellationToken);
 
         if (product is null)
         {
-            return CommandResult.Failure(Messages.BadRequest);
+            return CommandResult.Failure(MessageConstants.BadRequest);
         }
 
         if (cartEntity.CartItems is null)
         {
-            _logger.LogError(Messages.EntityRelationshipsRetrievalFailed, DateTime.UtcNow, typeof(Cart), typeof(CreateCartItemCommandHandler));
+            _logger.LogError(MessageConstants.EntityRelationshipsRetrievalFailed, DateTime.UtcNow, typeof(Cart), typeof(CreateCartItemCommandHandler));
 
-            return CommandResult.Failure(Messages.InternalServerError);
+            return CommandResult.Failure(MessageConstants.InternalServerError);
         }
 
         var existingCartItem = cartEntity.CartItems.FirstOrDefault(item => item.Product?.ExternalId == product.ExternalId);
@@ -61,16 +61,16 @@ public class CreateCartItemCommandHandler : IRequestHandler<CreateCartItemComman
         {
             existingCartItem.Quantity += request.CreateCartItemDto.Quantity;
 
-            return CommandResult.Success(Messages.SuccessfullyUpdated);
+            return CommandResult.Success(MessageConstants.SuccessfullyUpdated);
         }
 
         var cartItem = _mappingService.Map<CreateCartItemDto, CartItem>(request.CreateCartItemDto);
 
         if (cartItem is null)
         {
-            _logger.LogError(Messages.MappingFailed, DateTime.UtcNow, typeof(CartItem), typeof(CreateCartItemCommandHandler));
+            _logger.LogError(MessageConstants.MappingFailed, DateTime.UtcNow, typeof(CartItem), typeof(CreateCartItemCommandHandler));
 
-            return CommandResult.Failure(Messages.InternalServerError);
+            return CommandResult.Failure(MessageConstants.InternalServerError);
         }
 
         cartItem.CartId = cartEntity.InternalId;
@@ -80,11 +80,11 @@ public class CreateCartItemCommandHandler : IRequestHandler<CreateCartItemComman
 
         if (createdCartItem is not null)
         {
-            return CommandResult.Success(Messages.SuccessfullyCreated);
+            return CommandResult.Success(MessageConstants.SuccessfullyCreated);
         }
 
-        _logger.LogError(Messages.EntityCreationFailed, DateTime.UtcNow, typeof(CartItem), typeof(CreateCartItemCommandHandler));
+        _logger.LogError(MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(CartItem), typeof(CreateCartItemCommandHandler));
 
-        return CommandResult.Failure(Messages.InternalServerError);
+        return CommandResult.Failure(MessageConstants.InternalServerError);
     }
 }

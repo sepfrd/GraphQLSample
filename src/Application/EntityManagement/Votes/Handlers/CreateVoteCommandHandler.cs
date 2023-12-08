@@ -47,16 +47,16 @@ public class CreateVoteCommandHandler : IRequestHandler<CreateVoteCommand, Comma
 
         if (user is null)
         {
-            return CommandResult.Failure(Messages.BadRequest);
+            return CommandResult.Failure(MessageConstants.BadRequest);
         }
 
         var entity = _mappingService.Map<CreateVoteDto, Vote>(request.CreateVoteDto);
 
         if (entity is null)
         {
-            _logger.LogError(message: Messages.MappingFailed, DateTime.UtcNow, typeof(Vote), typeof(CreateVoteCommandHandler));
+            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Vote), typeof(CreateVoteCommandHandler));
 
-            return CommandResult.Failure(Messages.InternalServerError);
+            return CommandResult.Failure(MessageConstants.InternalServerError);
         }
 
         BaseEntity? content = entity.ContentType switch
@@ -70,7 +70,7 @@ public class CreateVoteCommandHandler : IRequestHandler<CreateVoteCommand, Comma
 
         if (content is null)
         {
-            return CommandResult.Failure(Messages.BadRequest);
+            return CommandResult.Failure(MessageConstants.BadRequest);
         }
 
         entity.UserId = user.InternalId;
@@ -80,11 +80,11 @@ public class CreateVoteCommandHandler : IRequestHandler<CreateVoteCommand, Comma
 
         if (createdEntity is not null)
         {
-            return CommandResult.Success(Messages.SuccessfullyCreated);
+            return CommandResult.Success(MessageConstants.SuccessfullyCreated);
         }
 
-        _logger.LogError(message: Messages.EntityCreationFailed, DateTime.UtcNow, typeof(Vote), typeof(CreateVoteCommandHandler));
+        _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(Vote), typeof(CreateVoteCommandHandler));
 
-        return CommandResult.Failure(Messages.InternalServerError);
+        return CommandResult.Failure(MessageConstants.InternalServerError);
     }
 }

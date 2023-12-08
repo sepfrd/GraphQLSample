@@ -17,7 +17,7 @@ public sealed class GetAllVotesQueryHandler(IRepository<Vote> repository)
         return new QueryReferenceResponse<IEnumerable<Vote>>(
             entities,
             true,
-            Messages.SuccessfullyRetrieved,
+            MessageConstants.SuccessfullyRetrieved,
             HttpStatusCode.OK);
     }
 }

@@ -28,7 +28,7 @@ public class ProductService
             productResult.Data is null ||
             !productResult.Data.Any())
         {
-            return CommandResult.Failure(Messages.NotFound);
+            return CommandResult.Failure(MessageConstants.NotFound);
         }
 
         var deleteProductCommand = new DeleteProductByExternalIdCommand(externalId);
@@ -39,6 +39,6 @@ public class ProductService
 
         await _mediator.Publish(productDeletedEvent, cancellationToken);
 
-        return CommandResult.Success(Messages.SuccessfullyDeleted);
+        return CommandResult.Success(MessageConstants.SuccessfullyDeleted);
     }
 }

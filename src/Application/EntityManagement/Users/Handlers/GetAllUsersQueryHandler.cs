@@ -24,7 +24,7 @@ public sealed class GetAllUsersQueryHandler
         return new QueryReferenceResponse<IEnumerable<User>>(
             users,
             true,
-            Messages.SuccessfullyRetrieved,
+            MessageConstants.SuccessfullyRetrieved,
             HttpStatusCode.OK);
     }
 }

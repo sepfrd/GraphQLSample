@@ -17,18 +17,18 @@ public class DeleteProductByExternalIdCommandHandler(IRepository<Product> reposi
 
         if (entity is null)
         {
-            return CommandResult.Failure(Messages.NotFound);
+            return CommandResult.Failure(MessageConstants.NotFound);
         }
 
         var deletedEntity = await repository.DeleteOneAsync(entity, cancellationToken);
 
         if (deletedEntity is not null)
         {
-            return CommandResult.Success(Messages.SuccessfullyDeleted);
+            return CommandResult.Success(MessageConstants.SuccessfullyDeleted);
         }
 
-        logger.LogError(Messages.EntityDeletionFailed, DateTime.UtcNow, typeof(Product), typeof(DeleteAnswerByExternalIdCommand));
+        logger.LogError(MessageConstants.EntityDeletionFailed, DateTime.UtcNow, typeof(Product), typeof(DeleteAnswerByExternalIdCommand));
 
-        return CommandResult.Failure(Messages.InternalServerError);
+        return CommandResult.Failure(MessageConstants.InternalServerError);
     }
 }

@@ -25,7 +25,7 @@ public class CreateUserCommandHandler(
 
         if (!isUsernameUnique)
         {
-            return CommandResult.Failure(Messages.DuplicateUsername);
+            return CommandResult.Failure(MessageConstants.DuplicateUsername);
         }
 
         var userInternalId = Guid.NewGuid();
@@ -34,21 +34,21 @@ public class CreateUserCommandHandler(
 
         if (person is null)
         {
-            logger.LogError(Messages.EntityCreationFailed, DateTime.UtcNow, typeof(Person), typeof(CreateUserCommandHandler));
+            logger.LogError(MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(Person), typeof(CreateUserCommandHandler));
 
-            return CommandResult.Failure(Messages.InternalServerError);
+            return CommandResult.Failure(MessageConstants.InternalServerError);
         }
 
         var user = await CreateUserAsync(request.UserDto, userInternalId, person.InternalId, cancellationToken);
 
         if (user is not null)
         {
-            return CommandResult.Success(Messages.SuccessfullyCreated);
+            return CommandResult.Success(MessageConstants.SuccessfullyCreated);
         }
 
-        logger.LogError(Messages.EntityCreationFailed, DateTime.UtcNow, typeof(User), typeof(CreateUserCommandHandler));
+        logger.LogError(MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(User), typeof(CreateUserCommandHandler));
 
-        return CommandResult.Failure(Messages.InternalServerError);
+        return CommandResult.Failure(MessageConstants.InternalServerError);
     }
 
     private async Task<bool> IsUsernameUniqueAsync(string username, CancellationToken cancellationToken = default)
@@ -122,7 +122,7 @@ public class CreateUserCommandHandler(
             return createdUser;
         }
 
-        logger.LogError(Messages.EntityCreationFailed, DateTime.UtcNow, typeof(User), typeof(CreateUserCommandHandler));
+        logger.LogError(MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(User), typeof(CreateUserCommandHandler));
 
         return null;
     }

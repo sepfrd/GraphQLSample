@@ -29,27 +29,27 @@ public class UpdateAnswerCommandHandler : IRequestHandler<UpdateAnswerCommand, C
 
         if (entity is null)
         {
-            return CommandResult.Success(Messages.NotFound);
+            return CommandResult.Success(MessageConstants.NotFound);
         }
 
         var newEntity = _mappingService.Map(request.AnswerDto, entity);
 
         if (newEntity is null)
         {
-            _logger.LogError(message: Messages.MappingFailed, DateTime.UtcNow, typeof(Answer), typeof(UpdateAnswerCommandHandler));
+            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Answer), typeof(UpdateAnswerCommandHandler));
 
-            return CommandResult.Failure(Messages.InternalServerError);
+            return CommandResult.Failure(MessageConstants.InternalServerError);
         }
 
         var updatedEntity = await _repository.UpdateAsync(newEntity, cancellationToken);
 
         if (updatedEntity is not null)
         {
-            return CommandResult.Success(Messages.SuccessfullyUpdated);
+            return CommandResult.Success(MessageConstants.SuccessfullyUpdated);
         }
 
-        _logger.LogError(message: Messages.EntityUpdateFailed, DateTime.UtcNow, typeof(Answer), typeof(UpdateAnswerCommandHandler));
+        _logger.LogError(message: MessageConstants.EntityUpdateFailed, DateTime.UtcNow, typeof(Answer), typeof(UpdateAnswerCommandHandler));
 
-        return CommandResult.Failure(Messages.InternalServerError);
+        return CommandResult.Failure(MessageConstants.InternalServerError);
     }
 }

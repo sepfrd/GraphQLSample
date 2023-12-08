@@ -28,7 +28,7 @@ public class RoleService
             roleResult.Data is null ||
             !roleResult.Data.Any())
         {
-            return CommandResult.Failure(Messages.NotFound);
+            return CommandResult.Failure(MessageConstants.NotFound);
         }
 
         var deleteRoleCommand = new DeleteRoleByExternalIdCommand(externalId);
@@ -39,6 +39,6 @@ public class RoleService
 
         await _mediator.Publish(roleDeletedEvent, cancellationToken);
 
-        return CommandResult.Success(Messages.SuccessfullyDeleted);
+        return CommandResult.Success(MessageConstants.SuccessfullyDeleted);
     }
 }

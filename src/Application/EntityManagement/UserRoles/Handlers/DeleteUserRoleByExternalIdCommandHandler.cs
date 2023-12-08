@@ -17,18 +17,18 @@ public class DeleteUserRoleByExternalIdCommandHandler(IRepository<UserRole> repo
 
         if (entity is null)
         {
-            return CommandResult.Failure(Messages.NotFound);
+            return CommandResult.Failure(MessageConstants.NotFound);
         }
 
         var deletedEntity = await repository.DeleteOneAsync(entity, cancellationToken);
 
         if (deletedEntity is not null)
         {
-            return CommandResult.Success(Messages.SuccessfullyDeleted);
+            return CommandResult.Success(MessageConstants.SuccessfullyDeleted);
         }
 
-        logger.LogError(Messages.EntityDeletionFailed, DateTime.UtcNow, typeof(UserRole), typeof(DeleteAnswerByExternalIdCommand));
+        logger.LogError(MessageConstants.EntityDeletionFailed, DateTime.UtcNow, typeof(UserRole), typeof(DeleteAnswerByExternalIdCommand));
 
-        return CommandResult.Failure(Messages.InternalServerError);
+        return CommandResult.Failure(MessageConstants.InternalServerError);
     }
 }

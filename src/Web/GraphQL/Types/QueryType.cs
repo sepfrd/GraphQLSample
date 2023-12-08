@@ -1,33 +1,27 @@
-﻿using MediatR;
-
-namespace Web.GraphQL.Types;
+﻿namespace Web.GraphQL.Types;
 
 public sealed class QueryType : ObjectType<Query>
-{
-    private readonly ISender _sender;
-
-    public QueryType(ISender sender)
-    {
-        _sender = sender;
-    }
-
+{ 
     protected override void Configure(IObjectTypeDescriptor<Query> descriptor)
     {
         descriptor
             .Field(query =>
-                query.GetUsersAsync(default, default, _sender, default!))
+                query.GetUsersAsync(default, default, default!, default!))
+            .Authorize()
             .UseFiltering()
             .UseSorting();
 
         descriptor
             .Field(query =>
-                query.GetCategoriesAsync(default, _sender, default!))
+                query.GetCategoriesAsync(default, default!, default!))
+            .AllowAnonymous()
             .UseFiltering()
             .UseSorting();
 
         descriptor
             .Field(query =>
-                query.GetProductsAsync(default, default, _sender, default!))
+                query.GetProductsAsync(default, default, default!, default!))
+            .AllowAnonymous()
             .UseFiltering()
             .UseSorting();
     }

@@ -28,7 +28,7 @@ public class CommentService
             commentResult.Data is null ||
             !commentResult.Data.Any())
         {
-            return CommandResult.Failure(Messages.NotFound);
+            return CommandResult.Failure(MessageConstants.NotFound);
         }
 
         var deleteCommentCommand = new DeleteCommentByExternalIdCommand(externalId);
@@ -39,6 +39,6 @@ public class CommentService
 
         await _mediator.Publish(commentDeletedEvent, cancellationToken);
 
-        return CommandResult.Success(Messages.SuccessfullyDeleted);
+        return CommandResult.Success(MessageConstants.SuccessfullyDeleted);
     }
 }

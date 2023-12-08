@@ -20,27 +20,27 @@ public class UpdatePaymentCommandHandler(
 
         if (entity is null)
         {
-            return CommandResult.Success(Messages.NotFound);
+            return CommandResult.Success(MessageConstants.NotFound);
         }
 
         var newEntity = mappingService.Map(request.CreatePaymentDto, entity);
 
         if (newEntity is null)
         {
-            logger.LogError(message: Messages.MappingFailed, DateTime.UtcNow, typeof(Payment), typeof(UpdatePaymentCommandHandler));
+            logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Payment), typeof(UpdatePaymentCommandHandler));
 
-            return CommandResult.Failure(Messages.InternalServerError);
+            return CommandResult.Failure(MessageConstants.InternalServerError);
         }
 
         var updatedEntity = await repository.UpdateAsync(newEntity, cancellationToken);
 
         if (updatedEntity is not null)
         {
-            return CommandResult.Success(Messages.SuccessfullyUpdated);
+            return CommandResult.Success(MessageConstants.SuccessfullyUpdated);
         }
 
-        logger.LogError(message: Messages.EntityUpdateFailed, DateTime.UtcNow, typeof(Payment), typeof(UpdatePaymentCommandHandler));
+        logger.LogError(message: MessageConstants.EntityUpdateFailed, DateTime.UtcNow, typeof(Payment), typeof(UpdatePaymentCommandHandler));
 
-        return CommandResult.Failure(Messages.InternalServerError);
+        return CommandResult.Failure(MessageConstants.InternalServerError);
     }
 }

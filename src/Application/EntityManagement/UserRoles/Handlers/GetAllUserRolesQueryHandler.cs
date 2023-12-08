@@ -23,7 +23,7 @@ public sealed class GetAllUserRolesQueryHandler : IRequestHandler<GetAllUserRole
         return new QueryReferenceResponse<IEnumerable<UserRole>>(
             entities,
             true,
-            Messages.SuccessfullyRetrieved,
+            MessageConstants.SuccessfullyRetrieved,
             HttpStatusCode.OK);
     }
 }

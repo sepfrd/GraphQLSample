@@ -24,7 +24,7 @@ public class GetAllCartItemsQueryHandler : IRequestHandler<GetAllCartItemsQuery,
             (
             entities,
             true,
-            Messages.SuccessfullyRetrieved,
+            MessageConstants.SuccessfullyRetrieved,
             HttpStatusCode.OK
             );
     }

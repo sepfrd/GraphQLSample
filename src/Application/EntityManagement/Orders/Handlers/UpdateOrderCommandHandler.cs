@@ -29,27 +29,27 @@ public class UpdateOrderCommandHandler : IRequestHandler<UpdateOrderCommand, Com
 
         if (entity is null)
         {
-            return CommandResult.Success(Messages.NotFound);
+            return CommandResult.Success(MessageConstants.NotFound);
         }
 
         var newEntity = _mappingService.Map(request.CreateOrderDto, entity);
 
         if (newEntity is null)
         {
-            _logger.LogError(message: Messages.MappingFailed, DateTime.UtcNow, typeof(Order), typeof(UpdateOrderCommandHandler));
+            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Order), typeof(UpdateOrderCommandHandler));
 
-            return CommandResult.Failure(Messages.InternalServerError);
+            return CommandResult.Failure(MessageConstants.InternalServerError);
         }
 
         var updatedEntity = await _repository.UpdateAsync(newEntity, cancellationToken);
 
         if (updatedEntity is not null)
         {
-            return CommandResult.Success(Messages.SuccessfullyUpdated);
+            return CommandResult.Success(MessageConstants.SuccessfullyUpdated);
         }
 
-        _logger.LogError(message: Messages.EntityUpdateFailed, DateTime.UtcNow, typeof(Order), typeof(UpdateOrderCommandHandler));
+        _logger.LogError(message: MessageConstants.EntityUpdateFailed, DateTime.UtcNow, typeof(Order), typeof(UpdateOrderCommandHandler));
 
-        return CommandResult.Failure(Messages.InternalServerError);
+        return CommandResult.Failure(MessageConstants.InternalServerError);
     }
 }

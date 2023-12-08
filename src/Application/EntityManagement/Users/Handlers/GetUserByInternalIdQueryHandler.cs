@@ -18,14 +18,14 @@ public class GetUserByInternalIdQueryHandler(IRepository<User> userRepository) :
             return new QueryReferenceResponse<User>(
                 null,
                 true,
-                Messages.NotFound,
+                MessageConstants.NotFound,
                 HttpStatusCode.NoContent);
         }
 
         return new QueryReferenceResponse<User>(
             user,
             true,
-            Messages.SuccessfullyRetrieved,
+            MessageConstants.SuccessfullyRetrieved,
             HttpStatusCode.OK);
     }
 }

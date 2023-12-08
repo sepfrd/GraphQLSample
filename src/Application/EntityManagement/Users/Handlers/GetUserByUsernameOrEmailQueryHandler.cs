@@ -25,14 +25,14 @@ public sealed class GetUserByUsernameOrEmailQueryHandler(IRepository<User> userR
             return new QueryReferenceResponse<User>(
                 user,
                 true,
-                Messages.SuccessfullyRetrieved,
+                MessageConstants.SuccessfullyRetrieved,
                 HttpStatusCode.OK);
         }
 
         return new QueryReferenceResponse<User>(
             null,
             true,
-            Messages.NotFound,
+            MessageConstants.NotFound,
             HttpStatusCode.NoContent);
     }
 }

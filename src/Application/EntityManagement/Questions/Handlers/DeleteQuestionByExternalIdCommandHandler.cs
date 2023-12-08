@@ -25,18 +25,18 @@ public class DeleteQuestionByExternalIdCommandHandler : IRequestHandler<DeleteQu
 
         if (entity is null)
         {
-            return CommandResult.Failure(Messages.NotFound);
+            return CommandResult.Failure(MessageConstants.NotFound);
         }
 
         var deletedEntity = await _repository.DeleteOneAsync(entity, cancellationToken);
 
         if (deletedEntity is not null)
         {
-            return CommandResult.Success(Messages.SuccessfullyDeleted);
+            return CommandResult.Success(MessageConstants.SuccessfullyDeleted);
         }
 
-        _logger.LogError(Messages.EntityDeletionFailed, DateTime.UtcNow, typeof(Question), typeof(DeleteAnswerByExternalIdCommand));
+        _logger.LogError(MessageConstants.EntityDeletionFailed, DateTime.UtcNow, typeof(Question), typeof(DeleteAnswerByExternalIdCommand));
 
-        return CommandResult.Failure(Messages.InternalServerError);
+        return CommandResult.Failure(MessageConstants.InternalServerError);
     }
 }

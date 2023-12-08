@@ -23,7 +23,7 @@ public sealed class GetAllAddressesQueryHandler : IRequestHandler<GetAllAddresse
         return new QueryReferenceResponse<IEnumerable<Address>>(
             entities,
             true,
-            Messages.SuccessfullyRetrieved,
+            MessageConstants.SuccessfullyRetrieved,
             HttpStatusCode.OK);
     }
 }

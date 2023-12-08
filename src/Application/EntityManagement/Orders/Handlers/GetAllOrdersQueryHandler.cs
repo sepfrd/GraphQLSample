@@ -24,7 +24,7 @@ public sealed class GetAllOrdersQueryHandler : IRequestHandler<GetAllOrdersQuery
             (
             entities,
             true,
-            Messages.SuccessfullyRetrieved,
+            MessageConstants.SuccessfullyRetrieved,
             HttpStatusCode.OK
             );
     }
