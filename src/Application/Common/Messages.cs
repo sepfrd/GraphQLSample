@@ -8,6 +8,7 @@ public static class Messages
     public const string SuccessfullyDeleted = "Successfully deleted.";
     public const string SuccessfullyRetrieved = "Successfully retrieved.";
     public const string SuccessfullyUpdated = "Successfully updated.";
+    public const string SuccessfullyLoggedIn = "Successfully logged in.";
 
     /* --------------------------------- 400 --------------------------------- */
 

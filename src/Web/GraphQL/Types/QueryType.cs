@@ -2,7 +2,7 @@
 
 namespace Web.GraphQL.Types;
 
-public class QueryType : ObjectType<Query>
+public sealed class QueryType : ObjectType<Query>
 {
     private readonly ISender _sender;
 

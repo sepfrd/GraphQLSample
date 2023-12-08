@@ -22,19 +22,19 @@ public class UserType : ObjectType<User>
             .Field(user => user.Cart)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetCartAsync(default!, default!));
+                    resolvers.GetCartAsync(default!, default!));
 
         descriptor
             .Field(user => user.Person)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetPersonAsync(default!, default!));
+                    resolvers.GetPersonAsync(default!, default!));
 
         descriptor
             .Field(user => user.Addresses)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetAddressesAsync(default!, default!))
+                    resolvers.GetAddressesAsync(default!, default!))
             .UseFiltering()
             .UseSorting();
 
@@ -42,7 +42,7 @@ public class UserType : ObjectType<User>
             .Field(user => user.Answers)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetAnswersAsync(default!, default!))
+                    resolvers.GetAnswersAsync(default!, default!))
             .UseFiltering()
             .UseSorting();
 
@@ -50,7 +50,7 @@ public class UserType : ObjectType<User>
             .Field(user => user.Comments)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetCommentsAsync(default!, default!))
+                    resolvers.GetCommentsAsync(default!, default!))
             .UseFiltering()
             .UseSorting();
 
@@ -58,7 +58,7 @@ public class UserType : ObjectType<User>
             .Field(user => user.Orders)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetOrdersAsync(default!, default!))
+                    resolvers.GetOrdersAsync(default!, default!))
             .UseFiltering()
             .UseSorting();
 
@@ -66,7 +66,7 @@ public class UserType : ObjectType<User>
             .Field(user => user.UserRoles)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetUserRolesAsync(default!, default!))
+                    resolvers.GetUserRolesAsync(default!, default!))
             .UseFiltering()
             .UseSorting();
 
@@ -74,7 +74,7 @@ public class UserType : ObjectType<User>
             .Field(user => user.Questions)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetQuestionsAsync(default!, default!))
+                    resolvers.GetQuestionsAsync(default!, default!))
             .UseFiltering()
             .UseSorting();
 
@@ -82,13 +82,13 @@ public class UserType : ObjectType<User>
             .Field(user => user.Votes)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetVotesAsync(default!, default!));
+                    resolvers.GetVotesAsync(default!, default!));
 
         descriptor
             .Field(user => user.PhoneNumbers)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetPhoneNumbersAsync(default!, default!))
+                    resolvers.GetPhoneNumbersAsync(default!, default!))
             .UseFiltering()
             .UseSorting();
 
@@ -124,7 +124,7 @@ public class UserType : ObjectType<User>
 
     private class Resolvers
     {
-        public static async Task<Person?> GetPersonAsync([Parent] User user, [Service] ISender sender)
+        public async Task<Person?> GetPersonAsync([Parent] User user, [Service] ISender sender)
         {
             var personsQuery = new GetAllPersonsQuery(
                 new Pagination(),
@@ -135,7 +135,7 @@ public class UserType : ObjectType<User>
             return result.Data?.FirstOrDefault();
         }
 
-        public static async Task<Cart?> GetCartAsync([Parent] User user, [Service] ISender sender)
+        public async Task<Cart?> GetCartAsync([Parent] User user, [Service] ISender sender)
         {
             var cartsQuery = new GetAllCartsQuery(
                 new Pagination(),
@@ -146,7 +146,7 @@ public class UserType : ObjectType<User>
             return result.Data?.FirstOrDefault();
         }
 
-        public static async Task<IEnumerable<Address>?> GetAddressesAsync([Parent] User user, [Service] ISender sender)
+        public async Task<IEnumerable<Address>?> GetAddressesAsync([Parent] User user, [Service] ISender sender)
         {
             var addressesQuery = new GetAllAddressesQuery(
                 new Pagination(1, int.MaxValue),
@@ -157,7 +157,7 @@ public class UserType : ObjectType<User>
             return result.Data;
         }
 
-        public static async Task<IEnumerable<Answer>?> GetAnswersAsync([Parent] User user, [Service] ISender sender)
+        public async Task<IEnumerable<Answer>?> GetAnswersAsync([Parent] User user, [Service] ISender sender)
         {
             var answersQuery = new GetAllAnswersQuery(
                 new Pagination(1, int.MaxValue),
@@ -168,7 +168,7 @@ public class UserType : ObjectType<User>
             return result.Data;
         }
 
-        public static async Task<IEnumerable<Comment>?> GetCommentsAsync([Parent] User user, [Service] ISender sender)
+        public async Task<IEnumerable<Comment>?> GetCommentsAsync([Parent] User user, [Service] ISender sender)
         {
             var commentsQuery = new GetAllCommentsQuery(
                 new Pagination(1, int.MaxValue),
@@ -179,7 +179,7 @@ public class UserType : ObjectType<User>
             return result.Data;
         }
 
-        public static async Task<IEnumerable<Order>?> GetOrdersAsync([Parent] User user, [Service] ISender sender)
+        public async Task<IEnumerable<Order>?> GetOrdersAsync([Parent] User user, [Service] ISender sender)
         {
             var ordersQuery = new GetAllOrdersQuery(
                 new Pagination(1, int.MaxValue),
@@ -190,7 +190,7 @@ public class UserType : ObjectType<User>
             return result.Data;
         }
 
-        public static async Task<IEnumerable<Question>?> GetQuestionsAsync([Parent] User user, [Service] ISender sender)
+        public async Task<IEnumerable<Question>?> GetQuestionsAsync([Parent] User user, [Service] ISender sender)
         {
             var questionsQuery = new GetAllQuestionsQuery(
                 new Pagination(1, int.MaxValue),
@@ -201,7 +201,7 @@ public class UserType : ObjectType<User>
             return result.Data;
         }
 
-        public static async Task<IEnumerable<UserRole>?> GetUserRolesAsync([Parent] User user, [Service] ISender sender)
+        public async Task<IEnumerable<UserRole>?> GetUserRolesAsync([Parent] User user, [Service] ISender sender)
         {
             var userRolesQuery = new GetAllUserRolesQuery(
                 new Pagination(1, int.MaxValue),
@@ -212,7 +212,7 @@ public class UserType : ObjectType<User>
             return result.Data;
         }
 
-        public static async Task<IEnumerable<Vote>?> GetVotesAsync([Parent] User user, [Service] ISender sender)
+        public async Task<IEnumerable<Vote>?> GetVotesAsync([Parent] User user, [Service] ISender sender)
         {
             var votesQuery = new GetAllVotesQuery(
                 new Pagination(1, int.MaxValue),
@@ -223,7 +223,7 @@ public class UserType : ObjectType<User>
             return result.Data;
         }
 
-        public static async Task<IEnumerable<PhoneNumber>?> GetPhoneNumbersAsync([Parent] User user, [Service] ISender sender)
+        public async Task<IEnumerable<PhoneNumber>?> GetPhoneNumbersAsync([Parent] User user, [Service] ISender sender)
         {
             var phoneNumbersQuery = new GetAllPhoneNumbersQuery(
                 new Pagination(1, int.MaxValue),

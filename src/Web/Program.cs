@@ -52,8 +52,8 @@ try
         // .UseHttpsRedirection()
         // .UseCors("AllowAnyOrigin")
         .UseRouting()
-        // .UseAuthentication()
-        // .UseAuthorization()
+        .UseAuthentication()
+        .UseAuthorization()
         .UseEndpoints(endpoints =>
         {
             endpoints.MapGraphQL();

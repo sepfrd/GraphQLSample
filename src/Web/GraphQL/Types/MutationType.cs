@@ -1,3 +1,3 @@
 ﻿namespace Web.GraphQL.Types;
 
-public class MutationType : ObjectType<Mutation>;
+public sealed class MutationType : ObjectType<Mutation>;

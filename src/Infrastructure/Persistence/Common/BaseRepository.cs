@@ -10,21 +10,19 @@ namespace Infrastructure.Persistence.Common;
 public class BaseRepository<TEntity> : IRepository<TEntity>
     where TEntity : BaseEntity
 {
-    public readonly IMongoDatabase MongoDatabase;
-
     private readonly IMongoCollection<TEntity> _mongoDbCollection;
 
     protected BaseRepository(IOptions<MongoDbSettings> databaseSettings)
     {
         var mongoClient = new MongoClient(databaseSettings.Value.ConnectionString);
 
-        MongoDatabase = mongoClient.GetDatabase(databaseSettings.Value.DatabaseName);
+        IMongoDatabase mongoDatabase = mongoClient.GetDatabase(databaseSettings.Value.DatabaseName);
 
         var collectionName = typeof(TEntity).Name.Pluralize();
 
         collectionName = collectionName == "People" ? "Persons" : collectionName;
 
-        _mongoDbCollection = MongoDatabase.GetCollection<TEntity>(collectionName);
+        _mongoDbCollection = mongoDatabase.GetCollection<TEntity>(collectionName);
     }
 
     public virtual async Task<TEntity?> CreateAsync(TEntity entity, CancellationToken cancellationToken = default)

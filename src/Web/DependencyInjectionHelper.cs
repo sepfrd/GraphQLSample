@@ -23,6 +23,7 @@ public static class DependencyInjectionHelper
     {
         services
             .AddGraphQLServer()
+            .AddAuthorization()
             .AddQueryType<QueryType>()
             .AddMutationType<MutationType>()
             .AddMaxExecutionDepthRule(15)

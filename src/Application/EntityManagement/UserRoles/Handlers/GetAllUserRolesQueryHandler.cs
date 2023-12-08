@@ -7,12 +7,18 @@ using System.Net;
 
 namespace Application.EntityManagement.UserRoles.Handlers;
 
-public sealed class GetAllUserRolesQueryHandler(IRepository<UserRole> repository)
-    : IRequestHandler<GetAllUserRolesQuery, QueryReferenceResponse<IEnumerable<UserRole>>>
+public sealed class GetAllUserRolesQueryHandler : IRequestHandler<GetAllUserRolesQuery, QueryReferenceResponse<IEnumerable<UserRole>>>
 {
+    private readonly IRepository<UserRole> _repository;
+
+    public GetAllUserRolesQueryHandler(IRepository<UserRole> repository)
+    {
+        _repository = repository;
+    }
+
     public async Task<QueryReferenceResponse<IEnumerable<UserRole>>> Handle(GetAllUserRolesQuery request, CancellationToken cancellationToken)
     {
-        var entities = await repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
+        var entities = await _repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
 
         return new QueryReferenceResponse<IEnumerable<UserRole>>(
             entities,

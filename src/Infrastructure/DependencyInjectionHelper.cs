@@ -6,14 +6,18 @@ using Domain.Entities;
 using Humanizer;
 using Infrastructure.Persistence.Common;
 using Infrastructure.Persistence.Repositories;
+using Infrastructure.Services.Authentication;
 using Infrastructure.Services.Mapping;
 using Mapster;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
+using System.Security.Cryptography;
 
 namespace Infrastructure;
 
@@ -26,7 +30,10 @@ public static class DependencyInjectionHelper
         return services
             .AddMongoDb(configuration)
             .AddRepositories()
-            .AddSingleton<IMappingService, MappingService>();
+            .AddSingleton<IMappingService, MappingService>()
+            .AddScoped<IAuthenticationService, AuthenticationService>()
+            .AddAuthentication(configuration)
+            .AddAuthorization();
     }
 
     private static IServiceCollection AddRepositories(this IServiceCollection services) =>
@@ -74,6 +81,40 @@ public static class DependencyInjectionHelper
 
         return services;
     }
+
+    private static IServiceCollection AddAuthentication(this IServiceCollection services, IConfiguration configuration) =>
+        services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                var publicKey = configuration.GetSection("JwtConfiguration").GetValue<string>("PublicKey");
+
+                var rsa = RSA.Create();
+
+                rsa.ImportFromPem(publicKey);
+
+                var securityKey = new RsaSecurityKey(rsa);
+
+                options.SaveToken = true;
+
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    RequireExpirationTime = true,
+                    IssuerSigningKey = securityKey,
+                    ValidIssuer = "SSP Labels Server",
+                    ValidAudience = "SSP Labels Client"
+                };
+            })
+            .Services
+            .AddAuthorization();
 
     private static void CreateIndexes(IMongoDatabase database)
     {

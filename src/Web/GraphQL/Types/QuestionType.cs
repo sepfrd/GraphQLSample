@@ -30,8 +30,6 @@ public class QuestionType : ObjectType<Question>
             .ResolveWith<Resolvers>(
                 resolvers =>
                     resolvers.GetVotesAsync(default!, default!));
-        // .UseFiltering()
-        // .UseSorting();
 
         descriptor
             .Field(question => question.DateCreated)

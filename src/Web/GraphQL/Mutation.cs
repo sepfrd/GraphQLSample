@@ -317,4 +317,15 @@ public class Mutation
     }
 
     // <-------------------------------------------------------------------------------------------
+
+    // ------------------------------------------ Login --------------------------------------->
+
+    public async Task<CommandResult> LoginAsync([Service] ISender sender, LoginDto loginDto, CancellationToken cancellationToken)
+    {
+        var loginCommand = new LoginCommand(loginDto);
+
+        return await sender.Send(loginCommand, cancellationToken);
+    }
+
+    // <-------------------------------------------------------------------------------------------
 }
