@@ -6,8 +6,7 @@ public sealed class MutationType : ObjectType<Mutation>
     {
         descriptor
             .Authorize()
-            .Field(
-                mutation => mutation.LoginAsync(default!, default!, default!))
+            .Field(mutation => mutation.LoginAsync(default!, default!, default!))
             .AllowAnonymous();
     }
 }

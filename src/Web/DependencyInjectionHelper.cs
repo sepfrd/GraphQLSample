@@ -24,9 +24,9 @@ public static class DependencyInjectionHelper
         services
             .AddGraphQLServer()
             .AddAuthorization()
+            .AddMaxExecutionDepthRule(15)
             .AddQueryType<QueryType>()
             .AddMutationType<MutationType>()
-            .AddMaxExecutionDepthRule(15)
             .AddType<AddressType>()
             .AddType<AnswerType>()
             .AddType<CartItemType>()
@@ -60,6 +60,7 @@ public static class DependencyInjectionHelper
             .AddInputObjectType<QuestionDto>()
             .AddInputObjectType<ShipmentDto>()
             .AddInputObjectType<UserDto>()
+            .AddInputObjectType<LoginDto>()
             .AddInputObjectType<CreateUserDto>()
             .AddInputObjectType<CreateVoteDto>()
             .AddFiltering()

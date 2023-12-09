@@ -1,15 +1,14 @@
 ﻿namespace Web.GraphQL.Types;
 
 public sealed class QueryType : ObjectType<Query>
-{ 
+{
     protected override void Configure(IObjectTypeDescriptor<Query> descriptor)
     {
+        descriptor.Authorize();
+
         descriptor
             .Field(query =>
-                query.GetUsersAsync(default, default, default!, default!))
-            .Authorize()
-            .UseFiltering()
-            .UseSorting();
+                query.GetUsersAsync(default, default, default!, default!));
 
         descriptor
             .Field(query =>
