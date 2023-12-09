@@ -18,12 +18,10 @@ public class CommentDeletedEventHandler : INotificationHandler<CommentDeletedEve
 
     public async Task Handle(CommentDeletedEvent notification, CancellationToken cancellationToken)
     {
-        var pagination = new Pagination(1, int.MaxValue);
-
         var votes = (await _repository.GetAllAsync(
                 vote => vote.ContentId == notification.Entity.InternalId &&
                         vote.ContentType == VotableContentType.Comment,
-                pagination,
+                Pagination.MaxPagination,
                 cancellationToken))
             .ToList();
 

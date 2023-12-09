@@ -18,12 +18,10 @@ public class AnswerDeletedEventHandler : INotificationHandler<AnswerDeletedEvent
 
     public async Task Handle(AnswerDeletedEvent notification, CancellationToken cancellationToken)
     {
-        var pagination = new Pagination(1, int.MaxValue);
-
         var votes = (await _repository.GetAllAsync(
                 vote => vote.ContentId == notification.Entity.InternalId &&
                         vote.ContentType == VotableContentType.Answer,
-                pagination,
+                Pagination.MaxPagination,
                 cancellationToken))
             .ToList();
 

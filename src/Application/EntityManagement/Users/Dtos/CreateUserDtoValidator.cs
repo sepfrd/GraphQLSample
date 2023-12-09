@@ -1,4 +1,5 @@
 using Application.Common;
+using Application.Common.Constants;
 using Application.EntityManagement.PhoneNumbers.Dtos;
 using FluentValidation;
 
@@ -10,11 +11,11 @@ public class CreateUserDtoValidator : AbstractValidator<CreateUserDto>
     {
         RuleFor(model => model.Password)
             .NotEmpty()
-            .Matches(RegexPatterns.PasswordPattern);
+            .Matches(RegexPatternConstants.PasswordPattern);
 
         RuleFor(model => model.Username)
             .NotEmpty()
-            .Matches(RegexPatterns.UsernamePattern);
+            .Matches(RegexPatternConstants.UsernamePattern);
 
         RuleForEach(model => model.PhoneNumbers)
             .SetValidator(new PhoneNumberDtoValidator());
@@ -22,7 +23,7 @@ public class CreateUserDtoValidator : AbstractValidator<CreateUserDto>
         RuleFor(model => model.Password)
             .Equal(model => model.PasswordConfirmation)
             .NotEmpty()
-            .Matches(RegexPatterns.PasswordPattern);
+            .Matches(RegexPatternConstants.PasswordPattern);
 
         RuleFor(model => model.Addresses)
             .NotEmpty();

@@ -149,7 +149,7 @@ public class UserType : ObjectType<User>
         public async Task<IEnumerable<Address>?> GetAddressesAsync([Parent] User user, [Service] ISender sender)
         {
             var addressesQuery = new GetAllAddressesQuery(
-                new Pagination(1, int.MaxValue),
+                Pagination.MaxPagination,
                 address => address.UserId == user.InternalId);
 
             var result = await sender.Send(addressesQuery);
@@ -160,7 +160,7 @@ public class UserType : ObjectType<User>
         public async Task<IEnumerable<Answer>?> GetAnswersAsync([Parent] User user, [Service] ISender sender)
         {
             var answersQuery = new GetAllAnswersQuery(
-                new Pagination(1, int.MaxValue),
+                Pagination.MaxPagination,
                 answer => answer.UserId == user.InternalId);
 
             var result = await sender.Send(answersQuery);
@@ -171,7 +171,7 @@ public class UserType : ObjectType<User>
         public async Task<IEnumerable<Comment>?> GetCommentsAsync([Parent] User user, [Service] ISender sender)
         {
             var commentsQuery = new GetAllCommentsQuery(
-                new Pagination(1, int.MaxValue),
+                Pagination.MaxPagination,
                 comment => comment.UserId == user.InternalId);
 
             var result = await sender.Send(commentsQuery);
@@ -182,7 +182,7 @@ public class UserType : ObjectType<User>
         public async Task<IEnumerable<Order>?> GetOrdersAsync([Parent] User user, [Service] ISender sender)
         {
             var ordersQuery = new GetAllOrdersQuery(
-                new Pagination(1, int.MaxValue),
+                Pagination.MaxPagination,
                 order => order.UserId == user.InternalId);
 
             var result = await sender.Send(ordersQuery);
@@ -193,7 +193,7 @@ public class UserType : ObjectType<User>
         public async Task<IEnumerable<Question>?> GetQuestionsAsync([Parent] User user, [Service] ISender sender)
         {
             var questionsQuery = new GetAllQuestionsQuery(
-                new Pagination(1, int.MaxValue),
+                Pagination.MaxPagination,
                 question => question.UserId == user.InternalId);
 
             var result = await sender.Send(questionsQuery);
@@ -204,7 +204,7 @@ public class UserType : ObjectType<User>
         public async Task<IEnumerable<UserRole>?> GetUserRolesAsync([Parent] User user, [Service] ISender sender)
         {
             var userRolesQuery = new GetAllUserRolesQuery(
-                new Pagination(1, int.MaxValue),
+                Pagination.MaxPagination,
                 userRole => userRole.UserId == user.InternalId);
 
             var result = await sender.Send(userRolesQuery);
@@ -215,7 +215,7 @@ public class UserType : ObjectType<User>
         public async Task<IEnumerable<Vote>?> GetVotesAsync([Parent] User user, [Service] ISender sender)
         {
             var votesQuery = new GetAllVotesQuery(
-                new Pagination(1, int.MaxValue),
+                Pagination.MaxPagination,
                 vote => vote.UserId == user.InternalId);
 
             var result = await sender.Send(votesQuery);
@@ -226,7 +226,7 @@ public class UserType : ObjectType<User>
         public async Task<IEnumerable<PhoneNumber>?> GetPhoneNumbersAsync([Parent] User user, [Service] ISender sender)
         {
             var phoneNumbersQuery = new GetAllPhoneNumbersQuery(
-                new Pagination(1, int.MaxValue),
+                Pagination.MaxPagination,
                 phoneNumber => phoneNumber.UserId == user.InternalId);
 
             var result = await sender.Send(phoneNumbersQuery);

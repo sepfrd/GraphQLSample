@@ -20,12 +20,10 @@ public class QuestionDeletedEventHandler : INotificationHandler<QuestionDeletedE
 
     public async Task Handle(QuestionDeletedEvent notification, CancellationToken cancellationToken)
     {
-        var pagination = new Pagination(1, int.MaxValue);
-
         var votes = (await _voteRepository.GetAllAsync(
                 vote => vote.ContentId == notification.Entity.InternalId &&
                         vote.ContentType == VotableContentType.Question,
-                pagination,
+                Pagination.MaxPagination,
                 cancellationToken))
             .ToList();
 
@@ -36,7 +34,7 @@ public class QuestionDeletedEventHandler : INotificationHandler<QuestionDeletedE
 
         var answers = (await _answerRepository.GetAllAsync(
                 answer => answer.QuestionId == notification.Entity.InternalId,
-                pagination,
+                Pagination.MaxPagination,
                 cancellationToken))
             .ToList();
 
@@ -49,7 +47,7 @@ public class QuestionDeletedEventHandler : INotificationHandler<QuestionDeletedE
             var answerVotes = (await _voteRepository.GetAllAsync(
                     vote => answerInternalIds.Contains(vote.ContentId) &&
                             vote.ContentType == VotableContentType.Answer,
-                    pagination,
+                    Pagination.MaxPagination,
                     cancellationToken))
                 .ToList();
 

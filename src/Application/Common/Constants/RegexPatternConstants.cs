@@ -1,6 +1,6 @@
-namespace Application.Common;
+namespace Application.Common.Constants;
 
-public static class RegexPatterns
+public static class RegexPatternConstants
 {
     public const string EmailPattern = @"^[\w\.-]+@[a-zA-Z\d\.-]{3,}\.[a-zA-Z]{2,}$";
     public const string UsernamePattern = @"^(?![\d_])[\w\d_]{8,16}$";

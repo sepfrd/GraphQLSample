@@ -24,10 +24,9 @@ public class OrderDeletedEventHandler : INotificationHandler<OrderDeletedEvent>
 
     public async Task Handle(OrderDeletedEvent notification, CancellationToken cancellationToken)
     {
-        var pagination = new Pagination(1, int.MaxValue);
-
         var orderItems = (await _orderItemRepository.GetAllAsync(
-                orderItem => orderItem.OrderId == notification.Entity.InternalId, pagination,
+                orderItem => orderItem.OrderId == notification.Entity.InternalId,
+                Pagination.MaxPagination,
                 cancellationToken))
             .ToList();
 

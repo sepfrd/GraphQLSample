@@ -11,7 +11,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 
-namespace Infrastructure.Services.Authentication;
+namespace Infrastructure.Services;
 
 public class AuthenticationService : IAuthenticationService
 {
@@ -36,9 +36,7 @@ public class AuthenticationService : IAuthenticationService
 
         var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha512Signature);
 
-        var pagination = new Pagination(1, int.MaxValue);
-
-        var userRolesQuery = new GetAllUserRolesQuery(pagination,
+        var userRolesQuery = new GetAllUserRolesQuery(Pagination.MaxPagination,
             userRole => userRole.UserId == user.InternalId);
 
         var userRolesResult = await _sender.Send(userRolesQuery, cancellationToken);
@@ -52,7 +50,7 @@ public class AuthenticationService : IAuthenticationService
 
         var roleIds = userRolesResult.Data.Select(userRole => userRole.RoleId);
 
-        var rolesQuery = new GetAllRolesQuery(pagination, role => roleIds.Contains(role.InternalId));
+        var rolesQuery = new GetAllRolesQuery(Pagination.MaxPagination, role => roleIds.Contains(role.InternalId));
 
         var rolesResult = await _sender.Send(rolesQuery, cancellationToken);
 

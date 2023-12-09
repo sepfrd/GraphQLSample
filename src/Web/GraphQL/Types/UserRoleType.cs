@@ -26,7 +26,7 @@ public class UserRoleType : ObjectType<UserRole>
         public async Task<Role?> GetRoleAsync([Parent] UserRole userRole, [Service] ISender sender)
         {
             var rolesQuery = new GetAllRolesQuery(
-                new Pagination(1, int.MaxValue),
+                Pagination.MaxPagination,
                 role => role.InternalId == userRole.RoleId);
 
             var result = await sender.Send(rolesQuery);

@@ -1,4 +1,5 @@
 using Application.Common;
+using Application.Common.Constants;
 using FluentValidation;
 
 namespace Application.EntityManagement.PhoneNumbers.Dtos;
@@ -9,7 +10,7 @@ public class PhoneNumberDtoValidator : AbstractValidator<PhoneNumberDto>
     {
         RuleFor(model => model.Number)
             .NotEmpty()
-            .Matches(RegexPatterns.PhoneNumberPattern);
+            .Matches(RegexPatternConstants.PhoneNumberPattern);
 
         RuleFor(model => model.Type)
             .IsInEnum();

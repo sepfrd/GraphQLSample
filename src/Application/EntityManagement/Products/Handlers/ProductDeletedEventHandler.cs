@@ -29,12 +29,10 @@ public class ProductDeletedEventHandler : INotificationHandler<ProductDeletedEve
 
     public async Task Handle(ProductDeletedEvent notification, CancellationToken cancellationToken)
     {
-        var pagination = new Pagination(1, int.MaxValue);
-
         var votes = (await _voteRepository.GetAllAsync(
                 vote => vote.ContentId == notification.Entity.InternalId &&
                         vote.ContentType == VotableContentType.Product,
-                pagination,
+                Pagination.MaxPagination,
                 cancellationToken))
             .ToList();
 
@@ -45,7 +43,7 @@ public class ProductDeletedEventHandler : INotificationHandler<ProductDeletedEve
 
         var questions = (await _questionRepository.GetAllAsync(
                 question => question.ProductId == notification.Entity.InternalId,
-                pagination,
+                Pagination.MaxPagination,
                 cancellationToken))
             .ToList();
 
@@ -58,7 +56,7 @@ public class ProductDeletedEventHandler : INotificationHandler<ProductDeletedEve
             var questionVotes = (await _voteRepository.GetAllAsync(
                     vote => questionInternalIds.Contains(vote.ContentId) &&
                             vote.ContentType == VotableContentType.Question,
-                    pagination,
+                    Pagination.MaxPagination,
                     cancellationToken))
                 .ToList();
 
@@ -69,7 +67,7 @@ public class ProductDeletedEventHandler : INotificationHandler<ProductDeletedEve
 
             var questionAnswers = (await _answerRepository.GetAllAsync(
                     answer => questionInternalIds.Contains(answer.QuestionId),
-                    pagination,
+                    Pagination.MaxPagination,
                     cancellationToken))
                 .ToList();
 
@@ -82,7 +80,7 @@ public class ProductDeletedEventHandler : INotificationHandler<ProductDeletedEve
                 var questionAnswersVotes = (await _voteRepository.GetAllAsync(
                         vote => questionAnswersInternalIds.Contains(vote.ContentId) &&
                                 vote.ContentType == VotableContentType.Answer,
-                        pagination,
+                        Pagination.MaxPagination,
                         cancellationToken))
                     .ToList();
 
@@ -95,7 +93,7 @@ public class ProductDeletedEventHandler : INotificationHandler<ProductDeletedEve
 
         var comments = (await _commentRepository.GetAllAsync(
                 comment => comment.ProductId == notification.Entity.InternalId,
-                pagination,
+                Pagination.MaxPagination,
                 cancellationToken))
             .ToList();
 
@@ -108,7 +106,7 @@ public class ProductDeletedEventHandler : INotificationHandler<ProductDeletedEve
             var commentVotes = (await _voteRepository.GetAllAsync(
                     vote => commentInternalIds.Contains(vote.ContentId) &&
                             vote.ContentType == VotableContentType.Comment,
-                    pagination,
+                    Pagination.MaxPagination,
                     cancellationToken))
                 .ToList();
 

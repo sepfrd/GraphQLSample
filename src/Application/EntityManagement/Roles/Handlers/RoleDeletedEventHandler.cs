@@ -17,11 +17,9 @@ public class RoleDeletedEventHandler : INotificationHandler<RoleDeletedEvent>
 
     public async Task Handle(RoleDeletedEvent notification, CancellationToken cancellationToken)
     {
-        var pagination = new Pagination(1, int.MaxValue);
-
         var userRoles = (await _userRoleRepository.GetAllAsync(
                 userRole => userRole.RoleId == notification.Entity.InternalId,
-                pagination,
+                Pagination.MaxPagination,
                 cancellationToken))
             .ToList();
 

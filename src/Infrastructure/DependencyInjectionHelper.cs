@@ -1,4 +1,5 @@
 ﻿using Application.Abstractions;
+using Application.Common.Constants;
 using Application.EntityManagement.Users.Dtos;
 using Domain.Abstractions;
 using Domain.Common;
@@ -6,7 +7,7 @@ using Domain.Entities;
 using Humanizer;
 using Infrastructure.Persistence.Common;
 using Infrastructure.Persistence.Repositories;
-using Infrastructure.Services.Authentication;
+using Infrastructure.Services;
 using Infrastructure.Services.Mapping;
 using Mapster;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -113,7 +114,36 @@ public static class DependencyInjectionHelper
                 };
             })
             .Services
-            .AddAuthorization();
+            .AddAuthorization(options =>
+            {
+                options.AddPolicy(
+                    PolicyConstants.AddToCart,
+                    policyConfig => policyConfig.RequireRole(RoleConstants.Customer));
+
+                options.AddPolicy(
+                    PolicyConstants.PlaceOrder,
+                    policyConfig => policyConfig.RequireRole(RoleConstants.Customer));
+
+                options.AddPolicy(
+                    PolicyConstants.ManageProducts,
+                    policyConfig => policyConfig.RequireRole(RoleConstants.Admin));
+
+                options.AddPolicy(
+                    PolicyConstants.ManageOrders,
+                    policyConfig => policyConfig.RequireRole(RoleConstants.Admin));
+
+                options.AddPolicy(
+                    PolicyConstants.ManageUsers,
+                    policyConfig => policyConfig.RequireRole(RoleConstants.Admin));
+
+                options.AddPolicy(
+                    PolicyConstants.ViewOrders,
+                    policyConfig => policyConfig.RequireRole(RoleConstants.Manager));
+
+                options.AddPolicy(
+                    PolicyConstants.ManageOrderStatus,
+                    policyConfig => policyConfig.RequireRole(RoleConstants.Manager));
+            });
 
     private static void CreateIndexes(IMongoDatabase database)
     {
