@@ -117,32 +117,12 @@ public static class DependencyInjectionHelper
             .AddAuthorization(options =>
             {
                 options.AddPolicy(
-                    PolicyConstants.AddToCart,
-                    policyConfig => policyConfig.RequireRole(RoleConstants.Customer));
+                    PolicyConstants.CustomerPolicy,
+                    policyConfig => policyConfig.RequireRole(RoleConstants.Customer, RoleConstants.Admin));
 
                 options.AddPolicy(
-                    PolicyConstants.PlaceOrder,
-                    policyConfig => policyConfig.RequireRole(RoleConstants.Customer));
-
-                options.AddPolicy(
-                    PolicyConstants.ManageProducts,
+                    PolicyConstants.AdminPolicy,
                     policyConfig => policyConfig.RequireRole(RoleConstants.Admin));
-
-                options.AddPolicy(
-                    PolicyConstants.ManageOrders,
-                    policyConfig => policyConfig.RequireRole(RoleConstants.Admin));
-
-                options.AddPolicy(
-                    PolicyConstants.ManageUsers,
-                    policyConfig => policyConfig.RequireRole(RoleConstants.Admin));
-
-                options.AddPolicy(
-                    PolicyConstants.ViewOrders,
-                    policyConfig => policyConfig.RequireRole(RoleConstants.Manager));
-
-                options.AddPolicy(
-                    PolicyConstants.ManageOrderStatus,
-                    policyConfig => policyConfig.RequireRole(RoleConstants.Manager));
             });
 
     private static void CreateIndexes(IMongoDatabase database)

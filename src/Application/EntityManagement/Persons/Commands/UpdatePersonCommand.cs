@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Application.EntityManagement.Persons.Commands;
 
-public record UpdatePersonCommand(int ExternalId, PersonDto PersonDto) : IRequest<CommandResult>;
+public record UpdatePersonCommand(int ExternalId, UpdatePersonDto UpdatePersonDto) : IRequest<CommandResult>;

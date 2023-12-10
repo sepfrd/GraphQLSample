@@ -177,9 +177,9 @@ public class Mutation
 
     // ------------------------------------------ Person --------------------------------------->
 
-    public async Task<CommandResult> UpdatePersonAsync([Service] ISender sender, int externalId, PersonDto personDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> UpdatePersonAsync([Service] ISender sender, int externalId, UpdatePersonDto updatePersonDto, CancellationToken cancellationToken)
     {
-        var updateCommand = new UpdatePersonCommand(externalId, personDto);
+        var updateCommand = new UpdatePersonCommand(externalId, updatePersonDto);
 
         var result = await sender.Send(updateCommand, cancellationToken);
 
@@ -244,6 +244,7 @@ public class Mutation
     // <-------------------------------------------------------------------------------------------
 
     // ------------------------------------------ Question --------------------------------------->
+    
     public async Task<CommandResult> AddQuestionAsync([Service] ISender sender, QuestionDto questionDto, CancellationToken cancellationToken)
     {
         var createCommand = new CreateQuestionCommand(questionDto);
