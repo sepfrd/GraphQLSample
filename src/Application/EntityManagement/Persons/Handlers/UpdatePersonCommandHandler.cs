@@ -24,7 +24,7 @@ public class UpdatePersonCommandHandler(
             return CommandResult.Success(MessageConstants.NotFound);
         }
 
-        var newEntity = mappingService.Map(request.PersonDto, entity);
+        var newEntity = mappingService.Map(request.UpdatePersonDto, entity);
 
         if (newEntity is null)
         {
