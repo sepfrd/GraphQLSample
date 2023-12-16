@@ -11,8 +11,6 @@ public sealed class MutationType : ObjectType<Mutation>
             .Field(mutation => mutation.LoginAsync(default!, default!, default!))
             .AllowAnonymous();
 
-        // ------------------------------------------ Address --------------------------------------->
-
         descriptor
             .Field(mutation =>
                 mutation.AddAddressAsync(default!, default!, default!))
@@ -27,10 +25,6 @@ public sealed class MutationType : ObjectType<Mutation>
             .Field(mutation =>
                 mutation.DeleteAddressAsync(default!, default!, default!))
             .Authorize(PolicyConstants.CustomerPolicy);
-
-        // <-------------------------------------------------------------------------------------------
-
-        // ------------------------------------------ Answer --------------------------------------->
 
         descriptor
             .Field(mutation =>
@@ -47,10 +41,6 @@ public sealed class MutationType : ObjectType<Mutation>
                 mutation.DeleteAnswerAsync(default!, default!, default!))
             .Authorize(PolicyConstants.CustomerPolicy);
 
-        // <-------------------------------------------------------------------------------------------
-
-        // ------------------------------------------ CartItem --------------------------------------->        
-
         descriptor
             .Field(mutation =>
                 mutation.AddCartItemAsync(default!, default!, default!))
@@ -60,19 +50,11 @@ public sealed class MutationType : ObjectType<Mutation>
             .Field(mutation =>
                 mutation.DeleteCartItemAsync(default!, default!, default!))
             .Authorize(PolicyConstants.CustomerPolicy);
-        
-        // <-------------------------------------------------------------------------------------------
-
-        // ------------------------------------------ Category --------------------------------------->
 
         descriptor
             .Field(mutation =>
                 mutation.AddCategoryAsync(default!, default!, default!))
             .Authorize(PolicyConstants.AdminPolicy);
-
-        // <-------------------------------------------------------------------------------------------
-
-        // ------------------------------------------ Comment --------------------------------------->
 
         descriptor
             .Field(mutation =>
@@ -83,10 +65,6 @@ public sealed class MutationType : ObjectType<Mutation>
             .Field(mutation =>
                 mutation.DeleteCommentAsync(default!, default!, default!))
             .Authorize(PolicyConstants.CustomerPolicy);
-
-        // <-------------------------------------------------------------------------------------------
-
-        // ------------------------------------------ Order --------------------------------------->
 
         descriptor
             .Field(mutation =>
@@ -103,27 +81,15 @@ public sealed class MutationType : ObjectType<Mutation>
                 mutation.DeleteOrderAsync(default!, default!, default!))
             .Authorize(PolicyConstants.AdminPolicy);
 
-        // <-------------------------------------------------------------------------------------------
-
-        // ------------------------------------------ Payment --------------------------------------->
-
         descriptor
             .Field(mutation =>
                 mutation.UpdatePaymentAsync(default!, default!, default!, default!))
             .Authorize(PolicyConstants.AdminPolicy);
 
-        // <-------------------------------------------------------------------------------------------
-
-        // ------------------------------------------ Person --------------------------------------->
-
         descriptor
             .Field(mutation =>
                 mutation.UpdatePersonAsync(default!, default!, default!, default!))
             .Authorize(PolicyConstants.AdminPolicy);
-
-        // <-------------------------------------------------------------------------------------------
-
-        // ------------------------------------------ PhoneNumber --------------------------------------->
 
         descriptor
             .Field(mutation =>
@@ -140,10 +106,6 @@ public sealed class MutationType : ObjectType<Mutation>
                 mutation.DeletePhoneNumberAsync(default!, default!, default!))
             .Authorize(PolicyConstants.CustomerPolicy);
 
-        // <-------------------------------------------------------------------------------------------
-
-        // ------------------------------------------ Product --------------------------------------->
-
         descriptor
             .Field(mutation =>
                 mutation.AddProductAsync(default!, default!, default!))
@@ -159,10 +121,6 @@ public sealed class MutationType : ObjectType<Mutation>
                 mutation.DeleteProductAsync(default!, default!, default!))
             .Authorize(PolicyConstants.AdminPolicy);
 
-        // <-------------------------------------------------------------------------------------------
-
-        // ------------------------------------------ Question --------------------------------------->
-
         descriptor
             .Field(mutation =>
                 mutation.AddQuestionAsync(default!, default!, default!))
@@ -173,18 +131,10 @@ public sealed class MutationType : ObjectType<Mutation>
                 mutation.DeleteQuestionAsync(default!, default!, default!))
             .Authorize(PolicyConstants.CustomerPolicy);
 
-        // <-------------------------------------------------------------------------------------------
-
-        // ------------------------------------------ Shipment --------------------------------------->
-
         descriptor
             .Field(mutation =>
                 mutation.UpdateShipmentAsync(default!, default!, default!, default!))
             .Authorize(PolicyConstants.AdminPolicy);
-
-        // <-------------------------------------------------------------------------------------------
-
-        // ------------------------------------------ User --------------------------------------->
 
         descriptor
             .Field(mutation =>
@@ -200,10 +150,6 @@ public sealed class MutationType : ObjectType<Mutation>
             .Field(mutation =>
                 mutation.DeleteUserAsync(default!, default!, default!))
             .Authorize(PolicyConstants.AdminPolicy);
-
-        // <-------------------------------------------------------------------------------------------
-
-        // ------------------------------------------ Vote --------------------------------------->
 
         descriptor
             .Field(mutation =>

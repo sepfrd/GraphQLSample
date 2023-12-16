@@ -161,8 +161,6 @@ public class DatabaseSeeder
         fakeVotes.AddRange(fakeProductVotes);
         fakeVotes.AddRange(fakeQuestionVotes);
 
-        // ------------------------------------------------
-
         _mongoDatabase.GetCollection<Address>("Addresses").InsertMany(fakeAddresses);
         _mongoDatabase.GetCollection<Answer>("Answers").InsertMany(fakeAnswers);
         _mongoDatabase.GetCollection<Cart>("Carts").InsertMany(fakeCarts);

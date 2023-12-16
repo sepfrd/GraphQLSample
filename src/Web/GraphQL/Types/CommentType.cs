@@ -37,8 +37,6 @@ public class CommentType : ObjectType<Comment>
             .ResolveWith<Resolvers>(
                 resolvers =>
                     resolvers.GetVotesAsync(default!, default!));
-        // .UseFiltering()
-        // .UseSorting();
 
         descriptor
             .Field(comment => comment.DateCreated)
