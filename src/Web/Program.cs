@@ -24,6 +24,7 @@ try
 {
     builder
         .Services
+        .AddHttpContextAccessor()
         .AddEndpointsApiExplorer()
         .AddSingleton<ILogger, CustomLogger>()
         .InjectApplicationLayer()

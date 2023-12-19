@@ -13,7 +13,7 @@ public sealed class MutationType : ObjectType<Mutation>
 
         descriptor
             .Field(mutation =>
-                mutation.AddAddressAsync(default!, default!, default!))
+                mutation.AddAddressAsync(default!, default!, default!, default!))
             .Authorize(PolicyConstants.CustomerPolicy);
 
         descriptor

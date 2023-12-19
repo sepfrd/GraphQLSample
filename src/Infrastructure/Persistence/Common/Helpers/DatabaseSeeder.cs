@@ -135,6 +135,22 @@ public class DatabaseSeeder
             userRole.RoleId = fakeRoles.ElementAt(Random.Shared.Next(0, fakeRoles.Count)).InternalId;
         }
 
+        fakeUserRoles.AddRange(new[]
+        {
+            new UserRole
+            {
+                ExternalId = 0,
+                UserId = AdminUserInternalId,
+                RoleId = AdminRoleInternalId
+            },
+            new UserRole
+            {
+                ExternalId = 1,
+                UserId = CustomerUserInternalId,
+                RoleId = CustomerRoleInternalId
+            }
+        });
+
         foreach (var vote in fakeAnswerVotes)
         {
             vote.UserId = fakeUsers.ElementAt(Random.Shared.Next(0, fakeUsers.Count)).InternalId;
@@ -616,30 +632,12 @@ public class DatabaseSeeder
 
     private static List<UserRole> GetFakeUserRoles()
     {
-        var adminUserRole = new UserRole
-        {
-            ExternalId = 0,
-            UserId = AdminUserInternalId,
-            RoleId = AdminRoleInternalId
-        };
-
-        var customerUserRole = new UserRole
-        {
-            ExternalId = 1,
-            UserId = CustomerUserInternalId,
-            RoleId = CustomerRoleInternalId
-        };
-
         var externalId = 2;
 
         var userRoleFaker = new Faker<UserRole>()
             .RuleFor(userRole => userRole.ExternalId, _ => externalId++);
 
-        var fakeUserRoles = new List<UserRole>
-        {
-            adminUserRole,
-            customerUserRole
-        };
+        var fakeUserRoles = new List<UserRole>();
 
         for (var i = 0; i < DefaultHugeNumber; i++)
         {

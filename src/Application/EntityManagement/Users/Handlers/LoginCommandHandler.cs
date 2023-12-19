@@ -43,6 +43,11 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, CommandResult>
 
         var jwt = await _authenticationService.CreateJwtAsync(user, cancellationToken);
 
-        return CommandResult.Success(MessageConstants.SuccessfullyLoggedIn, jwt);
+        if (!string.IsNullOrEmpty(jwt))
+        {
+            return CommandResult.Success(MessageConstants.SuccessfullyLoggedIn, jwt);
+        }
+        
+        return CommandResult.Failure(MessageConstants.InternalServerError);
     }
 }

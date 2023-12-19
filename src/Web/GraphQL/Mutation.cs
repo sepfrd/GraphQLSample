@@ -1,4 +1,5 @@
 using Application.Common;
+using Application.Common.Constants;
 using Application.EntityManagement.Addresses.Commands;
 using Application.EntityManagement.Addresses.Dtos;
 using Application.EntityManagement.Answers;
@@ -34,13 +35,32 @@ using Application.EntityManagement.Users.Dtos;
 using Application.EntityManagement.Votes.Commands;
 using Application.EntityManagement.Votes.Dtos;
 using MediatR;
+using System.Security.Claims;
 
 namespace Web.GraphQL;
 
 public class Mutation
 {
-    public async Task<CommandResult> AddAddressAsync([Service] ISender sender, CreateAddressDto createAddressDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> AddAddressAsync([Service] ISender sender,
+        [Service] IHttpContextAccessor httpContextAccessor,
+        CreateAddressDto createAddressDto,
+        CancellationToken cancellationToken)
     {
+        //TODO: Create constants for custom JWT claims
+        var userExternalIdClaim = httpContextAccessor.HttpContext!.User.FindFirstValue("external_id");
+
+        if (userExternalIdClaim is null)
+        {
+            return CommandResult.Failure(MessageConstants.BadRequest);
+        }
+
+        var userExternalId = int.Parse(userExternalIdClaim);
+
+        if (userExternalId != createAddressDto.UserExternalId)
+        {
+            return CommandResult.Failure(MessageConstants.Forbidden);
+        }
+
         var createCommand = new CreateAddressCommand(createAddressDto);
 
         var result = await sender.Send(createCommand, cancellationToken);

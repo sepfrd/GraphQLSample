@@ -72,7 +72,8 @@ public class AuthenticationService : IAuthenticationService
                     .ToString(CultureInfo.InvariantCulture)),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            new Claim("username", user.Username)
+            new Claim("username", user.Username),
+            new Claim("external_id", user.ExternalId.ToString())
         });
 
         foreach (var role in roles)

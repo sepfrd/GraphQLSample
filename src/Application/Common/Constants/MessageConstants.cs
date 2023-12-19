@@ -16,6 +16,7 @@ public static class MessageConstants
     public const string DuplicateUsername = "Username already taken.";
     public const string InvalidCredentials = "Invalid Username / Email or Password";
     public const string BadRequest = "Invalid Parameters";
+    public const string Forbidden = "Forbidden";
 
     /* --------------------------------- 500 --------------------------------- */
 
