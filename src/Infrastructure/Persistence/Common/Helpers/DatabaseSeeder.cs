@@ -9,10 +9,14 @@ namespace Infrastructure.Persistence.Common.Helpers;
 
 public class DatabaseSeeder
 {
-    private readonly IMongoDatabase _mongoDatabase;
     private const int DefaultHugeNumber = 100_000;
     private const int DefaultNormalNumber = 50_000;
     private const int DefaultSmallNumber = 10_000;
+    private readonly IMongoDatabase _mongoDatabase;
+    private readonly static Guid AdminRoleInternalId = Guid.NewGuid();
+    private readonly static Guid CustomerRoleInternalId = Guid.NewGuid();
+    private readonly static Guid AdminUserInternalId = Guid.NewGuid();
+    private readonly static Guid CustomerUserInternalId = Guid.NewGuid();
 
     public DatabaseSeeder(string connectionString, string databaseName)
     {
@@ -127,7 +131,7 @@ public class DatabaseSeeder
 
         foreach (var userRole in fakeUserRoles)
         {
-            userRole.UserId = fakeUsers.ElementAt(Random.Shared.Next(0, fakeUsers.Count)).InternalId;
+            userRole.UserId = fakeUsers.ElementAt(Random.Shared.Next(2, fakeUsers.Count)).InternalId;
             userRole.RoleId = fakeRoles.ElementAt(Random.Shared.Next(0, fakeRoles.Count)).InternalId;
         }
 
@@ -429,12 +433,14 @@ public class DatabaseSeeder
     {
         new Role
         {
+            InternalId = AdminRoleInternalId,
             ExternalId = 0,
             Title = RoleConstants.Admin,
             Description = "The Highest Role in the Application Role Hierarchy"
         },
         new Role
         {
+            InternalId = CustomerRoleInternalId,
             ExternalId = 1,
             Title = RoleConstants.Customer,
             Description = "The Basic Role in the Application Role Hierarchy"
@@ -562,7 +568,29 @@ public class DatabaseSeeder
 
     private static List<User> GetFakeUsers()
     {
-        var externalId = 0;
+        var adminUser = new User
+        {
+            InternalId = AdminUserInternalId,
+            ExternalId = 0,
+            Username = "sepehr_frd",
+            Password = "sfr1376",
+            Score = 0,
+            Email = "sepfrd@outlook.com",
+            IsEmailConfirmed = true
+        };
+
+        var customerUser = new User
+        {
+            InternalId = CustomerUserInternalId,
+            ExternalId = 1,
+            Username = "customer",
+            Password = "sfr1376",
+            Score = 0,
+            Email = "customer@outlook.com",
+            IsEmailConfirmed = true
+        };
+
+        var externalId = 2;
 
         var userFaker = new Faker<User>()
             .RuleFor(user => user.ExternalId, _ => externalId++)
@@ -572,7 +600,11 @@ public class DatabaseSeeder
             .RuleFor(user => user.Email, faker => faker.Internet.Email())
             .RuleFor(user => user.IsEmailConfirmed, faker => faker.Random.Bool());
 
-        var fakeUsers = new List<User>();
+        var fakeUsers = new List<User>
+        {
+            adminUser,
+            customerUser
+        };
 
         for (var i = 0; i < DefaultHugeNumber; i++)
         {
@@ -584,12 +616,30 @@ public class DatabaseSeeder
 
     private static List<UserRole> GetFakeUserRoles()
     {
-        var externalId = 0;
+        var adminUserRole = new UserRole
+        {
+            ExternalId = 0,
+            UserId = AdminUserInternalId,
+            RoleId = AdminRoleInternalId
+        };
+
+        var customerUserRole = new UserRole
+        {
+            ExternalId = 1,
+            UserId = CustomerUserInternalId,
+            RoleId = CustomerRoleInternalId
+        };
+
+        var externalId = 2;
 
         var userRoleFaker = new Faker<UserRole>()
-            .RuleFor(user => user.ExternalId, _ => externalId++);
+            .RuleFor(userRole => userRole.ExternalId, _ => externalId++);
 
-        var fakeUserRoles = new List<UserRole>();
+        var fakeUserRoles = new List<UserRole>
+        {
+            adminUserRole,
+            customerUserRole
+        };
 
         for (var i = 0; i < DefaultHugeNumber; i++)
         {
