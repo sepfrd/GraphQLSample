@@ -1,3 +1,4 @@
+using Application.Common.Constants;
 using Bogus;
 using Domain.Entities;
 using Domain.Enums;
@@ -424,24 +425,21 @@ public class DatabaseSeeder
         return fakeQuestions;
     }
 
-    private static List<Role> GetFakeRoles()
+    private static List<Role> GetFakeRoles() => new()
     {
-        var externalId = 0;
-
-        var roleFaker = new Faker<Role>()
-            .RuleFor(role => role.ExternalId, _ => externalId++)
-            .RuleFor(role => role.Description, faker => faker.Name.JobDescriptor())
-            .RuleFor(role => role.Title, faker => faker.Name.JobTitle());
-
-        var fakeRoles = new List<Role>();
-
-        for (var i = 0; i < 5; i++)
+        new Role
         {
-            fakeRoles.Add(roleFaker.Generate());
+            ExternalId = 0,
+            Title = RoleConstants.Admin,
+            Description = "The Highest Role in the Application Role Hierarchy"
+        },
+        new Role
+        {
+            ExternalId = 1,
+            Title = RoleConstants.Customer,
+            Description = "The Basic Role in the Application Role Hierarchy"
         }
-
-        return fakeRoles;
-    }
+    };
 
     private static List<Shipment> GetFakeShipments()
     {
