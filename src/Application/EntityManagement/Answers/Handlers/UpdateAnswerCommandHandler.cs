@@ -55,7 +55,9 @@ public class UpdateAnswerCommandHandler : IRequestHandler<UpdateAnswerCommand, C
 
         if (user is null)
         {
-            return CommandResult.Failure(MessageConstants.BadRequest);
+            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(UpdateAnswerCommandHandler));
+
+            return CommandResult.Failure(MessageConstants.InternalServerError);
         }
 
         if (entity.UserId != user.InternalId)

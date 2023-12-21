@@ -52,7 +52,9 @@ public class DeleteAnswerByExternalIdCommandHandler : IRequestHandler<DeleteAnsw
 
         if (user is null)
         {
-            return CommandResult.Failure(MessageConstants.BadRequest);
+            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(DeleteAnswerByExternalIdCommandHandler));
+
+            return CommandResult.Failure(MessageConstants.InternalServerError);
         }
 
         if (entity.UserId != user.InternalId)

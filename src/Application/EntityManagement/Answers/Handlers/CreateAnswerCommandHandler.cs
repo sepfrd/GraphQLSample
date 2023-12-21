@@ -58,7 +58,9 @@ public class CreateAnswerCommandHandler : IRequestHandler<CreateAnswerCommand, C
 
         if (user is null)
         {
-            return CommandResult.Failure(MessageConstants.BadRequest);
+            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(CreateAnswerCommandHandler));
+
+            return CommandResult.Failure(MessageConstants.InternalServerError);
         }
         
         var entity = _mappingService.Map<AnswerDto, Answer>(request.AnswerDto);

@@ -64,7 +64,9 @@ public class UpdateCartItemQuantityCommandHandler : IRequestHandler<UpdateCartIt
 
         if (user is null)
         {
-            return CommandResult.Failure(MessageConstants.BadRequest);
+            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(UpdateCartItemQuantityCommandHandler));
+
+            return CommandResult.Failure(MessageConstants.InternalServerError);
         }
 
         if (cart.UserId != user.InternalId)

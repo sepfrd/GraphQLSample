@@ -24,6 +24,7 @@ public static class MessageConstants
     public const string InternalServerError = "Internal Server Error";
     public const string MappingFailed = "{time} - Internal Server Error - {entity} mapping failed inside : {class}";
     public const string EntityCreationFailed = "{time} - Internal Server Error - {entity} creation failed inside :  {class}";
+    public const string EntityRetrievalFailed = "{time} - Internal Server Error - {entity} retrieval failed inside :  {class}";
     public const string EntityDeletionFailed = "{time} - Internal Server Error - {entity} deletion failed inside : {class}";
     public const string EntityUpdateFailed = "{time} - Internal Server Error - {entity} update failed inside : {class}";
     public const string EntityRelationshipsRetrievalFailed = "{time} - Internal Server Error - {entity} relationships retrieval failed inside : {class}";

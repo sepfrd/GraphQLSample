@@ -48,7 +48,9 @@ public class CreateAddressCommandHandler : IRequestHandler<CreateAddressCommand,
 
         if (user is null)
         {
-            return CommandResult.Failure(MessageConstants.BadRequest);
+            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(CreateAddressCommandHandler));
+            
+            return CommandResult.Failure(MessageConstants.InternalServerError);
         }
 
         var entity = _mappingService.Map<AddressDto, Address>(request.AddressDto);

@@ -55,7 +55,9 @@ public class UpdateAddressCommandHandler : IRequestHandler<UpdateAddressCommand,
 
         if (user is null)
         {
-            return CommandResult.Failure(MessageConstants.BadRequest);
+            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(CreateAddressCommandHandler));
+
+            return CommandResult.Failure(MessageConstants.InternalServerError);
         }
 
         if (entity.UserId != user.InternalId)

@@ -63,7 +63,9 @@ public class CreateCartItemCommandHandler : IRequestHandler<CreateCartItemComman
 
         if (user is null)
         {
-            return CommandResult.Failure(MessageConstants.BadRequest);
+            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(CreateCartItemCommandHandler));
+
+            return CommandResult.Failure(MessageConstants.InternalServerError);
         }
 
         if (cartEntity.UserId != user.InternalId)

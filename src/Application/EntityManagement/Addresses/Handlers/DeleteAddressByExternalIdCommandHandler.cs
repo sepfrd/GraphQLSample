@@ -53,7 +53,9 @@ public class DeleteAddressByExternalIdCommandHandler : IRequestHandler<DeleteAdd
 
         if (user is null)
         {
-            return CommandResult.Failure(MessageConstants.BadRequest);
+            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(DeleteAddressByExternalIdCommandHandler));
+
+            return CommandResult.Failure(MessageConstants.InternalServerError);
         }
 
         if (entity.UserId != user.InternalId)
