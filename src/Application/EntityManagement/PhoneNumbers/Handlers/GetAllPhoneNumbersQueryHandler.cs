@@ -8,12 +8,18 @@ using System.Net;
 
 namespace Application.EntityManagement.PhoneNumbers.Handlers;
 
-public sealed class GetAllPhoneNumbersQueryHandler(IRepository<PhoneNumber> repository)
-    : IRequestHandler<GetAllPhoneNumbersQuery, QueryResponse<IEnumerable<PhoneNumber>>>
+public sealed class GetAllPhoneNumbersQueryHandler : IRequestHandler<GetAllPhoneNumbersQuery, QueryResponse<IEnumerable<PhoneNumber>>>
 {
+    private readonly IRepository<PhoneNumber> _repository;
+
+    public GetAllPhoneNumbersQueryHandler(IRepository<PhoneNumber> repository)
+    {
+        _repository = repository;
+    }
+
     public async Task<QueryResponse<IEnumerable<PhoneNumber>>> Handle(GetAllPhoneNumbersQuery request, CancellationToken cancellationToken)
     {
-        var entities = await repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
+        var entities = await _repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
 
         return new QueryResponse<IEnumerable<PhoneNumber>>(
             entities,
