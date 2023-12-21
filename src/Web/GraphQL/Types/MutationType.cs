@@ -48,11 +48,6 @@ public sealed class MutationType : ObjectType<Mutation>
 
         descriptor
             .Field(mutation =>
-                mutation.DeleteCartItemAsync(default!, default!, default!))
-            .Authorize(PolicyConstants.CustomerPolicy);
-
-        descriptor
-            .Field(mutation =>
                 mutation.AddCategoryAsync(default!, default!, default!))
             .Authorize(PolicyConstants.AdminPolicy);
 

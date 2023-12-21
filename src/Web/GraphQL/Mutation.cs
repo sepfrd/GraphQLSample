@@ -98,15 +98,6 @@ public class Mutation
         return result;
     }
 
-    public async Task<CommandResult> DeleteCartItemAsync([Service] ISender sender, int externalId, CancellationToken cancellationToken)
-    {
-        var deleteCommand = new DeleteCartItemByExternalICommand(externalId);
-
-        var result = await sender.Send(deleteCommand, cancellationToken);
-
-        return result;
-    }
-
     public async Task<CommandResult> AddCategoryAsync([Service] ISender sender, CategoryDto categoryDto, CancellationToken cancellationToken)
     {
         var createCommand = new CreateCategoryCommand(categoryDto);

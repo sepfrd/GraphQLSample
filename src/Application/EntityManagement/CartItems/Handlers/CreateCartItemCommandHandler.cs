@@ -15,19 +15,25 @@ public class CreateCartItemCommandHandler : IRequestHandler<CreateCartItemComman
     private readonly IRepository<CartItem> _cartItemRepository;
     private readonly IRepository<Cart> _cartRepository;
     private readonly IRepository<Product> _productRepository;
+    private readonly IRepository<User> _userRepository;
     private readonly IMappingService _mappingService;
+    private readonly IAuthenticationService _authenticationService;
     private readonly ILogger _logger;
 
     public CreateCartItemCommandHandler(IRepository<CartItem> cartItemRepository,
         IRepository<Cart> cartRepository,
         IRepository<Product> productRepository,
+        IRepository<User> userRepository,
         IMappingService mappingService,
+        IAuthenticationService authenticationService,
         ILogger logger)
     {
         _cartItemRepository = cartItemRepository;
         _cartRepository = cartRepository;
         _productRepository = productRepository;
+        _userRepository = userRepository;
         _mappingService = mappingService;
+        _authenticationService = authenticationService;
         _logger = logger;
     }
 
@@ -40,6 +46,29 @@ public class CreateCartItemCommandHandler : IRequestHandler<CreateCartItemComman
         if (cartEntity is null)
         {
             return CommandResult.Failure(MessageConstants.BadRequest);
+        }
+
+        var userClaims = _authenticationService.GetLoggedInUser();
+
+        if (userClaims?.ExternalId is null)
+        {
+            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow, typeof(CreateCartItemCommandHandler));
+
+            return CommandResult.Failure(MessageConstants.InternalServerError);
+        }
+
+        var userExternalId = (int)userClaims.ExternalId;
+
+        var user = await _userRepository.GetByExternalIdAsync(userExternalId, cancellationToken);
+
+        if (user is null)
+        {
+            return CommandResult.Failure(MessageConstants.BadRequest);
+        }
+
+        if (cartEntity.UserId != user.InternalId)
+        {
+            return CommandResult.Failure(MessageConstants.Forbidden);
         }
 
         var product = await _productRepository.GetByExternalIdAsync(request.CreateCartItemDto.ProductExternalId, cancellationToken);
