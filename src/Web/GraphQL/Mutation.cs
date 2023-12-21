@@ -26,6 +26,9 @@ using Application.EntityManagement.Products.Dtos;
 using Application.EntityManagement.Questions;
 using Application.EntityManagement.Questions.Commands;
 using Application.EntityManagement.Questions.Dtos;
+using Application.EntityManagement.Roles;
+using Application.EntityManagement.Roles.Commands;
+using Application.EntityManagement.Roles.Dtos;
 using Application.EntityManagement.Shipments.Commands;
 using Application.EntityManagement.Shipments.Dtos;
 using Application.EntityManagement.Users;
@@ -218,6 +221,28 @@ public class Mutation
     public async Task<CommandResult> DeleteQuestionAsync([Service] QuestionService questionService, int externalId, CancellationToken cancellationToken) =>
         await questionService.DeleteByExternalIdAsync(externalId, cancellationToken);
 
+    public async Task<CommandResult> AddRoleAsync([Service] ISender sender,
+        RoleDto roleDto,
+        CancellationToken cancellationToken)
+    {
+        var createCommand = new CreateRoleCommand(roleDto);
+
+        var result = await sender.Send(createCommand, cancellationToken);
+
+        return result;
+    }
+
+    public async Task<CommandResult> UpdateRoleAsync([Service] ISender sender, int externalId, RoleDto roleDto, CancellationToken cancellationToken)
+    {
+        var updateCommand = new UpdateRoleCommand(externalId, roleDto);
+
+        var result = await sender.Send(updateCommand, cancellationToken);
+
+        return result;
+    }
+
+    public async Task<CommandResult> DeleteRoleAsync([Service] RoleService roleService, int externalId, CancellationToken cancellationToken) =>
+        await roleService.DeleteByExternalIdAsync(externalId, cancellationToken);
 
     public async Task<CommandResult> UpdateShipmentAsync([Service] ISender sender, int externalId, ShipmentDto shipmentDto, CancellationToken cancellationToken)
     {
