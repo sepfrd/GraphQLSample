@@ -10,31 +10,40 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.Products.Handlers;
 
-public class CreateProductCommandHandler(
-        IRepository<Product> repository,
+public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, CommandResult>
+{
+    private readonly IRepository<Product> _repository;
+    private readonly IMappingService _mappingService;
+    private readonly ILogger _logger;
+
+    public CreateProductCommandHandler(IRepository<Product> repository,
         IMappingService mappingService,
         ILogger logger)
-    : IRequestHandler<CreateProductCommand, CommandResult>
-{
+    {
+        _repository = repository;
+        _mappingService = mappingService;
+        _logger = logger;
+    }
+
     public async Task<CommandResult> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
-        var entity = mappingService.Map<CreateProductDto, Product>(request.CreateProductDto);
+        var entity = _mappingService.Map<ProductDto, Product>(request.ProductDto);
 
         if (entity is null)
         {
-            logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Product), typeof(CreateProductCommandHandler));
+            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Product), typeof(CreateProductCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
 
-        var createdEntity = await repository.CreateAsync(entity, cancellationToken);
+        var createdEntity = await _repository.CreateAsync(entity, cancellationToken);
 
         if (createdEntity is not null)
         {
             return CommandResult.Success(MessageConstants.SuccessfullyCreated);
         }
 
-        logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(Product), typeof(CreateProductCommandHandler));
+        _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(Product), typeof(CreateProductCommandHandler));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }

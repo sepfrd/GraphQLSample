@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Application.EntityManagement.Products.Commands;
 
-public record CreateProductCommand(CreateProductDto CreateProductDto) : IRequest<CommandResult>;
+public record CreateProductCommand(ProductDto ProductDto) : IRequest<CommandResult>;

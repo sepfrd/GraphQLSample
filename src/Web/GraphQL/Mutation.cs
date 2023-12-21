@@ -185,9 +185,9 @@ public class Mutation
         return result;
     }
 
-    public async Task<CommandResult> AddProductAsync([Service] ISender sender, CreateProductDto createProductDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> AddProductAsync([Service] ISender sender, ProductDto productDto, CancellationToken cancellationToken)
     {
-        var createCommand = new CreateProductCommand(createProductDto);
+        var createCommand = new CreateProductCommand(productDto);
 
         var result = await sender.Send(createCommand, cancellationToken);
 

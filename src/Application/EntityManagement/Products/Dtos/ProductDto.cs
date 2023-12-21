@@ -4,7 +4,6 @@ using Application.EntityManagement.Comments.Dtos;
 namespace Application.EntityManagement.Products.Dtos;
 
 public record ProductDto(
-    int ExternalId,
     string? Name,
     string? Description,
     decimal Price,
