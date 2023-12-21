@@ -1,9 +1,12 @@
 using Application.Abstractions;
+using Application.Common.Constants;
 using Application.EntityManagement.Roles.Queries;
 using Application.EntityManagement.UserRoles.Queries;
+using Application.EntityManagement.Users.Dtos;
 using Domain.Common;
 using Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Globalization;
@@ -17,11 +20,13 @@ public class AuthenticationService : IAuthenticationService
 {
     private readonly ISender _sender;
     private readonly IConfiguration _configuration;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public AuthenticationService(ISender sender, IConfiguration configuration)
+    public AuthenticationService(ISender sender, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
     {
         _sender = sender;
         _configuration = configuration;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<string?> CreateJwtAsync(User user, CancellationToken cancellationToken = default)
@@ -72,8 +77,8 @@ public class AuthenticationService : IAuthenticationService
                     .ToString(CultureInfo.InvariantCulture)),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            new Claim("username", user.Username),
-            new Claim("external_id", user.ExternalId.ToString())
+            new Claim(JwtClaimConstants.UsernameClaim, user.Username),
+            new Claim(JwtClaimConstants.ExternalIdClaim, user.ExternalId.ToString())
         });
 
         foreach (var role in roles)
@@ -98,4 +103,40 @@ public class AuthenticationService : IAuthenticationService
 
         return jwt;
     }
+
+    public UserClaimsDto? GetLoggedInUser()
+    {
+        if (!IsLoggedIn())
+        {
+            return null;
+        }
+
+        var user = _httpContextAccessor.HttpContext!.User;
+
+        var iss = user.FindFirstValue(JwtRegisteredClaimNames.Iss);
+        var aud = user.FindFirstValue(JwtRegisteredClaimNames.Aud);
+        var iat = user.FindFirstValue(JwtRegisteredClaimNames.Iat);
+        var jti = user.FindFirstValue(JwtRegisteredClaimNames.Jti);
+        var email = user.FindFirstValue(JwtRegisteredClaimNames.Email);
+        var username = user.FindFirstValue(JwtClaimConstants.UsernameClaim);
+        var externalIdString = user.FindFirstValue(JwtClaimConstants.ExternalIdClaim);
+        var roles = user.FindFirstValue(ClaimTypes.Role)?.Split();
+
+        int? externalId = externalIdString is null ? null : int.Parse(externalIdString);
+
+        var userClaimsDto = new UserClaimsDto(
+            iss,
+            aud,
+            iat,
+            jti,
+            email,
+            username,
+            externalId,
+            roles);
+
+        return userClaimsDto;
+    }
+
+    public bool IsLoggedIn() =>
+        _httpContextAccessor.HttpContext?.User.Identity?.IsAuthenticated ?? false;
 }
