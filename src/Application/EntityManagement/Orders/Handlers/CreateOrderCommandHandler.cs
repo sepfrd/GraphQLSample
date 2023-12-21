@@ -24,6 +24,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Com
     private readonly IRepository<Product> _productRepository;
     private readonly IRepository<Address> _addressRepository;
     private readonly IMappingService _mappingService;
+    private readonly IAuthenticationService _authenticationService;
     private readonly ILogger _logger;
 
     public CreateOrderCommandHandler(
@@ -35,26 +36,41 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Com
         IRepository<Product> productRepository,
         IRepository<Address> addressRepository,
         IMappingService mappingService,
+        IAuthenticationService authenticationService,
         ILogger logger)
     {
         _orderRepository = orderRepository;
-        _mappingService = mappingService;
-        _logger = logger;
         _userRepository = userRepository;
         _orderItemRepository = orderItemRepository;
         _paymentRepository = paymentRepository;
         _shipmentRepository = shipmentRepository;
         _productRepository = productRepository;
         _addressRepository = addressRepository;
+        _mappingService = mappingService;
+        _authenticationService = authenticationService;
+        _logger = logger;
     }
 
     public async Task<CommandResult> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByExternalIdAsync(request.CreateOrderDto.UserExternalId, cancellationToken);
+        var userClaims = _authenticationService.GetLoggedInUser();
+
+        if (userClaims?.ExternalId is null)
+        {
+            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow, typeof(CreateOrderCommandHandler));
+
+            return CommandResult.Failure(MessageConstants.InternalServerError);
+        }
+
+        var userExternalId = (int)userClaims.ExternalId;
+
+        var user = await _userRepository.GetByExternalIdAsync(userExternalId, cancellationToken);
 
         if (user is null)
         {
-            return CommandResult.Failure(MessageConstants.BadRequest);
+            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(CreateOrderCommandHandler));
+
+            return CommandResult.Failure(MessageConstants.InternalServerError);
         }
 
         var orderId = Guid.NewGuid();

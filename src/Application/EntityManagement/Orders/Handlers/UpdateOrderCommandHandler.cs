@@ -11,26 +11,58 @@ namespace Application.EntityManagement.Orders.Handlers;
 
 public class UpdateOrderCommandHandler : IRequestHandler<UpdateOrderCommand, CommandResult>
 {
-    private readonly IRepository<Order> _repository;
+    private readonly IRepository<Order> _orderRepository;
+    private readonly IRepository<User> _userRepository;
     private readonly IMappingService _mappingService;
+    private readonly IAuthenticationService _authenticationService;
     private readonly ILogger _logger;
 
-    public UpdateOrderCommandHandler(IRepository<Order> repository,
+    public UpdateOrderCommandHandler(
+        IRepository<Order> orderRepository,
+        IRepository<User> userRepository,
         IMappingService mappingService,
+        IAuthenticationService authenticationService,
         ILogger logger)
     {
-        _repository = repository;
+        _orderRepository = orderRepository;
         _mappingService = mappingService;
         _logger = logger;
+        _authenticationService = authenticationService;
+        _userRepository = userRepository;
     }
 
     public virtual async Task<CommandResult> Handle(UpdateOrderCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _repository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
+        var entity = await _orderRepository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
 
         if (entity is null)
         {
             return CommandResult.Success(MessageConstants.NotFound);
+        }
+
+        var userClaims = _authenticationService.GetLoggedInUser();
+
+        if (userClaims?.ExternalId is null)
+        {
+            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow, typeof(UpdateOrderCommandHandler));
+
+            return CommandResult.Failure(MessageConstants.InternalServerError);
+        }
+
+        var userExternalId = (int)userClaims.ExternalId;
+
+        var user = await _userRepository.GetByExternalIdAsync(userExternalId, cancellationToken);
+
+        if (user is null)
+        {
+            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(UpdateOrderCommandHandler));
+
+            return CommandResult.Failure(MessageConstants.InternalServerError);
+        }
+
+        if (entity.UserId != user.InternalId)
+        {
+            return CommandResult.Failure(MessageConstants.Forbidden);
         }
 
         var newEntity = _mappingService.Map(request.CreateOrderDto, entity);
@@ -42,7 +74,7 @@ public class UpdateOrderCommandHandler : IRequestHandler<UpdateOrderCommand, Com
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
 
-        var updatedEntity = await _repository.UpdateAsync(newEntity, cancellationToken);
+        var updatedEntity = await _orderRepository.UpdateAsync(newEntity, cancellationToken);
 
         if (updatedEntity is not null)
         {
