@@ -149,9 +149,9 @@ public class Mutation
         return result;
     }
 
-    public async Task<CommandResult> UpdatePersonAsync([Service] ISender sender, int externalId, UpdatePersonDto updatePersonDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> UpdatePersonAsync([Service] ISender sender, int externalId, PersonDto personDto, CancellationToken cancellationToken)
     {
-        var updateCommand = new UpdatePersonCommand(externalId, updatePersonDto);
+        var updateCommand = new UpdatePersonCommand(externalId, personDto);
 
         var result = await sender.Send(updateCommand, cancellationToken);
 
