@@ -89,7 +89,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Com
 
         var orderItems = (List<OrderItem>)orderItemsResult.Data!;
 
-        var paymentResult = await CreatePaymentAsync(request.CreateOrderDto.CreatePaymentDto, orderId, cancellationToken);
+        var paymentResult = await CreatePaymentAsync(request.CreateOrderDto.PaymentDto, orderId, cancellationToken);
 
         if (paymentResult.HttpStatusCode != HttpStatusCode.OK)
         {
@@ -203,9 +203,9 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Com
         return new OrderCreationResultDto(orderItems, HttpStatusCode.OK);
     }
 
-    private async Task<OrderCreationResultDto> CreatePaymentAsync(CreatePaymentDto createPaymentDto, Guid orderId, CancellationToken cancellationToken = default)
+    private async Task<OrderCreationResultDto> CreatePaymentAsync(PaymentDto paymentDto, Guid orderId, CancellationToken cancellationToken = default)
     {
-        var paymentEntity = _mappingService.Map<CreatePaymentDto, Payment>(createPaymentDto);
+        var paymentEntity = _mappingService.Map<PaymentDto, Payment>(paymentDto);
 
         if (paymentEntity is null)
         {

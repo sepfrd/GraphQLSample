@@ -140,9 +140,9 @@ public class Mutation
     public async Task<CommandResult> DeleteOrderAsync([Service] OrderService orderService, int externalId, CancellationToken cancellationToken) =>
         await orderService.DeleteByExternalIdAsync(externalId, cancellationToken);
 
-    public async Task<CommandResult> UpdatePaymentAsync([Service] ISender sender, int externalId, CreatePaymentDto createPaymentDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> UpdatePaymentAsync([Service] ISender sender, int externalId, PaymentDto paymentDto, CancellationToken cancellationToken)
     {
-        var updateCommand = new UpdatePaymentCommand(externalId, createPaymentDto);
+        var updateCommand = new UpdatePaymentCommand(externalId, paymentDto);
 
         var result = await sender.Send(updateCommand, cancellationToken);
 

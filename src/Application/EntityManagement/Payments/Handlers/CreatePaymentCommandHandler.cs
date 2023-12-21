@@ -10,31 +10,84 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.Payments.Handlers;
 
-public class CreatePaymentCommandHandler(
-        IRepository<Payment> repository,
-        IMappingService mappingService,
-        ILogger logger)
-    : IRequestHandler<CreatePaymentCommand, CommandResult>
+public class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand, CommandResult>
 {
+    private readonly IRepository<Payment> _paymentRepository;
+    private readonly IRepository<Order> _orderRepository;
+    private readonly IRepository<User> _userRepository;
+    private readonly IMappingService _mappingService;
+    private readonly IAuthenticationService _authenticationService;
+    private readonly ILogger _logger;
+
+    public CreatePaymentCommandHandler(
+        IRepository<Payment> paymentRepository,
+        IRepository<Order> orderRepository,
+        IRepository<User> userRepository,
+        IMappingService mappingService,
+        IAuthenticationService authenticationService,
+        ILogger logger)
+    {
+        _paymentRepository = paymentRepository;
+        _orderRepository = orderRepository;
+        _userRepository = userRepository;
+        _mappingService = mappingService;
+        _authenticationService = authenticationService;
+        _logger = logger;
+    }
+
     public async Task<CommandResult> Handle(CreatePaymentCommand request, CancellationToken cancellationToken)
     {
-        var entity = mappingService.Map<CreatePaymentDto, Payment>(request.CreatePaymentDto);
+        var order = await _orderRepository.GetByExternalIdAsync(request.PaymentDto.OrderExternalId, cancellationToken);
 
-        if (entity is null)
+        if (order is null)
         {
-            logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Payment), typeof(CreatePaymentCommandHandler));
+            return CommandResult.Failure(MessageConstants.BadRequest);
+        }
+
+        var userClaims = _authenticationService.GetLoggedInUser();
+
+        if (userClaims?.ExternalId is null)
+        {
+            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow, typeof(CreatePaymentCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
 
-        var createdEntity = await repository.CreateAsync(entity, cancellationToken);
+        var userExternalId = (int)userClaims.ExternalId;
+
+        var user = await _userRepository.GetByExternalIdAsync(userExternalId, cancellationToken);
+
+        if (user is null)
+        {
+            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(CreatePaymentCommandHandler));
+
+            return CommandResult.Failure(MessageConstants.InternalServerError);
+        }
+
+        if (order.UserId != user.InternalId)
+        {
+            return CommandResult.Failure(MessageConstants.Forbidden);
+        }
+
+        var entity = _mappingService.Map<PaymentDto, Payment>(request.PaymentDto);
+
+        if (entity is null)
+        {
+            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Payment), typeof(CreatePaymentCommandHandler));
+
+            return CommandResult.Failure(MessageConstants.InternalServerError);
+        }
+
+        entity.OrderId = order.InternalId;
+
+        var createdEntity = await _paymentRepository.CreateAsync(entity, cancellationToken);
 
         if (createdEntity is not null)
         {
             return CommandResult.Success(MessageConstants.SuccessfullyCreated);
         }
 
-        logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(Payment), typeof(CreatePaymentCommandHandler));
+        _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(Payment), typeof(CreatePaymentCommandHandler));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }

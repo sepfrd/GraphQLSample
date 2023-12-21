@@ -5,6 +5,6 @@ using Application.EntityManagement.Shipments.Dtos;
 namespace Application.EntityManagement.Orders.Dtos;
 
 public record CreateOrderDto(
-    CreatePaymentDto CreatePaymentDto,
+    PaymentDto PaymentDto,
     CreateShipmentDto CreateShipmentDto,
     IEnumerable<CreateOrderItemDto> CreateOrderItemDtos);

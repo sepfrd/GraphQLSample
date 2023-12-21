@@ -52,7 +52,7 @@ public static class DependencyInjectionHelper
             .AddInputObjectType<CategoryDto>()
             .AddInputObjectType<CommentDto>()
             .AddInputObjectType<CreateOrderDto>()
-            .AddInputObjectType<CreatePaymentDto>()
+            .AddInputObjectType<PaymentDto>()
             .AddInputObjectType<PersonDto>()
             .AddInputObjectType<PhoneNumberDto>()
             .AddInputObjectType<CreateProductDto>()
