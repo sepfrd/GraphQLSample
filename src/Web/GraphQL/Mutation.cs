@@ -43,10 +43,10 @@ namespace Web.GraphQL;
 public class Mutation
 {
     public async Task<CommandResult> AddAddressAsync([Service] ISender sender,
-        CreateAddressDto createAddressDto,
+        AddressDto addressDto,
         CancellationToken cancellationToken)
     {
-        var createCommand = new CreateAddressCommand(createAddressDto);
+        var createCommand = new CreateAddressCommand(addressDto);
 
         var result = await sender.Send(createCommand, cancellationToken);
 

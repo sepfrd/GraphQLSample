@@ -27,4 +27,5 @@ public static class MessageConstants
     public const string EntityDeletionFailed = "{time} - Internal Server Error - {entity} deletion failed inside : {class}";
     public const string EntityUpdateFailed = "{time} - Internal Server Error - {entity} update failed inside : {class}";
     public const string EntityRelationshipsRetrievalFailed = "{time} - Internal Server Error - {entity} relationships retrieval failed inside : {class}";
+    public const string ClaimsRetrievalFailed = "{time} - Internal Server Error - Claims retrieval failed while user is logged in inside : {class}";
 }

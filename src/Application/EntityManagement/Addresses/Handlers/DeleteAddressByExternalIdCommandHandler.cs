@@ -1,3 +1,4 @@
+using Application.Abstractions;
 using Application.Common;
 using Application.Common.Constants;
 using Application.EntityManagement.Addresses.Commands;
@@ -11,25 +12,56 @@ namespace Application.EntityManagement.Addresses.Handlers;
 
 public class DeleteAddressByExternalIdCommandHandler : IRequestHandler<DeleteAddressByExternalIdCommand, CommandResult>
 {
-    private readonly IRepository<Address> _repository;
+    private readonly IRepository<Address> _addressRepository;
+    private readonly IRepository<User> _userRepository;
+    private readonly IAuthenticationService _authenticationService;
     private readonly ILogger _logger;
 
-    public DeleteAddressByExternalIdCommandHandler(IRepository<Address> repository, ILogger logger)
+    public DeleteAddressByExternalIdCommandHandler(
+        IRepository<Address> addressRepository,
+        IRepository<User> userRepository,
+        IAuthenticationService authenticationService,
+        ILogger logger)
     {
-        _repository = repository;
+        _addressRepository = addressRepository;
+        _userRepository = userRepository;
+        _authenticationService = authenticationService;
         _logger = logger;
     }
 
     public virtual async Task<CommandResult> Handle(DeleteAddressByExternalIdCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _repository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
+        var entity = await _addressRepository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
 
         if (entity is null)
         {
             return CommandResult.Failure(MessageConstants.NotFound);
         }
 
-        var deletedEntity = await _repository.DeleteOneAsync(entity, cancellationToken);
+        var userClaims = _authenticationService.GetLoggedInUser();
+
+        if (userClaims?.ExternalId is null)
+        {
+            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow, typeof(DeleteAddressByExternalIdCommandHandler));
+
+            return CommandResult.Failure(MessageConstants.InternalServerError);
+        }
+
+        var userExternalId = (int)userClaims.ExternalId;
+
+        var user = await _userRepository.GetByExternalIdAsync(userExternalId, cancellationToken);
+
+        if (user is null)
+        {
+            return CommandResult.Failure(MessageConstants.BadRequest);
+        }
+
+        if (entity.UserId != user.InternalId)
+        {
+            return CommandResult.Failure(MessageConstants.Forbidden);
+        }
+
+        var deletedEntity = await _addressRepository.DeleteOneAsync(entity, cancellationToken);
 
         if (deletedEntity is not null)
         {

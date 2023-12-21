@@ -35,19 +35,23 @@ public class CreateAddressCommandHandler : IRequestHandler<CreateAddressCommand,
     {
         var userClaims = _authenticationService.GetLoggedInUser();
 
-        if (userClaims?.ExternalId != request.CreateAddressDto.UserExternalId)
+        if (userClaims?.ExternalId is null)
         {
-            return CommandResult.Failure(MessageConstants.Forbidden);
+            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow, typeof(CreateAddressCommandHandler));
+
+            return CommandResult.Failure(MessageConstants.InternalServerError);
         }
 
-        var user = await _userRepository.GetByExternalIdAsync(request.CreateAddressDto.UserExternalId, cancellationToken);
+        var userExternalId = (int)userClaims.ExternalId;
+
+        var user = await _userRepository.GetByExternalIdAsync(userExternalId, cancellationToken);
 
         if (user is null)
         {
             return CommandResult.Failure(MessageConstants.BadRequest);
         }
 
-        var entity = _mappingService.Map<CreateAddressDto, Address>(request.CreateAddressDto);
+        var entity = _mappingService.Map<AddressDto, Address>(request.AddressDto);
 
         if (entity is null)
         {

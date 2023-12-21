@@ -11,26 +11,56 @@ namespace Application.EntityManagement.Addresses.Handlers;
 
 public class UpdateAddressCommandHandler : IRequestHandler<UpdateAddressCommand, CommandResult>
 {
-    private readonly IRepository<Address> _repository;
+    private readonly IRepository<Address> _addressRepository;
+    private readonly IRepository<User> _userRepository;
     private readonly IMappingService _mappingService;
+    private readonly IAuthenticationService _authenticationService;
     private readonly ILogger _logger;
 
-    public UpdateAddressCommandHandler(IRepository<Address> repository,
+    public UpdateAddressCommandHandler(
+        IRepository<Address> addressRepository,
+        IRepository<User> userRepository,
         IMappingService mappingService,
+        IAuthenticationService authenticationService,
         ILogger logger)
     {
-        _repository = repository;
+        _addressRepository = addressRepository;
+        _userRepository = userRepository;
         _mappingService = mappingService;
+        _authenticationService = authenticationService;
         _logger = logger;
     }
 
     public virtual async Task<CommandResult> Handle(UpdateAddressCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _repository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
+        var entity = await _addressRepository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
 
         if (entity is null)
         {
             return CommandResult.Success(MessageConstants.NotFound);
+        }
+
+        var userClaims = _authenticationService.GetLoggedInUser();
+
+        if (userClaims?.ExternalId is null)
+        {
+            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow, typeof(CreateAddressCommandHandler));
+
+            return CommandResult.Failure(MessageConstants.InternalServerError);
+        }
+
+        var userExternalId = (int)userClaims.ExternalId;
+
+        var user = await _userRepository.GetByExternalIdAsync(userExternalId, cancellationToken);
+
+        if (user is null)
+        {
+            return CommandResult.Failure(MessageConstants.BadRequest);
+        }
+
+        if (entity.UserId != user.InternalId)
+        {
+            return CommandResult.Failure(MessageConstants.Forbidden);
         }
 
         var newEntity = _mappingService.Map(request.AddressDto, entity);
@@ -42,7 +72,7 @@ public class UpdateAddressCommandHandler : IRequestHandler<UpdateAddressCommand,
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
 
-        var updatedEntity = await _repository.UpdateAsync(newEntity, cancellationToken);
+        var updatedEntity = await _addressRepository.UpdateAsync(newEntity, cancellationToken);
 
         if (updatedEntity is not null)
         {
