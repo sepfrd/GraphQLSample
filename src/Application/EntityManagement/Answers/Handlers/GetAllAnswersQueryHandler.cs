@@ -8,7 +8,7 @@ using System.Net;
 
 namespace Application.EntityManagement.Answers.Handlers;
 
-public sealed class GetAllAnswersQueryHandler : IRequestHandler<GetAllAnswersQuery, QueryReferenceResponse<IEnumerable<Answer>>>
+public sealed class GetAllAnswersQueryHandler : IRequestHandler<GetAllAnswersQuery, QueryResponse<IEnumerable<Answer>>>
 {
     private readonly IRepository<Answer> _repository;
 
@@ -17,11 +17,11 @@ public sealed class GetAllAnswersQueryHandler : IRequestHandler<GetAllAnswersQue
         _repository = repository;
     }
 
-    public async Task<QueryReferenceResponse<IEnumerable<Answer>>> Handle(GetAllAnswersQuery request, CancellationToken cancellationToken)
+    public async Task<QueryResponse<IEnumerable<Answer>>> Handle(GetAllAnswersQuery request, CancellationToken cancellationToken)
     {
         var entities = await _repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
 
-        return new QueryReferenceResponse<IEnumerable<Answer>>(
+        return new QueryResponse<IEnumerable<Answer>>(
             entities,
             true,
             MessageConstants.SuccessfullyRetrieved,

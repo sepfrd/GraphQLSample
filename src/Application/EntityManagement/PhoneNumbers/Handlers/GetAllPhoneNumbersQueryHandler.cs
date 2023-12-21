@@ -9,13 +9,13 @@ using System.Net;
 namespace Application.EntityManagement.PhoneNumbers.Handlers;
 
 public sealed class GetAllPhoneNumbersQueryHandler(IRepository<PhoneNumber> repository)
-    : IRequestHandler<GetAllPhoneNumbersQuery, QueryReferenceResponse<IEnumerable<PhoneNumber>>>
+    : IRequestHandler<GetAllPhoneNumbersQuery, QueryResponse<IEnumerable<PhoneNumber>>>
 {
-    public async Task<QueryReferenceResponse<IEnumerable<PhoneNumber>>> Handle(GetAllPhoneNumbersQuery request, CancellationToken cancellationToken)
+    public async Task<QueryResponse<IEnumerable<PhoneNumber>>> Handle(GetAllPhoneNumbersQuery request, CancellationToken cancellationToken)
     {
         var entities = await repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
 
-        return new QueryReferenceResponse<IEnumerable<PhoneNumber>>(
+        return new QueryResponse<IEnumerable<PhoneNumber>>(
             entities,
             true,
             MessageConstants.SuccessfullyRetrieved,

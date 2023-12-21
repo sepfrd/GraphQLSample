@@ -22,6 +22,11 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, CommandResult>
 
     public async Task<CommandResult> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
+        if (_authenticationService.IsLoggedIn())
+        {
+            return CommandResult.Failure(MessageConstants.AlreadyLoggedIn);
+        }
+        
         var users = await _userRepository.GetAllAsync(
             user => user.Username == request.LoginDto.UsernameOrEmail || user.Email == request.LoginDto.UsernameOrEmail,
             new Pagination(),

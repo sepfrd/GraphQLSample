@@ -9,4 +9,4 @@ namespace Application.EntityManagement.Shipments.Queries;
 public record GetAllShipmentsQuery(
         Pagination Pagination,
         Expression<Func<Shipment, bool>>? Filter = null)
-    : IRequest<QueryReferenceResponse<IEnumerable<Shipment>>>;
+    : IRequest<QueryResponse<IEnumerable<Shipment>>>;

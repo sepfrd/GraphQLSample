@@ -8,7 +8,7 @@ using System.Net;
 
 namespace Application.EntityManagement.Comments.Handlers;
 
-public sealed class GetAllCommentsQueryHandler : IRequestHandler<GetAllCommentsQuery, QueryReferenceResponse<IEnumerable<Comment>>>
+public sealed class GetAllCommentsQueryHandler : IRequestHandler<GetAllCommentsQuery, QueryResponse<IEnumerable<Comment>>>
 {
     private readonly IRepository<Comment> _repository;
 
@@ -17,11 +17,11 @@ public sealed class GetAllCommentsQueryHandler : IRequestHandler<GetAllCommentsQ
         _repository = repository;
     }
 
-    public async Task<QueryReferenceResponse<IEnumerable<Comment>>> Handle(GetAllCommentsQuery request, CancellationToken cancellationToken)
+    public async Task<QueryResponse<IEnumerable<Comment>>> Handle(GetAllCommentsQuery request, CancellationToken cancellationToken)
     {
         var entities = await _repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
 
-        return new QueryReferenceResponse<IEnumerable<Comment>>(
+        return new QueryResponse<IEnumerable<Comment>>(
             entities,
             true,
             MessageConstants.SuccessfullyRetrieved,

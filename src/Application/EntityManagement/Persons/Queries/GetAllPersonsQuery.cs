@@ -9,4 +9,4 @@ namespace Application.EntityManagement.Persons.Queries;
 public record GetAllPersonsQuery(
         Pagination Pagination,
         Expression<Func<Person, bool>>? Filter = null)
-    : IRequest<QueryReferenceResponse<IEnumerable<Person>>>;
+    : IRequest<QueryResponse<IEnumerable<Person>>>;

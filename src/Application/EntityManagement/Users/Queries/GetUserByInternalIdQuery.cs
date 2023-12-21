@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Application.EntityManagement.Users.Queries;
 
-public sealed record GetUserByInternalIdQuery(Guid InternalId) : IRequest<QueryReferenceResponse<User>>;
+public sealed record GetUserByInternalIdQuery(Guid InternalId) : IRequest<QueryResponse<User>>;

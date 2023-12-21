@@ -9,4 +9,4 @@ namespace Application.EntityManagement.Questions.Queries;
 public record GetAllQuestionsQuery(
         Pagination Pagination,
         Expression<Func<Question, bool>>? Filter = null)
-    : IRequest<QueryReferenceResponse<IEnumerable<Question>>>;
+    : IRequest<QueryResponse<IEnumerable<Question>>>;

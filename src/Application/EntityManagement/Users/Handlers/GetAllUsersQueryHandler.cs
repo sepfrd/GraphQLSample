@@ -9,7 +9,7 @@ using System.Net;
 namespace Application.EntityManagement.Users.Handlers;
 
 public sealed class GetAllUsersQueryHandler
-    : IRequestHandler<GetAllUsersQuery, QueryReferenceResponse<IEnumerable<User>>>
+    : IRequestHandler<GetAllUsersQuery, QueryResponse<IEnumerable<User>>>
 {
     private readonly IRepository<User> _userRepository;
 
@@ -18,11 +18,11 @@ public sealed class GetAllUsersQueryHandler
         _userRepository = userRepository;
     }
 
-    public async Task<QueryReferenceResponse<IEnumerable<User>>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
+    public async Task<QueryResponse<IEnumerable<User>>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
     {
         var users = await _userRepository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
 
-        return new QueryReferenceResponse<IEnumerable<User>>(
+        return new QueryResponse<IEnumerable<User>>(
             users,
             true,
             MessageConstants.SuccessfullyRetrieved,

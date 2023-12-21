@@ -9,4 +9,4 @@ namespace Application.EntityManagement.Products.Queries;
 public record GetAllProductsQuery(
         Pagination Pagination,
         Expression<Func<Product, bool>>? Filter = null)
-    : IRequest<QueryReferenceResponse<IEnumerable<Product>>>;
+    : IRequest<QueryResponse<IEnumerable<Product>>>;

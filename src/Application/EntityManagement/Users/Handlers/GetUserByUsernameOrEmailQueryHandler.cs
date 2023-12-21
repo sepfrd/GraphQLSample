@@ -8,9 +8,9 @@ using System.Net;
 
 namespace Application.EntityManagement.Users.Handlers;
 
-public sealed class GetUserByUsernameOrEmailQueryHandler(IRepository<User> userRepository) : IRequestHandler<GetUserByUsernameOrEmailQuery, QueryReferenceResponse<User>>
+public sealed class GetUserByUsernameOrEmailQueryHandler(IRepository<User> userRepository) : IRequestHandler<GetUserByUsernameOrEmailQuery, QueryResponse<User>>
 {
-    public async Task<QueryReferenceResponse<User>> Handle(GetUserByUsernameOrEmailQuery request, CancellationToken cancellationToken)
+    public async Task<QueryResponse<User>> Handle(GetUserByUsernameOrEmailQuery request, CancellationToken cancellationToken)
     {
         var users = await userRepository
             .GetAllAsync(user =>
@@ -23,14 +23,14 @@ public sealed class GetUserByUsernameOrEmailQueryHandler(IRepository<User> userR
 
         if (user is not null)
         {
-            return new QueryReferenceResponse<User>(
+            return new QueryResponse<User>(
                 user,
                 true,
                 MessageConstants.SuccessfullyRetrieved,
                 HttpStatusCode.OK);
         }
 
-        return new QueryReferenceResponse<User>(
+        return new QueryResponse<User>(
             null,
             true,
             MessageConstants.NotFound,

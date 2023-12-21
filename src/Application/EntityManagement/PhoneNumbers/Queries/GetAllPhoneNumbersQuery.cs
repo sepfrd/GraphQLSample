@@ -9,4 +9,4 @@ namespace Application.EntityManagement.PhoneNumbers.Queries;
 public record GetAllPhoneNumbersQuery(
         Pagination Pagination,
         Expression<Func<PhoneNumber, bool>>? Filter = null)
-    : IRequest<QueryReferenceResponse<IEnumerable<PhoneNumber>>>;
+    : IRequest<QueryResponse<IEnumerable<PhoneNumber>>>;

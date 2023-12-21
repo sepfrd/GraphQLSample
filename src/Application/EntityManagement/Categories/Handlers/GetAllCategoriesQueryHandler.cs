@@ -9,13 +9,13 @@ using System.Net;
 namespace Application.EntityManagement.Categories.Handlers;
 
 public sealed class GetAllCategoriesQueryHandler(IRepository<Category> repository)
-    : IRequestHandler<GetAllCategoriesQuery, QueryReferenceResponse<IEnumerable<Category>>>
+    : IRequestHandler<GetAllCategoriesQuery, QueryResponse<IEnumerable<Category>>>
 {
-    public async Task<QueryReferenceResponse<IEnumerable<Category>>> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken)
+    public async Task<QueryResponse<IEnumerable<Category>>> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken)
     {
         var entities = await repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
 
-        return new QueryReferenceResponse<IEnumerable<Category>>(
+        return new QueryResponse<IEnumerable<Category>>(
             entities,
             true,
             MessageConstants.SuccessfullyRetrieved,

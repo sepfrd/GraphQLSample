@@ -15,15 +15,15 @@ public class GetUserByExternalIdQueryHandler(
         IRepository<User> userRepository,
         IMappingService mappingService,
         ILogger logger)
-    : IRequestHandler<GetUserByExternalIdQuery, QueryReferenceResponse<UserDto>>
+    : IRequestHandler<GetUserByExternalIdQuery, QueryResponse<UserDto>>
 {
-    public async Task<QueryReferenceResponse<UserDto>> Handle(GetUserByExternalIdQuery request, CancellationToken cancellationToken)
+    public async Task<QueryResponse<UserDto>> Handle(GetUserByExternalIdQuery request, CancellationToken cancellationToken)
     {
         var user = await userRepository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
 
         if (user is null)
         {
-            return new QueryReferenceResponse<UserDto>(
+            return new QueryResponse<UserDto>(
                 null,
                 true,
                 MessageConstants.NotFound,
@@ -34,7 +34,7 @@ public class GetUserByExternalIdQueryHandler(
 
         if (userDto is not null)
         {
-            return new QueryReferenceResponse<UserDto>(
+            return new QueryResponse<UserDto>(
                 userDto,
                 true,
                 MessageConstants.SuccessfullyRetrieved,
@@ -43,7 +43,7 @@ public class GetUserByExternalIdQueryHandler(
 
         logger.LogError(MessageConstants.MappingFailed, DateTime.UtcNow, typeof(User), typeof(GetUserByExternalIdQueryHandler));
 
-        return new QueryReferenceResponse<UserDto>(
+        return new QueryResponse<UserDto>(
             null,
             false,
             MessageConstants.InternalServerError,

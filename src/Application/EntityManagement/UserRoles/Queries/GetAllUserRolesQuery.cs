@@ -9,4 +9,4 @@ namespace Application.EntityManagement.UserRoles.Queries;
 public record GetAllUserRolesQuery(
         Pagination Pagination,
         Expression<Func<UserRole, bool>>? Filter = null)
-    : IRequest<QueryReferenceResponse<IEnumerable<UserRole>>>;
+    : IRequest<QueryResponse<IEnumerable<UserRole>>>;

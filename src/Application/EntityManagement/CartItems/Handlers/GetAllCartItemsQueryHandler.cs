@@ -8,7 +8,7 @@ using System.Net;
 
 namespace Application.EntityManagement.CartItems.Handlers;
 
-public class GetAllCartItemsQueryHandler : IRequestHandler<GetAllCartItemsQuery, QueryReferenceResponse<IEnumerable<CartItem>>>
+public class GetAllCartItemsQueryHandler : IRequestHandler<GetAllCartItemsQuery, QueryResponse<IEnumerable<CartItem>>>
 {
     private readonly IRepository<CartItem> _repository;
 
@@ -17,11 +17,11 @@ public class GetAllCartItemsQueryHandler : IRequestHandler<GetAllCartItemsQuery,
         _repository = repository;
     }
 
-    public virtual async Task<QueryReferenceResponse<IEnumerable<CartItem>>> Handle(GetAllCartItemsQuery request, CancellationToken cancellationToken)
+    public virtual async Task<QueryResponse<IEnumerable<CartItem>>> Handle(GetAllCartItemsQuery request, CancellationToken cancellationToken)
     {
         var entities = await _repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
 
-        return new QueryReferenceResponse<IEnumerable<CartItem>>
+        return new QueryResponse<IEnumerable<CartItem>>
             (
             entities,
             true,

@@ -9,4 +9,4 @@ namespace Application.EntityManagement.Roles.Queries;
 public record GetAllRolesQuery(
         Pagination Pagination,
         Expression<Func<Role, bool>>? Filter = null)
-    : IRequest<QueryReferenceResponse<IEnumerable<Role>>>;
+    : IRequest<QueryResponse<IEnumerable<Role>>>;

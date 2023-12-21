@@ -8,7 +8,7 @@ using System.Net;
 
 namespace Application.EntityManagement.UserRoles.Handlers;
 
-public sealed class GetAllUserRolesQueryHandler : IRequestHandler<GetAllUserRolesQuery, QueryReferenceResponse<IEnumerable<UserRole>>>
+public sealed class GetAllUserRolesQueryHandler : IRequestHandler<GetAllUserRolesQuery, QueryResponse<IEnumerable<UserRole>>>
 {
     private readonly IRepository<UserRole> _repository;
 
@@ -17,11 +17,11 @@ public sealed class GetAllUserRolesQueryHandler : IRequestHandler<GetAllUserRole
         _repository = repository;
     }
 
-    public async Task<QueryReferenceResponse<IEnumerable<UserRole>>> Handle(GetAllUserRolesQuery request, CancellationToken cancellationToken)
+    public async Task<QueryResponse<IEnumerable<UserRole>>> Handle(GetAllUserRolesQuery request, CancellationToken cancellationToken)
     {
         var entities = await _repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
 
-        return new QueryReferenceResponse<IEnumerable<UserRole>>(
+        return new QueryResponse<IEnumerable<UserRole>>(
             entities,
             true,
             MessageConstants.SuccessfullyRetrieved,

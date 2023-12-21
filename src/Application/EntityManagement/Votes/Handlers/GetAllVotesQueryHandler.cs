@@ -9,13 +9,13 @@ using System.Net;
 namespace Application.EntityManagement.Votes.Handlers;
 
 public sealed class GetAllVotesQueryHandler(IRepository<Vote> repository)
-    : IRequestHandler<GetAllVotesQuery, QueryReferenceResponse<IEnumerable<Vote>>>
+    : IRequestHandler<GetAllVotesQuery, QueryResponse<IEnumerable<Vote>>>
 {
-    public async Task<QueryReferenceResponse<IEnumerable<Vote>>> Handle(GetAllVotesQuery request, CancellationToken cancellationToken)
+    public async Task<QueryResponse<IEnumerable<Vote>>> Handle(GetAllVotesQuery request, CancellationToken cancellationToken)
     {
         var entities = await repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
 
-        return new QueryReferenceResponse<IEnumerable<Vote>>(
+        return new QueryResponse<IEnumerable<Vote>>(
             entities,
             true,
             MessageConstants.SuccessfullyRetrieved,

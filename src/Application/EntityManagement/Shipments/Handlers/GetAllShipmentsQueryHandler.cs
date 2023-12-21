@@ -9,13 +9,13 @@ using System.Net;
 namespace Application.EntityManagement.Shipments.Handlers;
 
 public sealed class GetAllShipmentsQueryHandler(IRepository<Shipment> repository)
-    : IRequestHandler<GetAllShipmentsQuery, QueryReferenceResponse<IEnumerable<Shipment>>>
+    : IRequestHandler<GetAllShipmentsQuery, QueryResponse<IEnumerable<Shipment>>>
 {
-    public async Task<QueryReferenceResponse<IEnumerable<Shipment>>> Handle(GetAllShipmentsQuery request, CancellationToken cancellationToken)
+    public async Task<QueryResponse<IEnumerable<Shipment>>> Handle(GetAllShipmentsQuery request, CancellationToken cancellationToken)
     {
         var entities = await repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
 
-        return new QueryReferenceResponse<IEnumerable<Shipment>>(
+        return new QueryResponse<IEnumerable<Shipment>>(
             entities,
             true,
             MessageConstants.SuccessfullyRetrieved,

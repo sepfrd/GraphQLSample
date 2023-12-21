@@ -9,4 +9,4 @@ namespace Application.EntityManagement.Comments.Queries;
 public record GetAllCommentsQuery(
         Pagination Pagination,
         Expression<Func<Comment, bool>>? Filter = null)
-    : IRequest<QueryReferenceResponse<IEnumerable<Comment>>>;
+    : IRequest<QueryResponse<IEnumerable<Comment>>>;

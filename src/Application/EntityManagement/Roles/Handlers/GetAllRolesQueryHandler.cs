@@ -9,13 +9,13 @@ using System.Net;
 namespace Application.EntityManagement.Roles.Handlers;
 
 public sealed class GetAllRolesQueryHandler(IRepository<Role> repository)
-    : IRequestHandler<GetAllRolesQuery, QueryReferenceResponse<IEnumerable<Role>>>
+    : IRequestHandler<GetAllRolesQuery, QueryResponse<IEnumerable<Role>>>
 {
-    public async Task<QueryReferenceResponse<IEnumerable<Role>>> Handle(GetAllRolesQuery request, CancellationToken cancellationToken)
+    public async Task<QueryResponse<IEnumerable<Role>>> Handle(GetAllRolesQuery request, CancellationToken cancellationToken)
     {
         var entities = await repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
 
-        return new QueryReferenceResponse<IEnumerable<Role>>(
+        return new QueryResponse<IEnumerable<Role>>(
             entities,
             true,
             MessageConstants.SuccessfullyRetrieved,

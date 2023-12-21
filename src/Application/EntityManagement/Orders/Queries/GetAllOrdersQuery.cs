@@ -9,4 +9,4 @@ namespace Application.EntityManagement.Orders.Queries;
 public record GetAllOrdersQuery(
         Pagination Pagination,
         Expression<Func<Order, bool>>? Filter = null)
-    : IRequest<QueryReferenceResponse<IEnumerable<Order>>>;
+    : IRequest<QueryResponse<IEnumerable<Order>>>;

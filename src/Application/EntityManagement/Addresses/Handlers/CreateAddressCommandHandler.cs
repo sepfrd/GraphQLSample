@@ -15,21 +15,31 @@ public class CreateAddressCommandHandler : IRequestHandler<CreateAddressCommand,
     private readonly IRepository<Address> _addressRepository;
     private readonly IRepository<User> _userRepository;
     private readonly IMappingService _mappingService;
+    private readonly IAuthenticationService _authenticationService;
     private readonly ILogger _logger;
 
     public CreateAddressCommandHandler(IRepository<Address> addressRepository,
         IRepository<User> userRepository,
         IMappingService mappingService,
+        IAuthenticationService authenticationService,
         ILogger logger)
     {
         _addressRepository = addressRepository;
         _userRepository = userRepository;
         _mappingService = mappingService;
+        _authenticationService = authenticationService;
         _logger = logger;
     }
 
     public async Task<CommandResult> Handle(CreateAddressCommand request, CancellationToken cancellationToken)
     {
+        var userClaims = _authenticationService.GetLoggedInUser();
+
+        if (userClaims?.ExternalId != request.CreateAddressDto.UserExternalId)
+        {
+            return CommandResult.Failure(MessageConstants.Forbidden);
+        }
+
         var user = await _userRepository.GetByExternalIdAsync(request.CreateAddressDto.UserExternalId, cancellationToken);
 
         if (user is null)

@@ -9,4 +9,4 @@ namespace Application.EntityManagement.Carts.Queries;
 public record GetAllCartsQuery(
         Pagination Pagination,
         Expression<Func<Cart, bool>>? Filter = null)
-    : IRequest<QueryReferenceResponse<IEnumerable<Cart>>>;
+    : IRequest<QueryResponse<IEnumerable<Cart>>>;

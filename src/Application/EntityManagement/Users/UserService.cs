@@ -45,35 +45,4 @@ public class UserService
 
         return CommandResult.Success(MessageConstants.SuccessfullyDeleted);
     }
-
-    public async Task<QueryReferenceResponse<User>> LoginAsync(LoginDto dto, CancellationToken cancellationToken = default)
-    {
-        var getUserQuery = new GetUserByUsernameOrEmailQuery(dto.UsernameOrEmail);
-
-        var queryResponse = await _mediator.Send(getUserQuery, cancellationToken);
-
-        if (queryResponse.Data is null)
-        {
-            return new QueryReferenceResponse<User>(
-                null,
-                false,
-                MessageConstants.InvalidCredentials);
-        }
-
-        var user = queryResponse.Data;
-
-        if (user.Password != dto.Password)
-        {
-            return new QueryReferenceResponse<User>(
-                null,
-                false,
-                MessageConstants.InvalidCredentials);
-        }
-
-        return new QueryReferenceResponse<User>(
-            user,
-            true,
-            MessageConstants.SuccessfullyRetrieved,
-            HttpStatusCode.OK);
-    }
 }

@@ -9,4 +9,4 @@ namespace Application.EntityManagement.Addresses.Queries;
 public record GetAllAddressesQuery(
         Pagination Pagination,
         Expression<Func<Address, bool>>? Filter = null)
-    : IRequest<QueryReferenceResponse<IEnumerable<Address>>>;
+    : IRequest<QueryResponse<IEnumerable<Address>>>;

@@ -8,7 +8,7 @@ using System.Net;
 
 namespace Application.EntityManagement.Addresses.Handlers;
 
-public sealed class GetAllAddressesQueryHandler : IRequestHandler<GetAllAddressesQuery, QueryReferenceResponse<IEnumerable<Address>>>
+public sealed class GetAllAddressesQueryHandler : IRequestHandler<GetAllAddressesQuery, QueryResponse<IEnumerable<Address>>>
 {
     private readonly IRepository<Address> _repository;
 
@@ -17,11 +17,11 @@ public sealed class GetAllAddressesQueryHandler : IRequestHandler<GetAllAddresse
         _repository = repository;
     }
 
-    public async Task<QueryReferenceResponse<IEnumerable<Address>>> Handle(GetAllAddressesQuery request, CancellationToken cancellationToken)
+    public async Task<QueryResponse<IEnumerable<Address>>> Handle(GetAllAddressesQuery request, CancellationToken cancellationToken)
     {
         var entities = await _repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
 
-        return new QueryReferenceResponse<IEnumerable<Address>>(
+        return new QueryResponse<IEnumerable<Address>>(
             entities,
             true,
             MessageConstants.SuccessfullyRetrieved,

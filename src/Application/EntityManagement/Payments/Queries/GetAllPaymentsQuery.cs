@@ -9,4 +9,4 @@ namespace Application.EntityManagement.Payments.Queries;
 public record GetAllPaymentsQuery(
         Pagination Pagination,
         Expression<Func<Payment, bool>>? Filter = null)
-    : IRequest<QueryReferenceResponse<IEnumerable<Payment>>>;
+    : IRequest<QueryResponse<IEnumerable<Payment>>>;

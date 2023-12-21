@@ -8,22 +8,22 @@ using System.Net;
 
 namespace Application.EntityManagement.Users.Handlers;
 
-public class GetUserByInternalIdQueryHandler(IRepository<User> userRepository) : IRequestHandler<GetUserByInternalIdQuery, QueryReferenceResponse<User>>
+public class GetUserByInternalIdQueryHandler(IRepository<User> userRepository) : IRequestHandler<GetUserByInternalIdQuery, QueryResponse<User>>
 {
-    public async Task<QueryReferenceResponse<User>> Handle(GetUserByInternalIdQuery request, CancellationToken cancellationToken)
+    public async Task<QueryResponse<User>> Handle(GetUserByInternalIdQuery request, CancellationToken cancellationToken)
     {
         var user = await userRepository.GetByInternalIdAsync(request.InternalId, cancellationToken);
 
         if (user is null)
         {
-            return new QueryReferenceResponse<User>(
+            return new QueryResponse<User>(
                 null,
                 true,
                 MessageConstants.NotFound,
                 HttpStatusCode.NoContent);
         }
 
-        return new QueryReferenceResponse<User>(
+        return new QueryResponse<User>(
             user,
             true,
             MessageConstants.SuccessfullyRetrieved,
