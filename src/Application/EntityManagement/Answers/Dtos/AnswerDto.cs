@@ -1,7 +1,6 @@
 namespace Application.EntityManagement.Answers.Dtos;
 
 public record AnswerDto(
-    int ExternalId,
+    int QuestionExternalId,
     string Title,
-    string Description
-);
+    string Description);

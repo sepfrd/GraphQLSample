@@ -11,26 +11,56 @@ namespace Application.EntityManagement.Answers.Handlers;
 
 public class UpdateAnswerCommandHandler : IRequestHandler<UpdateAnswerCommand, CommandResult>
 {
-    private readonly IRepository<Answer> _repository;
+    private readonly IRepository<Answer> _answerRepository;
+    private readonly IRepository<User> _userRepository;
     private readonly IMappingService _mappingService;
+    private readonly IAuthenticationService _authenticationService;
     private readonly ILogger _logger;
 
-    public UpdateAnswerCommandHandler(IRepository<Answer> repository,
+    public UpdateAnswerCommandHandler(
+        IRepository<Answer> answerRepository,
+        IRepository<User> userRepository,
         IMappingService mappingService,
-        ILogger logger)
+        ILogger logger,
+        IAuthenticationService authenticationService)
     {
-        _repository = repository;
+        _answerRepository = answerRepository;
+        _userRepository = userRepository;
         _mappingService = mappingService;
         _logger = logger;
+        _authenticationService = authenticationService;
     }
 
     public virtual async Task<CommandResult> Handle(UpdateAnswerCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _repository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
+        var entity = await _answerRepository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
 
         if (entity is null)
         {
             return CommandResult.Success(MessageConstants.NotFound);
+        }
+
+        var userClaims = _authenticationService.GetLoggedInUser();
+
+        if (userClaims?.ExternalId is null)
+        {
+            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow, typeof(UpdateAnswerCommandHandler));
+
+            return CommandResult.Failure(MessageConstants.InternalServerError);
+        }
+
+        var userExternalId = (int)userClaims.ExternalId;
+
+        var user = await _userRepository.GetByExternalIdAsync(userExternalId, cancellationToken);
+
+        if (user is null)
+        {
+            return CommandResult.Failure(MessageConstants.BadRequest);
+        }
+
+        if (entity.UserId != user.InternalId)
+        {
+            return CommandResult.Failure(MessageConstants.Forbidden);
         }
 
         var newEntity = _mappingService.Map(request.AnswerDto, entity);
@@ -42,7 +72,7 @@ public class UpdateAnswerCommandHandler : IRequestHandler<UpdateAnswerCommand, C
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
 
-        var updatedEntity = await _repository.UpdateAsync(newEntity, cancellationToken);
+        var updatedEntity = await _answerRepository.UpdateAsync(newEntity, cancellationToken);
 
         if (updatedEntity is not null)
         {

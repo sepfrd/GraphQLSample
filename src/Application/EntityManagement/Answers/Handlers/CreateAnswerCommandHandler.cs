@@ -16,38 +16,52 @@ public class CreateAnswerCommandHandler : IRequestHandler<CreateAnswerCommand, C
     private readonly IRepository<Question> _questionRepository;
     private readonly IRepository<User> _userRepository;
     private readonly IMappingService _mappingService;
+    private readonly IAuthenticationService _authenticationService;
     private readonly ILogger _logger;
 
     public CreateAnswerCommandHandler(IRepository<Answer> answerRepository,
         IRepository<Question> questionRepository,
         IRepository<User> userRepository,
         IMappingService mappingService,
+        IAuthenticationService authenticationService,
         ILogger logger)
     {
         _answerRepository = answerRepository;
         _questionRepository = questionRepository;
         _userRepository = userRepository;
         _mappingService = mappingService;
+        _authenticationService = authenticationService;
         _logger = logger;
     }
 
     public async Task<CommandResult> Handle(CreateAnswerCommand request, CancellationToken cancellationToken)
     {
-        var question = await _questionRepository.GetByExternalIdAsync(request.CreateAnswerDto.QuestionExternalId, cancellationToken);
+        var question = await _questionRepository.GetByExternalIdAsync(request.AnswerDto.QuestionExternalId, cancellationToken);
 
         if (question is null)
         {
             return CommandResult.Failure(MessageConstants.BadRequest);
         }
 
-        var user = await _userRepository.GetByExternalIdAsync(request.CreateAnswerDto.UserExternalId, cancellationToken);
+        var userClaims = _authenticationService.GetLoggedInUser();
+
+        if (userClaims?.ExternalId is null)
+        {
+            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow, typeof(CreateAnswerCommandHandler));
+
+            return CommandResult.Failure(MessageConstants.InternalServerError);
+        }
+
+        var userExternalId = (int)userClaims.ExternalId;
+
+        var user = await _userRepository.GetByExternalIdAsync(userExternalId, cancellationToken);
 
         if (user is null)
         {
             return CommandResult.Failure(MessageConstants.BadRequest);
         }
-
-        var entity = _mappingService.Map<CreateAnswerDto, Answer>(request.CreateAnswerDto);
+        
+        var entity = _mappingService.Map<AnswerDto, Answer>(request.AnswerDto);
 
         if (entity is null)
         {

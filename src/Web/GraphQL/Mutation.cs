@@ -1,6 +1,4 @@
-using Application.Abstractions;
 using Application.Common;
-using Application.Common.Constants;
 using Application.EntityManagement.Addresses.Commands;
 using Application.EntityManagement.Addresses.Dtos;
 using Application.EntityManagement.Answers;
@@ -36,7 +34,6 @@ using Application.EntityManagement.Users.Dtos;
 using Application.EntityManagement.Votes.Commands;
 using Application.EntityManagement.Votes.Dtos;
 using MediatR;
-using System.Security.Claims;
 
 namespace Web.GraphQL;
 
@@ -71,7 +68,7 @@ public class Mutation
         return result;
     }
 
-    public async Task<CommandResult> AddAnswerAsync([Service] ISender sender, CreateAnswerDto answerDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> AddAnswerAsync([Service] ISender sender, AnswerDto answerDto, CancellationToken cancellationToken)
     {
         var createCommand = new CreateAnswerCommand(answerDto);
 

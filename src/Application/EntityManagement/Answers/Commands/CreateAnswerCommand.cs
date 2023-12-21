@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Application.EntityManagement.Answers.Commands;
 
-public record CreateAnswerCommand(CreateAnswerDto CreateAnswerDto) : IRequest<CommandResult>;
+public record CreateAnswerCommand(AnswerDto AnswerDto) : IRequest<CommandResult>;
