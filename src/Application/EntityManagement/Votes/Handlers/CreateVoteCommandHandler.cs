@@ -48,6 +48,20 @@ public class CreateVoteCommandHandler : IRequestHandler<CreateVoteCommand, Comma
 
     public async Task<CommandResult> Handle(CreateVoteCommand request, CancellationToken cancellationToken)
     {
+        BaseEntity? content = request.VoteDto.ContentType switch
+        {
+            VotableContentType.Answer => await _answerRepository.GetByExternalIdAsync(request.VoteDto.ContentExternalId, cancellationToken),
+            VotableContentType.Comment => await _commentRepository.GetByExternalIdAsync(request.VoteDto.ContentExternalId, cancellationToken),
+            VotableContentType.Product => await _productRepository.GetByExternalIdAsync(request.VoteDto.ContentExternalId, cancellationToken),
+            VotableContentType.Question => await _questionRepository.GetByExternalIdAsync(request.VoteDto.ContentExternalId, cancellationToken),
+            _ => null
+        };
+
+        if (content is null)
+        {
+            return CommandResult.Failure(MessageConstants.BadRequest);
+        }
+        
         var userClaims = _authenticationService.GetLoggedInUser();
 
         if (userClaims?.ExternalId is null)
@@ -75,20 +89,6 @@ public class CreateVoteCommandHandler : IRequestHandler<CreateVoteCommand, Comma
             _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Vote), typeof(CreateVoteCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
-        }
-
-        BaseEntity? content = entity.ContentType switch
-        {
-            VotableContentType.Answer => await _answerRepository.GetByExternalIdAsync(request.VoteDto.ContentExternalId, cancellationToken),
-            VotableContentType.Comment => await _commentRepository.GetByExternalIdAsync(request.VoteDto.ContentExternalId, cancellationToken),
-            VotableContentType.Product => await _productRepository.GetByExternalIdAsync(request.VoteDto.ContentExternalId, cancellationToken),
-            VotableContentType.Question => await _questionRepository.GetByExternalIdAsync(request.VoteDto.ContentExternalId, cancellationToken),
-            _ => null
-        };
-
-        if (content is null)
-        {
-            return CommandResult.Failure(MessageConstants.BadRequest);
         }
 
         entity.UserId = user.InternalId;

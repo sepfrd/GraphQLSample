@@ -9,9 +9,7 @@ namespace Infrastructure.Persistence.Common.Helpers;
 
 public class DatabaseSeeder
 {
-    private const int DefaultHugeNumber = 100_000;
-    private const int DefaultNormalNumber = 50_000;
-    private const int DefaultSmallNumber = 10_000;
+    private const int DefaultNumber = 100_000;
     private readonly IMongoDatabase _mongoDatabase;
     private readonly static Guid AdminRoleInternalId = Guid.NewGuid();
     private readonly static Guid CustomerRoleInternalId = Guid.NewGuid();
@@ -49,131 +47,71 @@ public class DatabaseSeeder
         var fakeProductVotes = GetFakeProductVotes();
         var fakeQuestionVotes = GetFakeQuestionVotes();
 
-        foreach (var address in fakeAddresses)
+        for (var i = 0; i < DefaultNumber; i++)
         {
-            address.UserId = fakeUsers.ElementAt(Random.Shared.Next(0, fakeUsers.Count)).InternalId;
+            fakeAddresses[i].UserId = fakeUsers[i].InternalId;
+            fakePhoneNumbers[i].UserId = fakeUsers[i].InternalId;
+            fakeOrders[i].UserId = fakeUsers[i].InternalId;
+            fakeQuestions[i].UserId = fakeUsers[i].InternalId;
+            fakeAnswers[i].UserId = fakeUsers[i].InternalId;
+            fakeComments[i].UserId = fakeUsers[i].InternalId;
+            fakeAnswerVotes[i].UserId = fakeUsers[i].InternalId;
+            fakeCommentVotes[i].UserId = fakeUsers[i].InternalId;
+            fakeProductVotes[i].UserId = fakeUsers[i].InternalId;
+            fakeQuestionVotes[i].UserId = fakeUsers[i].InternalId;
+
+            fakePersons[i].UserId = fakeUsers[i].InternalId;
+            fakeUsers[i].PersonId = fakePersons[i].InternalId;
+
+            fakeCarts[i].UserId = fakeUsers[i].InternalId;
+            fakeUsers[i].CartId = fakeCarts[i].InternalId;
+
+            fakeAnswers[i].QuestionId = fakeQuestions[i].InternalId;
+
+            fakeCartItems[i].CartId = fakeCarts[i].InternalId;
+            fakeCartItems[i].ProductId = fakeProducts[i].InternalId;
+
+            fakeComments[i].ProductId = fakeProducts[i].InternalId;
+
+            fakeOrders[i].PaymentId = fakePayments[i].InternalId;
+            fakePayments[i].OrderId = fakeOrders[i].InternalId;
+
+            fakeOrders[i].ShipmentId = fakeShipments[i].InternalId;
+            fakeShipments[i].OrderId = fakeOrders[i].InternalId;
+
+            fakeOrderItems[i].OrderId = fakeOrders[i].InternalId;
+
+            fakeOrderItems[i].ProductId = fakeProducts[i].InternalId;
+
+            fakeProducts[i].CategoryId = fakeCategories.ElementAt(Random.Shared.Next(0, fakeCategories.Count)).InternalId;
+
+            fakeQuestions[i].ProductId = fakeProducts[i].InternalId;
+
+            fakeShipments[i].DestinationAddressId = fakeAddresses[i].InternalId;
+            fakeShipments[i].OriginAddressId = fakeAddresses[DefaultNumber - i - 1].InternalId;
+
+            fakeUserRoles[i].UserId = fakeUsers[i].InternalId;
+            fakeUserRoles[i].RoleId = fakeRoles.ElementAt(Random.Shared.Next(0, fakeRoles.Count)).InternalId;
+
+            fakeAnswerVotes[i].ContentId = fakeAnswers[i].InternalId;
+            fakeCommentVotes[i].ContentId = fakeComments[i].InternalId;
+            fakeProductVotes[i].ContentId = fakeProducts[i].InternalId;
+            fakeQuestionVotes[i].ContentId = fakeQuestions[i].InternalId;
         }
 
-        foreach (var answer in fakeAnswers)
+        fakeUserRoles[0] = new UserRole
         {
-            answer.QuestionId = fakeQuestions.ElementAt(Random.Shared.Next(0, fakeQuestions.Count)).InternalId;
-            answer.UserId = fakeUsers.ElementAt(Random.Shared.Next(0, fakeUsers.Count)).InternalId;
-        }
+            ExternalId = 0,
+            UserId = AdminUserInternalId,
+            RoleId = AdminRoleInternalId
+        };
 
-        foreach (var cart in fakeCarts)
+        fakeUserRoles[1] = new UserRole
         {
-            cart.UserId = fakeUsers.ElementAt(Random.Shared.Next(0, fakeUsers.Count)).InternalId;
-        }
-
-        foreach (var cartItem in fakeCartItems)
-        {
-            cartItem.CartId = fakeCarts.ElementAt(Random.Shared.Next(0, fakeCarts.Count)).InternalId;
-            cartItem.ProductId = fakeProducts.ElementAt(Random.Shared.Next(0, fakeProducts.Count)).InternalId;
-        }
-
-        foreach (var comment in fakeComments)
-        {
-            comment.UserId = fakeUsers.ElementAt(Random.Shared.Next(0, fakeUsers.Count)).InternalId;
-            comment.ProductId = fakeProducts.ElementAt(Random.Shared.Next(0, fakeProducts.Count)).InternalId;
-        }
-
-        foreach (var order in fakeOrders)
-        {
-            order.UserId = fakeUsers.ElementAt(Random.Shared.Next(0, fakeUsers.Count)).InternalId;
-            order.PaymentId = fakePayments.ElementAt(Random.Shared.Next(0, fakePayments.Count)).InternalId;
-            order.ShipmentId = fakeShipments.ElementAt(Random.Shared.Next(0, fakeShipments.Count)).InternalId;
-        }
-
-        foreach (var orderItem in fakeOrderItems)
-        {
-            orderItem.OrderId = fakeOrders.ElementAt(Random.Shared.Next(0, fakeOrders.Count)).InternalId;
-            orderItem.ProductId = fakeProducts.ElementAt(Random.Shared.Next(0, fakeProducts.Count)).InternalId;
-        }
-
-        foreach (var payment in fakePayments)
-        {
-            payment.OrderId = fakeOrders.ElementAt(Random.Shared.Next(0, fakeOrders.Count)).InternalId;
-        }
-
-        foreach (var person in fakePersons)
-        {
-            person.UserId = fakeUsers.ElementAt(Random.Shared.Next(0, fakeUsers.Count)).InternalId;
-        }
-
-        foreach (var product in fakeProducts)
-        {
-            product.CategoryId = fakeCategories.ElementAt(Random.Shared.Next(0, fakeCategories.Count)).InternalId;
-        }
-
-        foreach (var phoneNumber in fakePhoneNumbers)
-        {
-            phoneNumber.UserId = fakeUsers.ElementAt(Random.Shared.Next(0, fakeUsers.Count)).InternalId;
-        }
-
-        foreach (var question in fakeQuestions)
-        {
-            question.UserId = fakeUsers.ElementAt(Random.Shared.Next(0, fakeUsers.Count)).InternalId;
-            question.ProductId = fakeProducts.ElementAt(Random.Shared.Next(0, fakeProducts.Count)).InternalId;
-        }
-
-        foreach (var shipment in fakeShipments)
-        {
-            shipment.OrderId = fakeOrders.ElementAt(Random.Shared.Next(0, fakeOrders.Count)).InternalId;
-            shipment.DestinationAddressId = fakeAddresses.ElementAt(Random.Shared.Next(0, fakeAddresses.Count)).InternalId;
-            shipment.OriginAddressId = fakeAddresses.ElementAt(Random.Shared.Next(0, fakeAddresses.Count)).InternalId;
-        }
-
-        foreach (var user in fakeUsers)
-        {
-            user.CartId = fakeCarts.ElementAt(Random.Shared.Next(0, fakeCarts.Count)).InternalId;
-            user.PersonId = fakePersons.ElementAt(Random.Shared.Next(0, fakePersons.Count)).InternalId;
-        }
-
-        foreach (var userRole in fakeUserRoles)
-        {
-            userRole.UserId = fakeUsers.ElementAt(Random.Shared.Next(2, fakeUsers.Count)).InternalId;
-            userRole.RoleId = fakeRoles.ElementAt(Random.Shared.Next(0, fakeRoles.Count)).InternalId;
-        }
-
-        fakeUserRoles.AddRange(new[]
-        {
-            new UserRole
-            {
-                ExternalId = 0,
-                UserId = AdminUserInternalId,
-                RoleId = AdminRoleInternalId
-            },
-            new UserRole
-            {
-                ExternalId = 1,
-                UserId = CustomerUserInternalId,
-                RoleId = CustomerRoleInternalId
-            }
-        });
-
-        foreach (var vote in fakeAnswerVotes)
-        {
-            vote.UserId = fakeUsers.ElementAt(Random.Shared.Next(0, fakeUsers.Count)).InternalId;
-            vote.ContentId = fakeAnswers.ElementAt(Random.Shared.Next(0, fakeAnswers.Count)).InternalId;
-        }
-
-        foreach (var vote in fakeCommentVotes)
-        {
-            vote.UserId = fakeUsers.ElementAt(Random.Shared.Next(0, fakeUsers.Count)).InternalId;
-            vote.ContentId = fakeComments.ElementAt(Random.Shared.Next(0, fakeComments.Count)).InternalId;
-        }
-
-        foreach (var vote in fakeProductVotes)
-        {
-            vote.UserId = fakeUsers.ElementAt(Random.Shared.Next(0, fakeUsers.Count)).InternalId;
-            vote.ContentId = fakeProducts.ElementAt(Random.Shared.Next(0, fakeProducts.Count)).InternalId;
-        }
-
-        foreach (var vote in fakeQuestionVotes)
-        {
-            vote.UserId = fakeUsers.ElementAt(Random.Shared.Next(0, fakeUsers.Count)).InternalId;
-            vote.ContentId = fakeQuestions.ElementAt(Random.Shared.Next(0, fakeQuestions.Count)).InternalId;
-        }
+            ExternalId = 1,
+            UserId = CustomerUserInternalId,
+            RoleId = CustomerRoleInternalId
+        };
 
         var fakeVotes = new List<Vote>();
 
@@ -218,7 +156,7 @@ public class DatabaseSeeder
 
         var fakeAddresses = new List<Address>();
 
-        for (var i = 0; i < DefaultHugeNumber; i++)
+        for (var i = 0; i < DefaultNumber; i++)
         {
             fakeAddresses.Add(addressFaker.Generate());
         }
@@ -237,7 +175,7 @@ public class DatabaseSeeder
 
         var fakeAnswers = new List<Answer>();
 
-        for (var i = 0; i < DefaultSmallNumber; i++)
+        for (var i = 0; i < DefaultNumber; i++)
         {
             fakeAnswers.Add(answerFaker.Generate());
         }
@@ -254,7 +192,7 @@ public class DatabaseSeeder
 
         var fakeCarts = new List<Cart>();
 
-        for (var i = 0; i < DefaultHugeNumber; i++)
+        for (var i = 0; i < DefaultNumber; i++)
         {
             fakeCarts.Add(cartFaker.Generate());
         }
@@ -273,7 +211,7 @@ public class DatabaseSeeder
 
         var fakeCartItems = new List<CartItem>();
 
-        for (var i = 0; i < DefaultHugeNumber; i++)
+        for (var i = 0; i < DefaultNumber; i++)
         {
             fakeCartItems.Add(cartItemFaker.Generate());
         }
@@ -312,7 +250,7 @@ public class DatabaseSeeder
 
         var fakeComments = new List<Comment>();
 
-        for (var i = 0; i < DefaultSmallNumber; i++)
+        for (var i = 0; i < DefaultNumber; i++)
         {
             fakeComments.Add(commentFaker.Generate());
         }
@@ -330,7 +268,7 @@ public class DatabaseSeeder
 
         var fakeOrders = new List<Order>();
 
-        for (var i = 0; i < DefaultNormalNumber; i++)
+        for (var i = 0; i < DefaultNumber; i++)
         {
             fakeOrders.Add(orderFaker.Generate());
         }
@@ -349,7 +287,7 @@ public class DatabaseSeeder
 
         var fakeOrderItems = new List<OrderItem>();
 
-        for (var i = 0; i < DefaultHugeNumber; i++)
+        for (var i = 0; i < DefaultNumber; i++)
         {
             fakeOrderItems.Add(orderItemFaker.Generate());
         }
@@ -369,7 +307,7 @@ public class DatabaseSeeder
 
         var fakePayments = new List<Payment>();
 
-        for (var i = 0; i < DefaultNormalNumber; i++)
+        for (var i = 0; i < DefaultNumber; i++)
         {
             fakePayments.Add(paymentFaker.Generate());
         }
@@ -389,7 +327,7 @@ public class DatabaseSeeder
 
         var fakePhoneNumbers = new List<PhoneNumber>();
 
-        for (var i = 0; i < DefaultHugeNumber; i++)
+        for (var i = 0; i < DefaultNumber; i++)
         {
             fakePhoneNumbers.Add(phoneNumberFaker.Generate());
         }
@@ -418,7 +356,7 @@ public class DatabaseSeeder
 
         var fakeProducts = new List<Product>();
 
-        for (var i = 0; i < DefaultHugeNumber; i++)
+        for (var i = 0; i < DefaultNumber; i++)
         {
             fakeProducts.Add(productFaker.Generate());
         }
@@ -437,7 +375,7 @@ public class DatabaseSeeder
 
         var fakeQuestions = new List<Question>();
 
-        for (var i = 0; i < DefaultNormalNumber; i++)
+        for (var i = 0; i < DefaultNumber; i++)
         {
             fakeQuestions.Add(questionFaker.Generate());
         }
@@ -478,7 +416,7 @@ public class DatabaseSeeder
 
         var fakeShipments = new List<Shipment>();
 
-        for (var i = 0; i < DefaultNormalNumber; i++)
+        for (var i = 0; i < DefaultNumber; i++)
         {
             fakeShipments.Add(shipmentFaker.Generate());
         }
@@ -497,7 +435,7 @@ public class DatabaseSeeder
 
         var fakeAnswerVotes = new List<Vote>();
 
-        for (var i = 0; i < DefaultNormalNumber; i++)
+        for (var i = 0; i < DefaultNumber; i++)
         {
             fakeAnswerVotes.Add(voteFaker.Generate());
         }
@@ -507,7 +445,7 @@ public class DatabaseSeeder
 
     private static List<Vote> GetFakeCommentVotes()
     {
-        var externalId = DefaultNormalNumber;
+        var externalId = DefaultNumber;
 
         var voteFaker = new Faker<Vote>()
             .RuleFor(vote => vote.ExternalId, _ => externalId++)
@@ -516,7 +454,7 @@ public class DatabaseSeeder
 
         var fakeCommentVotes = new List<Vote>();
 
-        for (var i = 0; i < DefaultNormalNumber; i++)
+        for (var i = 0; i < DefaultNumber; i++)
         {
             fakeCommentVotes.Add(voteFaker.Generate());
         }
@@ -526,7 +464,7 @@ public class DatabaseSeeder
 
     private static List<Vote> GetFakeProductVotes()
     {
-        var externalId = DefaultNormalNumber * 2;
+        var externalId = DefaultNumber * 2;
 
         var voteFaker = new Faker<Vote>()
             .RuleFor(vote => vote.ExternalId, _ => externalId++)
@@ -535,7 +473,7 @@ public class DatabaseSeeder
 
         var fakeProductVotes = new List<Vote>();
 
-        for (var i = 0; i < DefaultNormalNumber; i++)
+        for (var i = 0; i < DefaultNumber; i++)
         {
             fakeProductVotes.Add(voteFaker.Generate());
         }
@@ -545,7 +483,7 @@ public class DatabaseSeeder
 
     private static List<Vote> GetFakeQuestionVotes()
     {
-        var externalId = DefaultNormalNumber * 3;
+        var externalId = DefaultNumber * 3;
 
         var voteFaker = new Faker<Vote>()
             .RuleFor(vote => vote.ExternalId, _ => externalId++)
@@ -554,7 +492,7 @@ public class DatabaseSeeder
 
         var fakeQuestionVotes = new List<Vote>();
 
-        for (var i = 0; i < DefaultNormalNumber; i++)
+        for (var i = 0; i < DefaultNumber; i++)
         {
             fakeQuestionVotes.Add(voteFaker.Generate());
         }
@@ -574,7 +512,7 @@ public class DatabaseSeeder
 
         var fakePeople = new List<Person>();
 
-        for (var i = 0; i < DefaultHugeNumber; i++)
+        for (var i = 0; i < DefaultNumber; i++)
         {
             fakePeople.Add(personFaker.Generate());
         }
@@ -622,7 +560,7 @@ public class DatabaseSeeder
             customerUser
         };
 
-        for (var i = 0; i < DefaultHugeNumber; i++)
+        for (var i = 0; i < DefaultNumber - 2; i++)
         {
             fakeUsers.Add(userFaker.Generate());
         }
@@ -639,7 +577,7 @@ public class DatabaseSeeder
 
         var fakeUserRoles = new List<UserRole>();
 
-        for (var i = 0; i < DefaultHugeNumber; i++)
+        for (var i = 0; i < DefaultNumber; i++)
         {
             fakeUserRoles.Add(userRoleFaker.Generate());
         }
