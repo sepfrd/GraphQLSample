@@ -4,19 +4,19 @@ namespace Domain.Entities;
 
 public sealed class Address : BaseEntity
 {
-    public string? Street { get; set; }
+    public string? Street { get; init; }
 
-    public string? City { get; set; }
+    public string? City { get; init; }
 
-    public string? State { get; set; }
+    public string? State { get; init; }
 
-    public string? PostalCode { get; set; }
+    public string? PostalCode { get; init; }
 
-    public string? Country { get; set; }
+    public string? Country { get; init; }
 
-    public string? UnitNumber { get; set; }
+    public string? UnitNumber { get; init; }
 
-    public string? BuildingNumber { get; set; }
+    public string? BuildingNumber { get; init; }
 
     public User? User { get; set; }
 

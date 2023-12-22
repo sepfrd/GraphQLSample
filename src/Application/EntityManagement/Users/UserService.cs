@@ -1,13 +1,10 @@
 using Application.Common;
 using Application.Common.Constants;
 using Application.EntityManagement.Users.Commands;
-using Application.EntityManagement.Users.Dtos;
 using Application.EntityManagement.Users.Events;
 using Application.EntityManagement.Users.Queries;
 using Domain.Common;
-using Domain.Entities;
 using MediatR;
-using System.Net;
 
 namespace Application.EntityManagement.Users;
 

@@ -11,7 +11,7 @@ namespace Web.GraphQL;
 
 public class Query
 {
-    public async Task<IEnumerable<Category>?> GetCategoriesAsync(Pagination? pagination, [Service] ISender sender, CancellationToken cancellationToken)
+    public static async Task<IEnumerable<Category>?> GetCategoriesAsync(Pagination? pagination, [Service] ISender sender, CancellationToken cancellationToken)
     {
         pagination ??= new Pagination();
 
@@ -22,7 +22,7 @@ public class Query
         return result.Data;
     }
 
-    public async Task<IEnumerable<Product>?> GetProductsAsync(Pagination? pagination, CustomProductFilter? productFilter, [Service] ISender sender, CancellationToken cancellationToken)
+    public static async Task<IEnumerable<Product>?> GetProductsAsync(Pagination? pagination, CustomProductFilter? productFilter, [Service] ISender sender, CancellationToken cancellationToken)
     {
         pagination ??= new Pagination();
 
@@ -40,7 +40,7 @@ public class Query
         return result.Data;
     }
 
-    public async Task<IEnumerable<User>?> GetUsersAsync(Pagination? pagination, CustomUserFilter? userFilter, [Service] ISender sender, CancellationToken cancellationToken)
+    public static async Task<IEnumerable<User>?> GetUsersAsync(Pagination? pagination, CustomUserFilter? userFilter, [Service] ISender sender, CancellationToken cancellationToken)
     {
         pagination ??= new Pagination();
 

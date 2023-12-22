@@ -15,13 +15,13 @@ public class QuestionType : ObjectType<Question>
             .Field(question => question.User)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetUserAsync(default!, default!));
+                    Resolvers.GetUserAsync(default!, default!));
 
         descriptor
             .Field(question => question.Answers)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetAnswersAsync(default!, default!))
+                    Resolvers.GetAnswersAsync(default!, default!))
             .UseFiltering()
             .UseSorting();
 
@@ -29,7 +29,7 @@ public class QuestionType : ObjectType<Question>
             .Field(question => question.Votes)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetVotesAsync(default!, default!));
+                    Resolvers.GetVotesAsync(default!, default!));
 
         descriptor
             .Field(question => question.DateCreated)
@@ -54,7 +54,7 @@ public class QuestionType : ObjectType<Question>
 
     private sealed class Resolvers
     {
-        public async Task<User?> GetUserAsync([Parent] Question question, [Service] ISender sender)
+        public static async Task<User?> GetUserAsync([Parent] Question question, [Service] ISender sender)
         {
             var usersQuery = new GetAllUsersQuery(
                 new Pagination(),
@@ -65,7 +65,7 @@ public class QuestionType : ObjectType<Question>
             return result.Data?.FirstOrDefault();
         }
 
-        public async Task<IEnumerable<Answer>?> GetAnswersAsync([Parent] Question question, [Service] ISender sender)
+        public static async Task<IEnumerable<Answer>?> GetAnswersAsync([Parent] Question question, [Service] ISender sender)
         {
             var answersQuery = new GetAllAnswersQuery(
                 new Pagination(),
@@ -76,7 +76,7 @@ public class QuestionType : ObjectType<Question>
             return result.Data;
         }
 
-        public async Task<IEnumerable<Vote>?> GetVotesAsync([Parent] Question question, [Service] ISender sender)
+        public static async Task<IEnumerable<Vote>?> GetVotesAsync([Parent] Question question, [Service] ISender sender)
         {
             var votesQuery = new GetAllVotesQuery(
                 new Pagination(),

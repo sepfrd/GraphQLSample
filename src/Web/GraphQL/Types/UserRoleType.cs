@@ -14,16 +14,16 @@ public class UserRoleType : ObjectType<UserRole>
             .Field(userRole => userRole.User)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetUserAsync(default!, default!));
+                    Resolvers.GetUserAsync(default!, default!));
 
         descriptor
             .Field(userRole => userRole.Role)
-            .ResolveWith<Resolvers>(resolvers => resolvers.GetRoleAsync(default!, default!));
+            .ResolveWith<Resolvers>(resolvers => Resolvers.GetRoleAsync(default!, default!));
     }
 
     private class Resolvers
     {
-        public async Task<Role?> GetRoleAsync([Parent] UserRole userRole, [Service] ISender sender)
+        public static async Task<Role?> GetRoleAsync([Parent] UserRole userRole, [Service] ISender sender)
         {
             var rolesQuery = new GetAllRolesQuery(
                 Pagination.MaxPagination,
@@ -34,7 +34,7 @@ public class UserRoleType : ObjectType<UserRole>
             return result.Data?.FirstOrDefault();
         }
 
-        public async Task<User?> GetUserAsync([Parent] UserRole userRole, [Service] ISender sender)
+        public static async Task<User?> GetUserAsync([Parent] UserRole userRole, [Service] ISender sender)
         {
             var userQuery = new GetUserByInternalIdQuery(userRole.UserId);
 

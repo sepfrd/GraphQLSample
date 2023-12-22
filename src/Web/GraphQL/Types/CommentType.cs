@@ -22,21 +22,21 @@ public class CommentType : ObjectType<Comment>
             .Description("The Product This Comment Is For")
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetProductAsync(default!, default!));
+                    Resolvers.GetProductAsync(default!, default!));
 
         descriptor
             .Field(comment => comment.User)
             .Description("The User Who Wrote This Comment")
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetUserAsync(default!, default!));
+                    Resolvers.GetUserAsync(default!, default!));
 
         descriptor
             .Field(comment => comment.Votes)
             .Description("The Votes Submitted for This Comment")
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetVotesAsync(default!, default!));
+                    Resolvers.GetVotesAsync(default!, default!));
 
         descriptor
             .Field(comment => comment.DateCreated)
@@ -65,7 +65,7 @@ public class CommentType : ObjectType<Comment>
 
     private sealed class Resolvers
     {
-        public async Task<Product?> GetProductAsync([Parent] Comment comment, [Service] ISender sender)
+        public static async Task<Product?> GetProductAsync([Parent] Comment comment, [Service] ISender sender)
         {
             var productsQuery = new GetAllProductsQuery(
                 new Pagination(),
@@ -76,7 +76,7 @@ public class CommentType : ObjectType<Comment>
             return result.Data?.FirstOrDefault();
         }
 
-        public async Task<User?> GetUserAsync([Parent] Comment comment, [Service] ISender sender)
+        public static async Task<User?> GetUserAsync([Parent] Comment comment, [Service] ISender sender)
         {
             var usersQuery = new GetAllUsersQuery(
                 new Pagination(),
@@ -87,7 +87,7 @@ public class CommentType : ObjectType<Comment>
             return result.Data?.FirstOrDefault();
         }
 
-        public async Task<IEnumerable<Vote>?> GetVotesAsync([Parent] Comment comment, [Service] ISender sender)
+        public static async Task<IEnumerable<Vote>?> GetVotesAsync([Parent] Comment comment, [Service] ISender sender)
         {
             var votesQuery = new GetAllVotesQuery(
                 new Pagination(),

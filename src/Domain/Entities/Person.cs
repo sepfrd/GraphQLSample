@@ -4,11 +4,11 @@ namespace Domain.Entities;
 
 public sealed class Person : BaseEntity
 {
-    public required string FirstName { get; set; }
+    public required string FirstName { get; init; }
 
-    public required string LastName { get; set; }
+    public required string LastName { get; init; }
 
-    public DateTime BirthDate { get; set; }
+    public DateTime BirthDate { get; init; }
 
     public int Age
     {

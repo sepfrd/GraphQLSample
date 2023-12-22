@@ -32,7 +32,7 @@ public class CategoryType : ObjectType<Category>
             .Description("All Products of This Category")
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetProductsAsync(default!, default!))
+                    Resolvers.GetProductsAsync(default!, default!))
             .UseFiltering()
             .UseSorting();
 
@@ -55,7 +55,7 @@ public class CategoryType : ObjectType<Category>
 
     private sealed class Resolvers
     {
-        public async Task<IEnumerable<Product>?> GetProductsAsync([Parent] Category category, [Service] ISender sender)
+        public static async Task<IEnumerable<Product>?> GetProductsAsync([Parent] Category category, [Service] ISender sender)
         {
             var productsQuery = new GetAllProductsQuery(
                 new Pagination(),

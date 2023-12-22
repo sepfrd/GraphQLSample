@@ -4,15 +4,15 @@ namespace Domain.Entities;
 
 public sealed class User : BaseEntity
 {
-    public required string Username { get; set; }
+    public required string Username { get; init; }
 
-    public required string Password { get; set; }
+    public required string Password { get; init; }
 
-    public required string Email { get; set; }
+    public required string Email { get; init; }
 
-    public bool IsEmailConfirmed { get; set; }
+    public bool IsEmailConfirmed { get; init; }
 
-    public int Score { get; set; }
+    public int Score { get; init; }
 
     public Person? Person { get; set; }
 
@@ -24,9 +24,9 @@ public sealed class User : BaseEntity
 
     public ICollection<Order>? Orders { get; set; }
 
-    public ICollection<Address>? Addresses { get; set; }
+    public ICollection<Address>? Addresses { get; init; }
 
-    public ICollection<PhoneNumber>? PhoneNumbers { get; set; }
+    public ICollection<PhoneNumber>? PhoneNumbers { get; init; }
 
     public ICollection<Question>? Questions { get; set; }
 

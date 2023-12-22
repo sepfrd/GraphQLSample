@@ -18,13 +18,13 @@ public class VoteType : ObjectType<Vote>
             .Field(vote => vote.User)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetUserAsync(default!, default!));
+                    Resolvers.GetUserAsync(default!, default!));
 
         descriptor
             .Field(vote => vote.Content)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetContentAsync(default!, default!));
+                    Resolvers.GetContentAsync(default!, default!));
 
         descriptor
             .Field(vote => vote.DateCreated)
@@ -53,7 +53,7 @@ public class VoteType : ObjectType<Vote>
 
     private sealed class Resolvers
     {
-        public async Task<User?> GetUserAsync([Parent] Vote vote, [Service] ISender sender)
+        public static async Task<User?> GetUserAsync([Parent] Vote vote, [Service] ISender sender)
         {
             var usersQuery = new GetAllUsersQuery(
                 new Pagination(),
@@ -64,7 +64,7 @@ public class VoteType : ObjectType<Vote>
             return result.Data?.FirstOrDefault();
         }
 
-        public async Task<IVotableContent?> GetContentAsync([Parent] Vote vote, [Service] ISender sender)
+        public static async Task<IVotableContent?> GetContentAsync([Parent] Vote vote, [Service] ISender sender)
         {
             switch (vote.Content)
             {

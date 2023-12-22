@@ -23,7 +23,7 @@ public class RoleType : ObjectType<Role>
 
         descriptor
             .Field(role => role.UserRoles)
-            .ResolveWith<Resolvers>(resolvers => resolvers.GetUserRolesAsync(default!, default!))
+            .ResolveWith<Resolvers>(resolvers => Resolvers.GetUserRolesAsync(default!, default!))
             .UseFiltering()
             .UseSorting();
 
@@ -32,9 +32,9 @@ public class RoleType : ObjectType<Role>
             .Ignore();
     }
 
-    private class Resolvers
+    private sealed class Resolvers
     {
-        public async Task<IEnumerable<UserRole>?> GetUserRolesAsync([Parent] Role role, [Service] ISender sender)
+        public static async Task<IEnumerable<UserRole>?> GetUserRolesAsync([Parent] Role role, [Service] ISender sender)
         {
             var userRolesQuery = new GetAllUserRolesQuery(
                 Pagination.MaxPagination,

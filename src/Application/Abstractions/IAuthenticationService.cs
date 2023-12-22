@@ -1,6 +1,5 @@
 using Application.EntityManagement.Users.Dtos;
 using Domain.Entities;
-using Microsoft.AspNetCore.Http;
 
 namespace Application.Abstractions;
 

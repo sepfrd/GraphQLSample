@@ -8,177 +8,177 @@ public sealed class MutationType : ObjectType<Mutation>
     {
         descriptor
             .Authorize()
-            .Field(mutation => mutation.LoginAsync(default!, default!, default!))
+            .Field(mutation => Mutation.LoginAsync(default!, default!, default!))
             .AllowAnonymous();
 
         descriptor
             .Field(mutation =>
-                mutation.SignUpAsync(default!, default!, default!))
+                Mutation.SignUpAsync(default!, default!, default!))
             .AllowAnonymous();
 
         descriptor
             .Field(mutation =>
-                mutation.AddAddressAsync(default!, default!, default!))
+                Mutation.AddAddressAsync(default!, default!, default!))
             .Authorize(PolicyConstants.CustomerPolicy);
 
         descriptor
             .Field(mutation =>
-                mutation.UpdateAddressAsync(default!, default!, default!, default!))
+                Mutation.UpdateAddressAsync(default!, default!, default!, default!))
             .Authorize(PolicyConstants.CustomerPolicy);
 
         descriptor
             .Field(mutation =>
-                mutation.DeleteAddressAsync(default!, default!, default!))
+                Mutation.DeleteAddressAsync(default!, default!, default!))
             .Authorize(PolicyConstants.CustomerPolicy);
 
         descriptor
             .Field(mutation =>
-                mutation.AddAnswerAsync(default!, default!, default!))
+                Mutation.AddAnswerAsync(default!, default!, default!))
             .Authorize(PolicyConstants.CustomerPolicy);
 
         descriptor
             .Field(mutation =>
-                mutation.UpdateAnswerAsync(default!, default!, default!, default!))
+                Mutation.UpdateAnswerAsync(default!, default!, default!, default!))
             .Authorize(PolicyConstants.CustomerPolicy);
 
         descriptor
             .Field(mutation =>
-                mutation.DeleteAnswerAsync(default!, default!, default!))
+                Mutation.DeleteAnswerAsync(default!, default!, default!))
             .Authorize(PolicyConstants.CustomerPolicy);
 
         descriptor
             .Field(mutation =>
-                mutation.AddCartItemAsync(default!, default!, default!))
+                Mutation.AddCartItemAsync(default!, default!, default!))
             .Authorize(PolicyConstants.CustomerPolicy);
 
         descriptor
             .Field(mutation =>
-                mutation.AddCategoryAsync(default!, default!, default!))
+                Mutation.AddCategoryAsync(default!, default!, default!))
             .Authorize(PolicyConstants.AdminPolicy);
 
         descriptor
             .Field(mutation =>
-                mutation.AddCommentAsync(default!, default!, default!))
+                Mutation.AddCommentAsync(default!, default!, default!))
             .Authorize(PolicyConstants.CustomerPolicy);
 
         descriptor
             .Field(mutation =>
-                mutation.DeleteCommentAsync(default!, default!, default!))
+                Mutation.DeleteCommentAsync(default!, default!, default!))
             .Authorize(PolicyConstants.CustomerPolicy);
 
         descriptor
             .Field(mutation =>
-                mutation.AddOrderAsync(default!, default!, default!))
+                Mutation.AddOrderAsync(default!, default!, default!))
             .Authorize(PolicyConstants.CustomerPolicy);
 
         descriptor
             .Field(mutation =>
-                mutation.UpdateOrderAsync(default!, default!, default!, default!))
+                Mutation.UpdateOrderAsync(default!, default!, default!, default!))
             .Authorize(PolicyConstants.AdminPolicy);
 
         descriptor
             .Field(mutation =>
-                mutation.DeleteOrderAsync(default!, default!, default!))
+                Mutation.DeleteOrderAsync(default!, default!, default!))
             .Authorize(PolicyConstants.AdminPolicy);
 
         descriptor
             .Field(mutation =>
-                mutation.UpdatePaymentAsync(default!, default!, default!, default!))
+                Mutation.UpdatePaymentAsync(default!, default!, default!, default!))
             .Authorize(PolicyConstants.AdminPolicy);
 
         descriptor
             .Field(mutation =>
-                mutation.UpdatePersonAsync(default!, default!, default!, default!))
+                Mutation.UpdatePersonAsync(default!, default!, default!, default!))
             .Authorize(PolicyConstants.AdminPolicy);
 
         descriptor
             .Field(mutation =>
-                mutation.AddPhoneNumberAsync(default!, default!, default!))
+                Mutation.AddPhoneNumberAsync(default!, default!, default!))
             .Authorize(PolicyConstants.CustomerPolicy);
 
         descriptor
             .Field(mutation =>
-                mutation.UpdatePhoneNumberAsync(default!, default!, default!, default!))
+                Mutation.UpdatePhoneNumberAsync(default!, default!, default!, default!))
             .Authorize(PolicyConstants.CustomerPolicy);
 
         descriptor
             .Field(mutation =>
-                mutation.DeletePhoneNumberAsync(default!, default!, default!))
+                Mutation.DeletePhoneNumberAsync(default!, default!, default!))
             .Authorize(PolicyConstants.CustomerPolicy);
 
         descriptor
             .Field(mutation =>
-                mutation.AddProductAsync(default!, default!, default!))
+                Mutation.AddProductAsync(default!, default!, default!))
             .Authorize(PolicyConstants.AdminPolicy);
 
         descriptor
             .Field(mutation =>
-                mutation.UpdateProductAsync(default!, default!, default!, default!))
+                Mutation.UpdateProductAsync(default!, default!, default!, default!))
             .Authorize(PolicyConstants.AdminPolicy);
 
         descriptor
             .Field(mutation =>
-                mutation.DeleteProductAsync(default!, default!, default!))
+                Mutation.DeleteProductAsync(default!, default!, default!))
             .Authorize(PolicyConstants.AdminPolicy);
 
         descriptor
             .Field(mutation =>
-                mutation.AddQuestionAsync(default!, default!, default!))
+                Mutation.AddQuestionAsync(default!, default!, default!))
             .Authorize(PolicyConstants.CustomerPolicy);
 
         descriptor
             .Field(mutation =>
-                mutation.DeleteQuestionAsync(default!, default!, default!))
+                Mutation.DeleteQuestionAsync(default!, default!, default!))
             .Authorize(PolicyConstants.CustomerPolicy);
 
         descriptor
             .Field(mutation =>
-                mutation.AddRoleAsync(default!, default!, default!))
+                Mutation.AddRoleAsync(default!, default!, default!))
             .Authorize(PolicyConstants.AdminPolicy);
 
         descriptor
             .Field(mutation =>
-                mutation.UpdateRoleAsync(default!, default!, default!, default!))
+                Mutation.UpdateRoleAsync(default!, default!, default!, default!))
             .Authorize(PolicyConstants.AdminPolicy);
 
         descriptor
             .Field(mutation =>
-                mutation.DeleteRoleAsync(default!, default!, default!))
+                Mutation.DeleteRoleAsync(default!, default!, default!))
             .Authorize(PolicyConstants.AdminPolicy);
 
         descriptor
             .Field(mutation =>
-                mutation.UpdateShipmentAsync(default!, default!, default!, default!))
+                Mutation.UpdateShipmentAsync(default!, default!, default!, default!))
             .Authorize(PolicyConstants.AdminPolicy);
 
         descriptor
             .Field(mutation =>
-                mutation.AddUserRoleAsync(default!, default!, default!))
+                Mutation.AddUserRoleAsync(default!, default!, default!))
             .Authorize(PolicyConstants.AdminPolicy);
 
         descriptor
             .Field(mutation =>
-                mutation.DeleteUserRoleAsync(default!, default!, default!))
+                Mutation.DeleteUserRoleAsync(default!, default!, default!))
             .Authorize(PolicyConstants.AdminPolicy);
 
         descriptor
             .Field(mutation =>
-                mutation.UpdateUserAsync(default!, default!, default!))
+                Mutation.UpdateUserAsync(default!, default!, default!))
             .Authorize(PolicyConstants.AdminPolicy);
 
         descriptor
             .Field(mutation =>
-                mutation.DeleteUserAsync(default!, default!, default!))
+                Mutation.DeleteUserAsync(default!, default!, default!))
             .Authorize(PolicyConstants.AdminPolicy);
 
         descriptor
             .Field(mutation =>
-                mutation.AddVoteAsync(default!, default!, default!))
+                Mutation.AddVoteAsync(default!, default!, default!))
             .Authorize(PolicyConstants.CustomerPolicy);
 
         descriptor
             .Field(mutation =>
-                mutation.DeleteVoteAsync(default!, default!, default!))
+                Mutation.DeleteVoteAsync(default!, default!, default!))
             .Authorize(PolicyConstants.CustomerPolicy);
     }
 }

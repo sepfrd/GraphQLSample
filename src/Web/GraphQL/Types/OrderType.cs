@@ -15,19 +15,19 @@ public class OrderType : ObjectType<Order>
             .Field(order => order.Payment)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetPaymentAsync(default!, default!));
+                    Resolvers.GetPaymentAsync(default!, default!));
 
         descriptor
             .Field(order => order.Shipment)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetShipmentAsync(default!, default!));
+                    Resolvers.GetShipmentAsync(default!, default!));
 
         descriptor
             .Field(order => order.OrderItems)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetOrderItemsAsync(default!, default!))
+                    Resolvers.GetOrderItemsAsync(default!, default!))
             .UseFiltering()
             .UseSorting();
 
@@ -58,7 +58,7 @@ public class OrderType : ObjectType<Order>
 
     private sealed class Resolvers
     {
-        public async Task<Payment?> GetPaymentAsync([Parent] Order order, [Service] ISender sender)
+        public static async Task<Payment?> GetPaymentAsync([Parent] Order order, [Service] ISender sender)
         {
             var paymentsQuery = new GetAllPaymentsQuery(
                 new Pagination(),
@@ -69,7 +69,7 @@ public class OrderType : ObjectType<Order>
             return result.Data?.FirstOrDefault();
         }
 
-        public async Task<Shipment?> GetShipmentAsync([Parent] Order order, [Service] ISender sender)
+        public static async Task<Shipment?> GetShipmentAsync([Parent] Order order, [Service] ISender sender)
         {
             var shipmentsQuery = new GetAllShipmentsQuery(
                 new Pagination(),
@@ -80,7 +80,7 @@ public class OrderType : ObjectType<Order>
             return result.Data?.FirstOrDefault();
         }
 
-        public async Task<IEnumerable<OrderItem>?> GetOrderItemsAsync([Parent] Order order, [Service] ISender sender)
+        public static async Task<IEnumerable<OrderItem>?> GetOrderItemsAsync([Parent] Order order, [Service] ISender sender)
         {
             var orderItemsQuery = new GetAllOrderItemsQuery(
                 new Pagination(),

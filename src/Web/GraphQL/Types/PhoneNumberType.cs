@@ -13,7 +13,7 @@ public class PhoneNumberType : ObjectType<PhoneNumber>
             .Field(phoneNumber => phoneNumber.User)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetUserAsync(default!, default!));
+                    Resolvers.GetUserAsync(default!, default!));
 
         descriptor
             .Field(phoneNumber => phoneNumber.DateCreated)
@@ -38,7 +38,7 @@ public class PhoneNumberType : ObjectType<PhoneNumber>
 
     private sealed class Resolvers
     {
-        public async Task<User?> GetUserAsync([Parent] PhoneNumber phoneNumber, [Service] ISender sender)
+        public static async Task<User?> GetUserAsync([Parent] PhoneNumber phoneNumber, [Service] ISender sender)
         {
             var usersQuery = new GetAllUsersQuery(
                 new Pagination(),

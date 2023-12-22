@@ -14,19 +14,19 @@ public class ShipmentType : ObjectType<Shipment>
             .Field(shipment => shipment.Order)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetOrderAsync(default!, default!));
+                    Resolvers.GetOrderAsync(default!, default!));
 
         descriptor
             .Field(shipment => shipment.DestinationAddressId)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetDestinationAddressAsync(default!, default!));
+                    Resolvers.GetDestinationAddressAsync(default!, default!));
 
         descriptor
             .Field(shipment => shipment.OriginAddressId)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetOriginAddressAsync(default!, default!));
+                    Resolvers.GetOriginAddressAsync(default!, default!));
 
         descriptor
             .Field(shipment => shipment.DateCreated)
@@ -59,7 +59,7 @@ public class ShipmentType : ObjectType<Shipment>
 
     private sealed class Resolvers
     {
-        public async Task<Order?> GetOrderAsync([Parent] Shipment shipment, [Service] ISender sender)
+        public static async Task<Order?> GetOrderAsync([Parent] Shipment shipment, [Service] ISender sender)
         {
             var ordersQuery = new GetAllOrdersQuery(
                 new Pagination(),
@@ -70,7 +70,7 @@ public class ShipmentType : ObjectType<Shipment>
             return result.Data?.FirstOrDefault();
         }
 
-        public async Task<Address?> GetDestinationAddressAsync([Parent] Shipment shipment, [Service] ISender sender)
+        public static async Task<Address?> GetDestinationAddressAsync([Parent] Shipment shipment, [Service] ISender sender)
         {
             var addressesQuery = new GetAllAddressesQuery(
                 new Pagination(),
@@ -81,7 +81,7 @@ public class ShipmentType : ObjectType<Shipment>
             return result.Data?.FirstOrDefault();
         }
 
-        public async Task<Address?> GetOriginAddressAsync([Parent] Shipment shipment, [Service] ISender sender)
+        public static async Task<Address?> GetOriginAddressAsync([Parent] Shipment shipment, [Service] ISender sender)
         {
             var addressesQuery = new GetAllAddressesQuery(
                 new Pagination(),

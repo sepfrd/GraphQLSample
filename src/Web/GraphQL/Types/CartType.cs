@@ -17,14 +17,14 @@ public class CartType : ObjectType<Cart>
             .Description("The User This Cart Belongs To")
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetUserAsync(default!, default!));
+                    Resolvers.GetUserAsync(default!, default!));
 
         descriptor
             .Field(cart => cart.CartItems)
             .Description("All Sub Items of This Cart")
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetCartItemsAsync(default!, default!));
+                    Resolvers.GetCartItemsAsync(default!, default!));
 
         descriptor
             .Field(cart => cart.TotalPrice)
@@ -53,7 +53,7 @@ public class CartType : ObjectType<Cart>
 
     private sealed class Resolvers
     {
-        public async Task<User?> GetUserAsync([Parent] Cart cart, [Service] ISender sender)
+        public static async Task<User?> GetUserAsync([Parent] Cart cart, [Service] ISender sender)
         {
             var usersQuery = new GetAllUsersQuery(
                 new Pagination(),
@@ -64,7 +64,7 @@ public class CartType : ObjectType<Cart>
             return result.Data?.FirstOrDefault();
         }
 
-        public async Task<IEnumerable<CartItem>?> GetCartItemsAsync([Parent] Cart cart, [Service] ISender sender)
+        public static async Task<IEnumerable<CartItem>?> GetCartItemsAsync([Parent] Cart cart, [Service] ISender sender)
         {
             var cartItemsQuery = new GetAllCartItemsQuery(
                 new Pagination(),

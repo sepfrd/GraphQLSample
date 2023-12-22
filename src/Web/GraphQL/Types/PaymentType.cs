@@ -13,7 +13,7 @@ public class PaymentType : ObjectType<Payment>
             .Field(payment => payment.Order)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetOrderAsync(default!, default!));
+                    Resolvers.GetOrderAsync(default!, default!));
 
         descriptor
             .Field(payment => payment.DateCreated)
@@ -38,7 +38,7 @@ public class PaymentType : ObjectType<Payment>
 
     private sealed class Resolvers
     {
-        public async Task<Order?> GetOrderAsync([Parent] Payment payment, [Service] ISender sender)
+        public static async Task<Order?> GetOrderAsync([Parent] Payment payment, [Service] ISender sender)
         {
             var ordersQuery = new GetAllOrdersQuery(
                 new Pagination(),

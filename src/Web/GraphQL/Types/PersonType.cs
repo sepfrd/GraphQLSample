@@ -13,7 +13,7 @@ public class PersonType : ObjectType<Person>
             .Field(person => person.User)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetUserAsync(default!, default!));
+                    Resolvers.GetUserAsync(default!, default!));
 
         descriptor
             .Field(person => person.DateCreated)
@@ -38,7 +38,7 @@ public class PersonType : ObjectType<Person>
 
     private sealed class Resolvers
     {
-        public async Task<User?> GetUserAsync([Parent] Person person, [Service] ISender sender)
+        public static async Task<User?> GetUserAsync([Parent] Person person, [Service] ISender sender)
         {
             var usersQuery = new GetAllUsersQuery(
                 new Pagination(),

@@ -3,7 +3,6 @@ using Application.EntityManagement.Addresses.Dtos;
 using Application.EntityManagement.Answers.Dtos;
 using Application.EntityManagement.Categories.Dtos;
 using Application.EntityManagement.Comments.Dtos;
-using Application.EntityManagement.OrderItems.Dtos;
 using Application.EntityManagement.Orders.Dtos;
 using Application.EntityManagement.Payments.Dtos;
 using Application.EntityManagement.Persons.Dtos;

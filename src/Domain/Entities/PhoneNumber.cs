@@ -5,9 +5,9 @@ namespace Domain.Entities;
 
 public sealed class PhoneNumber : BaseEntity
 {
-    public string? Number { get; set; }
+    public string? Number { get; init; }
 
-    public PhoneNumberType Type { get; set; }
+    public PhoneNumberType Type { get; init; }
 
     public bool IsConfirmed { get; set; }
 

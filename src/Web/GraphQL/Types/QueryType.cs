@@ -8,18 +8,18 @@ public sealed class QueryType : ObjectType<Query>
 
         descriptor
             .Field(query =>
-                query.GetUsersAsync(default, default, default!, default!));
+                Query.GetUsersAsync(default, default, default!, default!));
 
         descriptor
             .Field(query =>
-                query.GetCategoriesAsync(default, default!, default!))
+                Query.GetCategoriesAsync(default, default!, default!))
             .AllowAnonymous()
             .UseFiltering()
             .UseSorting();
 
         descriptor
             .Field(query =>
-                query.GetProductsAsync(default, default, default!, default!))
+                Query.GetProductsAsync(default, default, default!, default!))
             .AllowAnonymous()
             .UseFiltering()
             .UseSorting();

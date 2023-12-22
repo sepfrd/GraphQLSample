@@ -134,7 +134,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Com
             InternalId = orderId,
             UserId = user.InternalId,
             PaymentId = payment.InternalId,
-            ShipmentId = shipment.InternalId,
+            ShipmentId = shipment.InternalId
         };
 
         var createdEntity = await _orderRepository.CreateAsync(order, cancellationToken);

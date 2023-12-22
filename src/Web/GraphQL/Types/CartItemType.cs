@@ -41,14 +41,14 @@ public class CartItemType : ObjectType<CartItem>
             .Description("The Cart This Item Belongs To")
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetCartAsync(default!, default!));
+                    Resolvers.GetCartAsync(default!, default!));
 
         descriptor
             .Field(cartItem => cartItem.Product)
             .Description("The Product This Cart Item Holds")
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetProductAsync(default!, default!));
+                    Resolvers.GetProductAsync(default!, default!));
 
         descriptor
             .Field(cartItem => cartItem.DateCreated)
@@ -77,7 +77,7 @@ public class CartItemType : ObjectType<CartItem>
 
     private sealed class Resolvers
     {
-        public async Task<Cart?> GetCartAsync([Parent] CartItem cartItem, [Service] ISender sender)
+        public static async Task<Cart?> GetCartAsync([Parent] CartItem cartItem, [Service] ISender sender)
         {
             var cartsQuery = new GetAllCartsQuery(
                 new Pagination(),
@@ -88,7 +88,7 @@ public class CartItemType : ObjectType<CartItem>
             return result.Data?.FirstOrDefault();
         }
 
-        public async Task<Product?> GetProductAsync([Parent] CartItem cartItem, [Service] ISender sender)
+        public static async Task<Product?> GetProductAsync([Parent] CartItem cartItem, [Service] ISender sender)
         {
             var productsQuery = new GetAllProductsQuery(
                 new Pagination(),

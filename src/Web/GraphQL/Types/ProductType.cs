@@ -16,19 +16,19 @@ public class ProductType : ObjectType<Product>
             .Field(product => product.Category)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetCategoryAsync(default!, default!));
+                    Resolvers.GetCategoryAsync(default!, default!));
 
         descriptor
             .Field(product => product.Votes)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetVotesAsync(default!, default!));
+                    Resolvers.GetVotesAsync(default!, default!));
 
         descriptor
             .Field(product => product.Comments)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetCommentsAsync(default!, default!))
+                    Resolvers.GetCommentsAsync(default!, default!))
             .UseFiltering()
             .UseSorting();
 
@@ -36,7 +36,7 @@ public class ProductType : ObjectType<Product>
             .Field(product => product.Questions)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetQuestionsAsync(default!, default!))
+                    Resolvers.GetQuestionsAsync(default!, default!))
             .UseFiltering()
             .UseSorting();
 
@@ -63,7 +63,7 @@ public class ProductType : ObjectType<Product>
 
     private sealed class Resolvers
     {
-        public async Task<Category?> GetCategoryAsync([Parent] Product product, [Service] ISender sender)
+        public static async Task<Category?> GetCategoryAsync([Parent] Product product, [Service] ISender sender)
         {
             var categoriesQuery = new GetAllCategoriesQuery(
                 new Pagination(),
@@ -74,7 +74,7 @@ public class ProductType : ObjectType<Product>
             return result.Data?.FirstOrDefault();
         }
 
-        public async Task<IEnumerable<Vote>?> GetVotesAsync([Parent] Product product, [Service] ISender sender)
+        public static async Task<IEnumerable<Vote>?> GetVotesAsync([Parent] Product product, [Service] ISender sender)
         {
             var votesQuery = new GetAllVotesQuery(
                 new Pagination(),
@@ -85,7 +85,7 @@ public class ProductType : ObjectType<Product>
             return result.Data;
         }
 
-        public async Task<IEnumerable<Comment>?> GetCommentsAsync([Parent] Product product, [Service] ISender sender)
+        public static async Task<IEnumerable<Comment>?> GetCommentsAsync([Parent] Product product, [Service] ISender sender)
         {
             var commentsQuery = new GetAllCommentsQuery(
                 new Pagination(),
@@ -96,7 +96,7 @@ public class ProductType : ObjectType<Product>
             return result.Data;
         }
 
-        public async Task<IEnumerable<Question>?> GetQuestionsAsync([Parent] Product product, [Service] ISender sender)
+        public static async Task<IEnumerable<Question>?> GetQuestionsAsync([Parent] Product product, [Service] ISender sender)
         {
             var questionsQuery = new GetAllQuestionsQuery(
                 new Pagination(),

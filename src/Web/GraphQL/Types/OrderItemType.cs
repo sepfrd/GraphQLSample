@@ -16,14 +16,14 @@ public class OrderItemType : ObjectType<OrderItem>
             .Field(orderItem => orderItem.Order)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetOrderAsync(default!, default!))
+                    Resolvers.GetOrderAsync(default!, default!))
             .Description("The Order This Item Belongs To");
 
         descriptor
             .Field(orderItem => orderItem.Product)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    resolvers.GetProductAsync(default!, default!))
+                    Resolvers.GetProductAsync(default!, default!))
             .Description("The Product This Item Represents");
 
         descriptor
@@ -65,7 +65,7 @@ public class OrderItemType : ObjectType<OrderItem>
 
     private sealed class Resolvers
     {
-        public async Task<Product?> GetProductAsync([Parent] OrderItem orderItem, [Service] ISender sender)
+        public static async Task<Product?> GetProductAsync([Parent] OrderItem orderItem, [Service] ISender sender)
         {
             var productsQuery = new GetAllProductsQuery(
                 new Pagination(),
@@ -76,7 +76,7 @@ public class OrderItemType : ObjectType<OrderItem>
             return result.Data?.FirstOrDefault();
         }
 
-        public async Task<Order?> GetOrderAsync([Parent] OrderItem orderItem, [Service] ISender sender)
+        public static async Task<Order?> GetOrderAsync([Parent] OrderItem orderItem, [Service] ISender sender)
         {
             var ordersQuery = new GetAllOrdersQuery(
                 new Pagination(),
