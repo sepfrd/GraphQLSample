@@ -15,7 +15,8 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand,
     private readonly IMappingService _mappingService;
     private readonly ILogger _logger;
 
-    public UpdateProductCommandHandler(IRepository<Product> repository,
+    public UpdateProductCommandHandler(
+        IRepository<Product> repository,
         IMappingService mappingService,
         ILogger logger)
     {

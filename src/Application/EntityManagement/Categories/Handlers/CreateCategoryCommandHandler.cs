@@ -10,21 +10,34 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.Categories.Handlers;
 
-public class CreateCategoryCommandHandler(IRepository<Category> categoryRepository, IMappingService mappingService, ILogger logger)
-    : IRequestHandler<CreateCategoryCommand, CommandResult>
+public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, CommandResult>
 {
+    private readonly IRepository<Category> _categoryRepository;
+    private readonly IMappingService _mappingService;
+    private readonly ILogger _logger;
+
+    public CreateCategoryCommandHandler(
+        IRepository<Category> categoryRepository,
+        IMappingService mappingService,
+        ILogger logger)
+    {
+        _categoryRepository = categoryRepository;
+        _mappingService = mappingService;
+        _logger = logger;
+    }
+
     public async Task<CommandResult> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
     {
-        var category = mappingService.Map<CategoryDto, Category>(request.CategoryDto);
+        var category = _mappingService.Map<CategoryDto, Category>(request.CategoryDto);
 
         if (category is null)
         {
-            logger.LogError(MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Category), typeof(CreateCategoryCommandHandler));
+            _logger.LogError(MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Category), typeof(CreateCategoryCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
 
-        await categoryRepository.CreateAsync(category, cancellationToken);
+        await _categoryRepository.CreateAsync(category, cancellationToken);
 
         return CommandResult.Success(MessageConstants.SuccessfullyCreated);
     }

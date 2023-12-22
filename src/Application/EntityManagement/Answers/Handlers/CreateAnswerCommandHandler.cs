@@ -19,7 +19,8 @@ public class CreateAnswerCommandHandler : IRequestHandler<CreateAnswerCommand, C
     private readonly IAuthenticationService _authenticationService;
     private readonly ILogger _logger;
 
-    public CreateAnswerCommandHandler(IRepository<Answer> answerRepository,
+    public CreateAnswerCommandHandler(
+        IRepository<Answer> answerRepository,
         IRepository<Question> questionRepository,
         IRepository<User> userRepository,
         IMappingService mappingService,

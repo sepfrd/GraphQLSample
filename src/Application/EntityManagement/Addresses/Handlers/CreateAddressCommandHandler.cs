@@ -18,7 +18,8 @@ public class CreateAddressCommandHandler : IRequestHandler<CreateAddressCommand,
     private readonly IAuthenticationService _authenticationService;
     private readonly ILogger _logger;
 
-    public CreateAddressCommandHandler(IRepository<Address> addressRepository,
+    public CreateAddressCommandHandler(
+        IRepository<Address> addressRepository,
         IRepository<User> userRepository,
         IMappingService mappingService,
         IAuthenticationService authenticationService,

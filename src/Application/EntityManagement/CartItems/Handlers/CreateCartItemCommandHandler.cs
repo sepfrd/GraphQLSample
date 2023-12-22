@@ -20,7 +20,8 @@ public class CreateCartItemCommandHandler : IRequestHandler<CreateCartItemComman
     private readonly IAuthenticationService _authenticationService;
     private readonly ILogger _logger;
 
-    public CreateCartItemCommandHandler(IRepository<CartItem> cartItemRepository,
+    public CreateCartItemCommandHandler(
+        IRepository<CartItem> cartItemRepository,
         IRepository<Cart> cartRepository,
         IRepository<Product> productRepository,
         IRepository<User> userRepository,

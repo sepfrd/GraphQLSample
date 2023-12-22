@@ -21,12 +21,10 @@ public class GetAllCartItemsQueryHandler : IRequestHandler<GetAllCartItemsQuery,
     {
         var entities = await _repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
 
-        return new QueryResponse<IEnumerable<CartItem>>
-            (
+        return new QueryResponse<IEnumerable<CartItem>>(
             entities,
             true,
             MessageConstants.SuccessfullyRetrieved,
-            HttpStatusCode.OK
-            );
+            HttpStatusCode.OK);
     }
 }
