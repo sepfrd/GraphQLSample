@@ -31,6 +31,8 @@ using Application.EntityManagement.Roles.Commands;
 using Application.EntityManagement.Roles.Dtos;
 using Application.EntityManagement.Shipments.Commands;
 using Application.EntityManagement.Shipments.Dtos;
+using Application.EntityManagement.UserRoles.Commands;
+using Application.EntityManagement.UserRoles.Dtos;
 using Application.EntityManagement.Users;
 using Application.EntityManagement.Users.Commands;
 using Application.EntityManagement.Users.Dtos;
@@ -249,6 +251,24 @@ public class Mutation
         var updateCommand = new UpdateShipmentCommand(externalId, shipmentDto);
 
         var result = await sender.Send(updateCommand, cancellationToken);
+
+        return result;
+    }
+
+    public async Task<CommandResult> AddUserRoleAsync([Service] ISender sender, UserRoleDto userRoleDto, CancellationToken cancellationToken)
+    {
+        var createCommand = new CreateUserRoleCommand(userRoleDto);
+
+        var result = await sender.Send(createCommand, cancellationToken);
+
+        return result;
+    }
+
+    public async Task<CommandResult> DeleteUserRoleAsync([Service] ISender sender, int externalId, CancellationToken cancellationToken)
+    {
+        var deleteCommand = new DeleteUserRoleByExternalIdCommand(externalId);
+
+        var result = await sender.Send(deleteCommand, cancellationToken);
 
         return result;
     }

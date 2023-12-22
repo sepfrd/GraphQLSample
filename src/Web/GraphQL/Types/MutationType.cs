@@ -148,6 +148,16 @@ public sealed class MutationType : ObjectType<Mutation>
 
         descriptor
             .Field(mutation =>
+                mutation.AddUserRoleAsync(default!, default!, default!))
+            .Authorize(PolicyConstants.AdminPolicy);
+
+        descriptor
+            .Field(mutation =>
+                mutation.DeleteUserRoleAsync(default!, default!, default!))
+            .Authorize(PolicyConstants.AdminPolicy);
+
+        descriptor
+            .Field(mutation =>
                 mutation.AddUserAsync(default!, default!, default!))
             .Authorize(PolicyConstants.AdminPolicy);
 
