@@ -61,7 +61,7 @@ public static class DependencyInjectionHelper
             .AddInputObjectType<UserDto>()
             .AddInputObjectType<LoginDto>()
             .AddInputObjectType<CreateUserDto>()
-            .AddInputObjectType<CreateVoteDto>()
+            .AddInputObjectType<VoteDto>()
             .AddFiltering()
             .AddSorting();
 

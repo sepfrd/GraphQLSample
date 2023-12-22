@@ -12,14 +12,28 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.Users.Handlers;
 
-public class CreateUserCommandHandler(
+public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, CommandResult>
+{
+    private readonly IRepository<User> _userRepository;
+    private readonly IRepository<Person> _personRepository;
+    private readonly IRepository<PhoneNumber> _phoneNumberRepository;
+    private readonly IRepository<Address> _addressRepository;
+    private readonly ILogger _logger;
+
+    public CreateUserCommandHandler(
         IRepository<User> userRepository,
         IRepository<Person> personRepository,
         IRepository<PhoneNumber> phoneNumberRepository,
         IRepository<Address> addressRepository,
         ILogger logger)
-    : IRequestHandler<CreateUserCommand, CommandResult>
-{
+    {
+        _userRepository = userRepository;
+        _personRepository = personRepository;
+        _phoneNumberRepository = phoneNumberRepository;
+        _addressRepository = addressRepository;
+        _logger = logger;
+    }
+
     public async Task<CommandResult> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
         var isUsernameUnique = await IsUsernameUniqueAsync(request.UserDto.Username, cancellationToken);
@@ -35,7 +49,7 @@ public class CreateUserCommandHandler(
 
         if (person is null)
         {
-            logger.LogError(MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(Person), typeof(CreateUserCommandHandler));
+            _logger.LogError(MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(Person), typeof(CreateUserCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -47,7 +61,7 @@ public class CreateUserCommandHandler(
             return CommandResult.Success(MessageConstants.SuccessfullyCreated);
         }
 
-        logger.LogError(MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(User), typeof(CreateUserCommandHandler));
+        _logger.LogError(MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(User), typeof(CreateUserCommandHandler));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }
@@ -56,7 +70,7 @@ public class CreateUserCommandHandler(
     {
         var pagination = new Pagination(1, 1);
 
-        var users = await userRepository.GetAllAsync(
+        var users = await _userRepository.GetAllAsync(
             user => user.Username == username,
             pagination,
             cancellationToken);
@@ -74,7 +88,7 @@ public class CreateUserCommandHandler(
             UserId = userId
         };
 
-        var createdPerson = await personRepository.CreateAsync(person, cancellationToken);
+        var createdPerson = await _personRepository.CreateAsync(person, cancellationToken);
 
         return createdPerson;
     }
@@ -116,14 +130,14 @@ public class CreateUserCommandHandler(
             PhoneNumbers = phoneNumberEntities
         };
 
-        var createdUser = await userRepository.CreateAsync(user, cancellationToken);
+        var createdUser = await _userRepository.CreateAsync(user, cancellationToken);
 
         if (createdUser is not null)
         {
             return createdUser;
         }
 
-        logger.LogError(MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(User), typeof(CreateUserCommandHandler));
+        _logger.LogError(MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(User), typeof(CreateUserCommandHandler));
 
         return null;
     }
@@ -137,7 +151,7 @@ public class CreateUserCommandHandler(
             UserId = userInternalId
         };
 
-        var createdPhoneNumber = await phoneNumberRepository.CreateAsync(phoneNumber, cancellationToken);
+        var createdPhoneNumber = await _phoneNumberRepository.CreateAsync(phoneNumber, cancellationToken);
 
         return createdPhoneNumber;
     }
@@ -156,7 +170,7 @@ public class CreateUserCommandHandler(
             UserId = userInternalId
         };
 
-        var createdAddress = await addressRepository.CreateAsync(address, cancellationToken);
+        var createdAddress = await _addressRepository.CreateAsync(address, cancellationToken);
 
         return createdAddress;
     }

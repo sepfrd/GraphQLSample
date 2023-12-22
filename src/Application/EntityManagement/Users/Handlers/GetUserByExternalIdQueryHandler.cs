@@ -11,15 +11,25 @@ using System.Net;
 
 namespace Application.EntityManagement.Users.Handlers;
 
-public class GetUserByExternalIdQueryHandler(
+public class GetUserByExternalIdQueryHandler : IRequestHandler<GetUserByExternalIdQuery, QueryResponse<UserDto>>
+{
+    private readonly IRepository<User> _userRepository;
+    private readonly IMappingService _mappingService;
+    private readonly ILogger _logger;
+
+    public GetUserByExternalIdQueryHandler(
         IRepository<User> userRepository,
         IMappingService mappingService,
         ILogger logger)
-    : IRequestHandler<GetUserByExternalIdQuery, QueryResponse<UserDto>>
-{
+    {
+        _userRepository = userRepository;
+        _mappingService = mappingService;
+        _logger = logger;
+    }
+
     public async Task<QueryResponse<UserDto>> Handle(GetUserByExternalIdQuery request, CancellationToken cancellationToken)
     {
-        var user = await userRepository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
+        var user = await _userRepository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
 
         if (user is null)
         {
@@ -30,7 +40,7 @@ public class GetUserByExternalIdQueryHandler(
                 HttpStatusCode.NoContent);
         }
 
-        var userDto = mappingService.Map<User, UserDto>(user);
+        var userDto = _mappingService.Map<User, UserDto>(user);
 
         if (userDto is not null)
         {
@@ -41,7 +51,7 @@ public class GetUserByExternalIdQueryHandler(
                 HttpStatusCode.OK);
         }
 
-        logger.LogError(MessageConstants.MappingFailed, DateTime.UtcNow, typeof(User), typeof(GetUserByExternalIdQueryHandler));
+        _logger.LogError(MessageConstants.MappingFailed, DateTime.UtcNow, typeof(User), typeof(GetUserByExternalIdQueryHandler));
 
         return new QueryResponse<UserDto>(
             null,

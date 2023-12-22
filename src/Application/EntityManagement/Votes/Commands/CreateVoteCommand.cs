@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Application.EntityManagement.Votes.Commands;
 
-public record CreateVoteCommand(CreateVoteDto CreateVoteDto) : IRequest<CommandResult>;
+public record CreateVoteCommand(VoteDto VoteDto) : IRequest<CommandResult>;

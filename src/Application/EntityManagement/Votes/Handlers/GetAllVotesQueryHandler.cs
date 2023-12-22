@@ -8,12 +8,18 @@ using System.Net;
 
 namespace Application.EntityManagement.Votes.Handlers;
 
-public sealed class GetAllVotesQueryHandler(IRepository<Vote> repository)
-    : IRequestHandler<GetAllVotesQuery, QueryResponse<IEnumerable<Vote>>>
+public sealed class GetAllVotesQueryHandler : IRequestHandler<GetAllVotesQuery, QueryResponse<IEnumerable<Vote>>>
 {
+    private readonly IRepository<Vote> _repository;
+
+    public GetAllVotesQueryHandler(IRepository<Vote> repository)
+    {
+        _repository = repository;
+    }
+
     public async Task<QueryResponse<IEnumerable<Vote>>> Handle(GetAllVotesQuery request, CancellationToken cancellationToken)
     {
-        var entities = await repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
+        var entities = await _repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
 
         return new QueryResponse<IEnumerable<Vote>>(
             entities,

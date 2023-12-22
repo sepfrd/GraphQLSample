@@ -273,15 +273,6 @@ public class Mutation
         return result;
     }
 
-    public async Task<CommandResult> AddUserAsync([Service] ISender sender, CreateUserDto userDto, CancellationToken cancellationToken)
-    {
-        var createCommand = new CreateUserCommand(userDto);
-
-        var result = await sender.Send(createCommand, cancellationToken);
-
-        return result;
-    }
-
     public async Task<CommandResult> UpdateUserAsync([Service] ISender sender, UserDto userDto, CancellationToken cancellationToken)
     {
         var updateCommand = new UpdateUserCommand(userDto);
@@ -294,9 +285,9 @@ public class Mutation
     public async Task<CommandResult> DeleteUserAsync([Service] UserService userService, int externalId, CancellationToken cancellationToken) =>
         await userService.DeleteByExternalIdAsync(externalId, cancellationToken);
 
-    public async Task<CommandResult> AddVoteAsync([Service] ISender sender, CreateVoteDto createVoteDto, CancellationToken cancellationToken)
+    public async Task<CommandResult> AddVoteAsync([Service] ISender sender, VoteDto voteDto, CancellationToken cancellationToken)
     {
-        var createVoteCommand = new CreateVoteCommand(createVoteDto);
+        var createVoteCommand = new CreateVoteCommand(voteDto);
 
         var result = await sender.Send(createVoteCommand, cancellationToken);
 
@@ -308,6 +299,15 @@ public class Mutation
         var deleteCommand = new DeleteVoteByExternalIdCommand(externalId);
 
         var result = await sender.Send(deleteCommand, cancellationToken);
+
+        return result;
+    }
+
+    public async Task<CommandResult> SignUpAsync([Service] ISender sender, CreateUserDto userDto, CancellationToken cancellationToken)
+    {
+        var createCommand = new CreateUserCommand(userDto);
+
+        var result = await sender.Send(createCommand, cancellationToken);
 
         return result;
     }
