@@ -1,5 +1,5 @@
 using Application.Common;
-using Application.EntityManagement.Orders.Dtos;
+using Application.EntityManagement.Orders.Dtos.CreateOrderDto;
 using MediatR;
 
 namespace Application.EntityManagement.Orders.Commands;

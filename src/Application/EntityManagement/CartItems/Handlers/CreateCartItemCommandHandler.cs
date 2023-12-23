@@ -3,6 +3,7 @@ using Application.Common;
 using Application.Common.Constants;
 using Application.EntityManagement.CartItems.Commands;
 using Application.EntityManagement.CartItems.Dtos;
+using Application.EntityManagement.CartItems.Dtos.CartItemDto;
 using Domain.Abstractions;
 using Domain.Entities;
 using MediatR;
@@ -41,7 +42,7 @@ public class CreateCartItemCommandHandler : IRequestHandler<CreateCartItemComman
     public async Task<CommandResult> Handle(CreateCartItemCommand request, CancellationToken cancellationToken)
     {
         var cartEntity = await _cartRepository.GetByExternalIdAsync(
-            request.CreateCartItemDto.CartExternalId,
+            request.CartItemDto.CartExternalId,
             cancellationToken);
 
         if (cartEntity is null)
@@ -74,7 +75,7 @@ public class CreateCartItemCommandHandler : IRequestHandler<CreateCartItemComman
             return CommandResult.Failure(MessageConstants.Forbidden);
         }
 
-        var product = await _productRepository.GetByExternalIdAsync(request.CreateCartItemDto.ProductExternalId, cancellationToken);
+        var product = await _productRepository.GetByExternalIdAsync(request.CartItemDto.ProductExternalId, cancellationToken);
 
         if (product is null)
         {
@@ -92,12 +93,12 @@ public class CreateCartItemCommandHandler : IRequestHandler<CreateCartItemComman
 
         if (existingCartItem is not null)
         {
-            existingCartItem.Quantity += request.CreateCartItemDto.Quantity;
+            existingCartItem.Quantity += request.CartItemDto.Quantity;
 
             return CommandResult.Success(MessageConstants.SuccessfullyUpdated);
         }
 
-        var cartItem = _mappingService.Map<CreateCartItemDto, CartItem>(request.CreateCartItemDto);
+        var cartItem = _mappingService.Map<CartItemDto, CartItem>(request.CartItemDto);
 
         if (cartItem is null)
         {

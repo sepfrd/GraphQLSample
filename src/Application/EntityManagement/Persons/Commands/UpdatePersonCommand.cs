@@ -1,5 +1,6 @@
 using Application.Common;
 using Application.EntityManagement.Persons.Dtos;
+using Application.EntityManagement.Persons.Dtos.PersonDto;
 using MediatR;
 
 namespace Application.EntityManagement.Persons.Commands;

@@ -2,6 +2,7 @@ using Application.Abstractions;
 using Application.Common;
 using Application.Common.Constants;
 using Application.EntityManagement.Users.Dtos;
+using Application.EntityManagement.Users.Dtos.UserDto;
 using Application.EntityManagement.Users.Queries;
 using Domain.Abstractions;
 using Domain.Entities;

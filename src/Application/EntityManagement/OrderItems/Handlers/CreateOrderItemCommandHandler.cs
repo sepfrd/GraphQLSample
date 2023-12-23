@@ -3,6 +3,7 @@ using Application.Common;
 using Application.Common.Constants;
 using Application.EntityManagement.OrderItems.Commands;
 using Application.EntityManagement.OrderItems.Dtos;
+using Application.EntityManagement.OrderItems.Dtos.CreateOrderItemDto;
 using Domain.Abstractions;
 using Domain.Entities;
 using MediatR;

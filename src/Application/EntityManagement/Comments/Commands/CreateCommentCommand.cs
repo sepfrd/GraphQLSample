@@ -1,5 +1,6 @@
 using Application.Common;
 using Application.EntityManagement.Comments.Dtos;
+using Application.EntityManagement.Comments.Dtos.CommentDto;
 using MediatR;
 
 namespace Application.EntityManagement.Comments.Commands;

@@ -1,9 +1,11 @@
 using Application.Common;
 using Application.Common.Constants;
-using Application.EntityManagement.Addresses.Dtos;
+using Application.EntityManagement.Addresses.Dtos.AddressDto;
 using Application.EntityManagement.PhoneNumbers.Dtos;
+using Application.EntityManagement.PhoneNumbers.Dtos.PhoneNumberDto;
 using Application.EntityManagement.Users.Commands;
 using Application.EntityManagement.Users.Dtos;
+using Application.EntityManagement.Users.Dtos.CreateUserDto;
 using Domain.Abstractions;
 using Domain.Common;
 using Domain.Entities;

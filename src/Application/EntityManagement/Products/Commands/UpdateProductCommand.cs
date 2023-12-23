@@ -1,5 +1,6 @@
 using Application.Common;
 using Application.EntityManagement.Products.Dtos;
+using Application.EntityManagement.Products.Dtos.ProductDto;
 using MediatR;
 
 namespace Application.EntityManagement.Products.Commands;

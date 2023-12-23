@@ -2,7 +2,7 @@ using Application.Abstractions;
 using Application.Common;
 using Application.Common.Constants;
 using Application.EntityManagement.Answers.Commands;
-using Application.EntityManagement.Answers.Dtos;
+using Application.EntityManagement.Answers.Dtos.AnswerDto;
 using Domain.Abstractions;
 using Domain.Entities;
 using MediatR;

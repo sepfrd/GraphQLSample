@@ -1,43 +1,61 @@
 using Application.Common;
 using Application.EntityManagement.Addresses.Commands;
 using Application.EntityManagement.Addresses.Dtos;
+using Application.EntityManagement.Addresses.Dtos.AddressDto;
 using Application.EntityManagement.Answers;
 using Application.EntityManagement.Answers.Commands;
 using Application.EntityManagement.Answers.Dtos;
+using Application.EntityManagement.Answers.Dtos.AnswerDto;
 using Application.EntityManagement.CartItems.Commands;
 using Application.EntityManagement.CartItems.Dtos;
+using Application.EntityManagement.CartItems.Dtos.CartItemDto;
 using Application.EntityManagement.Categories.Commands;
 using Application.EntityManagement.Categories.Dtos;
+using Application.EntityManagement.Categories.Dtos.CategoryDto;
 using Application.EntityManagement.Comments;
 using Application.EntityManagement.Comments.Commands;
 using Application.EntityManagement.Comments.Dtos;
+using Application.EntityManagement.Comments.Dtos.CommentDto;
 using Application.EntityManagement.Orders;
 using Application.EntityManagement.Orders.Commands;
 using Application.EntityManagement.Orders.Dtos;
+using Application.EntityManagement.Orders.Dtos.CreateOrderDto;
 using Application.EntityManagement.Payments.Commands;
 using Application.EntityManagement.Payments.Dtos;
+using Application.EntityManagement.Payments.Dtos.PaymentDto;
 using Application.EntityManagement.Persons.Commands;
 using Application.EntityManagement.Persons.Dtos;
+using Application.EntityManagement.Persons.Dtos.PersonDto;
 using Application.EntityManagement.PhoneNumbers.Commands;
 using Application.EntityManagement.PhoneNumbers.Dtos;
+using Application.EntityManagement.PhoneNumbers.Dtos.PhoneNumberDto;
 using Application.EntityManagement.Products;
 using Application.EntityManagement.Products.Commands;
 using Application.EntityManagement.Products.Dtos;
+using Application.EntityManagement.Products.Dtos.ProductDto;
 using Application.EntityManagement.Questions;
 using Application.EntityManagement.Questions.Commands;
 using Application.EntityManagement.Questions.Dtos;
+using Application.EntityManagement.Questions.Dtos.QuestionDto;
 using Application.EntityManagement.Roles;
 using Application.EntityManagement.Roles.Commands;
 using Application.EntityManagement.Roles.Dtos;
+using Application.EntityManagement.Roles.Dtos.RoleDto;
 using Application.EntityManagement.Shipments.Commands;
 using Application.EntityManagement.Shipments.Dtos;
+using Application.EntityManagement.Shipments.Dtos.ShipmentDto;
 using Application.EntityManagement.UserRoles.Commands;
 using Application.EntityManagement.UserRoles.Dtos;
+using Application.EntityManagement.UserRoles.Dtos.UserRoleDto;
 using Application.EntityManagement.Users;
 using Application.EntityManagement.Users.Commands;
 using Application.EntityManagement.Users.Dtos;
+using Application.EntityManagement.Users.Dtos.CreateUserDto;
+using Application.EntityManagement.Users.Dtos.LoginDto;
+using Application.EntityManagement.Users.Dtos.UserDto;
 using Application.EntityManagement.Votes.Commands;
 using Application.EntityManagement.Votes.Dtos;
+using Application.EntityManagement.Votes.Dtos.VoteDto;
 using MediatR;
 
 namespace Web.GraphQL;
@@ -94,9 +112,9 @@ public class Mutation
     public static async Task<CommandResult> DeleteAnswerAsync([Service] AnswerService answerService, int externalId, CancellationToken cancellationToken) =>
         await answerService.DeleteByExternalIdAsync(externalId, cancellationToken);
 
-    public static async Task<CommandResult> AddCartItemAsync([Service] ISender sender, CreateCartItemDto createCartItemDto, CancellationToken cancellationToken)
+    public static async Task<CommandResult> AddCartItemAsync([Service] ISender sender, CartItemDto cartItemDto, CancellationToken cancellationToken)
     {
-        var createCommand = new CreateCartItemCommand(createCartItemDto);
+        var createCommand = new CreateCartItemCommand(cartItemDto);
 
         var result = await sender.Send(createCommand, cancellationToken);
 

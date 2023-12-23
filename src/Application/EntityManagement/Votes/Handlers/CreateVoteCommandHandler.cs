@@ -3,6 +3,7 @@ using Application.Common;
 using Application.Common.Constants;
 using Application.EntityManagement.Votes.Commands;
 using Application.EntityManagement.Votes.Dtos;
+using Application.EntityManagement.Votes.Dtos.VoteDto;
 using Domain.Abstractions;
 using Domain.Common;
 using Domain.Entities;

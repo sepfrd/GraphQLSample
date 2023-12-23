@@ -1,5 +1,6 @@
 using Application.Common;
 using Application.EntityManagement.Categories.Dtos;
+using Application.EntityManagement.Categories.Dtos.CategoryDto;
 using MediatR;
 
 namespace Application.EntityManagement.Categories.Commands;

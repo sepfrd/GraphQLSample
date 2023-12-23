@@ -2,7 +2,7 @@ using Application.Abstractions;
 using Application.Common;
 using Application.Common.Constants;
 using Application.EntityManagement.Addresses.Commands;
-using Application.EntityManagement.Addresses.Dtos;
+using Application.EntityManagement.Addresses.Dtos.AddressDto;
 using Domain.Abstractions;
 using Domain.Entities;
 using MediatR;

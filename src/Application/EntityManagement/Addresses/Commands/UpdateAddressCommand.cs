@@ -1,5 +1,5 @@
 using Application.Common;
-using Application.EntityManagement.Addresses.Dtos;
+using Application.EntityManagement.Addresses.Dtos.AddressDto;
 using MediatR;
 
 namespace Application.EntityManagement.Addresses.Commands;
