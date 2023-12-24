@@ -9,10 +9,10 @@ public class PaginationValidator : AbstractValidator<Pagination>
     {
         RuleFor(pagination => pagination.PageNumber)
             .GreaterThanOrEqualTo(1)
-            .LessThanOrEqualTo(1000);
+            .LessThanOrEqualTo(int.MaxValue);
 
         RuleFor(pagination => pagination.PageSize)
             .GreaterThanOrEqualTo(10)
-            .LessThanOrEqualTo(int.MaxValue);
+            .LessThanOrEqualTo(1000);
     }
 }
