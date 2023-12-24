@@ -139,7 +139,7 @@ public class AuthenticationService : IAuthenticationService
     }
 
     public string HashPassword(string password) =>
-        BCrypt.Net.BCrypt.EnhancedHashPassword(password, HashType.SHA512);
+        BCrypt.Net.BCrypt.EnhancedHashPassword(password, HashType.SHA512, 12);
 
     public bool ValidatePassword(string password, string passwordHash) =>
         BCrypt.Net.BCrypt.EnhancedVerify(password, passwordHash, HashType.SHA512);

@@ -5,6 +5,8 @@
 
 .idea/
 
+FodyWeavers.xml
+
 # User-specific files
 *.rsuser
 *.suo
