@@ -50,7 +50,7 @@ public class CreateAddressCommandHandler : IRequestHandler<CreateAddressCommand,
         if (user is null)
         {
             _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(CreateAddressCommandHandler));
-            
+
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
 

@@ -1,5 +1,4 @@
 using Application.Common;
-using Application.EntityManagement.Votes.Dtos;
 using Application.EntityManagement.Votes.Dtos.VoteDto;
 using MediatR;
 

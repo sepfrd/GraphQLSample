@@ -1,11 +1,7 @@
 using Application.EntityManagement.Addresses.Dtos.AddressDto;
-using Application.EntityManagement.Comments.Dtos;
 using Application.EntityManagement.Comments.Dtos.CommentDto;
-using Application.EntityManagement.Payments.Dtos;
 using Application.EntityManagement.Payments.Dtos.PaymentDto;
-using Application.EntityManagement.Persons.Dtos;
 using Application.EntityManagement.Persons.Dtos.PersonDto;
-using Application.EntityManagement.PhoneNumbers.Dtos;
 using Application.EntityManagement.PhoneNumbers.Dtos.PhoneNumberDto;
 
 namespace Application.EntityManagement.Users.Dtos.UserDto;

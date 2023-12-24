@@ -2,7 +2,6 @@ using Application.Abstractions;
 using Application.Common;
 using Application.Common.Constants;
 using Application.EntityManagement.Products.Commands;
-using Application.EntityManagement.Products.Dtos;
 using Application.EntityManagement.Products.Dtos.ProductDto;
 using Domain.Abstractions;
 using Domain.Entities;

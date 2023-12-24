@@ -2,7 +2,6 @@ using Application.Abstractions;
 using Application.Common;
 using Application.Common.Constants;
 using Application.EntityManagement.Votes.Commands;
-using Application.EntityManagement.Votes.Dtos;
 using Application.EntityManagement.Votes.Dtos.VoteDto;
 using Domain.Abstractions;
 using Domain.Common;
@@ -62,7 +61,7 @@ public class CreateVoteCommandHandler : IRequestHandler<CreateVoteCommand, Comma
         {
             return CommandResult.Failure(MessageConstants.BadRequest);
         }
-        
+
         var userClaims = _authenticationService.GetLoggedInUser();
 
         if (userClaims?.ExternalId is null)

@@ -1,3 +1,4 @@
+using Application.Abstractions;
 using Application.Common.Constants;
 using Bogus;
 using Domain.Entities;
@@ -9,18 +10,21 @@ namespace Infrastructure.Persistence.Common.Helpers;
 
 public class DatabaseSeeder
 {
-    private const int DefaultNumber = 100_000;
+    private const int DefaultNumber = 1000;
+    private readonly IAuthenticationService _authenticationService;
     private readonly IMongoDatabase _mongoDatabase;
     private readonly static Guid AdminRoleInternalId = Guid.NewGuid();
     private readonly static Guid CustomerRoleInternalId = Guid.NewGuid();
     private readonly static Guid AdminUserInternalId = Guid.NewGuid();
     private readonly static Guid CustomerUserInternalId = Guid.NewGuid();
 
-    public DatabaseSeeder(string connectionString, string databaseName)
+    public DatabaseSeeder(string connectionString, string databaseName, IAuthenticationService authenticationService)
     {
         var mongoClient = new MongoClient(connectionString);
 
         _mongoDatabase = mongoClient.GetDatabase(databaseName);
+
+        _authenticationService = authenticationService;
     }
 
     public void SeedData()
@@ -520,14 +524,14 @@ public class DatabaseSeeder
         return fakePeople;
     }
 
-    private static List<User> GetFakeUsers()
+    private List<User> GetFakeUsers()
     {
         var adminUser = new User
         {
             InternalId = AdminUserInternalId,
             ExternalId = 0,
             Username = "sepehr_frd",
-            Password = "Correct_p0",
+            Password = _authenticationService.HashPassword("Correct_p0"),
             Score = 0,
             Email = "sepfrd@outlook.com",
             IsEmailConfirmed = true
@@ -538,7 +542,7 @@ public class DatabaseSeeder
             InternalId = CustomerUserInternalId,
             ExternalId = 1,
             Username = "customer",
-            Password = "Correct_p0",
+            Password = _authenticationService.HashPassword("Correct_p0"),
             Score = 0,
             Email = "customer@outlook.com",
             IsEmailConfirmed = true
@@ -549,7 +553,8 @@ public class DatabaseSeeder
         var userFaker = new Faker<User>()
             .RuleFor(user => user.ExternalId, _ => externalId++)
             .RuleFor(user => user.Username, faker => faker.Internet.UserName())
-            .RuleFor(user => user.Password, faker => faker.Internet.Password())
+            .RuleFor(user => user.Password,
+                faker => _authenticationService.HashPassword(faker.Internet.Password()))
             .RuleFor(user => user.Score, faker => faker.Random.Number(50))
             .RuleFor(user => user.Email, faker => faker.Internet.Email())
             .RuleFor(user => user.IsEmailConfirmed, faker => faker.Random.Bool());

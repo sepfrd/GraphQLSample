@@ -1,10 +1,9 @@
+using Application.Abstractions;
 using Application.Common;
 using Application.Common.Constants;
 using Application.EntityManagement.Addresses.Dtos.AddressDto;
-using Application.EntityManagement.PhoneNumbers.Dtos;
 using Application.EntityManagement.PhoneNumbers.Dtos.PhoneNumberDto;
 using Application.EntityManagement.Users.Commands;
-using Application.EntityManagement.Users.Dtos;
 using Application.EntityManagement.Users.Dtos.CreateUserDto;
 using Domain.Abstractions;
 using Domain.Common;
@@ -20,6 +19,7 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Comma
     private readonly IRepository<Person> _personRepository;
     private readonly IRepository<PhoneNumber> _phoneNumberRepository;
     private readonly IRepository<Address> _addressRepository;
+    private readonly IAuthenticationService _authenticationService;
     private readonly ILogger _logger;
 
     public CreateUserCommandHandler(
@@ -27,12 +27,14 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Comma
         IRepository<Person> personRepository,
         IRepository<PhoneNumber> phoneNumberRepository,
         IRepository<Address> addressRepository,
+        IAuthenticationService authenticationService,
         ILogger logger)
     {
         _userRepository = userRepository;
         _personRepository = personRepository;
         _phoneNumberRepository = phoneNumberRepository;
         _addressRepository = addressRepository;
+        _authenticationService = authenticationService;
         _logger = logger;
     }
 
@@ -121,11 +123,13 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Comma
             }
         }
 
+        var passwordHash = _authenticationService.HashPassword(userDto.Password);
+
         var user = new User
         {
             InternalId = userInternalId,
             Username = userDto.Username,
-            Password = userDto.Password,
+            Password = passwordHash,
             Email = userDto.Email,
             PersonId = personId,
             Addresses = addressEntities,

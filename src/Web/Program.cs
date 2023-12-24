@@ -1,4 +1,5 @@
 using Application;
+using Application.Abstractions;
 using Infrastructure;
 using Infrastructure.Persistence.Common.Helpers;
 using Infrastructure.Services.Logging;
@@ -35,9 +36,16 @@ try
 
     if (builder.Configuration.GetSection("EnableDataSeed").Value == "True")
     {
+        using var scope = app.Services.CreateScope();
+
+        var serviceProvider = scope.ServiceProvider;
+
+        var authenticationService = serviceProvider.GetRequiredService<IAuthenticationService>();
+
         var dataSeeder = new DatabaseSeeder(
             builder.Configuration.GetSection("MongoDb").GetSection("ConnectionString").Value!,
-            builder.Configuration.GetSection("MongoDb").GetSection("DatabaseName").Value!);
+            builder.Configuration.GetSection("MongoDb").GetSection("DatabaseName").Value!,
+            authenticationService);
 
         dataSeeder.SeedData();
     }

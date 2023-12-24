@@ -1,5 +1,4 @@
 using Application.Common;
-using Application.EntityManagement.Users.Dtos;
 using Application.EntityManagement.Users.Dtos.LoginDto;
 using MediatR;
 

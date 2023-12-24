@@ -1,5 +1,4 @@
 using Application.EntityManagement.Addresses.Dtos.AddressDto;
-using Application.EntityManagement.PhoneNumbers.Dtos;
 using Application.EntityManagement.PhoneNumbers.Dtos.PhoneNumberDto;
 
 namespace Application.EntityManagement.Users.Dtos.CreateUserDto;

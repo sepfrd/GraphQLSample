@@ -3,6 +3,7 @@ using Application.Common.Constants;
 using Application.EntityManagement.Roles.Queries;
 using Application.EntityManagement.UserRoles.Queries;
 using Application.EntityManagement.Users.Dtos;
+using BCrypt.Net;
 using Domain.Common;
 using Domain.Entities;
 using MediatR;
@@ -136,6 +137,12 @@ public class AuthenticationService : IAuthenticationService
 
         return userClaimsDto;
     }
+
+    public string HashPassword(string password) =>
+        BCrypt.Net.BCrypt.EnhancedHashPassword(password, HashType.SHA512);
+
+    public bool ValidatePassword(string password, string passwordHash) =>
+        BCrypt.Net.BCrypt.EnhancedVerify(password, passwordHash, HashType.SHA512);
 
     public bool IsLoggedIn() =>
         _httpContextAccessor.HttpContext?.User.Identity?.IsAuthenticated ?? false;

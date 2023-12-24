@@ -2,7 +2,6 @@ using Application.Abstractions;
 using Application.Common;
 using Application.Common.Constants;
 using Application.EntityManagement.CartItems.Commands;
-using Application.EntityManagement.CartItems.Dtos;
 using Application.EntityManagement.CartItems.Dtos.CartItemDto;
 using Domain.Abstractions;
 using Domain.Entities;

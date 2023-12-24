@@ -26,7 +26,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, CommandResult>
         {
             return CommandResult.Failure(MessageConstants.AlreadyLoggedIn);
         }
-        
+
         var users = await _userRepository.GetAllAsync(
             user => user.Username == request.LoginDto.UsernameOrEmail || user.Email == request.LoginDto.UsernameOrEmail,
             new Pagination(),
@@ -39,7 +39,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, CommandResult>
             return CommandResult.Failure(MessageConstants.InvalidCredentials);
         }
 
-        var isPasswordValid = request.LoginDto.Password == user.Password;
+        var isPasswordValid = _authenticationService.ValidatePassword(request.LoginDto.Password, user.Password);
 
         if (!isPasswordValid)
         {
@@ -52,7 +52,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, CommandResult>
         {
             return CommandResult.Success(MessageConstants.SuccessfullyLoggedIn, jwt);
         }
-        
+
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }
 }

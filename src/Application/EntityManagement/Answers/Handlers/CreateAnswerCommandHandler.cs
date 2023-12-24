@@ -63,7 +63,7 @@ public class CreateAnswerCommandHandler : IRequestHandler<CreateAnswerCommand, C
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
-        
+
         var entity = _mappingService.Map<AnswerDto, Answer>(request.AnswerDto);
 
         if (entity is null)

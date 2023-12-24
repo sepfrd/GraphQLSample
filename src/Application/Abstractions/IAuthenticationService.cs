@@ -9,5 +9,9 @@ public interface IAuthenticationService
 
     UserClaimsDto? GetLoggedInUser();
 
+    string HashPassword(string password);
+
+    bool ValidatePassword(string password, string passwordHash);
+
     bool IsLoggedIn();
 }
