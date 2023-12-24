@@ -22,7 +22,8 @@ public class Query
         return result.Data;
     }
 
-    public static async Task<IEnumerable<Product>?> GetProductsAsync(Pagination? pagination, CustomProductFilter? productFilter, [Service] ISender sender, CancellationToken cancellationToken)
+    public static async Task<IEnumerable<Product>?> GetProductsAsync(Pagination? pagination, CustomProductFilter? productFilter, [Service] ISender sender,
+        CancellationToken cancellationToken)
     {
         pagination ??= new Pagination();
 

@@ -527,7 +527,7 @@ public class DatabaseSeeder
             InternalId = AdminUserInternalId,
             ExternalId = 0,
             Username = "sepehr_frd",
-            Password = "sfr1376",
+            Password = "Correct_p0",
             Score = 0,
             Email = "sepfrd@outlook.com",
             IsEmailConfirmed = true
@@ -538,7 +538,7 @@ public class DatabaseSeeder
             InternalId = CustomerUserInternalId,
             ExternalId = 1,
             Username = "customer",
-            Password = "sfr1376",
+            Password = "Correct_p0",
             Score = 0,
             Email = "customer@outlook.com",
             IsEmailConfirmed = true

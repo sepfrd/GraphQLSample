@@ -59,6 +59,7 @@ public class AddressDtoValidator : AbstractValidator<AddressDto>
         "ECUADOR",
         "EGYPT",
         "EL SALVADOR",
+        "ENGLAND",
         "EQUATORIAL GUINEA",
         "ERITREA",
         "ESTONIA",

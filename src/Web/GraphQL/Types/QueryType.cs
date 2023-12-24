@@ -1,4 +1,6 @@
-﻿namespace Web.GraphQL.Types;
+﻿using Application.Common.Constants;
+
+namespace Web.GraphQL.Types;
 
 public sealed class QueryType : ObjectType<Query>
 {
@@ -8,7 +10,8 @@ public sealed class QueryType : ObjectType<Query>
 
         descriptor
             .Field(query =>
-                Query.GetUsersAsync(default, default, default!, default!));
+                Query.GetUsersAsync(default, default, default!, default!))
+            .Authorize(PolicyConstants.AdminPolicy);
 
         descriptor
             .Field(query =>
