@@ -9,19 +9,19 @@ public sealed class QueryType : ObjectType<Query>
         descriptor.Authorize();
 
         descriptor
-            .Field(query =>
+            .Field(_ =>
                 Query.GetUsersAsync(default, default, default!, default!))
             .Authorize(PolicyConstants.AdminPolicy);
 
         descriptor
-            .Field(query =>
+            .Field(_ =>
                 Query.GetCategoriesAsync(default, default!, default!))
             .AllowAnonymous()
             .UseFiltering()
             .UseSorting();
 
         descriptor
-            .Field(query =>
+            .Field(_ =>
                 Query.GetProductsAsync(default, default, default!, default!))
             .AllowAnonymous()
             .UseFiltering()

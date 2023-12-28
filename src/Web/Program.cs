@@ -21,6 +21,8 @@ Log.Logger = new LoggerConfiguration()
         })
     .CreateBootstrapLogger();
 
+Log.Logger.Information("Application setup started.");
+
 try
 {
     builder

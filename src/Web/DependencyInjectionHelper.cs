@@ -65,7 +65,14 @@ public static class DependencyInjectionHelper
             .AddInputObjectType<CreateUserDto>()
             .AddInputObjectType<VoteDto>()
             .AddFiltering()
-            .AddSorting();
+            .AddSorting()
+            .ModifyRequestOptions(options =>
+            {
+                options.Complexity.Enable = true;
+                options.Complexity.MaximumAllowed = 300;
+                options.ExecutionTimeout = TimeSpan.FromSeconds(1);
+                options.IncludeExceptionDetails = true;
+            });
 
         return services;
     }
