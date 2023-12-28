@@ -11,7 +11,8 @@ public class CommentType : ObjectType<Comment>
 {
     protected override void Configure(IObjectTypeDescriptor<Comment> descriptor)
     {
-        descriptor.Description("Represents a product comment.");
+        descriptor
+            .Description("Represents a user's comment on a product or other content, including details like content, user information, and creation timestamp.");
 
         descriptor
             .Field(comment => comment.Description)

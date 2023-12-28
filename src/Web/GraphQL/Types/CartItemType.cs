@@ -10,7 +10,8 @@ public class CartItemType : ObjectType<CartItem>
 {
     protected override void Configure(IObjectTypeDescriptor<CartItem> descriptor)
     {
-        descriptor.Description("Represents a single cart item.");
+        descriptor
+            .Description("Represents an item added to a user's shopping cart, including details like product, quantity, unit price, and subtotal.");
 
         descriptor
             .Field(cartItem => cartItem.Quantity)

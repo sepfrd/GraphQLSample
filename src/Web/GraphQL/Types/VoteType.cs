@@ -15,16 +15,23 @@ public class VoteType : ObjectType<Vote>
     protected override void Configure(IObjectTypeDescriptor<Vote> descriptor)
     {
         descriptor
+            .Description("Represents a user's vote on content, including details like vote type, content type, and the external ID of the voted content.");
+
+        descriptor
             .Field(vote => vote.User)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetUserAsync(default!, default!));
+                    Resolvers.GetUserAsync(default!, default!))
+            .Description("The User Who Voted\n" +
+                         "Authentication is required.");
 
         descriptor
             .Field(vote => vote.Content)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetContentAsync(default!, default!));
+                    Resolvers.GetContentAsync(default!, default!))
+            .Description("The Content Voted On\n" +
+                         "Authentication is required.");
 
         descriptor
             .Field(vote => vote.DateCreated)

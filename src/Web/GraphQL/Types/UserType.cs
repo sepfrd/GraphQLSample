@@ -19,16 +19,23 @@ public class UserType : ObjectType<User>
     protected override void Configure(IObjectTypeDescriptor<User> descriptor)
     {
         descriptor
+            .Description("Represents a user with details such as username, email, personal information, addresses, phone numbers, orders, and associated roles.");
+
+        descriptor
             .Field(user => user.Cart)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetCartAsync(default!, default!));
+                    Resolvers.GetCartAsync(default!, default!))
+            .Description("The Cart Associated with the User\n" +
+                         "Authentication is required.");
 
         descriptor
             .Field(user => user.Person)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetPersonAsync(default!, default!));
+                    Resolvers.GetPersonAsync(default!, default!))
+            .Description("The Personal Information of the User\n" +
+                         "Authentication is required.");
 
         descriptor
             .Field(user => user.Addresses)
@@ -36,7 +43,10 @@ public class UserType : ObjectType<User>
                 resolvers =>
                     Resolvers.GetAddressesAsync(default!, default!))
             .UseFiltering()
-            .UseSorting();
+            .UseSorting()
+            .Description("The Addresses Associated with the User\n" +
+                         "Authentication is required.\n" +
+                         "Supports filtering and sorting for address details.");
 
         descriptor
             .Field(user => user.Answers)
@@ -44,7 +54,10 @@ public class UserType : ObjectType<User>
                 resolvers =>
                     Resolvers.GetAnswersAsync(default!, default!))
             .UseFiltering()
-            .UseSorting();
+            .UseSorting()
+            .Description("The Answers Posted by the User\n" +
+                         "Authentication is required.\n" +
+                         "Supports filtering and sorting for answer details.");
 
         descriptor
             .Field(user => user.Comments)
@@ -52,7 +65,10 @@ public class UserType : ObjectType<User>
                 resolvers =>
                     Resolvers.GetCommentsAsync(default!, default!))
             .UseFiltering()
-            .UseSorting();
+            .UseSorting()
+            .Description("The Comments Posted by the User\n" +
+                         "Authentication is required.\n" +
+                         "Supports filtering and sorting for comment details.");
 
         descriptor
             .Field(user => user.Orders)
@@ -60,7 +76,10 @@ public class UserType : ObjectType<User>
                 resolvers =>
                     Resolvers.GetOrdersAsync(default!, default!))
             .UseFiltering()
-            .UseSorting();
+            .UseSorting()
+            .Description("The Orders Associated with the User\n" +
+                         "Authentication is required.\n" +
+                         "Supports filtering and sorting for order details.");
 
         descriptor
             .Field(user => user.UserRoles)
@@ -68,7 +87,10 @@ public class UserType : ObjectType<User>
                 resolvers =>
                     Resolvers.GetUserRolesAsync(default!, default!))
             .UseFiltering()
-            .UseSorting();
+            .UseSorting()
+            .Description("The User-Roles Associated with the User\n" +
+                         "Authentication is required.\n" +
+                         "Supports filtering and sorting for user-role details.");
 
         descriptor
             .Field(user => user.Questions)
@@ -76,13 +98,18 @@ public class UserType : ObjectType<User>
                 resolvers =>
                     Resolvers.GetQuestionsAsync(default!, default!))
             .UseFiltering()
-            .UseSorting();
+            .UseSorting()
+            .Description("The Questions Posted by the User\n" +
+                         "Authentication is required.\n" +
+                         "Supports filtering and sorting for question details.");
 
         descriptor
             .Field(user => user.Votes)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetVotesAsync(default!, default!));
+                    Resolvers.GetVotesAsync(default!, default!))
+            .Description("The Votes Associated with the User\n" +
+                         "Authentication is required.");
 
         descriptor
             .Field(user => user.PhoneNumbers)
@@ -90,7 +117,10 @@ public class UserType : ObjectType<User>
                 resolvers =>
                     Resolvers.GetPhoneNumbersAsync(default!, default!))
             .UseFiltering()
-            .UseSorting();
+            .UseSorting()
+            .Description("The Phone Numbers Associated with the User\n" +
+                         "Authentication is required.\n" +
+                         "Supports filtering and sorting for phone number details.");
 
         descriptor
             .Field(user => user.DateCreated)

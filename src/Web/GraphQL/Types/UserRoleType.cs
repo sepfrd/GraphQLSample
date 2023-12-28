@@ -11,14 +11,21 @@ public class UserRoleType : ObjectType<UserRole>
     protected override void Configure(IObjectTypeDescriptor<UserRole> descriptor)
     {
         descriptor
+            .Description("Represents the association between a user and a role, indicating the roles assigned to a user.");
+
+        descriptor
             .Field(userRole => userRole.User)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetUserAsync(default!, default!));
+                    Resolvers.GetUserAsync(default!, default!))
+            .Description("The User Associated with the User-Role\n" +
+                         "Authentication is required.");
 
         descriptor
             .Field(userRole => userRole.Role)
-            .ResolveWith<Resolvers>(resolvers => Resolvers.GetRoleAsync(default!, default!));
+            .ResolveWith<Resolvers>(resolvers => Resolvers.GetRoleAsync(default!, default!))
+            .Description("The Role Associated with the User-Role\n" +
+                         "Authentication is required.");
     }
 
     private class Resolvers

@@ -11,22 +11,31 @@ public class ShipmentType : ObjectType<Shipment>
     protected override void Configure(IObjectTypeDescriptor<Shipment> descriptor)
     {
         descriptor
+            .Description("Represents a shipment with details like status, shipping method, dates, cost, and associated addresses.");
+
+        descriptor
             .Field(shipment => shipment.Order)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetOrderAsync(default!, default!));
+                    Resolvers.GetOrderAsync(default!, default!))
+            .Description("The Order Associated with the Shipment\n" +
+                         "Authentication is required.");
 
         descriptor
             .Field(shipment => shipment.DestinationAddressId)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetDestinationAddressAsync(default!, default!));
+                    Resolvers.GetDestinationAddressAsync(default!, default!))
+            .Description("The Destination Address Associated with the Shipment\n" +
+                         "Authentication is required.");
 
         descriptor
             .Field(shipment => shipment.OriginAddressId)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetOriginAddressAsync(default!, default!));
+                    Resolvers.GetOriginAddressAsync(default!, default!))
+            .Description("The Origin Address Associated with the Shipment\n" +
+                         "Authentication is required.");
 
         descriptor
             .Field(shipment => shipment.DateCreated)

@@ -10,10 +10,15 @@ public class PersonType : ObjectType<Person>
     protected override void Configure(IObjectTypeDescriptor<Person> descriptor)
     {
         descriptor
+            .Description("Represents an individual person with details such as first name, last name, and birth date.");
+
+        descriptor
             .Field(person => person.User)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetUserAsync(default!, default!));
+                    Resolvers.GetUserAsync(default!, default!))
+            .Description("The User Associated with the Person\n" +
+                         "Authentication is required.");
 
         descriptor
             .Field(person => person.DateCreated)

@@ -10,7 +10,8 @@ public class OrderItemType : ObjectType<OrderItem>
 {
     protected override void Configure(IObjectTypeDescriptor<OrderItem> descriptor)
     {
-        descriptor.Description("Represents a single item of an order.");
+        descriptor
+            .Description("Represents an item within an order, including details like the associated product, quantity, unit price, and subtotal.");
 
         descriptor
             .Field(orderItem => orderItem.Order)

@@ -10,10 +10,15 @@ public class PhoneNumberType : ObjectType<PhoneNumber>
     protected override void Configure(IObjectTypeDescriptor<PhoneNumber> descriptor)
     {
         descriptor
+            .Description("Represents a phone number associated with a user, including details like the number itself and its type.");
+
+        descriptor
             .Field(phoneNumber => phoneNumber.User)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetUserAsync(default!, default!));
+                    Resolvers.GetUserAsync(default!, default!))
+            .Description("The User Associated with the Phone Number\n" +
+                         "Authentication is required.");
 
         descriptor
             .Field(phoneNumber => phoneNumber.DateCreated)

@@ -10,6 +10,9 @@ public class RoleType : ObjectType<Role>
     protected override void Configure(IObjectTypeDescriptor<Role> descriptor)
     {
         descriptor
+            .Description("Represents a user role, including details like title and description.");
+
+        descriptor
             .Field(role => role.DateCreated)
             .Description("The Creation Date");
 
@@ -25,7 +28,9 @@ public class RoleType : ObjectType<Role>
             .Field(role => role.UserRoles)
             .ResolveWith<Resolvers>(resolvers => Resolvers.GetUserRolesAsync(default!, default!))
             .UseFiltering()
-            .UseSorting();
+            .UseSorting()
+            .Description("The User-Roles Associated with the Role\n" +
+                         "Authentication is required.");
 
         descriptor
             .Field(role => role.InternalId)

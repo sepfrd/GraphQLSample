@@ -11,7 +11,8 @@ public class AnswerType : ObjectType<Answer>
 {
     protected override void Configure(IObjectTypeDescriptor<Answer> descriptor)
     {
-        descriptor.Description("Represents an answer.");
+        descriptor
+            .Description("Represents an answer to a question, including details such as the content of the answer and associated user information.");
 
         descriptor
             .Field(answer => answer.InternalId)

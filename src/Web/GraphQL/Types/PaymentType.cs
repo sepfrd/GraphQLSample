@@ -10,10 +10,15 @@ public class PaymentType : ObjectType<Payment>
     protected override void Configure(IObjectTypeDescriptor<Payment> descriptor)
     {
         descriptor
+            .Description("Represents a payment associated with an order, including details like the payment amount, method, and status.");
+
+        descriptor
             .Field(payment => payment.Order)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetOrderAsync(default!, default!));
+                    Resolvers.GetOrderAsync(default!, default!))
+            .Description("The Order Associated with the Payment\n" +
+                         "Authentication is required.");
 
         descriptor
             .Field(payment => payment.DateCreated)

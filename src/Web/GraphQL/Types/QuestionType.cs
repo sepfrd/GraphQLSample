@@ -12,10 +12,15 @@ public class QuestionType : ObjectType<Question>
     protected override void Configure(IObjectTypeDescriptor<Question> descriptor)
     {
         descriptor
+            .Description("Represents a question posted by a user, including details like title, description, associated user information, and answers.");
+
+        descriptor
             .Field(question => question.User)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetUserAsync(default!, default!));
+                    Resolvers.GetUserAsync(default!, default!))
+            .Description("The User Who Posted the Question\n" +
+                         "Authentication is required.");
 
         descriptor
             .Field(question => question.Answers)
@@ -23,13 +28,16 @@ public class QuestionType : ObjectType<Question>
                 resolvers =>
                     Resolvers.GetAnswersAsync(default!, default!))
             .UseFiltering()
-            .UseSorting();
+            .UseSorting()
+            .Description("The Answers Associated with the Question\n" +
+                         "Supports filtering and sorting for answer details.");
 
         descriptor
             .Field(question => question.Votes)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetVotesAsync(default!, default!));
+                    Resolvers.GetVotesAsync(default!, default!))
+            .Description("The Votes Received by the Question");
 
         descriptor
             .Field(question => question.DateCreated)

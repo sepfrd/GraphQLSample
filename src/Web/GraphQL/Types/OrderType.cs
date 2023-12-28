@@ -12,16 +12,25 @@ public class OrderType : ObjectType<Order>
     protected override void Configure(IObjectTypeDescriptor<Order> descriptor)
     {
         descriptor
+            .Description("Represents a user's order, containing a list of order items, associated user information, and order status.");
+
+        descriptor
             .Field(order => order.Payment)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetPaymentAsync(default!, default!));
+                    Resolvers.GetPaymentAsync(default!, default!))
+            .Description("The Payment Information Associated with the Order\n" +
+                         "Requires the order ID.\n" +
+                         "Authentication is required.");
 
         descriptor
             .Field(order => order.Shipment)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetShipmentAsync(default!, default!));
+                    Resolvers.GetShipmentAsync(default!, default!))
+            .Description("The Shipment Details Associated with the Order\n" +
+                         "Requires the order ID.\n" +
+                         "Authentication is required.");
 
         descriptor
             .Field(order => order.OrderItems)
@@ -29,7 +38,11 @@ public class OrderType : ObjectType<Order>
                 resolvers =>
                     Resolvers.GetOrderItemsAsync(default!, default!))
             .UseFiltering()
-            .UseSorting();
+            .UseSorting()
+            .Description("The List of Order Items Associated with the Order\n" +
+                         "Requires the order ID.\n" +
+                         "Authentication is required.\n" +
+                         "Supports filtering and sorting for order item details.");
 
         descriptor
             .Field(order => order.DateCreated)

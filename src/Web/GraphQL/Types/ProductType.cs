@@ -13,16 +13,21 @@ public class ProductType : ObjectType<Product>
     protected override void Configure(IObjectTypeDescriptor<Product> descriptor)
     {
         descriptor
+            .Description("Represents a product with details such as name, description, price, stock quantity, images, associated category, and user comments.");
+
+        descriptor
             .Field(product => product.Category)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetCategoryAsync(default!, default!));
+                    Resolvers.GetCategoryAsync(default!, default!))
+            .Description("The Category Associated with the Product");
 
         descriptor
             .Field(product => product.Votes)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetVotesAsync(default!, default!));
+                    Resolvers.GetVotesAsync(default!, default!))
+            .Description("The Votes Associated with the Product");
 
         descriptor
             .Field(product => product.Comments)
@@ -30,7 +35,10 @@ public class ProductType : ObjectType<Product>
                 resolvers =>
                     Resolvers.GetCommentsAsync(default!, default!))
             .UseFiltering()
-            .UseSorting();
+            .UseSorting()
+            .Description("The Comments Associated with the Product\n" +
+                         "Authentication is required.\n" +
+                         "Supports filtering and sorting for comment details.");
 
         descriptor
             .Field(product => product.Questions)
@@ -38,7 +46,10 @@ public class ProductType : ObjectType<Product>
                 resolvers =>
                     Resolvers.GetQuestionsAsync(default!, default!))
             .UseFiltering()
-            .UseSorting();
+            .UseSorting()
+            .Description("The Questions Associated with the Product\n" +
+                         "Authentication is required.\n" +
+                         "Supports filtering and sorting for question details.");
 
         descriptor
             .Field(product => product.DateCreated)

@@ -9,7 +9,8 @@ public class CategoryType : ObjectType<Category>
 {
     protected override void Configure(IObjectTypeDescriptor<Category> descriptor)
     {
-        descriptor.Description("Represents a category in its entirety.");
+        descriptor
+            .Description("Represents a product category with information such as name, description, image URL, and icon URL.");
 
         descriptor
             .Field(category => category.Name)
