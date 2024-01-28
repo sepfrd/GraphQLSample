@@ -32,7 +32,8 @@ try
         .AddSingleton<ILogger, CustomLogger>()
         .InjectApplicationLayer()
         .InjectInfrastructureLayer(builder.Configuration)
-        .AddAllGraphQlServices();
+        .AddAllGraphQlServices()
+        .AddHealthChecks();
 
     var app = builder.Build();
 
@@ -68,6 +69,7 @@ try
         .UseEndpoints(endpoints =>
         {
             endpoints.MapGraphQL();
+            endpoints.MapHealthChecks("/healthcheck");
         });
 
     app.Run();
