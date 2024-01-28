@@ -7,6 +7,7 @@ using Serilog;
 using Serilog.Settings.Configuration;
 using Web;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Logging.ClearProviders();
@@ -84,3 +85,5 @@ finally
 {
     Log.CloseAndFlush();
 }
+
+public partial class Program;
