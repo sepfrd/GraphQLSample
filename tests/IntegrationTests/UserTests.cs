@@ -1,4 +1,5 @@
 ﻿using Application.Common.Constants;
+using Domain.Common;
 using FluentAssertions;
 using GraphQL;
 using GraphQL.Client.Http;
@@ -20,7 +21,11 @@ public class UserTests : IClassFixture<WebApplicationFactory<Program>>
 
     [Theory]
     [MemberData(nameof(GetUsersData))]
-    public async Task Get_Users_Returns_Expected_Result(bool isAuthenticated, string? role, bool isSuccessful)
+    public async Task Get_Users_Returns_Expected_Result(
+        bool isAuthenticated,
+        string? role,
+        bool isSuccessful,
+        Pagination pagination)
     {
         // Arrange
 
@@ -40,8 +45,8 @@ public class UserTests : IClassFixture<WebApplicationFactory<Program>>
         var graphQlRequest = new GraphQLRequest
         {
             Query = """
-                    query Users {
-                        users(pagination: null) {
+                    query Users($pagination: PaginationInput) {
+                        users(pagination: $pagination) {
                             dateCreated
                             dateModified
                             externalId
@@ -51,7 +56,11 @@ public class UserTests : IClassFixture<WebApplicationFactory<Program>>
                             score
                         }
                     }
-                    """
+                    """,
+            Variables = new
+            {
+                pagination
+            }
         };
 
         // Act
@@ -63,7 +72,7 @@ public class UserTests : IClassFixture<WebApplicationFactory<Program>>
         if (isSuccessful)
         {
             graphQlResponse.Data.Users.Should().NotBeNullOrEmpty();
-            graphQlResponse.Data.Users!.Count.Should().Be(10);
+            graphQlResponse.Data.Users!.Count.Should().Be(pagination.PageSize);
         }
         else
         {
@@ -72,18 +81,26 @@ public class UserTests : IClassFixture<WebApplicationFactory<Program>>
         }
     }
 
-    public static TheoryData<bool, string?, bool> GetUsersData() =>
+    public static TheoryData<bool, string?, bool, Pagination> GetUsersData() =>
         new()
         {
             {
                 false,
                 null,
-                false
+                false,
+                new Pagination()
+            },
+            {
+                true,
+                RoleConstants.Customer,
+                false,
+                new Pagination()
             },
             {
                 true,
                 RoleConstants.Admin,
-                true
+                true,
+                new Pagination(1, 100)
             }
         };
 }
