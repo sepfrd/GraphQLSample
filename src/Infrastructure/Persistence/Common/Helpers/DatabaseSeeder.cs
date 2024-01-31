@@ -10,13 +10,13 @@ namespace Infrastructure.Persistence.Common.Helpers;
 
 public class DatabaseSeeder
 {
-    private const int DefaultNumber = 1000;
+    private const int DefaultNumber = 100;
     private readonly IAuthenticationService _authenticationService;
     private readonly IMongoDatabase _mongoDatabase;
-    private readonly static Guid AdminRoleInternalId = Guid.NewGuid();
-    private readonly static Guid CustomerRoleInternalId = Guid.NewGuid();
-    private readonly static Guid AdminUserInternalId = Guid.NewGuid();
-    private readonly static Guid CustomerUserInternalId = Guid.NewGuid();
+    private static readonly Guid AdminRoleInternalId = Guid.NewGuid();
+    private static readonly Guid CustomerRoleInternalId = Guid.NewGuid();
+    private static readonly Guid AdminUserInternalId = Guid.NewGuid();
+    private static readonly Guid CustomerUserInternalId = Guid.NewGuid();
 
     public DatabaseSeeder(string connectionString, string databaseName, IAuthenticationService authenticationService)
     {
