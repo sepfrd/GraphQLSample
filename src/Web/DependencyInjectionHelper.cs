@@ -29,6 +29,7 @@ public static class DependencyInjectionHelper
             .AddMaxExecutionDepthRule(15)
             .AddQueryType<QueryType>()
             .AddMutationType<MutationType>()
+            .AddSubscriptionType<SubscriptionType>()
             .AddType<AddressType>()
             .AddType<AnswerType>()
             .AddType<CartItemType>()
@@ -72,7 +73,8 @@ public static class DependencyInjectionHelper
                 options.Complexity.MaximumAllowed = 300;
                 options.ExecutionTimeout = TimeSpan.FromSeconds(1);
                 options.IncludeExceptionDetails = false;
-            });
+            })
+            .AddInMemorySubscriptions();
 
         return services;
     }

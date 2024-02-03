@@ -47,7 +47,7 @@ public sealed class MutationType : ObjectType<Mutation>
 
         descriptor
             .Field(_ =>
-                Mutation.AddAnswerAsync(default!, default!, default!))
+                Mutation.AddAnswerAsync(default!, default!, default!, default!))
             .Authorize(PolicyConstants.CustomerPolicy)
             .Description("Adds a new answer to a question. Requires the question ID and the content of the answer.\n" +
                          "Authentication is required and only customers are allowed.");

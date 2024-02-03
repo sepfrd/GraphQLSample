@@ -40,6 +40,7 @@ using Application.EntityManagement.Users.Dtos.LoginDto;
 using Application.EntityManagement.Users.Dtos.UserDto;
 using Application.EntityManagement.Votes.Commands;
 using Application.EntityManagement.Votes.Dtos.VoteDto;
+using HotChocolate.Subscriptions;
 using MediatR;
 
 namespace Web.GraphQL;
@@ -75,11 +76,16 @@ public class Mutation
         return result;
     }
 
-    public static async Task<CommandResult> AddAnswerAsync([Service] ISender sender, AnswerDto answerDto, CancellationToken cancellationToken)
+    public static async Task<CommandResult> AddAnswerAsync([Service] ISender sender, [Service] ITopicEventSender topicEventSender, AnswerDto answerDto, CancellationToken cancellationToken)
     {
         var createCommand = new CreateAnswerCommand(answerDto);
 
         var result = await sender.Send(createCommand, cancellationToken);
+
+        if (result.IsSuccessful)
+        {
+            await topicEventSender.SendAsync(nameof(Subscription.OnAnswerSubmitted), answerDto, cancellationToken);
+        }
 
         return result;
     }

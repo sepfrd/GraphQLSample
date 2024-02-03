@@ -67,6 +67,7 @@ try
         .UseRouting()
         .UseAuthentication()
         .UseAuthorization()
+        .UseWebSockets()
         .UseEndpoints(endpoints =>
         {
             endpoints.MapGraphQL();
