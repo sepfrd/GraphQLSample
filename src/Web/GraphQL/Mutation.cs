@@ -26,6 +26,7 @@ using Application.EntityManagement.Products.Dtos.ProductDto;
 using Application.EntityManagement.Questions;
 using Application.EntityManagement.Questions.Commands;
 using Application.EntityManagement.Questions.Dtos.QuestionDto;
+using Application.EntityManagement.Questions.Queries;
 using Application.EntityManagement.Roles;
 using Application.EntityManagement.Roles.Commands;
 using Application.EntityManagement.Roles.Dtos.RoleDto;
@@ -38,8 +39,10 @@ using Application.EntityManagement.Users.Commands;
 using Application.EntityManagement.Users.Dtos.CreateUserDto;
 using Application.EntityManagement.Users.Dtos.LoginDto;
 using Application.EntityManagement.Users.Dtos.UserDto;
+using Application.EntityManagement.Users.Queries;
 using Application.EntityManagement.Votes.Commands;
 using Application.EntityManagement.Votes.Dtos.VoteDto;
+using Domain.Common;
 using HotChocolate.Subscriptions;
 using MediatR;
 
@@ -75,17 +78,49 @@ public class Mutation
 
         return result;
     }
-
-    public static async Task<CommandResult> AddAnswerAsync([Service] ISender sender, [Service] ITopicEventSender topicEventSender, AnswerDto answerDto, CancellationToken cancellationToken)
+    
+    public static async Task<CommandResult> AddAnswerAsync(
+        [Service] ISender sender,
+        [Service] ITopicEventSender topicEventSender,
+        AnswerDto answerDto,
+        CancellationToken cancellationToken)
     {
         var createCommand = new CreateAnswerCommand(answerDto);
 
         var result = await sender.Send(createCommand, cancellationToken);
 
-        if (result.IsSuccessful)
+        if (!result.IsSuccessful)
         {
-            await topicEventSender.SendAsync(nameof(Subscription.OnAnswerSubmitted), answerDto, cancellationToken);
+            return result;
         }
+
+        var questionsQuery = new GetAllQuestionsQuery(
+            new Pagination(),
+            question => question.ExternalId == answerDto.QuestionExternalId);
+
+        var questionResult = await sender.Send(questionsQuery, cancellationToken);
+
+        var question = questionResult.Data?.FirstOrDefault();
+
+        if (question is null)
+        {
+            return result;
+        }
+
+        var userQuery = new GetUserByInternalIdQuery(question.UserId);
+
+        var userResult = await sender.Send(userQuery, cancellationToken);
+
+        var user = userResult.Data;
+
+        if (user is null)
+        {
+            return result;
+        }
+
+        var topicName = $"{nameof(Subscription.OnAnswerSubmitted)}/{user.Username}/questions/answers";
+
+        await topicEventSender.SendAsync(topicName, answerDto, cancellationToken);
 
         return result;
     }
@@ -99,8 +134,8 @@ public class Mutation
         return result;
     }
 
-    public static async Task<CommandResult> DeleteAnswerAsync([Service] AnswerService answerService, int externalId, CancellationToken cancellationToken) =>
-        await answerService.DeleteByExternalIdAsync(externalId, cancellationToken);
+    public static Task<CommandResult> DeleteAnswerAsync([Service] AnswerService answerService, int externalId, CancellationToken cancellationToken) =>
+        answerService.DeleteByExternalIdAsync(externalId, cancellationToken);
 
     public static async Task<CommandResult> AddCartItemAsync([Service] ISender sender, CartItemDto cartItemDto, CancellationToken cancellationToken)
     {
