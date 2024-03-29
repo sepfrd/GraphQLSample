@@ -13,10 +13,10 @@ public class DatabaseSeeder
     private const int DefaultNumber = 1000;
     private readonly IAuthenticationService _authenticationService;
     private readonly IMongoDatabase _mongoDatabase;
-    private readonly static Guid AdminRoleInternalId = Guid.NewGuid();
-    private readonly static Guid CustomerRoleInternalId = Guid.NewGuid();
-    private readonly static Guid AdminUserInternalId = Guid.NewGuid();
-    private readonly static Guid CustomerUserInternalId = Guid.NewGuid();
+    private static readonly Guid AdminRoleInternalId = Guid.NewGuid();
+    private static readonly Guid CustomerRoleInternalId = Guid.NewGuid();
+    private static readonly Guid AdminUserInternalId = Guid.NewGuid();
+    private static readonly Guid CustomerUserInternalId = Guid.NewGuid();
 
     public DatabaseSeeder(string connectionString, string databaseName, IAuthenticationService authenticationService)
     {
@@ -348,7 +348,7 @@ public class DatabaseSeeder
             .RuleFor(product => product.StockQuantity, faker => faker.Random.Number(10_000))
             .RuleFor(product => product.Description, faker => faker.Commerce.ProductDescription())
             .RuleFor(product => product.Name, faker => faker.Commerce.ProductName())
-            .RuleFor(product => product.Price, faker => faker.Random.Decimal())
+            .RuleFor(product => product.Price, faker => faker.Random.Decimal(0, 1_000_000_000))
             .RuleFor(product => product.ImageUrls, faker => new List<string>
             {
                 faker.Image.PicsumUrl(),
@@ -387,8 +387,8 @@ public class DatabaseSeeder
         return fakeQuestions;
     }
 
-    private static List<Role> GetFakeRoles() => new()
-    {
+    private static List<Role> GetFakeRoles() =>
+    [
         new Role
         {
             InternalId = AdminRoleInternalId,
@@ -396,6 +396,7 @@ public class DatabaseSeeder
             Title = RoleConstants.Admin,
             Description = "The Highest Role in the Application Role Hierarchy"
         },
+
         new Role
         {
             InternalId = CustomerRoleInternalId,
@@ -403,7 +404,7 @@ public class DatabaseSeeder
             Title = RoleConstants.Customer,
             Description = "The Basic Role in the Application Role Hierarchy"
         }
-    };
+    ];
 
     private static List<Shipment> GetFakeShipments()
     {

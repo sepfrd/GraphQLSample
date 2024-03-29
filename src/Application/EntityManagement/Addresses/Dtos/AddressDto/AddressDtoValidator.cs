@@ -6,7 +6,7 @@ namespace Application.EntityManagement.Addresses.Dtos.AddressDto;
 public class AddressDtoValidator : AbstractValidator<AddressDto>
 {
     private readonly string[] _countries =
-    {
+    [
         "AFGHANISTAN",
         "ALBANIA",
         "ALGERIA",
@@ -203,7 +203,7 @@ public class AddressDtoValidator : AbstractValidator<AddressDto>
         "YEMEN",
         "ZAMBIA",
         "ZIMBABWE"
-    };
+    ];
 
     public AddressDtoValidator()
     {
