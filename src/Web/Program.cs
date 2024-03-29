@@ -7,6 +7,7 @@ using Serilog;
 using Serilog.Settings.Configuration;
 using Web;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Logging.ClearProviders();
@@ -32,7 +33,8 @@ try
         .AddSingleton<ILogger, CustomLogger>()
         .InjectApplicationLayer()
         .InjectInfrastructureLayer(builder.Configuration)
-        .AddAllGraphQlServices();
+        .AddAllGraphQlServices()
+        .AddHealthChecks();
 
     var app = builder.Build();
 
@@ -68,6 +70,7 @@ try
         .UseEndpoints(endpoints =>
         {
             endpoints.MapGraphQL();
+            endpoints.MapHealthChecks("/healthcheck");
         });
 
     app.Run();
@@ -82,3 +85,5 @@ finally
 {
     Log.CloseAndFlush();
 }
+
+public partial class Program;

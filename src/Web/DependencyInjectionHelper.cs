@@ -71,7 +71,7 @@ public static class DependencyInjectionHelper
                 options.Complexity.Enable = true;
                 options.Complexity.MaximumAllowed = 300;
                 options.ExecutionTimeout = TimeSpan.FromSeconds(1);
-                options.IncludeExceptionDetails = true;
+                options.IncludeExceptionDetails = false;
             });
 
         return services;
