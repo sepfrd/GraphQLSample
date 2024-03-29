@@ -58,6 +58,10 @@ public class QuestionType : ObjectType<Question>
         descriptor
             .Field(question => question.UserId)
             .Ignore();
+        
+        descriptor
+            .Field(question => question.ProductId)
+            .Ignore();
     }
 
     private sealed class Resolvers
