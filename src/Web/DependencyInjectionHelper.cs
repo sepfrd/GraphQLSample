@@ -15,6 +15,7 @@ using Application.EntityManagement.Users.Dtos.LoginDto;
 using Application.EntityManagement.Users.Dtos.UserDto;
 using Application.EntityManagement.Votes.Dtos.VoteDto;
 using Web.GraphQL.Types;
+using Web.GraphQL.Types.SortTypes;
 
 namespace Web;
 
@@ -49,6 +50,23 @@ public static class DependencyInjectionHelper
             .AddType<VoteType>()
             .AddType<CommandResult>()
             .AddType<UserRoleType>()
+            .AddType<AddressSortType>()
+            .AddType<AnswerSortType>()
+            .AddType<CartItemSortType>()
+            .AddType<CategorySortType>()
+            .AddType<CategorySortType>()
+            .AddType<CommentSortType>()
+            .AddType<OrderItemSortType>()
+            .AddType<OrderSortType>()
+            .AddType<PaymentSortType>()
+            .AddType<PersonSortType>()
+            .AddType<PhoneNumberSortType>()
+            .AddType<ProductSortType>()
+            .AddType<QuestionSortType>()
+            .AddType<RoleSortType>()
+            .AddType<ShipmentSortType>()
+            .AddType<UserSortType>()
+            .AddType<VoteSortType>()
             .AddInputObjectType<AddressDto>()
             .AddInputObjectType<AnswerDto>()
             .AddInputObjectType<CategoryDto>()
@@ -64,7 +82,6 @@ public static class DependencyInjectionHelper
             .AddInputObjectType<LoginDto>()
             .AddInputObjectType<CreateUserDto>()
             .AddInputObjectType<VoteDto>()
-            .AddFiltering()
             .AddSorting()
             .ModifyRequestOptions(options =>
             {

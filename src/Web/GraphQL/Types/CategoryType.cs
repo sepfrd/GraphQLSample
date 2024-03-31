@@ -34,8 +34,7 @@ public class CategoryType : ObjectType<Category>
             .ResolveWith<Resolvers>(
                 resolvers =>
                     Resolvers.GetProductsAsync(default!, default!))
-            .UseFiltering()
-            .UseSorting();
+            ;
 
         descriptor
             .Field(category => category.DateCreated)

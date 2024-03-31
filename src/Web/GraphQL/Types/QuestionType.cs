@@ -27,10 +27,9 @@ public class QuestionType : ObjectType<Question>
             .ResolveWith<Resolvers>(
                 resolvers =>
                     Resolvers.GetAnswersAsync(default!, default!))
-            .UseFiltering()
-            .UseSorting()
+            
             .Description("The Answers Associated with the Question\n" +
-                         "Supports filtering and sorting for answer details.");
+                         "Supports sorting for answer details.");
 
         descriptor
             .Field(question => question.Votes)

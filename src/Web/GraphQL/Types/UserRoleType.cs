@@ -26,6 +26,18 @@ public class UserRoleType : ObjectType<UserRole>
             .ResolveWith<Resolvers>(resolvers => Resolvers.GetRoleAsync(default!, default!))
             .Description("The Role Associated with the User-Role\n" +
                          "Authentication is required.");
+        
+        descriptor
+            .Field(vote => vote.InternalId)
+            .Ignore();
+
+        descriptor
+            .Field(vote => vote.UserId)
+            .Ignore();
+
+        descriptor
+            .Field(vote => vote.RoleId)
+            .Ignore();
     }
 
     private class Resolvers

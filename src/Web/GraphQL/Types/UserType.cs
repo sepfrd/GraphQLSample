@@ -42,66 +42,59 @@ public class UserType : ObjectType<User>
             .ResolveWith<Resolvers>(
                 resolvers =>
                     Resolvers.GetAddressesAsync(default!, default!))
-            .UseFiltering()
-            .UseSorting()
+            
             .Description("The Addresses Associated with the User\n" +
                          "Authentication is required.\n" +
-                         "Supports filtering and sorting for address details.");
+                         "Supports sorting for address details.");
 
         descriptor
             .Field(user => user.Answers)
             .ResolveWith<Resolvers>(
                 resolvers =>
                     Resolvers.GetAnswersAsync(default!, default!))
-            .UseFiltering()
-            .UseSorting()
+            
             .Description("The Answers Posted by the User\n" +
                          "Authentication is required.\n" +
-                         "Supports filtering and sorting for answer details.");
+                         "Supports sorting for answer details.");
 
         descriptor
             .Field(user => user.Comments)
             .ResolveWith<Resolvers>(
                 resolvers =>
                     Resolvers.GetCommentsAsync(default!, default!))
-            .UseFiltering()
-            .UseSorting()
+            
             .Description("The Comments Posted by the User\n" +
                          "Authentication is required.\n" +
-                         "Supports filtering and sorting for comment details.");
+                         "Supports sorting for comment details.");
 
         descriptor
             .Field(user => user.Orders)
             .ResolveWith<Resolvers>(
                 resolvers =>
                     Resolvers.GetOrdersAsync(default!, default!))
-            .UseFiltering()
-            .UseSorting()
+            
             .Description("The Orders Associated with the User\n" +
                          "Authentication is required.\n" +
-                         "Supports filtering and sorting for order details.");
+                         "Supports sorting for order details.");
 
         descriptor
             .Field(user => user.UserRoles)
             .ResolveWith<Resolvers>(
                 resolvers =>
                     Resolvers.GetUserRolesAsync(default!, default!))
-            .UseFiltering()
-            .UseSorting()
             .Description("The User-Roles Associated with the User\n" +
                          "Authentication is required.\n" +
-                         "Supports filtering and sorting for user-role details.");
+                         "Supports sorting for user-role details.");
 
         descriptor
             .Field(user => user.Questions)
             .ResolveWith<Resolvers>(
                 resolvers =>
                     Resolvers.GetQuestionsAsync(default!, default!))
-            .UseFiltering()
-            .UseSorting()
+            
             .Description("The Questions Posted by the User\n" +
                          "Authentication is required.\n" +
-                         "Supports filtering and sorting for question details.");
+                         "Supports sorting for question details.");
 
         descriptor
             .Field(user => user.Votes)
@@ -116,11 +109,10 @@ public class UserType : ObjectType<User>
             .ResolveWith<Resolvers>(
                 resolvers =>
                     Resolvers.GetPhoneNumbersAsync(default!, default!))
-            .UseFiltering()
-            .UseSorting()
+            
             .Description("The Phone Numbers Associated with the User\n" +
                          "Authentication is required.\n" +
-                         "Supports filtering and sorting for phone number details.");
+                         "Supports sorting for phone number details.");
 
         descriptor
             .Field(user => user.DateCreated)
@@ -133,7 +125,7 @@ public class UserType : ObjectType<User>
         descriptor
             .Field(user => user.ExternalId)
             .Description("The External ID for Client Interactions")
-            .UseFiltering();
+            ;
 
         descriptor
             .Field(user => user.InternalId)

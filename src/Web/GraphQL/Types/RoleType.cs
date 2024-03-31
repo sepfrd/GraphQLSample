@@ -27,8 +27,6 @@ public class RoleType : ObjectType<Role>
         descriptor
             .Field(role => role.UserRoles)
             .ResolveWith<Resolvers>(resolvers => Resolvers.GetUserRolesAsync(default!, default!))
-            .UseFiltering()
-            .UseSorting()
             .Description("The User-Roles Associated with the Role\n" +
                          "Authentication is required.");
 

@@ -23,7 +23,6 @@ public sealed class QueryType : ObjectType<Query>
             .Field(_ =>
                 Query.GetCategoriesAsync(default, default!, default!))
             .AllowAnonymous()
-            .UseFiltering()
             .UseSorting()
             .Description("Retrieves the list of product categories.\n" +
                          "Allows anonymous access for public visibility.\n" +
@@ -34,7 +33,6 @@ public sealed class QueryType : ObjectType<Query>
             .Field(_ =>
                 Query.GetProductsAsync(default, default, default!, default!))
             .AllowAnonymous()
-            .UseFiltering()
             .UseSorting()
             .Description("Retrieves a list of products.\n" +
                          "Allows anonymous access for public visibility.\n" +

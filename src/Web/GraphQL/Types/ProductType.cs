@@ -34,22 +34,20 @@ public class ProductType : ObjectType<Product>
             .ResolveWith<Resolvers>(
                 resolvers =>
                     Resolvers.GetCommentsAsync(default!, default!))
-            .UseFiltering()
-            .UseSorting()
+            
             .Description("The Comments Associated with the Product\n" +
                          "Authentication is required.\n" +
-                         "Supports filtering and sorting for comment details.");
+                         "Supports sorting for comment details.");
 
         descriptor
             .Field(product => product.Questions)
             .ResolveWith<Resolvers>(
                 resolvers =>
                     Resolvers.GetQuestionsAsync(default!, default!))
-            .UseFiltering()
-            .UseSorting()
+            
             .Description("The Questions Associated with the Product\n" +
                          "Authentication is required.\n" +
-                         "Supports filtering and sorting for question details.");
+                         "Supports sorting for question details.");
 
         descriptor
             .Field(product => product.DateCreated)

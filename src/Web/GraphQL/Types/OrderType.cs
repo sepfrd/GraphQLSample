@@ -37,12 +37,11 @@ public class OrderType : ObjectType<Order>
             .ResolveWith<Resolvers>(
                 resolvers =>
                     Resolvers.GetOrderItemsAsync(default!, default!))
-            .UseFiltering()
-            .UseSorting()
+            
             .Description("The List of Order Items Associated with the Order\n" +
                          "Requires the order ID.\n" +
                          "Authentication is required.\n" +
-                         "Supports filtering and sorting for order item details.");
+                         "Supports sorting for order item details.");
 
         descriptor
             .Field(order => order.DateCreated)
