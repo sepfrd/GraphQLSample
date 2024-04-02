@@ -1,3 +1,4 @@
+using System.Net;
 using Application.Abstractions;
 using Application.Common;
 using Application.Common.Constants;
@@ -10,7 +11,6 @@ using Domain.Abstractions;
 using Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System.Net;
 
 namespace Application.EntityManagement.Orders.Handlers;
 

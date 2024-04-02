@@ -1,9 +1,9 @@
+using System.Linq.Expressions;
 using Domain.Abstractions;
 using Domain.Common;
 using Humanizer;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using System.Linq.Expressions;
 
 namespace Infrastructure.Persistence.Common;
 

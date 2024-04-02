@@ -82,13 +82,14 @@ public static class DependencyInjectionHelper
             .AddInputObjectType<LoginDto>()
             .AddInputObjectType<CreateUserDto>()
             .AddInputObjectType<VoteDto>()
+            .AddFiltering()
             .AddSorting()
             .ModifyRequestOptions(options =>
             {
                 options.Complexity.Enable = true;
                 options.Complexity.MaximumAllowed = 300;
                 options.ExecutionTimeout = TimeSpan.FromSeconds(1);
-                options.IncludeExceptionDetails = false;
+                options.IncludeExceptionDetails = true;
             });
 
         return services;

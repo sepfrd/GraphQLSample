@@ -1,10 +1,10 @@
-﻿using Application.Common;
+﻿using System.Net;
+using Application.Common;
 using Application.Common.Constants;
 using Application.EntityManagement.UserRoles.Queries;
 using Domain.Abstractions;
 using Domain.Entities;
 using MediatR;
-using System.Net;
 
 namespace Application.EntityManagement.UserRoles.Handlers;
 

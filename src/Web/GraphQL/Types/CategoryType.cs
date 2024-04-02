@@ -10,7 +10,8 @@ public class CategoryType : ObjectType<Category>
     protected override void Configure(IObjectTypeDescriptor<Category> descriptor)
     {
         descriptor
-            .Description("Represents a product category with information such as name, description, image URL, and icon URL.");
+            .Description(
+                "Represents a product category with information such as name, description, image URL, and icon URL.");
 
         descriptor
             .Field(category => category.Name)
@@ -33,8 +34,7 @@ public class CategoryType : ObjectType<Category>
             .Description("All Products of This Category")
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetProductsAsync(default!, default!))
-            ;
+                    Resolvers.GetProductsAsync(default!, default!));
 
         descriptor
             .Field(category => category.DateCreated)
@@ -55,7 +55,8 @@ public class CategoryType : ObjectType<Category>
 
     private sealed class Resolvers
     {
-        public static async Task<IEnumerable<Product>?> GetProductsAsync([Parent] Category category, [Service] ISender sender)
+        public static async Task<IEnumerable<Product>?> GetProductsAsync([Parent] Category category,
+            [Service] ISender sender)
         {
             var productsQuery = new GetAllProductsQuery(
                 new Pagination(),

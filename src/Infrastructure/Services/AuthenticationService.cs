@@ -1,3 +1,7 @@
+using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
 using Application.Abstractions;
 using Application.Common.Constants;
 using Application.EntityManagement.Roles.Queries;
@@ -10,10 +14,6 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System.Globalization;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
 
 namespace Infrastructure.Services;
 

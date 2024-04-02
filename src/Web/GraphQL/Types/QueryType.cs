@@ -1,4 +1,5 @@
 ﻿using Application.Common.Constants;
+using Domain.Entities;
 
 namespace Web.GraphQL.Types;
 
@@ -23,6 +24,17 @@ public sealed class QueryType : ObjectType<Query>
             .Field(_ =>
                 Query.GetCategoriesAsync(default, default!, default!))
             .AllowAnonymous()
+            .UseFiltering<Category>(filterDescriptor =>
+            {
+                filterDescriptor
+                    .BindFieldsExplicitly()
+                    .AllowAnd(false)
+                    .AllowOr(false);
+                
+                filterDescriptor
+                    .Field(category => category.ExternalId)
+                    .Type<IntOperationFilterInputType>();
+            })
             .UseSorting()
             .Description("Retrieves the list of product categories.\n" +
                          "Allows anonymous access for public visibility.\n" +

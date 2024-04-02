@@ -87,7 +87,8 @@ public class DatabaseSeeder
 
             fakeOrderItems[i].ProductId = fakeProducts[i].InternalId;
 
-            fakeProducts[i].CategoryId = fakeCategories.ElementAt(Random.Shared.Next(0, fakeCategories.Count)).InternalId;
+            fakeProducts[i].CategoryId =
+                fakeCategories.ElementAt(Random.Shared.Next(0, fakeCategories.Count)).InternalId;
 
             fakeQuestions[i].ProductId = fakeProducts[i].InternalId;
 
@@ -227,16 +228,70 @@ public class DatabaseSeeder
     {
         var externalId = 0;
 
+        Category[] categories =
+        [
+            new Category
+            {
+                Name = "Electronics",
+                Description = "Cutting-edge gadgets and devices for tech enthusiasts"
+            },
+            new Category
+            {
+                Name = "Clothing",
+                Description = "Fashionable apparel and accessories for all occasions"
+            },
+            new Category
+            {
+                Name = "Books",
+                Description = "Engaging reads for bookworms of all ages"
+            },
+            new Category
+            {
+                Name = "Home & Garden",
+                Description = "Decor and essentials to spruce up your living space"
+            },
+            new Category
+            {
+                Name = "Toys & Games",
+                Description = "Fun and entertaining toys and games for kids and adults alike"
+            },
+            new Category
+            {
+                Name = "Health & Beauty",
+                Description = "Products to enhance your well-being and beauty regimen"
+            },
+            new Category
+            {
+                Name = "Sports & Outdoors",
+                Description = "Gear and equipment for outdoor adventures and fitness pursuits"
+            },
+            new Category
+            {
+                Name = "Pet Supplies",
+                Description = "Essentials and treats for your furry friends"
+            },
+            new Category
+            {
+                Name = "Jewelry & Accessories",
+                Description = "Elegant adornments and stylish accessories to complement any outfit"
+            },
+            new Category
+            {
+                Name = "Food & Beverages",
+                Description = "Delicious treats and beverages for every palate"
+            }
+        ];
+
         var categoryFaker = new Faker<Category>()
+            .RuleFor(category => category.Description, _ => categories[externalId].Description)
+            .RuleFor(category => category.Name, _ => categories[externalId].Name)
             .RuleFor(category => category.ExternalId, _ => externalId++)
-            .RuleFor(category => category.Description, faker => faker.Lorem.Sentences(5))
-            .RuleFor(category => category.Name, faker => faker.Lorem.Word())
             .RuleFor(category => category.IconUrl, faker => faker.Image.PicsumUrl())
             .RuleFor(category => category.ImageUrl, faker => faker.Image.PicsumUrl());
 
         var fakeCategories = new List<Category>();
 
-        for (var i = 0; i < 20; i++)
+        for (var i = 0; i < 10; i++)
         {
             fakeCategories.Add(categoryFaker.Generate());
         }
@@ -307,7 +362,8 @@ public class DatabaseSeeder
             .RuleFor(payment => payment.ExternalId, _ => externalId++)
             .RuleFor(payment => payment.Amount, faker => faker.Random.Decimal())
             .RuleFor(payment => payment.PaymentMethod, faker => Enum.GetValues<PaymentMethod>()[faker.Random.Number(9)])
-            .RuleFor(payment => payment.PaymentStatus, faker => Enum.GetValues<PaymentStatus>()[faker.Random.Number(9)]);
+            .RuleFor(payment => payment.PaymentStatus,
+                faker => Enum.GetValues<PaymentStatus>()[faker.Random.Number(9)]);
 
         var fakePayments = new List<Payment>();
 
@@ -326,7 +382,8 @@ public class DatabaseSeeder
         var phoneNumberFaker = new Faker<PhoneNumber>()
             .RuleFor(phoneNumber => phoneNumber.ExternalId, _ => externalId++)
             .RuleFor(phoneNumber => phoneNumber.Number, faker => faker.Phone.PhoneNumber())
-            .RuleFor(phoneNumber => phoneNumber.Type, faker => Enum.GetValues<PhoneNumberType>()[faker.Random.Number(1)])
+            .RuleFor(phoneNumber => phoneNumber.Type,
+                faker => Enum.GetValues<PhoneNumberType>()[faker.Random.Number(1)])
             .RuleFor(phoneNumber => phoneNumber.IsConfirmed, faker => faker.Random.Bool());
 
         var fakePhoneNumbers = new List<PhoneNumber>();
@@ -414,8 +471,10 @@ public class DatabaseSeeder
             .RuleFor(shipment => shipment.ExternalId, _ => externalId++)
             .RuleFor(shipment => shipment.DateToBeDelivered, faker => faker.Date.Soon())
             .RuleFor(shipment => shipment.DateToBeShipped, faker => faker.Date.Recent())
-            .RuleFor(shipment => shipment.ShipmentStatus, faker => Enum.GetValues<ShipmentStatus>()[faker.Random.Number(9)])
-            .RuleFor(shipment => shipment.ShippingMethod, faker => Enum.GetValues<ShippingMethod>()[faker.Random.Number(9)])
+            .RuleFor(shipment => shipment.ShipmentStatus,
+                faker => Enum.GetValues<ShipmentStatus>()[faker.Random.Number(9)])
+            .RuleFor(shipment => shipment.ShippingMethod,
+                faker => Enum.GetValues<ShippingMethod>()[faker.Random.Number(9)])
             .RuleFor(shipment => shipment.ShippingCost, faker => faker.Random.Decimal())
             .RuleFor(shipment => shipment.TraceId, _ => Guid.NewGuid());
 
