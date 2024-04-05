@@ -32,7 +32,8 @@ public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryComman
 
         if (category is null)
         {
-            _logger.LogError(MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Category), typeof(CreateCategoryCommandHandler));
+            _logger.LogError(MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Category),
+                typeof(CreateCategoryCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }

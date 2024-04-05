@@ -35,7 +35,8 @@ public class BaseRepository<TEntity> : IRepository<TEntity>
 
         var filterDefinition = Builders<TEntity>.Filter.Eq(document => document.InternalId, entity.InternalId);
 
-        var documentCursor = await _mongoDbCollection.FindAsync<TEntity>(filterDefinition, cancellationToken: cancellationToken);
+        var documentCursor =
+            await _mongoDbCollection.FindAsync<TEntity>(filterDefinition, cancellationToken: cancellationToken);
 
         return await documentCursor.FirstOrDefaultAsync(cancellationToken);
     }
@@ -48,37 +49,29 @@ public class BaseRepository<TEntity> : IRepository<TEntity>
             Limit = 1
         };
 
-        var documentCursor = await _mongoDbCollection.FindAsync(FilterDefinition<TEntity>.Empty, findOptions, cancellationToken);
+        var documentCursor =
+            await _mongoDbCollection.FindAsync(FilterDefinition<TEntity>.Empty, findOptions, cancellationToken);
 
         var document = await documentCursor.FirstOrDefaultAsync(cancellationToken);
 
         return document is null ? 0 : document.ExternalId + 1;
     }
 
-    public virtual async Task<IEnumerable<TEntity>> GetAllAsync(
-        Expression<Func<TEntity, bool>>? filter = null,
-        Pagination? pagination = null,
+    public virtual async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter = null,
         CancellationToken cancellationToken = default)
     {
-        var filterDefinition = filter is null ? FilterDefinition<TEntity>.Empty : Builders<TEntity>.Filter.Where(filter);
+        var filterDefinition =
+            filter is null ? FilterDefinition<TEntity>.Empty : Builders<TEntity>.Filter.Where(filter);
 
-        pagination ??= new Pagination();
-
-        var findOptions = new FindOptions<TEntity>
-        {
-            Skip = (pagination.PageNumber - 1) * pagination.PageSize,
-            Limit = pagination.PageSize
-        };
-
-        var documentCursor = await _mongoDbCollection.FindAsync(
-            filterDefinition,
-            findOptions,
-            cancellationToken);
+        var documentCursor = await _mongoDbCollection
+            .FindAsync(filterDefinition,
+                cancellationToken: cancellationToken);
 
         return await documentCursor.ToListAsync(cancellationToken);
     }
 
-    public virtual async Task<TEntity?> GetByInternalIdAsync(Guid internalId, CancellationToken cancellationToken = default)
+    public virtual async Task<TEntity?> GetByInternalIdAsync(Guid internalId,
+        CancellationToken cancellationToken = default)
     {
         var filterDefinition = Builders<TEntity>.Filter.Eq(document => document.InternalId, internalId);
 
@@ -95,7 +88,8 @@ public class BaseRepository<TEntity> : IRepository<TEntity>
         return await documentCursor.FirstOrDefaultAsync(cancellationToken);
     }
 
-    public virtual async Task<TEntity?> GetByExternalIdAsync(int externalId, CancellationToken cancellationToken = default)
+    public virtual async Task<TEntity?> GetByExternalIdAsync(int externalId,
+        CancellationToken cancellationToken = default)
     {
         var filterDefinition = Builders<TEntity>.Filter.Eq(document => document.ExternalId, externalId);
 

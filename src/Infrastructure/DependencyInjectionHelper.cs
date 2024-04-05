@@ -24,7 +24,8 @@ namespace Infrastructure;
 
 public static class DependencyInjectionHelper
 {
-    public static IServiceCollection InjectInfrastructureLayer(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection InjectInfrastructureLayer(this IServiceCollection services,
+        IConfiguration configuration)
     {
         ConfigureMapster();
 

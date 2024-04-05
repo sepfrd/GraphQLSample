@@ -1,7 +1,6 @@
 using Application.EntityManagement.Answers.Queries;
 using Application.EntityManagement.Users.Queries;
 using Application.EntityManagement.Votes.Queries;
-using Domain.Common;
 using Domain.Entities;
 using MediatR;
 
@@ -12,7 +11,8 @@ public class QuestionType : ObjectType<Question>
     protected override void Configure(IObjectTypeDescriptor<Question> descriptor)
     {
         descriptor
-            .Description("Represents a question posted by a user, including details like title, description, associated user information, and answers.");
+            .Description(
+                "Represents a question posted by a user, including details like title, description, associated user information, and answers.");
 
         descriptor
             .Field(question => question.User)
@@ -27,7 +27,6 @@ public class QuestionType : ObjectType<Question>
             .ResolveWith<Resolvers>(
                 resolvers =>
                     Resolvers.GetAnswersAsync(default!, default!))
-            
             .Description("The Answers Associated with the Question\n" +
                          "Supports sorting for answer details.");
 
@@ -57,7 +56,7 @@ public class QuestionType : ObjectType<Question>
         descriptor
             .Field(question => question.UserId)
             .Ignore();
-        
+
         descriptor
             .Field(question => question.ProductId)
             .Ignore();
@@ -67,20 +66,17 @@ public class QuestionType : ObjectType<Question>
     {
         public static async Task<User?> GetUserAsync([Parent] Question question, [Service] ISender sender)
         {
-            var usersQuery = new GetAllUsersQuery(
-                new Pagination(),
-                x => x.InternalId == question.UserId);
+            var usersQuery = new GetAllUsersQuery(x => x.InternalId == question.UserId);
 
             var result = await sender.Send(usersQuery);
 
             return result.Data?.FirstOrDefault();
         }
 
-        public static async Task<IEnumerable<Answer>?> GetAnswersAsync([Parent] Question question, [Service] ISender sender)
+        public static async Task<IEnumerable<Answer>?> GetAnswersAsync([Parent] Question question,
+            [Service] ISender sender)
         {
-            var answersQuery = new GetAllAnswersQuery(
-                new Pagination(),
-                x => x.QuestionId == question.InternalId);
+            var answersQuery = new GetAllAnswersQuery(x => x.QuestionId == question.InternalId);
 
             var result = await sender.Send(answersQuery);
 
@@ -89,9 +85,7 @@ public class QuestionType : ObjectType<Question>
 
         public static async Task<IEnumerable<Vote>?> GetVotesAsync([Parent] Question question, [Service] ISender sender)
         {
-            var votesQuery = new GetAllVotesQuery(
-                new Pagination(),
-                x => x.ContentId == question.InternalId && x.Content is Question);
+            var votesQuery = new GetAllVotesQuery(x => x.ContentId == question.InternalId && x.Content is Question);
 
             var result = await sender.Send(votesQuery);
 

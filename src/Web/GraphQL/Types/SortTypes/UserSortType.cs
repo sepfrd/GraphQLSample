@@ -22,7 +22,7 @@ public class UserSortType : SortInputType<User>
         descriptor
             .Field(user => user.PersonId)
             .Ignore();
-        
+
         descriptor
             .Field(user => user.Cart)
             .Ignore();

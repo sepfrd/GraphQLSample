@@ -37,7 +37,8 @@ public class CreateAnswerCommandHandler : IRequestHandler<CreateAnswerCommand, C
 
     public async Task<CommandResult> Handle(CreateAnswerCommand request, CancellationToken cancellationToken)
     {
-        var question = await _questionRepository.GetByExternalIdAsync(request.AnswerDto.QuestionExternalId, cancellationToken);
+        var question =
+            await _questionRepository.GetByExternalIdAsync(request.AnswerDto.QuestionExternalId, cancellationToken);
 
         if (question is null)
         {
@@ -48,7 +49,8 @@ public class CreateAnswerCommandHandler : IRequestHandler<CreateAnswerCommand, C
 
         if (userClaims?.ExternalId is null)
         {
-            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow, typeof(CreateAnswerCommandHandler));
+            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow,
+                typeof(CreateAnswerCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -59,7 +61,8 @@ public class CreateAnswerCommandHandler : IRequestHandler<CreateAnswerCommand, C
 
         if (user is null)
         {
-            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(CreateAnswerCommandHandler));
+            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User),
+                typeof(CreateAnswerCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -68,7 +71,8 @@ public class CreateAnswerCommandHandler : IRequestHandler<CreateAnswerCommand, C
 
         if (entity is null)
         {
-            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Answer), typeof(CreateAnswerCommandHandler));
+            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Answer),
+                typeof(CreateAnswerCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -83,7 +87,8 @@ public class CreateAnswerCommandHandler : IRequestHandler<CreateAnswerCommand, C
             return CommandResult.Success(MessageConstants.SuccessfullyCreated);
         }
 
-        _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(Answer), typeof(CreateAnswerCommandHandler));
+        _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(Answer),
+            typeof(CreateAnswerCommandHandler));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }

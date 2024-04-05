@@ -8,7 +8,8 @@ using MediatR;
 
 namespace Application.EntityManagement.Users.Handlers;
 
-public sealed class GetUserByUsernameOrEmailQueryHandler : IRequestHandler<GetUserByUsernameOrEmailQuery, QueryResponse<User>>
+public sealed class
+    GetUserByUsernameOrEmailQueryHandler : IRequestHandler<GetUserByUsernameOrEmailQuery, QueryResponse<User>>
 {
     private readonly IRepository<User> _userRepository;
 
@@ -17,13 +18,13 @@ public sealed class GetUserByUsernameOrEmailQueryHandler : IRequestHandler<GetUs
         _userRepository = userRepository;
     }
 
-    public async Task<QueryResponse<User>> Handle(GetUserByUsernameOrEmailQuery request, CancellationToken cancellationToken)
+    public async Task<QueryResponse<User>> Handle(GetUserByUsernameOrEmailQuery request,
+        CancellationToken cancellationToken)
     {
         var users = await _userRepository
             .GetAllAsync(user =>
                     user.Username == request.UsernameOrEmail ||
                     user.Email == request.UsernameOrEmail,
-                null,
                 cancellationToken);
 
         var user = users.FirstOrDefault();

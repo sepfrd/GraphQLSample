@@ -3,7 +3,6 @@ using Application.Common.Constants;
 using Application.EntityManagement.Answers.Commands;
 using Application.EntityManagement.Answers.Events;
 using Application.EntityManagement.Answers.Queries;
-using Domain.Common;
 using MediatR;
 
 namespace Application.EntityManagement.Answers;
@@ -17,11 +16,10 @@ public class AnswerService
         _mediator = mediator;
     }
 
-    public async Task<CommandResult> DeleteByExternalIdAsync(int externalId, CancellationToken cancellationToken = default)
+    public async Task<CommandResult> DeleteByExternalIdAsync(int externalId,
+        CancellationToken cancellationToken = default)
     {
-        var pagination = new Pagination();
-
-        var answersQuery = new GetAllAnswersQuery(pagination, answer => answer.ExternalId == externalId);
+        var answersQuery = new GetAllAnswersQuery(answer => answer.ExternalId == externalId);
 
         var answerResult = await _mediator.Send(answersQuery, cancellationToken);
 

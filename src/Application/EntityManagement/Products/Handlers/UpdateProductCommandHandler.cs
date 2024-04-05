@@ -38,7 +38,8 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand,
 
         if (newEntity is null)
         {
-            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Product), typeof(UpdateProductCommandHandler));
+            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Product),
+                typeof(UpdateProductCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -50,7 +51,8 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand,
             return CommandResult.Success(MessageConstants.SuccessfullyUpdated);
         }
 
-        _logger.LogError(message: MessageConstants.EntityUpdateFailed, DateTime.UtcNow, typeof(Product), typeof(UpdateProductCommandHandler));
+        _logger.LogError(message: MessageConstants.EntityUpdateFailed, DateTime.UtcNow, typeof(Product),
+            typeof(UpdateProductCommandHandler));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }

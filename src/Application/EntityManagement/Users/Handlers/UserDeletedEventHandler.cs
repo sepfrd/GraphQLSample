@@ -1,6 +1,5 @@
 using Application.EntityManagement.Users.Events;
 using Domain.Abstractions;
-using Domain.Common;
 using Domain.Entities;
 using Domain.Enums;
 using MediatR;
@@ -54,7 +53,6 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
     {
         var votes = (await _voteRepository.GetAllAsync(
                 vote => vote.UserId == notification.Entity.InternalId,
-                Pagination.MaxPagination,
                 cancellationToken))
             .ToList();
 
@@ -65,7 +63,6 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
 
         var answers = (await _answerRepository.GetAllAsync(
                 answer => answer.UserId == notification.Entity.InternalId,
-                Pagination.MaxPagination,
                 cancellationToken))
             .ToList();
 
@@ -79,7 +76,6 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
         var answerVotes = (await _voteRepository.GetAllAsync(
                 vote => answerInternalIds.Contains(vote.ContentId) &&
                         vote.ContentType == VotableContentType.Answer,
-                Pagination.MaxPagination,
                 cancellationToken))
             .ToList();
 
@@ -90,7 +86,6 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
 
         var userRoles = (await _userRoleRepository.GetAllAsync(
                 userRole => userRole.UserId == notification.Entity.InternalId,
-                Pagination.MaxPagination,
                 cancellationToken))
             .ToList();
 
@@ -101,7 +96,6 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
 
         var questions = (await _questionRepository.GetAllAsync(
                 question => question.UserId == notification.Entity.InternalId,
-                Pagination.MaxPagination,
                 cancellationToken))
             .ToList();
 
@@ -114,7 +108,6 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
             var questionVotes = (await _voteRepository.GetAllAsync(
                     vote => questionInternalIds.Contains(vote.ContentId) &&
                             vote.ContentType == VotableContentType.Question,
-                    Pagination.MaxPagination,
                     cancellationToken))
                 .ToList();
 
@@ -125,7 +118,6 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
 
             var questionAnswers = (await _answerRepository.GetAllAsync(
                     answer => questionInternalIds.Contains(answer.QuestionId),
-                    Pagination.MaxPagination,
                     cancellationToken))
                 .ToList();
 
@@ -134,12 +126,12 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
                 await _answerRepository.DeleteManyAsync(questionAnswers, cancellationToken);
             }
 
-            var questionAnswersInternalIds = questionAnswers.Select(questionAnswer => questionAnswer.InternalId).ToList();
+            var questionAnswersInternalIds =
+                questionAnswers.Select(questionAnswer => questionAnswer.InternalId).ToList();
 
             var questionAnswersVotes = (await _voteRepository.GetAllAsync(
                     vote => questionAnswersInternalIds.Contains(vote.ContentId) &&
                             vote.ContentType == VotableContentType.Answer,
-                    Pagination.MaxPagination,
                     cancellationToken))
                 .ToList();
 
@@ -151,7 +143,6 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
 
         var comments = (await _commentRepository.GetAllAsync(
                 comment => comment.UserId == notification.Entity.InternalId,
-                Pagination.MaxPagination,
                 cancellationToken))
             .ToList();
 
@@ -164,7 +155,6 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
             var commentVotes = (await _voteRepository.GetAllAsync(
                     vote => commentInternalIds.Contains(vote.ContentId) &&
                             vote.ContentType == VotableContentType.Comment,
-                    Pagination.MaxPagination,
                     cancellationToken))
                 .ToList();
 
@@ -176,7 +166,6 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
 
         var phoneNumbers = (await _phoneNumberRepository.GetAllAsync(
                 phoneNumber => phoneNumber.UserId == notification.Entity.InternalId,
-                Pagination.MaxPagination,
                 cancellationToken))
             .ToList();
 
@@ -187,7 +176,6 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
 
         var addresses = (await _addressRepository.GetAllAsync(
                 address => address.UserId == notification.Entity.InternalId,
-                Pagination.MaxPagination,
                 cancellationToken))
             .ToList();
 
@@ -198,7 +186,6 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
 
         var orders = (await _orderRepository.GetAllAsync(
                 order => order.UserId == notification.Entity.InternalId,
-                Pagination.MaxPagination,
                 cancellationToken))
             .ToList();
 
@@ -210,7 +197,6 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
 
             var orderItems = (await _orderItemRepository.GetAllAsync(
                     orderItem => orderInternalIds.Contains(orderItem.OrderId),
-                    Pagination.MaxPagination,
                     cancellationToken))
                 .ToList();
 
@@ -235,7 +221,6 @@ public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
 
             var cartItems = (await _cartItemRepository.GetAllAsync(
                     cartItem => cartItem.CartId == cart.InternalId,
-                    Pagination.MaxPagination,
                     cancellationToken))
                 .ToList();
 

@@ -1,6 +1,5 @@
 using Application.EntityManagement.CartItems.Queries;
 using Application.EntityManagement.Users.Queries;
-using Domain.Common;
 using Domain.Entities;
 using MediatR;
 
@@ -11,7 +10,8 @@ public class CartType : ObjectType<Cart>
     protected override void Configure(IObjectTypeDescriptor<Cart> descriptor)
     {
         descriptor
-            .Description("Represents a user's shopping cart, containing a list of cart items and associated user information.");
+            .Description(
+                "Represents a user's shopping cart, containing a list of cart items and associated user information.");
 
         descriptor
             .Field(cart => cart.User)
@@ -56,9 +56,7 @@ public class CartType : ObjectType<Cart>
     {
         public static async Task<User?> GetUserAsync([Parent] Cart cart, [Service] ISender sender)
         {
-            var usersQuery = new GetAllUsersQuery(
-                new Pagination(),
-                x => x.InternalId == cart.UserId);
+            var usersQuery = new GetAllUsersQuery(x => x.InternalId == cart.UserId);
 
             var result = await sender.Send(usersQuery);
 
@@ -67,9 +65,7 @@ public class CartType : ObjectType<Cart>
 
         public static async Task<IEnumerable<CartItem>?> GetCartItemsAsync([Parent] Cart cart, [Service] ISender sender)
         {
-            var cartItemsQuery = new GetAllCartItemsQuery(
-                new Pagination(),
-                x => x.CartId == cart.InternalId);
+            var cartItemsQuery = new GetAllCartItemsQuery(x => x.CartId == cart.InternalId);
 
             var result = await sender.Send(cartItemsQuery);
 

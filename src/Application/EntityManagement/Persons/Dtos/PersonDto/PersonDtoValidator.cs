@@ -22,5 +22,4 @@ public class PersonDtoValidator : AbstractValidator<PersonDto>
             .Must(birthDate => birthDate.AddYears(16) <= DateTime.Today)
             .WithMessage("Age must be at least 16 years");
     }
-
 }

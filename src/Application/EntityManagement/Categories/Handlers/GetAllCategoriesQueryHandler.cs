@@ -8,7 +8,8 @@ using MediatR;
 
 namespace Application.EntityManagement.Categories.Handlers;
 
-public sealed class GetAllCategoriesQueryHandler : IRequestHandler<GetAllCategoriesQuery, QueryResponse<IEnumerable<Category>>>
+public sealed class
+    GetAllCategoriesQueryHandler : IRequestHandler<GetAllCategoriesQuery, QueryResponse<IEnumerable<Category>>>
 {
     private readonly IRepository<Category> _repository;
 
@@ -17,9 +18,10 @@ public sealed class GetAllCategoriesQueryHandler : IRequestHandler<GetAllCategor
         _repository = repository;
     }
 
-    public async Task<QueryResponse<IEnumerable<Category>>> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken)
+    public async Task<QueryResponse<IEnumerable<Category>>> Handle(GetAllCategoriesQuery request,
+        CancellationToken cancellationToken)
     {
-        var entities = await _repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
+        var entities = await _repository.GetAllAsync(request.Filter, cancellationToken);
 
         return new QueryResponse<IEnumerable<Category>>(
             entities,

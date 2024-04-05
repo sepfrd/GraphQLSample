@@ -32,7 +32,8 @@ public class CreateRoleCommandHandler : IRequestHandler<CreateRoleCommand, Comma
 
         if (entity is null)
         {
-            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Role), typeof(CreateRoleCommandHandler));
+            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Role),
+                typeof(CreateRoleCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -44,7 +45,8 @@ public class CreateRoleCommandHandler : IRequestHandler<CreateRoleCommand, Comma
             return CommandResult.Success(MessageConstants.SuccessfullyCreated);
         }
 
-        _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(Role), typeof(CreateRoleCommandHandler));
+        _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(Role),
+            typeof(CreateRoleCommandHandler));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }

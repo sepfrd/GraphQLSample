@@ -47,7 +47,8 @@ public class UpdatePaymentCommandHandler : IRequestHandler<UpdatePaymentCommand,
 
         if (userClaims?.ExternalId is null)
         {
-            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow, typeof(UpdatePaymentCommandHandler));
+            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow,
+                typeof(UpdatePaymentCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -58,7 +59,8 @@ public class UpdatePaymentCommandHandler : IRequestHandler<UpdatePaymentCommand,
 
         if (user is null)
         {
-            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(UpdatePaymentCommandHandler));
+            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User),
+                typeof(UpdatePaymentCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -79,7 +81,8 @@ public class UpdatePaymentCommandHandler : IRequestHandler<UpdatePaymentCommand,
 
         if (newEntity is null)
         {
-            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Payment), typeof(UpdatePaymentCommandHandler));
+            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Payment),
+                typeof(UpdatePaymentCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -91,7 +94,8 @@ public class UpdatePaymentCommandHandler : IRequestHandler<UpdatePaymentCommand,
             return CommandResult.Success(MessageConstants.SuccessfullyUpdated);
         }
 
-        _logger.LogError(message: MessageConstants.EntityUpdateFailed, DateTime.UtcNow, typeof(Payment), typeof(UpdatePaymentCommandHandler));
+        _logger.LogError(message: MessageConstants.EntityUpdateFailed, DateTime.UtcNow, typeof(Payment),
+            typeof(UpdatePaymentCommandHandler));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }

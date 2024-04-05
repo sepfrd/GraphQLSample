@@ -3,7 +3,6 @@ using Application.Common.Constants;
 using Application.EntityManagement.Comments.Commands;
 using Application.EntityManagement.Comments.Events;
 using Application.EntityManagement.Comments.Queries;
-using Domain.Common;
 using MediatR;
 
 namespace Application.EntityManagement.Comments;
@@ -17,11 +16,10 @@ public class CommentService
         _mediator = mediator;
     }
 
-    public async Task<CommandResult> DeleteByExternalIdAsync(int externalId, CancellationToken cancellationToken = default)
+    public async Task<CommandResult> DeleteByExternalIdAsync(int externalId,
+        CancellationToken cancellationToken = default)
     {
-        var pagination = new Pagination();
-
-        var commentsQuery = new GetAllCommentsQuery(pagination, comment => comment.ExternalId == externalId);
+        var commentsQuery = new GetAllCommentsQuery(comment => comment.ExternalId == externalId);
 
         var commentResult = await _mediator.Send(commentsQuery, cancellationToken);
 

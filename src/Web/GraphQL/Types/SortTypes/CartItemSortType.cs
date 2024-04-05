@@ -18,7 +18,7 @@ public class CartItemSortType : SortInputType<CartItem>
         descriptor
             .Field(cartItem => cartItem.ProductId)
             .Ignore();
-        
+
         descriptor
             .Field(cartItem => cartItem.Cart)
             .Ignore();

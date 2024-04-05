@@ -1,6 +1,5 @@
 using Application.EntityManagement.Questions.Events;
 using Domain.Abstractions;
-using Domain.Common;
 using Domain.Entities;
 using Domain.Enums;
 using MediatR;
@@ -23,7 +22,6 @@ public class QuestionDeletedEventHandler : INotificationHandler<QuestionDeletedE
         var votes = (await _voteRepository.GetAllAsync(
                 vote => vote.ContentId == notification.Entity.InternalId &&
                         vote.ContentType == VotableContentType.Question,
-                Pagination.MaxPagination,
                 cancellationToken))
             .ToList();
 
@@ -34,7 +32,6 @@ public class QuestionDeletedEventHandler : INotificationHandler<QuestionDeletedE
 
         var answers = (await _answerRepository.GetAllAsync(
                 answer => answer.QuestionId == notification.Entity.InternalId,
-                Pagination.MaxPagination,
                 cancellationToken))
             .ToList();
 
@@ -47,7 +44,6 @@ public class QuestionDeletedEventHandler : INotificationHandler<QuestionDeletedE
             var answerVotes = (await _voteRepository.GetAllAsync(
                     vote => answerInternalIds.Contains(vote.ContentId) &&
                             vote.ContentType == VotableContentType.Answer,
-                    Pagination.MaxPagination,
                     cancellationToken))
                 .ToList();
 

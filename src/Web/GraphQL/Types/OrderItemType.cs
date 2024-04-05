@@ -1,6 +1,5 @@
 using Application.EntityManagement.Orders.Queries;
 using Application.EntityManagement.Products.Queries;
-using Domain.Common;
 using Domain.Entities;
 using MediatR;
 
@@ -11,7 +10,8 @@ public class OrderItemType : ObjectType<OrderItem>
     protected override void Configure(IObjectTypeDescriptor<OrderItem> descriptor)
     {
         descriptor
-            .Description("Represents an item within an order, including details like the associated product, quantity, unit price, and subtotal.");
+            .Description(
+                "Represents an item within an order, including details like the associated product, quantity, unit price, and subtotal.");
 
         descriptor
             .Field(orderItem => orderItem.Order)
@@ -68,9 +68,7 @@ public class OrderItemType : ObjectType<OrderItem>
     {
         public static async Task<Product?> GetProductAsync([Parent] OrderItem orderItem, [Service] ISender sender)
         {
-            var productsQuery = new GetAllProductsQuery(
-                new Pagination(),
-                x => x.InternalId == orderItem.ProductId);
+            var productsQuery = new GetAllProductsQuery(x => x.InternalId == orderItem.ProductId);
 
             var result = await sender.Send(productsQuery);
 
@@ -79,9 +77,7 @@ public class OrderItemType : ObjectType<OrderItem>
 
         public static async Task<Order?> GetOrderAsync([Parent] OrderItem orderItem, [Service] ISender sender)
         {
-            var ordersQuery = new GetAllOrdersQuery(
-                new Pagination(),
-                x => x.InternalId == orderItem.OrderId);
+            var ordersQuery = new GetAllOrdersQuery(x => x.InternalId == orderItem.OrderId);
 
             var result = await sender.Send(ordersQuery);
 

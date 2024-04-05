@@ -17,9 +17,10 @@ public sealed class GetAllVotesQueryHandler : IRequestHandler<GetAllVotesQuery, 
         _repository = repository;
     }
 
-    public async Task<QueryResponse<IEnumerable<Vote>>> Handle(GetAllVotesQuery request, CancellationToken cancellationToken)
+    public async Task<QueryResponse<IEnumerable<Vote>>> Handle(GetAllVotesQuery request,
+        CancellationToken cancellationToken)
     {
-        var entities = await _repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
+        var entities = await _repository.GetAllAsync(request.Filter, cancellationToken);
 
         return new QueryResponse<IEnumerable<Vote>>(
             entities,

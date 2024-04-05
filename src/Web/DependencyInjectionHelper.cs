@@ -14,6 +14,7 @@ using Application.EntityManagement.Users.Dtos.CreateUserDto;
 using Application.EntityManagement.Users.Dtos.LoginDto;
 using Application.EntityManagement.Users.Dtos.UserDto;
 using Application.EntityManagement.Votes.Dtos.VoteDto;
+using HotChocolate.Types.Pagination;
 using Web.GraphQL.Types;
 using Web.GraphQL.Types.SortTypes;
 
@@ -82,14 +83,19 @@ public static class DependencyInjectionHelper
             .AddInputObjectType<LoginDto>()
             .AddInputObjectType<CreateUserDto>()
             .AddInputObjectType<VoteDto>()
+            .SetPagingOptions(new PagingOptions
+            {
+                IncludeTotalCount = true,
+                MaxPageSize = 100
+            })
             .AddFiltering()
             .AddSorting()
             .ModifyRequestOptions(options =>
             {
                 options.Complexity.Enable = true;
-                options.Complexity.MaximumAllowed = 300;
+                options.Complexity.MaximumAllowed = 10000;
                 options.ExecutionTimeout = TimeSpan.FromSeconds(1);
-                options.IncludeExceptionDetails = true;
+                options.IncludeExceptionDetails = false;
             });
 
         return services;

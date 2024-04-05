@@ -20,7 +20,8 @@ public class DeleteRoleByExternalIdCommandHandler : IRequestHandler<DeleteRoleBy
         _logger = logger;
     }
 
-    public virtual async Task<CommandResult> Handle(DeleteRoleByExternalIdCommand request, CancellationToken cancellationToken)
+    public virtual async Task<CommandResult> Handle(DeleteRoleByExternalIdCommand request,
+        CancellationToken cancellationToken)
     {
         var entity = await _repository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
 
@@ -36,7 +37,8 @@ public class DeleteRoleByExternalIdCommandHandler : IRequestHandler<DeleteRoleBy
             return CommandResult.Success(MessageConstants.SuccessfullyDeleted);
         }
 
-        _logger.LogError(MessageConstants.EntityDeletionFailed, DateTime.UtcNow, typeof(Role), typeof(DeleteAnswerByExternalIdCommand));
+        _logger.LogError(MessageConstants.EntityDeletionFailed, DateTime.UtcNow, typeof(Role),
+            typeof(DeleteAnswerByExternalIdCommand));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }

@@ -56,7 +56,8 @@ public class CreateUserRoleCommandHandler : IRequestHandler<CreateUserRoleComman
             return CommandResult.Success(MessageConstants.SuccessfullyCreated);
         }
 
-        _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(UserRole), typeof(CreateUserRoleCommandHandler));
+        _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(UserRole),
+            typeof(CreateUserRoleCommandHandler));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }

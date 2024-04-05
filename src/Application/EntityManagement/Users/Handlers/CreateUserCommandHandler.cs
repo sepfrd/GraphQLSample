@@ -6,7 +6,6 @@ using Application.EntityManagement.PhoneNumbers.Dtos.PhoneNumberDto;
 using Application.EntityManagement.Users.Commands;
 using Application.EntityManagement.Users.Dtos.CreateUserDto;
 using Domain.Abstractions;
-using Domain.Common;
 using Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -53,7 +52,8 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Comma
 
         if (person is null)
         {
-            _logger.LogError(MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(Person), typeof(CreateUserCommandHandler));
+            _logger.LogError(MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(Person),
+                typeof(CreateUserCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -65,24 +65,23 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Comma
             return CommandResult.Success(MessageConstants.SuccessfullyCreated);
         }
 
-        _logger.LogError(MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(User), typeof(CreateUserCommandHandler));
+        _logger.LogError(MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(User),
+            typeof(CreateUserCommandHandler));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }
 
     private async Task<bool> IsUsernameUniqueAsync(string username, CancellationToken cancellationToken = default)
     {
-        var pagination = new Pagination(1, 1);
-
         var users = await _userRepository.GetAllAsync(
             user => user.Username == username,
-            pagination,
             cancellationToken);
 
         return !users.Any();
     }
 
-    private async Task<Person?> CreatePersonAsync(CreateUserDto userDto, Guid userId, CancellationToken cancellationToken = default)
+    private async Task<Person?> CreatePersonAsync(CreateUserDto userDto, Guid userId,
+        CancellationToken cancellationToken = default)
     {
         var person = new Person
         {
@@ -97,7 +96,8 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Comma
         return createdPerson;
     }
 
-    private async Task<User?> CreateUserAsync(CreateUserDto userDto, Guid userInternalId, Guid personId, CancellationToken cancellationToken = default)
+    private async Task<User?> CreateUserAsync(CreateUserDto userDto, Guid userInternalId, Guid personId,
+        CancellationToken cancellationToken = default)
     {
         var phoneNumberEntities = new List<PhoneNumber>();
 
@@ -143,12 +143,14 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Comma
             return createdUser;
         }
 
-        _logger.LogError(MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(User), typeof(CreateUserCommandHandler));
+        _logger.LogError(MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(User),
+            typeof(CreateUserCommandHandler));
 
         return null;
     }
 
-    private async Task<PhoneNumber?> CreatePhoneNumberAsync(PhoneNumberDto phoneNumberDto, Guid userInternalId, CancellationToken cancellationToken = default)
+    private async Task<PhoneNumber?> CreatePhoneNumberAsync(PhoneNumberDto phoneNumberDto, Guid userInternalId,
+        CancellationToken cancellationToken = default)
     {
         var phoneNumber = new PhoneNumber
         {
@@ -162,7 +164,8 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Comma
         return createdPhoneNumber;
     }
 
-    private async Task<Address?> CreateAddressAsync(AddressDto addressDto, Guid userInternalId, CancellationToken cancellationToken = default)
+    private async Task<Address?> CreateAddressAsync(AddressDto addressDto, Guid userInternalId,
+        CancellationToken cancellationToken = default)
     {
         var address = new Address
         {

@@ -42,8 +42,7 @@ public class AuthenticationService : IAuthenticationService
 
         var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha512Signature);
 
-        var userRolesQuery = new GetAllUserRolesQuery(Pagination.MaxPagination,
-            userRole => userRole.UserId == user.InternalId);
+        var userRolesQuery = new GetAllUserRolesQuery(userRole => userRole.UserId == user.InternalId);
 
         var userRolesResult = await _sender.Send(userRolesQuery, cancellationToken);
 
@@ -56,7 +55,7 @@ public class AuthenticationService : IAuthenticationService
 
         var roleIds = userRolesResult.Data.Select(userRole => userRole.RoleId);
 
-        var rolesQuery = new GetAllRolesQuery(Pagination.MaxPagination, role => roleIds.Contains(role.InternalId));
+        var rolesQuery = new GetAllRolesQuery(role => roleIds.Contains(role.InternalId));
 
         var rolesResult = await _sender.Send(rolesQuery, cancellationToken);
 
@@ -72,8 +71,8 @@ public class AuthenticationService : IAuthenticationService
         var claims = new ClaimsIdentity(new[]
         {
             new Claim(JwtRegisteredClaimNames.Iss, DomainConstants.ApplicationUrl),
-            new Claim(JwtRegisteredClaimNames.Aud, DomainConstants.ApplicationUrl),
-            new Claim(JwtRegisteredClaimNames.Iat,
+            new Claim(JwtRegisteredClaimNames.Aud, DomainConstants.ApplicationUrl), new Claim(
+                JwtRegisteredClaimNames.Iat,
                 DateTime.Now.ToUniversalTime()
                     .ToString(CultureInfo.InvariantCulture)),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),

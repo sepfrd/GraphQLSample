@@ -1,5 +1,4 @@
 using Application.EntityManagement.Orders.Queries;
-using Domain.Common;
 using Domain.Entities;
 using MediatR;
 
@@ -10,7 +9,8 @@ public class PaymentType : ObjectType<Payment>
     protected override void Configure(IObjectTypeDescriptor<Payment> descriptor)
     {
         descriptor
-            .Description("Represents a payment associated with an order, including details like the payment amount, method, and status.");
+            .Description(
+                "Represents a payment associated with an order, including details like the payment amount, method, and status.");
 
         descriptor
             .Field(payment => payment.Order)
@@ -45,9 +45,7 @@ public class PaymentType : ObjectType<Payment>
     {
         public static async Task<Order?> GetOrderAsync([Parent] Payment payment, [Service] ISender sender)
         {
-            var ordersQuery = new GetAllOrdersQuery(
-                new Pagination(),
-                x => x.InternalId == payment.OrderId);
+            var ordersQuery = new GetAllOrdersQuery(x => x.InternalId == payment.OrderId);
 
             var result = await sender.Send(ordersQuery);
 

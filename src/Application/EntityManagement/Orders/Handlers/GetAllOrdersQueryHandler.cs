@@ -17,16 +17,17 @@ public sealed class GetAllOrdersQueryHandler : IRequestHandler<GetAllOrdersQuery
         _repository = repository;
     }
 
-    public async Task<QueryResponse<IEnumerable<Order>>> Handle(GetAllOrdersQuery request, CancellationToken cancellationToken)
+    public async Task<QueryResponse<IEnumerable<Order>>> Handle(GetAllOrdersQuery request,
+        CancellationToken cancellationToken)
     {
-        var entities = await _repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
+        var entities = await _repository.GetAllAsync(request.Filter, cancellationToken);
 
         return new QueryResponse<IEnumerable<Order>>
-            (
+        (
             entities,
             true,
             MessageConstants.SuccessfullyRetrieved,
             HttpStatusCode.OK
-            );
+        );
     }
 }

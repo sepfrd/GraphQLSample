@@ -44,7 +44,8 @@ public class UpdateAnswerCommandHandler : IRequestHandler<UpdateAnswerCommand, C
 
         if (userClaims?.ExternalId is null)
         {
-            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow, typeof(UpdateAnswerCommandHandler));
+            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow,
+                typeof(UpdateAnswerCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -55,7 +56,8 @@ public class UpdateAnswerCommandHandler : IRequestHandler<UpdateAnswerCommand, C
 
         if (user is null)
         {
-            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(UpdateAnswerCommandHandler));
+            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User),
+                typeof(UpdateAnswerCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -69,7 +71,8 @@ public class UpdateAnswerCommandHandler : IRequestHandler<UpdateAnswerCommand, C
 
         if (newEntity is null)
         {
-            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Answer), typeof(UpdateAnswerCommandHandler));
+            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Answer),
+                typeof(UpdateAnswerCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -81,7 +84,8 @@ public class UpdateAnswerCommandHandler : IRequestHandler<UpdateAnswerCommand, C
             return CommandResult.Success(MessageConstants.SuccessfullyUpdated);
         }
 
-        _logger.LogError(message: MessageConstants.EntityUpdateFailed, DateTime.UtcNow, typeof(Answer), typeof(UpdateAnswerCommandHandler));
+        _logger.LogError(message: MessageConstants.EntityUpdateFailed, DateTime.UtcNow, typeof(Answer),
+            typeof(UpdateAnswerCommandHandler));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }

@@ -7,7 +7,8 @@ public class AddressType : ObjectType<Address>
     protected override void Configure(IObjectTypeDescriptor<Address> descriptor)
     {
         descriptor
-            .Description("Represents a physical address with details such as street, city, state, postal code, country, unit number and building number.");
+            .Description(
+                "Represents a physical address with details such as street, city, state, postal code, country, unit number and building number.");
 
         descriptor
             .Field(address => address.InternalId)

@@ -57,7 +57,8 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Com
 
         if (userClaims?.ExternalId is null)
         {
-            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow, typeof(CreateOrderCommandHandler));
+            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow,
+                typeof(CreateOrderCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -68,14 +69,16 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Com
 
         if (user is null)
         {
-            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(CreateOrderCommandHandler));
+            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User),
+                typeof(CreateOrderCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
 
         var orderId = Guid.NewGuid();
 
-        var orderItemsResult = await CreateOrderItemsAsync(request.CreateOrderDto.CreateOrderItemDtos, orderId, cancellationToken);
+        var orderItemsResult =
+            await CreateOrderItemsAsync(request.CreateOrderDto.CreateOrderItemDtos, orderId, cancellationToken);
 
         if (orderItemsResult.HttpStatusCode != HttpStatusCode.OK)
         {
@@ -108,7 +111,8 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Com
 
         var payment = (Payment)paymentResult.Data!;
 
-        var shipmentResult = await CreateShipmentAsync(request.CreateOrderDto.CreateShipmentDto, orderId, cancellationToken);
+        var shipmentResult =
+            await CreateShipmentAsync(request.CreateOrderDto.CreateShipmentDto, orderId, cancellationToken);
 
         if (shipmentResult.HttpStatusCode != HttpStatusCode.OK)
         {
@@ -144,7 +148,8 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Com
             return CommandResult.Success(MessageConstants.SuccessfullyCreated);
         }
 
-        _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(Order), typeof(CreateOrderCommandHandler));
+        _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(Order),
+            typeof(CreateOrderCommandHandler));
 
         foreach (var orderItem in orderItems)
         {
@@ -158,13 +163,16 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Com
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }
 
-    private async Task<OrderCreationResultDto> CreateOrderItemsAsync(IEnumerable<CreateOrderItemDto> createOrderItemDtos, Guid orderId, CancellationToken cancellationToken = default)
+    private async Task<OrderCreationResultDto> CreateOrderItemsAsync(
+        IEnumerable<CreateOrderItemDto> createOrderItemDtos, Guid orderId,
+        CancellationToken cancellationToken = default)
     {
         var orderItems = new List<OrderItem>();
 
         foreach (var orderItemDto in createOrderItemDtos)
         {
-            var product = await _productRepository.GetByExternalIdAsync(orderItemDto.ProductExternalId, cancellationToken);
+            var product =
+                await _productRepository.GetByExternalIdAsync(orderItemDto.ProductExternalId, cancellationToken);
 
             if (product is null)
             {
@@ -175,7 +183,8 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Com
 
             if (orderItemEntity is null)
             {
-                _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(OrderItem), typeof(CreateOrderCommandHandler));
+                _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(OrderItem),
+                    typeof(CreateOrderCommandHandler));
 
                 return new OrderCreationResultDto(null, HttpStatusCode.InternalServerError);
             }
@@ -187,7 +196,8 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Com
 
             if (createdOrderItemEntity is null)
             {
-                _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(OrderItem), typeof(CreateOrderCommandHandler));
+                _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(OrderItem),
+                    typeof(CreateOrderCommandHandler));
 
                 foreach (var item in orderItems)
                 {
@@ -203,13 +213,15 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Com
         return new OrderCreationResultDto(orderItems, HttpStatusCode.OK);
     }
 
-    private async Task<OrderCreationResultDto> CreatePaymentAsync(PaymentDto paymentDto, Guid orderId, CancellationToken cancellationToken = default)
+    private async Task<OrderCreationResultDto> CreatePaymentAsync(PaymentDto paymentDto, Guid orderId,
+        CancellationToken cancellationToken = default)
     {
         var paymentEntity = _mappingService.Map<PaymentDto, Payment>(paymentDto);
 
         if (paymentEntity is null)
         {
-            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Payment), typeof(CreateOrderCommandHandler));
+            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Payment),
+                typeof(CreateOrderCommandHandler));
 
             return new OrderCreationResultDto(null, HttpStatusCode.InternalServerError);
         }
@@ -223,21 +235,26 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Com
             return new OrderCreationResultDto(createdPaymentEntity, HttpStatusCode.OK);
         }
 
-        _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(Payment), typeof(CreateOrderCommandHandler));
+        _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(Payment),
+            typeof(CreateOrderCommandHandler));
 
         return new OrderCreationResultDto(null, HttpStatusCode.InternalServerError);
     }
 
-    private async Task<OrderCreationResultDto> CreateShipmentAsync(CreateShipmentDto createShipmentDto, Guid orderId, CancellationToken cancellationToken = default)
+    private async Task<OrderCreationResultDto> CreateShipmentAsync(CreateShipmentDto createShipmentDto, Guid orderId,
+        CancellationToken cancellationToken = default)
     {
-        var originAddress = await _addressRepository.GetByExternalIdAsync(createShipmentDto.OriginAddressExternalId, cancellationToken);
+        var originAddress =
+            await _addressRepository.GetByExternalIdAsync(createShipmentDto.OriginAddressExternalId, cancellationToken);
 
         if (originAddress is null)
         {
             return new OrderCreationResultDto(null, HttpStatusCode.BadRequest);
         }
 
-        var destinationAddress = await _addressRepository.GetByExternalIdAsync(createShipmentDto.DestinationAddressExternalId, cancellationToken);
+        var destinationAddress =
+            await _addressRepository.GetByExternalIdAsync(createShipmentDto.DestinationAddressExternalId,
+                cancellationToken);
 
         if (destinationAddress is null)
         {
@@ -248,7 +265,8 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Com
 
         if (shipmentEntity is null)
         {
-            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Shipment), typeof(CreateOrderCommandHandler));
+            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Shipment),
+                typeof(CreateOrderCommandHandler));
 
             return new OrderCreationResultDto(null, HttpStatusCode.InternalServerError);
         }
@@ -264,7 +282,8 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Com
             return new OrderCreationResultDto(createdShipmentEntity, HttpStatusCode.OK);
         }
 
-        _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(Shipment), typeof(CreateOrderCommandHandler));
+        _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(Shipment),
+            typeof(CreateOrderCommandHandler));
 
         return new OrderCreationResultDto(null, HttpStatusCode.InternalServerError);
     }

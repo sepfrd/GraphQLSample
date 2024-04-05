@@ -44,7 +44,8 @@ public class UpdateCartItemQuantityCommandHandler : IRequestHandler<UpdateCartIt
 
         if (cart is null)
         {
-            _logger.LogError(MessageConstants.EntityRelationshipsRetrievalFailed, DateTime.UtcNow, typeof(CartItem), typeof(UpdateCartItemQuantityCommandHandler));
+            _logger.LogError(MessageConstants.EntityRelationshipsRetrievalFailed, DateTime.UtcNow, typeof(CartItem),
+                typeof(UpdateCartItemQuantityCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -53,7 +54,8 @@ public class UpdateCartItemQuantityCommandHandler : IRequestHandler<UpdateCartIt
 
         if (userClaims?.ExternalId is null)
         {
-            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow, typeof(UpdateCartItemQuantityCommandHandler));
+            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow,
+                typeof(UpdateCartItemQuantityCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -64,7 +66,8 @@ public class UpdateCartItemQuantityCommandHandler : IRequestHandler<UpdateCartIt
 
         if (user is null)
         {
-            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(UpdateCartItemQuantityCommandHandler));
+            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User),
+                typeof(UpdateCartItemQuantityCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -83,7 +86,8 @@ public class UpdateCartItemQuantityCommandHandler : IRequestHandler<UpdateCartIt
             return CommandResult.Success(MessageConstants.SuccessfullyUpdated);
         }
 
-        _logger.LogError(MessageConstants.EntityUpdateFailed, DateTime.UtcNow, typeof(CartItem), typeof(UpdateCartItemQuantityCommandHandler));
+        _logger.LogError(MessageConstants.EntityUpdateFailed, DateTime.UtcNow, typeof(CartItem),
+            typeof(UpdateCartItemQuantityCommandHandler));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }

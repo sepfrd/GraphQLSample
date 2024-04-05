@@ -10,7 +10,7 @@ public class VoteSortType : SortInputType<Vote>
         descriptor
             .Field(vote => vote.Content)
             .Ignore();
-     
+
         descriptor
             .Field(vote => vote.InternalId)
             .Ignore();

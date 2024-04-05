@@ -41,7 +41,9 @@ public class CreateOrderItemCommandHandler : IRequestHandler<CreateOrderItemComm
             return CommandResult.Failure(MessageConstants.BadRequest);
         }
 
-        var product = await _productRepository.GetByExternalIdAsync(request.CreateOrderItemDto.ProductExternalId, cancellationToken);
+        var product =
+            await _productRepository.GetByExternalIdAsync(request.CreateOrderItemDto.ProductExternalId,
+                cancellationToken);
 
         if (product is null)
         {
@@ -52,7 +54,8 @@ public class CreateOrderItemCommandHandler : IRequestHandler<CreateOrderItemComm
 
         if (entity is null)
         {
-            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(OrderItem), typeof(CreateOrderItemCommandHandler));
+            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(OrderItem),
+                typeof(CreateOrderItemCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -67,7 +70,8 @@ public class CreateOrderItemCommandHandler : IRequestHandler<CreateOrderItemComm
             return CommandResult.Success(MessageConstants.SuccessfullyCreated);
         }
 
-        _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(OrderItem), typeof(CreateOrderItemCommandHandler));
+        _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(OrderItem),
+            typeof(CreateOrderItemCommandHandler));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }

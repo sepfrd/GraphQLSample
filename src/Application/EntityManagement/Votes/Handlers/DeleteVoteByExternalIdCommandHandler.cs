@@ -29,7 +29,8 @@ public class DeleteVoteByExternalIdCommandHandler : IRequestHandler<DeleteVoteBy
         _logger = logger;
     }
 
-    public virtual async Task<CommandResult> Handle(DeleteVoteByExternalIdCommand request, CancellationToken cancellationToken)
+    public virtual async Task<CommandResult> Handle(DeleteVoteByExternalIdCommand request,
+        CancellationToken cancellationToken)
     {
         var entity = await _voteRepository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
 
@@ -42,7 +43,8 @@ public class DeleteVoteByExternalIdCommandHandler : IRequestHandler<DeleteVoteBy
 
         if (userClaims?.ExternalId is null)
         {
-            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow, typeof(DeleteVoteByExternalIdCommandHandler));
+            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow,
+                typeof(DeleteVoteByExternalIdCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -53,7 +55,8 @@ public class DeleteVoteByExternalIdCommandHandler : IRequestHandler<DeleteVoteBy
 
         if (user is null)
         {
-            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(DeleteVoteByExternalIdCommandHandler));
+            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User),
+                typeof(DeleteVoteByExternalIdCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -70,7 +73,8 @@ public class DeleteVoteByExternalIdCommandHandler : IRequestHandler<DeleteVoteBy
             return CommandResult.Success(MessageConstants.SuccessfullyDeleted);
         }
 
-        _logger.LogError(MessageConstants.EntityDeletionFailed, DateTime.UtcNow, typeof(Vote), typeof(DeleteAnswerByExternalIdCommand));
+        _logger.LogError(MessageConstants.EntityDeletionFailed, DateTime.UtcNow, typeof(Vote),
+            typeof(DeleteAnswerByExternalIdCommand));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }

@@ -8,7 +8,8 @@ using MediatR;
 
 namespace Application.EntityManagement.Payments.Handlers;
 
-public sealed class GetAllPaymentsQueryHandler : IRequestHandler<GetAllPaymentsQuery, QueryResponse<IEnumerable<Payment>>>
+public sealed class
+    GetAllPaymentsQueryHandler : IRequestHandler<GetAllPaymentsQuery, QueryResponse<IEnumerable<Payment>>>
 {
     private readonly IRepository<Payment> _repository;
 
@@ -17,9 +18,10 @@ public sealed class GetAllPaymentsQueryHandler : IRequestHandler<GetAllPaymentsQ
         _repository = repository;
     }
 
-    public async Task<QueryResponse<IEnumerable<Payment>>> Handle(GetAllPaymentsQuery request, CancellationToken cancellationToken)
+    public async Task<QueryResponse<IEnumerable<Payment>>> Handle(GetAllPaymentsQuery request,
+        CancellationToken cancellationToken)
     {
-        var entities = await _repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
+        var entities = await _repository.GetAllAsync(request.Filter, cancellationToken);
 
         return new QueryResponse<IEnumerable<Payment>>(
             entities,

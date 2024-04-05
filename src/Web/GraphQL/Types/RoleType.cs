@@ -1,5 +1,4 @@
 using Application.EntityManagement.UserRoles.Queries;
-using Domain.Common;
 using Domain.Entities;
 using MediatR;
 
@@ -39,9 +38,7 @@ public class RoleType : ObjectType<Role>
     {
         public static async Task<IEnumerable<UserRole>?> GetUserRolesAsync([Parent] Role role, [Service] ISender sender)
         {
-            var userRolesQuery = new GetAllUserRolesQuery(
-                Pagination.MaxPagination,
-                userRole => userRole.RoleId == role.InternalId);
+            var userRolesQuery = new GetAllUserRolesQuery(userRole => userRole.RoleId == role.InternalId);
 
             var result = await sender.Send(userRolesQuery);
 

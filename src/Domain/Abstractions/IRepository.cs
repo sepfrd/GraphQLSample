@@ -10,7 +10,8 @@ public interface
 
     Task<int> GenerateUniqueExternalIdAsync(CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter = null, Pagination? pagination = null, CancellationToken cancellationToken = default);
+    Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter = null,
+        CancellationToken cancellationToken = default);
 
     Task<TEntity?> GetByInternalIdAsync(Guid internalId, CancellationToken cancellationToken = default);
 

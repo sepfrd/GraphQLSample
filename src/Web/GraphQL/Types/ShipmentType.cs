@@ -1,6 +1,5 @@
 using Application.EntityManagement.Addresses.Queries;
 using Application.EntityManagement.Orders.Queries;
-using Domain.Common;
 using Domain.Entities;
 using MediatR;
 
@@ -11,7 +10,8 @@ public class ShipmentType : ObjectType<Shipment>
     protected override void Configure(IObjectTypeDescriptor<Shipment> descriptor)
     {
         descriptor
-            .Description("Represents a shipment with details like status, shipping method, dates, cost, and associated addresses.");
+            .Description(
+                "Represents a shipment with details like status, shipping method, dates, cost, and associated addresses.");
 
         descriptor
             .Field(shipment => shipment.Order)
@@ -70,20 +70,17 @@ public class ShipmentType : ObjectType<Shipment>
     {
         public static async Task<Order?> GetOrderAsync([Parent] Shipment shipment, [Service] ISender sender)
         {
-            var ordersQuery = new GetAllOrdersQuery(
-                new Pagination(),
-                x => x.InternalId == shipment.OrderId);
+            var ordersQuery = new GetAllOrdersQuery(x => x.InternalId == shipment.OrderId);
 
             var result = await sender.Send(ordersQuery);
 
             return result.Data?.FirstOrDefault();
         }
 
-        public static async Task<Address?> GetDestinationAddressAsync([Parent] Shipment shipment, [Service] ISender sender)
+        public static async Task<Address?> GetDestinationAddressAsync([Parent] Shipment shipment,
+            [Service] ISender sender)
         {
-            var addressesQuery = new GetAllAddressesQuery(
-                new Pagination(),
-                x => x.InternalId == shipment.DestinationAddressId);
+            var addressesQuery = new GetAllAddressesQuery(x => x.InternalId == shipment.DestinationAddressId);
 
             var result = await sender.Send(addressesQuery);
 
@@ -92,9 +89,7 @@ public class ShipmentType : ObjectType<Shipment>
 
         public static async Task<Address?> GetOriginAddressAsync([Parent] Shipment shipment, [Service] ISender sender)
         {
-            var addressesQuery = new GetAllAddressesQuery(
-                new Pagination(),
-                x => x.InternalId == shipment.OriginAddressId);
+            var addressesQuery = new GetAllAddressesQuery(x => x.InternalId == shipment.OriginAddressId);
 
             var result = await sender.Send(addressesQuery);
 

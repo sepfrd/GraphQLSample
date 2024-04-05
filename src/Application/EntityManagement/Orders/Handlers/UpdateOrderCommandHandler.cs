@@ -44,7 +44,8 @@ public class UpdateOrderCommandHandler : IRequestHandler<UpdateOrderCommand, Com
 
         if (userClaims?.ExternalId is null)
         {
-            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow, typeof(UpdateOrderCommandHandler));
+            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow,
+                typeof(UpdateOrderCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -55,7 +56,8 @@ public class UpdateOrderCommandHandler : IRequestHandler<UpdateOrderCommand, Com
 
         if (user is null)
         {
-            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(UpdateOrderCommandHandler));
+            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User),
+                typeof(UpdateOrderCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -69,7 +71,8 @@ public class UpdateOrderCommandHandler : IRequestHandler<UpdateOrderCommand, Com
 
         if (newEntity is null)
         {
-            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Order), typeof(UpdateOrderCommandHandler));
+            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Order),
+                typeof(UpdateOrderCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -81,7 +84,8 @@ public class UpdateOrderCommandHandler : IRequestHandler<UpdateOrderCommand, Com
             return CommandResult.Success(MessageConstants.SuccessfullyUpdated);
         }
 
-        _logger.LogError(message: MessageConstants.EntityUpdateFailed, DateTime.UtcNow, typeof(Order), typeof(UpdateOrderCommandHandler));
+        _logger.LogError(message: MessageConstants.EntityUpdateFailed, DateTime.UtcNow, typeof(Order),
+            typeof(UpdateOrderCommandHandler));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }

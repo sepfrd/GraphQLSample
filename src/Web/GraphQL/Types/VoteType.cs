@@ -4,7 +4,6 @@ using Application.EntityManagement.Products.Queries;
 using Application.EntityManagement.Questions.Queries;
 using Application.EntityManagement.Users.Queries;
 using Domain.Abstractions;
-using Domain.Common;
 using Domain.Entities;
 using MediatR;
 
@@ -15,7 +14,8 @@ public class VoteType : ObjectType<Vote>
     protected override void Configure(IObjectTypeDescriptor<Vote> descriptor)
     {
         descriptor
-            .Description("Represents a user's vote on content, including details like vote type, content type, and the external ID of the voted content.");
+            .Description(
+                "Represents a user's vote on content, including details like vote type, content type, and the external ID of the voted content.");
 
         descriptor
             .Field(vote => vote.User)
@@ -62,9 +62,7 @@ public class VoteType : ObjectType<Vote>
     {
         public static async Task<User?> GetUserAsync([Parent] Vote vote, [Service] ISender sender)
         {
-            var usersQuery = new GetAllUsersQuery(
-                new Pagination(),
-                x => x.InternalId == vote.UserId);
+            var usersQuery = new GetAllUsersQuery(x => x.InternalId == vote.UserId);
 
             var result = await sender.Send(usersQuery);
 
@@ -77,9 +75,7 @@ public class VoteType : ObjectType<Vote>
             {
                 case Answer:
                 {
-                    var contentsQuery = new GetAllAnswersQuery(
-                        new Pagination(),
-                        x => x.InternalId == vote.ContentId);
+                    var contentsQuery = new GetAllAnswersQuery(x => x.InternalId == vote.ContentId);
 
                     var result = await sender.Send(contentsQuery);
 
@@ -88,9 +84,7 @@ public class VoteType : ObjectType<Vote>
 
                 case Comment:
                 {
-                    var contentsQuery = new GetAllCommentsQuery(
-                        new Pagination(),
-                        x => x.InternalId == vote.ContentId);
+                    var contentsQuery = new GetAllCommentsQuery(x => x.InternalId == vote.ContentId);
 
                     var result = await sender.Send(contentsQuery);
 
@@ -99,9 +93,7 @@ public class VoteType : ObjectType<Vote>
 
                 case Product:
                 {
-                    var contentsQuery = new GetAllProductsQuery(
-                        new Pagination(),
-                        x => x.InternalId == vote.ContentId);
+                    var contentsQuery = new GetAllProductsQuery(x => x.InternalId == vote.ContentId);
 
                     var result = await sender.Send(contentsQuery);
 
@@ -110,9 +102,7 @@ public class VoteType : ObjectType<Vote>
 
                 case Question:
                 {
-                    var contentsQuery = new GetAllQuestionsQuery(
-                        new Pagination(),
-                        x => x.InternalId == vote.ContentId);
+                    var contentsQuery = new GetAllQuestionsQuery(x => x.InternalId == vote.ContentId);
 
                     var result = await sender.Send(contentsQuery);
 

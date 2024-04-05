@@ -8,7 +8,8 @@ using MediatR;
 
 namespace Application.EntityManagement.OrderItems.Handlers;
 
-public sealed class GetAllOrderItemsQueryHandler : IRequestHandler<GetAllOrderItemsQuery, QueryResponse<IEnumerable<OrderItem>>>
+public sealed class
+    GetAllOrderItemsQueryHandler : IRequestHandler<GetAllOrderItemsQuery, QueryResponse<IEnumerable<OrderItem>>>
 {
     private readonly IRepository<OrderItem> _repository;
 
@@ -17,9 +18,10 @@ public sealed class GetAllOrderItemsQueryHandler : IRequestHandler<GetAllOrderIt
         _repository = repository;
     }
 
-    public async Task<QueryResponse<IEnumerable<OrderItem>>> Handle(GetAllOrderItemsQuery request, CancellationToken cancellationToken)
+    public async Task<QueryResponse<IEnumerable<OrderItem>>> Handle(GetAllOrderItemsQuery request,
+        CancellationToken cancellationToken)
     {
-        var entities = await _repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
+        var entities = await _repository.GetAllAsync(request.Filter, cancellationToken);
 
         return new QueryResponse<IEnumerable<OrderItem>>(
             entities,

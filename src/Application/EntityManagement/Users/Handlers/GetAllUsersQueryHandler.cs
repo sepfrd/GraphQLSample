@@ -18,9 +18,10 @@ public sealed class GetAllUsersQueryHandler
         _userRepository = userRepository;
     }
 
-    public async Task<QueryResponse<IEnumerable<User>>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
+    public async Task<QueryResponse<IEnumerable<User>>> Handle(GetAllUsersQuery request,
+        CancellationToken cancellationToken)
     {
-        var users = await _userRepository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
+        var users = await _userRepository.GetAllAsync(request.Filter, cancellationToken);
 
         return new QueryResponse<IEnumerable<User>>(
             users,

@@ -17,9 +17,10 @@ public sealed class GetAllRolesQueryHandler : IRequestHandler<GetAllRolesQuery, 
         _repository = repository;
     }
 
-    public async Task<QueryResponse<IEnumerable<Role>>> Handle(GetAllRolesQuery request, CancellationToken cancellationToken)
+    public async Task<QueryResponse<IEnumerable<Role>>> Handle(GetAllRolesQuery request,
+        CancellationToken cancellationToken)
     {
-        var entities = await _repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
+        var entities = await _repository.GetAllAsync(request.Filter, cancellationToken);
 
         return new QueryResponse<IEnumerable<Role>>(
             entities,

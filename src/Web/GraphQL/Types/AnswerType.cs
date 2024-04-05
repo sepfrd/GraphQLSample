@@ -1,7 +1,6 @@
 using Application.EntityManagement.Questions.Queries;
 using Application.EntityManagement.Users.Queries;
 using Application.EntityManagement.Votes.Queries;
-using Domain.Common;
 using Domain.Entities;
 using MediatR;
 
@@ -12,7 +11,8 @@ public class AnswerType : ObjectType<Answer>
     protected override void Configure(IObjectTypeDescriptor<Answer> descriptor)
     {
         descriptor
-            .Description("Represents an answer to a question, including details such as the content of the answer and associated user information.");
+            .Description(
+                "Represents an answer to a question, including details such as the content of the answer and associated user information.");
 
         descriptor
             .Field(answer => answer.InternalId)
@@ -76,9 +76,7 @@ public class AnswerType : ObjectType<Answer>
     {
         public static async Task<Question?> GetQuestionAsync([Parent] Answer answer, [Service] ISender sender)
         {
-            var questionsQuery = new GetAllQuestionsQuery(
-                new Pagination(),
-                x => x.InternalId == answer.QuestionId);
+            var questionsQuery = new GetAllQuestionsQuery(x => x.InternalId == answer.QuestionId);
 
             var result = await sender.Send(questionsQuery);
 
@@ -87,9 +85,7 @@ public class AnswerType : ObjectType<Answer>
 
         public static async Task<User?> GetUserAsync([Parent] Answer answer, [Service] ISender sender)
         {
-            var usersQuery = new GetAllUsersQuery(
-                new Pagination(),
-                x => x.InternalId == answer.UserId);
+            var usersQuery = new GetAllUsersQuery(x => x.InternalId == answer.UserId);
 
             var result = await sender.Send(usersQuery);
 
@@ -98,9 +94,7 @@ public class AnswerType : ObjectType<Answer>
 
         public static async Task<IEnumerable<Vote>?> GetVotesAsync([Parent] Answer answer, [Service] ISender sender)
         {
-            var votesQuery = new GetAllVotesQuery(
-                new Pagination(),
-                x => x.ContentId == answer.InternalId && x.Content is Answer);
+            var votesQuery = new GetAllVotesQuery(x => x.ContentId == answer.InternalId && x.Content is Answer);
 
             var result = await sender.Send(votesQuery);
 

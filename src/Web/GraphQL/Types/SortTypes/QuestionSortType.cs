@@ -14,7 +14,7 @@ public class QuestionSortType : SortInputType<Question>
         descriptor
             .Field(question => question.UserId)
             .Ignore();
-        
+
         descriptor
             .Field(question => question.ProductId)
             .Ignore();

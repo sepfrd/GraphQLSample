@@ -38,7 +38,8 @@ public class CreatePhoneNumberCommandHandler : IRequestHandler<CreatePhoneNumber
 
         if (entity is null)
         {
-            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(PhoneNumber), typeof(CreatePhoneNumberCommandHandler));
+            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(PhoneNumber),
+                typeof(CreatePhoneNumberCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -47,7 +48,8 @@ public class CreatePhoneNumberCommandHandler : IRequestHandler<CreatePhoneNumber
 
         if (userClaims?.ExternalId is null)
         {
-            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow, typeof(CreatePhoneNumberCommandHandler));
+            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow,
+                typeof(CreatePhoneNumberCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -58,7 +60,8 @@ public class CreatePhoneNumberCommandHandler : IRequestHandler<CreatePhoneNumber
 
         if (user is null)
         {
-            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(CreatePhoneNumberCommandHandler));
+            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User),
+                typeof(CreatePhoneNumberCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -72,7 +75,8 @@ public class CreatePhoneNumberCommandHandler : IRequestHandler<CreatePhoneNumber
             return CommandResult.Success(MessageConstants.SuccessfullyCreated);
         }
 
-        _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(PhoneNumber), typeof(CreatePhoneNumberCommandHandler));
+        _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(PhoneNumber),
+            typeof(CreatePhoneNumberCommandHandler));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }

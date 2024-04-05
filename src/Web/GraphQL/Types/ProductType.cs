@@ -2,7 +2,6 @@ using Application.EntityManagement.Categories.Queries;
 using Application.EntityManagement.Comments.Queries;
 using Application.EntityManagement.Questions.Queries;
 using Application.EntityManagement.Votes.Queries;
-using Domain.Common;
 using Domain.Entities;
 using MediatR;
 
@@ -13,7 +12,8 @@ public class ProductType : ObjectType<Product>
     protected override void Configure(IObjectTypeDescriptor<Product> descriptor)
     {
         descriptor
-            .Description("Represents a product with details such as name, description, price, stock quantity, images, associated category, and user comments.");
+            .Description(
+                "Represents a product with details such as name, description, price, stock quantity, images, associated category, and user comments.");
 
         descriptor
             .Field(product => product.Category)
@@ -34,7 +34,6 @@ public class ProductType : ObjectType<Product>
             .ResolveWith<Resolvers>(
                 resolvers =>
                     Resolvers.GetCommentsAsync(default!, default!))
-            
             .Description("The Comments Associated with the Product\n" +
                          "Authentication is required.\n" +
                          "Supports sorting for comment details.");
@@ -44,7 +43,6 @@ public class ProductType : ObjectType<Product>
             .ResolveWith<Resolvers>(
                 resolvers =>
                     Resolvers.GetQuestionsAsync(default!, default!))
-            
             .Description("The Questions Associated with the Product\n" +
                          "Authentication is required.\n" +
                          "Supports sorting for question details.");
@@ -74,9 +72,7 @@ public class ProductType : ObjectType<Product>
     {
         public static async Task<Category?> GetCategoryAsync([Parent] Product product, [Service] ISender sender)
         {
-            var categoriesQuery = new GetAllCategoriesQuery(
-                new Pagination(),
-                x => x.InternalId == product.CategoryId);
+            var categoriesQuery = new GetAllCategoriesQuery(x => x.InternalId == product.CategoryId);
 
             var result = await sender.Send(categoriesQuery);
 
@@ -85,31 +81,27 @@ public class ProductType : ObjectType<Product>
 
         public static async Task<IEnumerable<Vote>?> GetVotesAsync([Parent] Product product, [Service] ISender sender)
         {
-            var votesQuery = new GetAllVotesQuery(
-                new Pagination(),
-                x => x.ContentId == product.InternalId && x.Content is Product);
+            var votesQuery = new GetAllVotesQuery(x => x.ContentId == product.InternalId && x.Content is Product);
 
             var result = await sender.Send(votesQuery);
 
             return result.Data;
         }
 
-        public static async Task<IEnumerable<Comment>?> GetCommentsAsync([Parent] Product product, [Service] ISender sender)
+        public static async Task<IEnumerable<Comment>?> GetCommentsAsync([Parent] Product product,
+            [Service] ISender sender)
         {
-            var commentsQuery = new GetAllCommentsQuery(
-                new Pagination(),
-                x => x.ProductId == product.InternalId);
+            var commentsQuery = new GetAllCommentsQuery(x => x.ProductId == product.InternalId);
 
             var result = await sender.Send(commentsQuery);
 
             return result.Data;
         }
 
-        public static async Task<IEnumerable<Question>?> GetQuestionsAsync([Parent] Product product, [Service] ISender sender)
+        public static async Task<IEnumerable<Question>?> GetQuestionsAsync([Parent] Product product,
+            [Service] ISender sender)
         {
-            var questionsQuery = new GetAllQuestionsQuery(
-                new Pagination(),
-                x => x.ProductId == product.InternalId);
+            var questionsQuery = new GetAllQuestionsQuery(x => x.ProductId == product.InternalId);
 
             var result = await sender.Send(questionsQuery);
 

@@ -8,7 +8,8 @@ using MediatR;
 
 namespace Application.EntityManagement.Addresses.Handlers;
 
-public sealed class GetAllAddressesQueryHandler : IRequestHandler<GetAllAddressesQuery, QueryResponse<IEnumerable<Address>>>
+public sealed class
+    GetAllAddressesQueryHandler : IRequestHandler<GetAllAddressesQuery, QueryResponse<IEnumerable<Address>>>
 {
     private readonly IRepository<Address> _repository;
 
@@ -17,9 +18,10 @@ public sealed class GetAllAddressesQueryHandler : IRequestHandler<GetAllAddresse
         _repository = repository;
     }
 
-    public async Task<QueryResponse<IEnumerable<Address>>> Handle(GetAllAddressesQuery request, CancellationToken cancellationToken)
+    public async Task<QueryResponse<IEnumerable<Address>>> Handle(GetAllAddressesQuery request,
+        CancellationToken cancellationToken)
     {
-        var entities = await _repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
+        var entities = await _repository.GetAllAsync(request.Filter, cancellationToken);
 
         return new QueryResponse<IEnumerable<Address>>(
             entities,

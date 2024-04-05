@@ -3,7 +3,6 @@ using Application.Common;
 using Application.Common.Constants;
 using Application.EntityManagement.Users.Commands;
 using Domain.Abstractions;
-using Domain.Common;
 using Domain.Entities;
 using MediatR;
 
@@ -29,7 +28,6 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, CommandResult>
 
         var users = await _userRepository.GetAllAsync(
             user => user.Username == request.LoginDto.UsernameOrEmail || user.Email == request.LoginDto.UsernameOrEmail,
-            new Pagination(),
             cancellationToken);
 
         var user = users.FirstOrDefault();

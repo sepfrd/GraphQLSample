@@ -1,6 +1,5 @@
 ﻿using Application.EntityManagement.Roles.Queries;
 using Application.EntityManagement.Users.Queries;
-using Domain.Common;
 using Domain.Entities;
 using MediatR;
 
@@ -11,7 +10,8 @@ public class UserRoleType : ObjectType<UserRole>
     protected override void Configure(IObjectTypeDescriptor<UserRole> descriptor)
     {
         descriptor
-            .Description("Represents the association between a user and a role, indicating the roles assigned to a user.");
+            .Description(
+                "Represents the association between a user and a role, indicating the roles assigned to a user.");
 
         descriptor
             .Field(userRole => userRole.User)
@@ -26,7 +26,7 @@ public class UserRoleType : ObjectType<UserRole>
             .ResolveWith<Resolvers>(resolvers => Resolvers.GetRoleAsync(default!, default!))
             .Description("The Role Associated with the User-Role\n" +
                          "Authentication is required.");
-        
+
         descriptor
             .Field(vote => vote.InternalId)
             .Ignore();
@@ -44,9 +44,7 @@ public class UserRoleType : ObjectType<UserRole>
     {
         public static async Task<Role?> GetRoleAsync([Parent] UserRole userRole, [Service] ISender sender)
         {
-            var rolesQuery = new GetAllRolesQuery(
-                Pagination.MaxPagination,
-                role => role.InternalId == userRole.RoleId);
+            var rolesQuery = new GetAllRolesQuery(role => role.InternalId == userRole.RoleId);
 
             var result = await sender.Send(rolesQuery);
 

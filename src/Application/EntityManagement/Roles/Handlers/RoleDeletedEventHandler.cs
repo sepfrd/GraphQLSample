@@ -1,6 +1,5 @@
 using Application.EntityManagement.Roles.Events;
 using Domain.Abstractions;
-using Domain.Common;
 using Domain.Entities;
 using MediatR;
 
@@ -19,7 +18,6 @@ public class RoleDeletedEventHandler : INotificationHandler<RoleDeletedEvent>
     {
         var userRoles = (await _userRoleRepository.GetAllAsync(
                 userRole => userRole.RoleId == notification.Entity.InternalId,
-                Pagination.MaxPagination,
                 cancellationToken))
             .ToList();
 

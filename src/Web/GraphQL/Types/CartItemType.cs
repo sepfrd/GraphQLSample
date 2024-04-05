@@ -1,6 +1,5 @@
 using Application.EntityManagement.Carts.Queries;
 using Application.EntityManagement.Products.Queries;
-using Domain.Common;
 using Domain.Entities;
 using MediatR;
 
@@ -11,7 +10,8 @@ public class CartItemType : ObjectType<CartItem>
     protected override void Configure(IObjectTypeDescriptor<CartItem> descriptor)
     {
         descriptor
-            .Description("Represents an item added to a user's shopping cart, including details like product, quantity, unit price, and subtotal.");
+            .Description(
+                "Represents an item added to a user's shopping cart, including details like product, quantity, unit price, and subtotal.");
 
         descriptor
             .Field(cartItem => cartItem.Quantity)
@@ -80,9 +80,7 @@ public class CartItemType : ObjectType<CartItem>
     {
         public static async Task<Cart?> GetCartAsync([Parent] CartItem cartItem, [Service] ISender sender)
         {
-            var cartsQuery = new GetAllCartsQuery(
-                new Pagination(),
-                x => x.InternalId == cartItem.CartId);
+            var cartsQuery = new GetAllCartsQuery(x => x.InternalId == cartItem.CartId);
 
             var result = await sender.Send(cartsQuery);
 
@@ -91,9 +89,7 @@ public class CartItemType : ObjectType<CartItem>
 
         public static async Task<Product?> GetProductAsync([Parent] CartItem cartItem, [Service] ISender sender)
         {
-            var productsQuery = new GetAllProductsQuery(
-                new Pagination(),
-                x => x.InternalId == cartItem.ProductId);
+            var productsQuery = new GetAllProductsQuery(x => x.InternalId == cartItem.ProductId);
 
             var result = await sender.Send(productsQuery);
 

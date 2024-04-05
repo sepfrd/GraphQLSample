@@ -3,7 +3,6 @@ using Application.Common.Constants;
 using Application.EntityManagement.Roles.Commands;
 using Application.EntityManagement.Roles.Events;
 using Application.EntityManagement.Roles.Queries;
-using Domain.Common;
 using MediatR;
 
 namespace Application.EntityManagement.Roles;
@@ -17,11 +16,10 @@ public class RoleService
         _mediator = mediator;
     }
 
-    public async Task<CommandResult> DeleteByExternalIdAsync(int externalId, CancellationToken cancellationToken = default)
+    public async Task<CommandResult> DeleteByExternalIdAsync(int externalId,
+        CancellationToken cancellationToken = default)
     {
-        var pagination = new Pagination();
-
-        var rolesQuery = new GetAllRolesQuery(pagination, role => role.ExternalId == externalId);
+        var rolesQuery = new GetAllRolesQuery(role => role.ExternalId == externalId);
 
         var roleResult = await _mediator.Send(rolesQuery, cancellationToken);
 

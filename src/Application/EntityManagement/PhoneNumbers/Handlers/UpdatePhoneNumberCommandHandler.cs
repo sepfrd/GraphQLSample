@@ -31,7 +31,8 @@ public class UpdatePhoneNumberCommandHandler : IRequestHandler<UpdatePhoneNumber
         _logger = logger;
     }
 
-    public virtual async Task<CommandResult> Handle(UpdatePhoneNumberCommand request, CancellationToken cancellationToken)
+    public virtual async Task<CommandResult> Handle(UpdatePhoneNumberCommand request,
+        CancellationToken cancellationToken)
     {
         var entity = await _repository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
 
@@ -44,7 +45,8 @@ public class UpdatePhoneNumberCommandHandler : IRequestHandler<UpdatePhoneNumber
 
         if (userClaims?.ExternalId is null)
         {
-            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow, typeof(UpdatePhoneNumberCommandHandler));
+            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow,
+                typeof(UpdatePhoneNumberCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -55,7 +57,8 @@ public class UpdatePhoneNumberCommandHandler : IRequestHandler<UpdatePhoneNumber
 
         if (user is null)
         {
-            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(UpdatePhoneNumberCommandHandler));
+            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User),
+                typeof(UpdatePhoneNumberCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -69,7 +72,8 @@ public class UpdatePhoneNumberCommandHandler : IRequestHandler<UpdatePhoneNumber
 
         if (newEntity is null)
         {
-            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(PhoneNumber), typeof(UpdatePhoneNumberCommandHandler));
+            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(PhoneNumber),
+                typeof(UpdatePhoneNumberCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -81,7 +85,8 @@ public class UpdatePhoneNumberCommandHandler : IRequestHandler<UpdatePhoneNumber
             return CommandResult.Success(MessageConstants.SuccessfullyUpdated);
         }
 
-        _logger.LogError(message: MessageConstants.EntityUpdateFailed, DateTime.UtcNow, typeof(PhoneNumber), typeof(UpdatePhoneNumberCommandHandler));
+        _logger.LogError(message: MessageConstants.EntityUpdateFailed, DateTime.UtcNow, typeof(PhoneNumber),
+            typeof(UpdatePhoneNumberCommandHandler));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }
