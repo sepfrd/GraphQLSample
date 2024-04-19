@@ -10,7 +10,8 @@ namespace Infrastructure.Persistence.Common.Helpers;
 
 public class DatabaseSeeder
 {
-    private const int DefaultNumber = 100;
+    private const int DefaultNumber = 200;
+    private const int DefaultLargeNumber = 100_000;
     private readonly IAuthenticationService _authenticationService;
     private readonly IMongoDatabase _mongoDatabase;
     private static readonly Guid AdminRoleInternalId = Guid.NewGuid();
@@ -70,38 +71,41 @@ public class DatabaseSeeder
             fakeCarts[i].UserId = fakeUsers[i].InternalId;
             fakeUsers[i].CartId = fakeCarts[i].InternalId;
 
-            fakeAnswers[i].QuestionId = fakeQuestions[i].InternalId;
-
             fakeCartItems[i].CartId = fakeCarts[i].InternalId;
-            fakeCartItems[i].ProductId = fakeProducts[i].InternalId;
-
-            fakeComments[i].ProductId = fakeProducts[i].InternalId;
-
-            fakeOrders[i].PaymentId = fakePayments[i].InternalId;
-            fakePayments[i].OrderId = fakeOrders[i].InternalId;
-
-            fakeOrders[i].ShipmentId = fakeShipments[i].InternalId;
-            fakeShipments[i].OrderId = fakeOrders[i].InternalId;
-
-            fakeOrderItems[i].OrderId = fakeOrders[i].InternalId;
-
-            fakeOrderItems[i].ProductId = fakeProducts[i].InternalId;
-
-            fakeProducts[i].CategoryId =
-                fakeCategories.ElementAt(Random.Shared.Next(0, fakeCategories.Count)).InternalId;
-
-            fakeQuestions[i].ProductId = fakeProducts[i].InternalId;
 
             fakeShipments[i].DestinationAddressId = fakeAddresses[i].InternalId;
             fakeShipments[i].OriginAddressId = fakeAddresses[DefaultNumber - i - 1].InternalId;
 
             fakeUserRoles[i].UserId = fakeUsers[i].InternalId;
             fakeUserRoles[i].RoleId = fakeRoles.ElementAt(Random.Shared.Next(0, fakeRoles.Count)).InternalId;
+        }
 
-            fakeAnswerVotes[i].ContentId = fakeAnswers[i].InternalId;
-            fakeCommentVotes[i].ContentId = fakeComments[i].InternalId;
-            fakeProductVotes[i].ContentId = fakeProducts[i].InternalId;
-            fakeQuestionVotes[i].ContentId = fakeQuestions[i].InternalId;
+        for (var index = 0; index < DefaultLargeNumber; index++)
+        {
+            if (index < DefaultNumber)
+            {
+                fakeCartItems[index].ProductId = fakeProducts[index].InternalId;
+            }
+
+            fakeAnswers[index].QuestionId = fakeQuestions[index].InternalId;
+            fakeQuestions[index].ProductId = fakeProducts[index].InternalId;
+            fakeComments[index].ProductId = fakeProducts[index].InternalId;
+
+            fakeOrders[index].PaymentId = fakePayments[index].InternalId;
+            fakePayments[index].OrderId = fakeOrders[index].InternalId;
+            fakeOrders[index].ShipmentId = fakeShipments[index].InternalId;
+            fakeShipments[index].OrderId = fakeOrders[index].InternalId;
+
+            fakeOrderItems[index].OrderId = fakeOrders[index].InternalId;
+            fakeOrderItems[index].ProductId = fakeProducts[index].InternalId;
+
+            fakeProducts[index].CategoryId =
+                fakeCategories.ElementAt(Random.Shared.Next(0, fakeCategories.Length)).InternalId;
+
+            fakeAnswerVotes[index].ContentId = fakeAnswers[index].InternalId;
+            fakeCommentVotes[index].ContentId = fakeComments[index].InternalId;
+            fakeProductVotes[index].ContentId = fakeProducts[index].InternalId;
+            fakeQuestionVotes[index].ContentId = fakeQuestions[index].InternalId;
         }
 
         fakeUserRoles[0] = new UserRole
@@ -180,7 +184,7 @@ public class DatabaseSeeder
 
         var fakeAnswers = new List<Answer>();
 
-        for (var i = 0; i < DefaultNumber; i++)
+        for (var i = 0; i < DefaultLargeNumber; i++)
         {
             fakeAnswers.Add(answerFaker.Generate());
         }
@@ -224,77 +228,93 @@ public class DatabaseSeeder
         return fakeCartItems;
     }
 
-    private static List<Category> GetFakeCategories()
+    private static Category[] GetFakeCategories()
     {
         var externalId = 0;
 
-        Category[] categories =
+        Category[] fakeCategories =
         [
             new Category
             {
+                ExternalId = externalId++,
                 Name = "Electronics",
-                Description = "Cutting-edge gadgets and devices for tech enthusiasts"
+                Description = "Cutting-edge gadgets and devices for tech enthusiasts",
+                ImageUrl = "categories/electronics.png",
+                IconUrl = "categories/electronics.png"
             },
             new Category
             {
+                ExternalId = externalId++,
                 Name = "Clothing",
-                Description = "Fashionable apparel and accessories for all occasions"
+                Description = "Fashionable apparel and accessories for all occasions",
+                ImageUrl = "categories/clothing.png",
+                IconUrl = "categories/clothing.png"
             },
             new Category
             {
+                ExternalId = externalId++,
                 Name = "Books",
-                Description = "Engaging reads for bookworms of all ages"
+                Description = "Engaging reads for bookworms of all ages",
+                ImageUrl = "categories/books.png",
+                IconUrl = "categories/books.png"
             },
             new Category
             {
+                ExternalId = externalId++,
                 Name = "Home & Garden",
-                Description = "Decor and essentials to spruce up your living space"
+                Description = "Decor and essentials to spruce up your living space",
+                ImageUrl = "categories/garden.png",
+                IconUrl = "categories/garden.png"
             },
             new Category
             {
+                ExternalId = externalId++,
                 Name = "Toys & Games",
-                Description = "Fun and entertaining toys and games for kids and adults alike"
+                Description = "Fun and entertaining toys and games for kids and adults alike",
+                ImageUrl = "categories/games.png",
+                IconUrl = "categories/games.png"
             },
             new Category
             {
+                ExternalId = externalId++,
                 Name = "Health & Beauty",
-                Description = "Products to enhance your well-being and beauty regimen"
+                Description = "Products to enhance your well-being and beauty regimen",
+                ImageUrl = "categories/health.png",
+                IconUrl = "categories/health.png"
             },
             new Category
             {
+                ExternalId = externalId++,
                 Name = "Sports & Outdoors",
-                Description = "Gear and equipment for outdoor adventures and fitness pursuits"
+                Description = "Gear and equipment for outdoor adventures and fitness pursuits",
+                ImageUrl = "categories/sports.png",
+                IconUrl = "categories/sports.png"
             },
             new Category
             {
+                ExternalId = externalId++,
                 Name = "Pet Supplies",
-                Description = "Essentials and treats for your furry friends"
+                Description = "Essentials and treats for your furry friends",
+                ImageUrl = "categories/pet.png",
+                IconUrl = "categories/pet.png"
             },
             new Category
             {
+                ExternalId = externalId++,
                 Name = "Jewelry & Accessories",
-                Description = "Elegant adornments and stylish accessories to complement any outfit"
+                Description = "Elegant adornments and stylish accessories to complement any outfit",
+                ImageUrl = "categories/jewelry.png",
+                IconUrl = "categories/jewelry.png"
             },
             new Category
             {
+                ExternalId = externalId,
                 Name = "Food & Beverages",
-                Description = "Delicious treats and beverages for every palate"
+                Description = "Delicious treats and beverages for every palate",
+                ImageUrl = "categories/food.png",
+                IconUrl = "categories/food.png"
             }
         ];
-
-        var categoryFaker = new Faker<Category>()
-            .RuleFor(category => category.Description, _ => categories[externalId].Description)
-            .RuleFor(category => category.Name, _ => categories[externalId].Name)
-            .RuleFor(category => category.ExternalId, _ => externalId++)
-            .RuleFor(category => category.IconUrl, faker => faker.Image.PicsumUrl())
-            .RuleFor(category => category.ImageUrl, faker => faker.Image.PicsumUrl());
-
-        var fakeCategories = new List<Category>();
-
-        for (var i = 0; i < 10; i++)
-        {
-            fakeCategories.Add(categoryFaker.Generate());
-        }
 
         return fakeCategories;
     }
@@ -309,7 +329,7 @@ public class DatabaseSeeder
 
         var fakeComments = new List<Comment>();
 
-        for (var i = 0; i < DefaultNumber; i++)
+        for (var i = 0; i < DefaultLargeNumber; i++)
         {
             fakeComments.Add(commentFaker.Generate());
         }
@@ -327,7 +347,7 @@ public class DatabaseSeeder
 
         var fakeOrders = new List<Order>();
 
-        for (var i = 0; i < DefaultNumber; i++)
+        for (var i = 0; i < DefaultLargeNumber; i++)
         {
             fakeOrders.Add(orderFaker.Generate());
         }
@@ -346,7 +366,7 @@ public class DatabaseSeeder
 
         var fakeOrderItems = new List<OrderItem>();
 
-        for (var i = 0; i < DefaultNumber; i++)
+        for (var i = 0; i < DefaultLargeNumber; i++)
         {
             fakeOrderItems.Add(orderItemFaker.Generate());
         }
@@ -367,7 +387,7 @@ public class DatabaseSeeder
 
         var fakePayments = new List<Payment>();
 
-        for (var i = 0; i < DefaultNumber; i++)
+        for (var i = 0; i < DefaultLargeNumber; i++)
         {
             fakePayments.Add(paymentFaker.Generate());
         }
@@ -388,7 +408,7 @@ public class DatabaseSeeder
 
         var fakePhoneNumbers = new List<PhoneNumber>();
 
-        for (var i = 0; i < DefaultNumber; i++)
+        for (var i = 0; i < DefaultLargeNumber; i++)
         {
             fakePhoneNumbers.Add(phoneNumberFaker.Generate());
         }
@@ -405,7 +425,7 @@ public class DatabaseSeeder
             .RuleFor(product => product.StockQuantity, faker => faker.Random.Number(10_000))
             .RuleFor(product => product.Description, faker => faker.Commerce.ProductDescription())
             .RuleFor(product => product.Name, faker => faker.Commerce.ProductName())
-            .RuleFor(product => product.Price, faker => faker.Random.Decimal(0, 1_000_000_000))
+            .RuleFor(product => product.Price, faker => decimal.Parse(faker.Commerce.Price()))
             .RuleFor(product => product.ImageUrls, faker => new List<string>
             {
                 faker.Image.PicsumUrl(),
@@ -417,7 +437,7 @@ public class DatabaseSeeder
 
         var fakeProducts = new List<Product>();
 
-        for (var i = 0; i < DefaultNumber; i++)
+        for (var i = 0; i < DefaultLargeNumber; i++)
         {
             fakeProducts.Add(productFaker.Generate());
         }
@@ -436,7 +456,7 @@ public class DatabaseSeeder
 
         var fakeQuestions = new List<Question>();
 
-        for (var i = 0; i < DefaultNumber; i++)
+        for (var i = 0; i < DefaultLargeNumber; i++)
         {
             fakeQuestions.Add(questionFaker.Generate());
         }
@@ -480,7 +500,7 @@ public class DatabaseSeeder
 
         var fakeShipments = new List<Shipment>();
 
-        for (var i = 0; i < DefaultNumber; i++)
+        for (var i = 0; i < DefaultLargeNumber; i++)
         {
             fakeShipments.Add(shipmentFaker.Generate());
         }
@@ -499,7 +519,7 @@ public class DatabaseSeeder
 
         var fakeAnswerVotes = new List<Vote>();
 
-        for (var i = 0; i < DefaultNumber; i++)
+        for (var i = 0; i < DefaultLargeNumber; i++)
         {
             fakeAnswerVotes.Add(voteFaker.Generate());
         }
@@ -509,7 +529,7 @@ public class DatabaseSeeder
 
     private static List<Vote> GetFakeCommentVotes()
     {
-        var externalId = DefaultNumber;
+        var externalId = DefaultLargeNumber;
 
         var voteFaker = new Faker<Vote>()
             .RuleFor(vote => vote.ExternalId, _ => externalId++)
@@ -518,7 +538,7 @@ public class DatabaseSeeder
 
         var fakeCommentVotes = new List<Vote>();
 
-        for (var i = 0; i < DefaultNumber; i++)
+        for (var i = 0; i < DefaultLargeNumber; i++)
         {
             fakeCommentVotes.Add(voteFaker.Generate());
         }
@@ -528,7 +548,7 @@ public class DatabaseSeeder
 
     private static List<Vote> GetFakeProductVotes()
     {
-        var externalId = DefaultNumber * 2;
+        var externalId = DefaultLargeNumber * 2;
 
         var voteFaker = new Faker<Vote>()
             .RuleFor(vote => vote.ExternalId, _ => externalId++)
@@ -537,7 +557,7 @@ public class DatabaseSeeder
 
         var fakeProductVotes = new List<Vote>();
 
-        for (var i = 0; i < DefaultNumber; i++)
+        for (var i = 0; i < DefaultLargeNumber; i++)
         {
             fakeProductVotes.Add(voteFaker.Generate());
         }
@@ -547,7 +567,7 @@ public class DatabaseSeeder
 
     private static List<Vote> GetFakeQuestionVotes()
     {
-        var externalId = DefaultNumber * 3;
+        var externalId = DefaultLargeNumber * 3;
 
         var voteFaker = new Faker<Vote>()
             .RuleFor(vote => vote.ExternalId, _ => externalId++)
@@ -556,7 +576,7 @@ public class DatabaseSeeder
 
         var fakeQuestionVotes = new List<Vote>();
 
-        for (var i = 0; i < DefaultNumber; i++)
+        for (var i = 0; i < DefaultLargeNumber; i++)
         {
             fakeQuestionVotes.Add(voteFaker.Generate());
         }

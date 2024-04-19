@@ -69,7 +69,7 @@ public class OrderType : ObjectType<Order>
 
     private sealed class Resolvers
     {
-        public static async Task<Payment?> GetPaymentAsync([Parent] Order order, [Service] ISender sender)
+        public async static Task<Payment?> GetPaymentAsync([Parent] Order order, [Service] ISender sender)
         {
             var paymentsQuery = new GetAllPaymentsQuery(x => x.OrderId == order.InternalId);
 
@@ -78,7 +78,7 @@ public class OrderType : ObjectType<Order>
             return result.Data?.FirstOrDefault();
         }
 
-        public static async Task<Shipment?> GetShipmentAsync([Parent] Order order, [Service] ISender sender)
+        public async static Task<Shipment?> GetShipmentAsync([Parent] Order order, [Service] ISender sender)
         {
             var shipmentsQuery = new GetAllShipmentsQuery(x => x.OrderId == order.InternalId);
 
@@ -87,8 +87,9 @@ public class OrderType : ObjectType<Order>
             return result.Data?.FirstOrDefault();
         }
 
-        public static async Task<IEnumerable<OrderItem>?> GetOrderItemsAsync([Parent] Order order,
-            [Service] ISender sender)
+        public async static Task<IEnumerable<OrderItem>?> GetOrderItemsAsync([Parent] Order order,
+            [Service]
+            ISender sender)
         {
             var orderItemsQuery = new GetAllOrderItemsQuery(x => x.OrderId == order.InternalId);
 

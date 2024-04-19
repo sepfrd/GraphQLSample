@@ -66,7 +66,7 @@ public class OrderItemType : ObjectType<OrderItem>
 
     private sealed class Resolvers
     {
-        public static async Task<Product?> GetProductAsync([Parent] OrderItem orderItem, [Service] ISender sender)
+        public async static Task<Product?> GetProductAsync([Parent] OrderItem orderItem, [Service] ISender sender)
         {
             var productsQuery = new GetAllProductsQuery(x => x.InternalId == orderItem.ProductId);
 
@@ -75,7 +75,7 @@ public class OrderItemType : ObjectType<OrderItem>
             return result.Data?.FirstOrDefault();
         }
 
-        public static async Task<Order?> GetOrderAsync([Parent] OrderItem orderItem, [Service] ISender sender)
+        public async static Task<Order?> GetOrderAsync([Parent] OrderItem orderItem, [Service] ISender sender)
         {
             var ordersQuery = new GetAllOrdersQuery(x => x.InternalId == orderItem.OrderId);
 

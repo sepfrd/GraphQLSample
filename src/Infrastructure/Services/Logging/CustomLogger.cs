@@ -50,7 +50,7 @@ public class CustomLogger : ILogger
             return;
         }
 
-        LogEventLevel serilogLogLevel = logLevel switch
+        var serilogLogLevel = logLevel switch
         {
             LogLevel.Trace => LogEventLevel.Verbose,
             LogLevel.Debug => LogEventLevel.Debug,

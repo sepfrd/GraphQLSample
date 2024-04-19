@@ -54,7 +54,7 @@ public class CartType : ObjectType<Cart>
 
     private sealed class Resolvers
     {
-        public static async Task<User?> GetUserAsync([Parent] Cart cart, [Service] ISender sender)
+        public async static Task<User?> GetUserAsync([Parent] Cart cart, [Service] ISender sender)
         {
             var usersQuery = new GetAllUsersQuery(x => x.InternalId == cart.UserId);
 
@@ -63,7 +63,7 @@ public class CartType : ObjectType<Cart>
             return result.Data?.FirstOrDefault();
         }
 
-        public static async Task<IEnumerable<CartItem>?> GetCartItemsAsync([Parent] Cart cart, [Service] ISender sender)
+        public async static Task<IEnumerable<CartItem>?> GetCartItemsAsync([Parent] Cart cart, [Service] ISender sender)
         {
             var cartItemsQuery = new GetAllCartItemsQuery(x => x.CartId == cart.InternalId);
 

@@ -43,7 +43,7 @@ public class PaymentType : ObjectType<Payment>
 
     private sealed class Resolvers
     {
-        public static async Task<Order?> GetOrderAsync([Parent] Payment payment, [Service] ISender sender)
+        public async static Task<Order?> GetOrderAsync([Parent] Payment payment, [Service] ISender sender)
         {
             var ordersQuery = new GetAllOrdersQuery(x => x.InternalId == payment.OrderId);
 

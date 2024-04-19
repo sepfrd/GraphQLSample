@@ -36,7 +36,7 @@ public class RoleType : ObjectType<Role>
 
     private sealed class Resolvers
     {
-        public static async Task<IEnumerable<UserRole>?> GetUserRolesAsync([Parent] Role role, [Service] ISender sender)
+        public async static Task<IEnumerable<UserRole>?> GetUserRolesAsync([Parent] Role role, [Service] ISender sender)
         {
             var userRolesQuery = new GetAllUserRolesQuery(userRole => userRole.RoleId == role.InternalId);
 

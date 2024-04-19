@@ -5,6 +5,7 @@ using Application.EntityManagement.Questions.Queries;
 using Application.EntityManagement.Users.Queries;
 using Domain.Abstractions;
 using Domain.Entities;
+using Domain.Enums;
 using MediatR;
 
 namespace Web.GraphQL.Types;
@@ -60,7 +61,7 @@ public class VoteType : ObjectType<Vote>
 
     private sealed class Resolvers
     {
-        public static async Task<User?> GetUserAsync([Parent] Vote vote, [Service] ISender sender)
+        public async static Task<User?> GetUserAsync([Parent] Vote vote, [Service] ISender sender)
         {
             var usersQuery = new GetAllUsersQuery(x => x.InternalId == vote.UserId);
 
@@ -69,11 +70,11 @@ public class VoteType : ObjectType<Vote>
             return result.Data?.FirstOrDefault();
         }
 
-        public static async Task<IVotableContent?> GetContentAsync([Parent] Vote vote, [Service] ISender sender)
+        public async static Task<IVotableContent?> GetContentAsync([Parent] Vote vote, [Service] ISender sender)
         {
-            switch (vote.Content)
+            switch (vote.ContentType)
             {
-                case Answer:
+                case VotableContentType.Answer:
                 {
                     var contentsQuery = new GetAllAnswersQuery(x => x.InternalId == vote.ContentId);
 
@@ -82,7 +83,7 @@ public class VoteType : ObjectType<Vote>
                     return result.Data?.FirstOrDefault();
                 }
 
-                case Comment:
+                case VotableContentType.Comment:
                 {
                     var contentsQuery = new GetAllCommentsQuery(x => x.InternalId == vote.ContentId);
 
@@ -91,7 +92,7 @@ public class VoteType : ObjectType<Vote>
                     return result.Data?.FirstOrDefault();
                 }
 
-                case Product:
+                case VotableContentType.Product:
                 {
                     var contentsQuery = new GetAllProductsQuery(x => x.InternalId == vote.ContentId);
 
@@ -100,7 +101,7 @@ public class VoteType : ObjectType<Vote>
                     return result.Data?.FirstOrDefault();
                 }
 
-                case Question:
+                case VotableContentType.Question:
                 {
                     var contentsQuery = new GetAllQuestionsQuery(x => x.InternalId == vote.ContentId);
 

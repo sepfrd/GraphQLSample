@@ -70,15 +70,11 @@ public class AuthenticationService : IAuthenticationService
 
         var claims = new ClaimsIdentity(new[]
         {
-            new Claim(JwtRegisteredClaimNames.Iss, DomainConstants.ApplicationUrl),
-            new Claim(JwtRegisteredClaimNames.Aud, DomainConstants.ApplicationUrl), new Claim(
+            new Claim(JwtRegisteredClaimNames.Iss, DomainConstants.ApplicationUrl), new Claim(JwtRegisteredClaimNames.Aud, DomainConstants.ApplicationUrl), new Claim(
                 JwtRegisteredClaimNames.Iat,
                 DateTime.Now.ToUniversalTime()
                     .ToString(CultureInfo.InvariantCulture)),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            new Claim(JwtClaimConstants.UsernameClaim, user.Username),
-            new Claim(JwtClaimConstants.ExternalIdClaim, user.ExternalId.ToString())
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), new Claim(JwtRegisteredClaimNames.Email, user.Email), new Claim(JwtClaimConstants.UsernameClaim, user.Username), new Claim(JwtClaimConstants.ExternalIdClaim, user.ExternalId.ToString())
         });
 
         foreach (var role in roles)

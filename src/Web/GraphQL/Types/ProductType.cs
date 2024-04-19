@@ -3,6 +3,7 @@ using Application.EntityManagement.Comments.Queries;
 using Application.EntityManagement.Questions.Queries;
 using Application.EntityManagement.Votes.Queries;
 using Domain.Entities;
+using Domain.Enums;
 using MediatR;
 
 namespace Web.GraphQL.Types;
@@ -70,7 +71,7 @@ public class ProductType : ObjectType<Product>
 
     private sealed class Resolvers
     {
-        public static async Task<Category?> GetCategoryAsync([Parent] Product product, [Service] ISender sender)
+        public async static Task<Category?> GetCategoryAsync([Parent] Product product, [Service] ISender sender)
         {
             var categoriesQuery = new GetAllCategoriesQuery(x => x.InternalId == product.CategoryId);
 
@@ -79,17 +80,18 @@ public class ProductType : ObjectType<Product>
             return result.Data?.FirstOrDefault();
         }
 
-        public static async Task<IEnumerable<Vote>?> GetVotesAsync([Parent] Product product, [Service] ISender sender)
+        public async static Task<IEnumerable<Vote>?> GetVotesAsync([Parent] Product product, [Service] ISender sender)
         {
-            var votesQuery = new GetAllVotesQuery(x => x.ContentId == product.InternalId && x.Content is Product);
+            var votesQuery = new GetAllVotesQuery(x => x.ContentId == product.InternalId && x.ContentType == VotableContentType.Product);
 
             var result = await sender.Send(votesQuery);
 
             return result.Data;
         }
 
-        public static async Task<IEnumerable<Comment>?> GetCommentsAsync([Parent] Product product,
-            [Service] ISender sender)
+        public async static Task<IEnumerable<Comment>?> GetCommentsAsync([Parent] Product product,
+            [Service]
+            ISender sender)
         {
             var commentsQuery = new GetAllCommentsQuery(x => x.ProductId == product.InternalId);
 
@@ -98,8 +100,9 @@ public class ProductType : ObjectType<Product>
             return result.Data;
         }
 
-        public static async Task<IEnumerable<Question>?> GetQuestionsAsync([Parent] Product product,
-            [Service] ISender sender)
+        public async static Task<IEnumerable<Question>?> GetQuestionsAsync([Parent] Product product,
+            [Service]
+            ISender sender)
         {
             var questionsQuery = new GetAllQuestionsQuery(x => x.ProductId == product.InternalId);
 

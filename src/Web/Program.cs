@@ -52,6 +52,9 @@ try
             authenticationService);
 
         dataSeeder.SeedData();
+
+        Console.BackgroundColor = ConsoleColor.DarkGreen;
+        Console.WriteLine("Database successfully seeded.");
     }
 
     if (app.Environment.IsDevelopment())

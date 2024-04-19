@@ -2,6 +2,7 @@ using Application.EntityManagement.Questions.Queries;
 using Application.EntityManagement.Users.Queries;
 using Application.EntityManagement.Votes.Queries;
 using Domain.Entities;
+using Domain.Enums;
 using MediatR;
 
 namespace Web.GraphQL.Types;
@@ -74,7 +75,7 @@ public class AnswerType : ObjectType<Answer>
 
     private sealed class Resolvers
     {
-        public static async Task<Question?> GetQuestionAsync([Parent] Answer answer, [Service] ISender sender)
+        public async static Task<Question?> GetQuestionAsync([Parent] Answer answer, [Service] ISender sender)
         {
             var questionsQuery = new GetAllQuestionsQuery(x => x.InternalId == answer.QuestionId);
 
@@ -83,7 +84,7 @@ public class AnswerType : ObjectType<Answer>
             return result.Data?.FirstOrDefault();
         }
 
-        public static async Task<User?> GetUserAsync([Parent] Answer answer, [Service] ISender sender)
+        public async static Task<User?> GetUserAsync([Parent] Answer answer, [Service] ISender sender)
         {
             var usersQuery = new GetAllUsersQuery(x => x.InternalId == answer.UserId);
 
@@ -92,9 +93,9 @@ public class AnswerType : ObjectType<Answer>
             return result.Data?.FirstOrDefault();
         }
 
-        public static async Task<IEnumerable<Vote>?> GetVotesAsync([Parent] Answer answer, [Service] ISender sender)
+        public async static Task<IEnumerable<Vote>?> GetVotesAsync([Parent] Answer answer, [Service] ISender sender)
         {
-            var votesQuery = new GetAllVotesQuery(x => x.ContentId == answer.InternalId && x.Content is Answer);
+            var votesQuery = new GetAllVotesQuery(x => x.ContentId == answer.InternalId && x.ContentType == VotableContentType.Answer);
 
             var result = await sender.Send(votesQuery);
 

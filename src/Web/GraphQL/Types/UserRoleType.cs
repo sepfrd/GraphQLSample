@@ -42,7 +42,7 @@ public class UserRoleType : ObjectType<UserRole>
 
     private class Resolvers
     {
-        public static async Task<Role?> GetRoleAsync([Parent] UserRole userRole, [Service] ISender sender)
+        public async static Task<Role?> GetRoleAsync([Parent] UserRole userRole, [Service] ISender sender)
         {
             var rolesQuery = new GetAllRolesQuery(role => role.InternalId == userRole.RoleId);
 
@@ -51,7 +51,7 @@ public class UserRoleType : ObjectType<UserRole>
             return result.Data?.FirstOrDefault();
         }
 
-        public static async Task<User?> GetUserAsync([Parent] UserRole userRole, [Service] ISender sender)
+        public async static Task<User?> GetUserAsync([Parent] UserRole userRole, [Service] ISender sender)
         {
             var userQuery = new GetUserByInternalIdQuery(userRole.UserId);
 

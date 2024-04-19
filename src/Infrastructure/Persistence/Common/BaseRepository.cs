@@ -16,7 +16,7 @@ public class BaseRepository<TEntity> : IRepository<TEntity>
     {
         var mongoClient = new MongoClient(databaseSettings.Value.ConnectionString);
 
-        IMongoDatabase mongoDatabase = mongoClient.GetDatabase(databaseSettings.Value.DatabaseName);
+        var mongoDatabase = mongoClient.GetDatabase(databaseSettings.Value.DatabaseName);
 
         var collectionName = typeof(TEntity).Name.Pluralize();
 

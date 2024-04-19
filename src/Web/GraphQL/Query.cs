@@ -3,12 +3,14 @@ using Application.EntityManagement.Products.Queries;
 using Application.EntityManagement.Users.Queries;
 using Domain.Entities;
 using MediatR;
+using MethodTimer;
 
 namespace Web.GraphQL;
 
 public class Query
 {
-    public static async Task<IEnumerable<Category>?> GetCategoriesAsync([Service] ISender sender,
+    [Time]
+    public async static Task<IEnumerable<Category>?> GetCategoriesAsync([Service] ISender sender,
         CancellationToken cancellationToken)
     {
         var categoryQuery = new GetAllCategoriesQuery();
@@ -18,7 +20,8 @@ public class Query
         return result.Data;
     }
 
-    public static async Task<IEnumerable<Product>?> GetProductsAsync([Service] ISender sender,
+    [Time]
+    public async static Task<IEnumerable<Product>?> GetProductsAsync([Service] ISender sender,
         CancellationToken cancellationToken)
     {
         var productQuery = new GetAllProductsQuery();
@@ -28,7 +31,8 @@ public class Query
         return result.Data;
     }
 
-    public static async Task<IEnumerable<User>?> GetUsersAsync([Service] ISender sender,
+    [Time]
+    public async static Task<IEnumerable<User>?> GetUsersAsync([Service] ISender sender,
         CancellationToken cancellationToken)
     {
         var usersQuery = new GetAllUsersQuery();

@@ -68,7 +68,7 @@ public class ShipmentType : ObjectType<Shipment>
 
     private sealed class Resolvers
     {
-        public static async Task<Order?> GetOrderAsync([Parent] Shipment shipment, [Service] ISender sender)
+        public async static Task<Order?> GetOrderAsync([Parent] Shipment shipment, [Service] ISender sender)
         {
             var ordersQuery = new GetAllOrdersQuery(x => x.InternalId == shipment.OrderId);
 
@@ -77,8 +77,9 @@ public class ShipmentType : ObjectType<Shipment>
             return result.Data?.FirstOrDefault();
         }
 
-        public static async Task<Address?> GetDestinationAddressAsync([Parent] Shipment shipment,
-            [Service] ISender sender)
+        public async static Task<Address?> GetDestinationAddressAsync([Parent] Shipment shipment,
+            [Service]
+            ISender sender)
         {
             var addressesQuery = new GetAllAddressesQuery(x => x.InternalId == shipment.DestinationAddressId);
 
@@ -87,7 +88,7 @@ public class ShipmentType : ObjectType<Shipment>
             return result.Data?.FirstOrDefault();
         }
 
-        public static async Task<Address?> GetOriginAddressAsync([Parent] Shipment shipment, [Service] ISender sender)
+        public async static Task<Address?> GetOriginAddressAsync([Parent] Shipment shipment, [Service] ISender sender)
         {
             var addressesQuery = new GetAllAddressesQuery(x => x.InternalId == shipment.OriginAddressId);
 

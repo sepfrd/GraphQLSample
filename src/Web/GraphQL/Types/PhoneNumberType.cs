@@ -43,7 +43,7 @@ public class PhoneNumberType : ObjectType<PhoneNumber>
 
     private sealed class Resolvers
     {
-        public static async Task<User?> GetUserAsync([Parent] PhoneNumber phoneNumber, [Service] ISender sender)
+        public async static Task<User?> GetUserAsync([Parent] PhoneNumber phoneNumber, [Service] ISender sender)
         {
             var usersQuery = new GetAllUsersQuery(x => x.InternalId == phoneNumber.UserId);
 

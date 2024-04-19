@@ -42,7 +42,7 @@ public class PersonType : ObjectType<Person>
 
     private sealed class Resolvers
     {
-        public static async Task<User?> GetUserAsync([Parent] Person person, [Service] ISender sender)
+        public async static Task<User?> GetUserAsync([Parent] Person person, [Service] ISender sender)
         {
             var usersQuery = new GetAllUsersQuery(x => x.InternalId == person.UserId);
 

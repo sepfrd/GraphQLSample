@@ -140,7 +140,7 @@ public class UserType : ObjectType<User>
 
     private class Resolvers
     {
-        public static async Task<Person?> GetPersonAsync([Parent] User user, [Service] ISender sender)
+        public async static Task<Person?> GetPersonAsync([Parent] User user, [Service] ISender sender)
         {
             var personsQuery = new GetAllPersonsQuery(x => x.InternalId == user.PersonId);
 
@@ -149,7 +149,7 @@ public class UserType : ObjectType<User>
             return result.Data?.FirstOrDefault();
         }
 
-        public static async Task<Cart?> GetCartAsync([Parent] User user, [Service] ISender sender)
+        public async static Task<Cart?> GetCartAsync([Parent] User user, [Service] ISender sender)
         {
             var cartsQuery = new GetAllCartsQuery(x => x.InternalId == user.CartId);
 
@@ -158,7 +158,7 @@ public class UserType : ObjectType<User>
             return result.Data?.FirstOrDefault();
         }
 
-        public static async Task<IEnumerable<Address>?> GetAddressesAsync([Parent] User user, [Service] ISender sender)
+        public async static Task<IEnumerable<Address>?> GetAddressesAsync([Parent] User user, [Service] ISender sender)
         {
             var addressesQuery = new GetAllAddressesQuery(address => address.UserId == user.InternalId);
 
@@ -167,7 +167,7 @@ public class UserType : ObjectType<User>
             return result.Data;
         }
 
-        public static async Task<IEnumerable<Answer>?> GetAnswersAsync([Parent] User user, [Service] ISender sender)
+        public async static Task<IEnumerable<Answer>?> GetAnswersAsync([Parent] User user, [Service] ISender sender)
         {
             var answersQuery = new GetAllAnswersQuery(answer => answer.UserId == user.InternalId);
 
@@ -176,7 +176,7 @@ public class UserType : ObjectType<User>
             return result.Data;
         }
 
-        public static async Task<IEnumerable<Comment>?> GetCommentsAsync([Parent] User user, [Service] ISender sender)
+        public async static Task<IEnumerable<Comment>?> GetCommentsAsync([Parent] User user, [Service] ISender sender)
         {
             var commentsQuery = new GetAllCommentsQuery(comment => comment.UserId == user.InternalId);
 
@@ -185,7 +185,7 @@ public class UserType : ObjectType<User>
             return result.Data;
         }
 
-        public static async Task<IEnumerable<Order>?> GetOrdersAsync([Parent] User user, [Service] ISender sender)
+        public async static Task<IEnumerable<Order>?> GetOrdersAsync([Parent] User user, [Service] ISender sender)
         {
             var ordersQuery = new GetAllOrdersQuery(order => order.UserId == user.InternalId);
 
@@ -194,7 +194,7 @@ public class UserType : ObjectType<User>
             return result.Data;
         }
 
-        public static async Task<IEnumerable<Question>?> GetQuestionsAsync([Parent] User user, [Service] ISender sender)
+        public async static Task<IEnumerable<Question>?> GetQuestionsAsync([Parent] User user, [Service] ISender sender)
         {
             var questionsQuery = new GetAllQuestionsQuery(question => question.UserId == user.InternalId);
 
@@ -203,7 +203,7 @@ public class UserType : ObjectType<User>
             return result.Data;
         }
 
-        public static async Task<IEnumerable<UserRole>?> GetUserRolesAsync([Parent] User user, [Service] ISender sender)
+        public async static Task<IEnumerable<UserRole>?> GetUserRolesAsync([Parent] User user, [Service] ISender sender)
         {
             var userRolesQuery = new GetAllUserRolesQuery(userRole => userRole.UserId == user.InternalId);
 
@@ -212,7 +212,7 @@ public class UserType : ObjectType<User>
             return result.Data;
         }
 
-        public static async Task<IEnumerable<Vote>?> GetVotesAsync([Parent] User user, [Service] ISender sender)
+        public async static Task<IEnumerable<Vote>?> GetVotesAsync([Parent] User user, [Service] ISender sender)
         {
             var votesQuery = new GetAllVotesQuery(vote => vote.UserId == user.InternalId);
 
@@ -221,8 +221,9 @@ public class UserType : ObjectType<User>
             return result.Data;
         }
 
-        public static async Task<IEnumerable<PhoneNumber>?> GetPhoneNumbersAsync([Parent] User user,
-            [Service] ISender sender)
+        public async static Task<IEnumerable<PhoneNumber>?> GetPhoneNumbersAsync([Parent] User user,
+            [Service]
+            ISender sender)
         {
             var phoneNumbersQuery = new GetAllPhoneNumbersQuery(phoneNumber => phoneNumber.UserId == user.InternalId);
 

@@ -48,14 +48,11 @@ public static class AuthHelper
 
         var claims = new ClaimsIdentity(new[]
         {
-            new Claim(JwtRegisteredClaimNames.Iss, DomainConstants.ApplicationUrl),
-            new Claim(JwtRegisteredClaimNames.Aud, DomainConstants.ApplicationUrl), new Claim(
+            new Claim(JwtRegisteredClaimNames.Iss, DomainConstants.ApplicationUrl), new Claim(JwtRegisteredClaimNames.Aud, DomainConstants.ApplicationUrl), new Claim(
                 JwtRegisteredClaimNames.Iat,
                 DateTime.Now.ToUniversalTime()
                     .ToString(CultureInfo.InvariantCulture)),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(JwtRegisteredClaimNames.Email, email), new Claim(JwtClaimConstants.UsernameClaim, username),
-            new Claim(JwtClaimConstants.ExternalIdClaim, externalId.ToString())
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), new Claim(JwtRegisteredClaimNames.Email, email), new Claim(JwtClaimConstants.UsernameClaim, username), new Claim(JwtClaimConstants.ExternalIdClaim, externalId.ToString())
         });
 
         foreach (var role in roles)
