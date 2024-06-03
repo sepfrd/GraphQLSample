@@ -87,7 +87,8 @@ public class CommentType : ObjectType<Comment>
 
         public async static Task<IEnumerable<Vote>?> GetVotesAsync([Parent] Comment comment, [Service] ISender sender)
         {
-            var votesQuery = new GetAllVotesQuery(x => x.ContentId == comment.InternalId && x.ContentType == VotableContentType.Comment);
+            var votesQuery = new GetAllVotesQuery(x =>
+                x.ContentId == comment.InternalId && x.ContentType == VotableContentType.Comment);
 
             var result = await sender.Send(votesQuery);
 

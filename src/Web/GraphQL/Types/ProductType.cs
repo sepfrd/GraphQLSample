@@ -82,7 +82,8 @@ public class ProductType : ObjectType<Product>
 
         public async static Task<IEnumerable<Vote>?> GetVotesAsync([Parent] Product product, [Service] ISender sender)
         {
-            var votesQuery = new GetAllVotesQuery(x => x.ContentId == product.InternalId && x.ContentType == VotableContentType.Product);
+            var votesQuery = new GetAllVotesQuery(x =>
+                x.ContentId == product.InternalId && x.ContentType == VotableContentType.Product);
 
             var result = await sender.Send(votesQuery);
 
@@ -90,8 +91,7 @@ public class ProductType : ObjectType<Product>
         }
 
         public async static Task<IEnumerable<Comment>?> GetCommentsAsync([Parent] Product product,
-            [Service]
-            ISender sender)
+            [Service] ISender sender)
         {
             var commentsQuery = new GetAllCommentsQuery(x => x.ProductId == product.InternalId);
 
@@ -101,8 +101,7 @@ public class ProductType : ObjectType<Product>
         }
 
         public async static Task<IEnumerable<Question>?> GetQuestionsAsync([Parent] Product product,
-            [Service]
-            ISender sender)
+            [Service] ISender sender)
         {
             var questionsQuery = new GetAllQuestionsQuery(x => x.ProductId == product.InternalId);
 

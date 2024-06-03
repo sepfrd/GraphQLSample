@@ -78,8 +78,7 @@ public class ShipmentType : ObjectType<Shipment>
         }
 
         public async static Task<Address?> GetDestinationAddressAsync([Parent] Shipment shipment,
-            [Service]
-            ISender sender)
+            [Service] ISender sender)
         {
             var addressesQuery = new GetAllAddressesQuery(x => x.InternalId == shipment.DestinationAddressId);
 

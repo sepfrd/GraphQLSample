@@ -1,0 +1,13 @@
+version: '1.0'
+services:
+  online-shop-sample:
+    image: online-shop-sample:1.0
+    ports:
+      - "4000:80"
+    depends_on:
+      - mongodb
+  mongodb:
+    image: mongo
+    restart: "no"
+    ports:
+      - "27017:27017"

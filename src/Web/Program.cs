@@ -1,5 +1,6 @@
 using Application;
 using Application.Abstractions;
+using Application.Common.Constants;
 using Infrastructure;
 using Infrastructure.Persistence.Common.Helpers;
 using Infrastructure.Services.Logging;
@@ -30,6 +31,16 @@ try
         .Services
         .AddHttpContextAccessor()
         .AddEndpointsApiExplorer()
+        .AddCors(options =>
+        {
+            options.AddPolicy(PolicyConstants.CorsPolicy, policyBuilder =>
+            {
+                policyBuilder
+                    .AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
+        })
         .AddSingleton<ILogger, CustomLogger>()
         .InjectApplicationLayer()
         .InjectInfrastructureLayer(builder.Configuration)
@@ -66,8 +77,8 @@ try
 
     app
         // .UseHttpsRedirection()
-        // .UseCors("AllowAnyOrigin")
         .UseRouting()
+        .UseCors()
         .UseAuthentication()
         .UseAuthorization()
         .UseEndpoints(endpoints =>

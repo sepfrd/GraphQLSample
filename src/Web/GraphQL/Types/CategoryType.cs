@@ -56,8 +56,7 @@ public class CategoryType : ObjectType<Category>
     private sealed class Resolvers
     {
         public async static Task<IEnumerable<Product>?> GetProductsAsync([Parent] Category category,
-            [Service]
-            ISender sender)
+            [Service] ISender sender)
         {
             var productsQuery = new GetAllProductsQuery(x => x.CategoryId == category.InternalId);
 

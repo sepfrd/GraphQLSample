@@ -222,8 +222,7 @@ public class UserType : ObjectType<User>
         }
 
         public async static Task<IEnumerable<PhoneNumber>?> GetPhoneNumbersAsync([Parent] User user,
-            [Service]
-            ISender sender)
+            [Service] ISender sender)
         {
             var phoneNumbersQuery = new GetAllPhoneNumbersQuery(phoneNumber => phoneNumber.UserId == user.InternalId);
 

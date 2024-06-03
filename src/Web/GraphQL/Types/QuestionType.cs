@@ -75,8 +75,7 @@ public class QuestionType : ObjectType<Question>
         }
 
         public async static Task<IEnumerable<Answer>?> GetAnswersAsync([Parent] Question question,
-            [Service]
-            ISender sender)
+            [Service] ISender sender)
         {
             var answersQuery = new GetAllAnswersQuery(x => x.QuestionId == question.InternalId);
 
@@ -87,7 +86,8 @@ public class QuestionType : ObjectType<Question>
 
         public async static Task<IEnumerable<Vote>?> GetVotesAsync([Parent] Question question, [Service] ISender sender)
         {
-            var votesQuery = new GetAllVotesQuery(x => x.ContentId == question.InternalId && x.ContentType == VotableContentType.Question);
+            var votesQuery = new GetAllVotesQuery(x =>
+                x.ContentId == question.InternalId && x.ContentType == VotableContentType.Question);
 
             var result = await sender.Send(votesQuery);
 

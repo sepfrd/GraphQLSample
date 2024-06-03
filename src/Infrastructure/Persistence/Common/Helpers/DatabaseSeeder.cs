@@ -110,14 +110,14 @@ public class DatabaseSeeder
 
         fakeUserRoles[0] = new UserRole
         {
-            ExternalId = 0,
+            ExternalId = 1,
             UserId = AdminUserInternalId,
             RoleId = AdminRoleInternalId
         };
 
         fakeUserRoles[1] = new UserRole
         {
-            ExternalId = 1,
+            ExternalId = 2,
             UserId = CustomerUserInternalId,
             RoleId = CustomerRoleInternalId
         };
@@ -151,7 +151,7 @@ public class DatabaseSeeder
 
     private static List<Address> GetFakeAddresses()
     {
-        var externalId = 0;
+        var externalId = 1;
 
         var addressFaker = new Faker<Address>()
             .RuleFor(address => address.ExternalId, _ => externalId++)
@@ -175,7 +175,7 @@ public class DatabaseSeeder
 
     private static List<Answer> GetFakeAnswers()
     {
-        var externalId = 0;
+        var externalId = 1;
 
         var answerFaker = new Faker<Answer>()
             .RuleFor(answer => answer.ExternalId, _ => externalId++)
@@ -194,7 +194,7 @@ public class DatabaseSeeder
 
     private static List<Cart> GetFakeCarts()
     {
-        var externalId = 0;
+        var externalId = 1;
 
         var cartFaker = new Faker<Cart>()
             .RuleFor(cart => cart.ExternalId, _ => externalId++);
@@ -211,7 +211,7 @@ public class DatabaseSeeder
 
     private static List<CartItem> GetFakeCartItems()
     {
-        var externalId = 0;
+        var externalId = 1;
 
         var cartItemFaker = new Faker<CartItem>()
             .RuleFor(cartItem => cartItem.ExternalId, _ => externalId++)
@@ -230,7 +230,7 @@ public class DatabaseSeeder
 
     private static Category[] GetFakeCategories()
     {
-        var externalId = 0;
+        var externalId = 1;
 
         Category[] fakeCategories =
         [
@@ -321,7 +321,7 @@ public class DatabaseSeeder
 
     private static List<Comment> GetFakeComments()
     {
-        var externalId = 0;
+        var externalId = 1;
 
         var commentFaker = new Faker<Comment>()
             .RuleFor(comment => comment.ExternalId, _ => externalId++)
@@ -339,7 +339,7 @@ public class DatabaseSeeder
 
     private static List<Order> GetFakeOrders()
     {
-        var externalId = 0;
+        var externalId = 1;
 
         var orderFaker = new Faker<Order>()
             .RuleFor(order => order.ExternalId, _ => externalId++)
@@ -357,7 +357,7 @@ public class DatabaseSeeder
 
     private static List<OrderItem> GetFakeOrderItems()
     {
-        var externalId = 0;
+        var externalId = 1;
 
         var orderItemFaker = new Faker<OrderItem>()
             .RuleFor(orderItem => orderItem.ExternalId, _ => externalId++)
@@ -376,7 +376,7 @@ public class DatabaseSeeder
 
     private static List<Payment> GetFakePayments()
     {
-        var externalId = 0;
+        var externalId = 1;
 
         var paymentFaker = new Faker<Payment>()
             .RuleFor(payment => payment.ExternalId, _ => externalId++)
@@ -397,7 +397,7 @@ public class DatabaseSeeder
 
     private static List<PhoneNumber> GetFakePhoneNumbers()
     {
-        var externalId = 0;
+        var externalId = 1;
 
         var phoneNumberFaker = new Faker<PhoneNumber>()
             .RuleFor(phoneNumber => phoneNumber.ExternalId, _ => externalId++)
@@ -418,7 +418,7 @@ public class DatabaseSeeder
 
     private static List<Product> GetFakeProducts()
     {
-        var externalId = 0;
+        var externalId = 1;
 
         var productFaker = new Faker<Product>()
             .RuleFor(product => product.ExternalId, _ => externalId++)
@@ -447,7 +447,7 @@ public class DatabaseSeeder
 
     private static List<Question> GetFakeQuestions()
     {
-        var externalId = 0;
+        var externalId = 1;
 
         var questionFaker = new Faker<Question>()
             .RuleFor(question => question.ExternalId, _ => externalId++)
@@ -469,7 +469,7 @@ public class DatabaseSeeder
         new Role
         {
             InternalId = AdminRoleInternalId,
-            ExternalId = 0,
+            ExternalId = 1,
             Title = RoleConstants.Admin,
             Description = "The Highest Role in the Application Role Hierarchy"
         },
@@ -477,7 +477,7 @@ public class DatabaseSeeder
         new Role
         {
             InternalId = CustomerRoleInternalId,
-            ExternalId = 1,
+            ExternalId = 2,
             Title = RoleConstants.Customer,
             Description = "The Basic Role in the Application Role Hierarchy"
         }
@@ -485,7 +485,7 @@ public class DatabaseSeeder
 
     private static List<Shipment> GetFakeShipments()
     {
-        var externalId = 0;
+        var externalId = 1;
 
         var shipmentFaker = new Faker<Shipment>()
             .RuleFor(shipment => shipment.ExternalId, _ => externalId++)
@@ -510,7 +510,7 @@ public class DatabaseSeeder
 
     private static List<Vote> GetFakeAnswerVotes()
     {
-        var externalId = 0;
+        var externalId = 1;
 
         var voteFaker = new Faker<Vote>()
             .RuleFor(vote => vote.ExternalId, _ => externalId++)
@@ -586,7 +586,7 @@ public class DatabaseSeeder
 
     private static List<Person> GetFakePersons()
     {
-        var externalId = 0;
+        var externalId = 1;
 
         var personFaker = new Faker<Person>()
             .RuleFor(person => person.ExternalId, _ => externalId++)
@@ -609,7 +609,7 @@ public class DatabaseSeeder
         var adminUser = new User
         {
             InternalId = AdminUserInternalId,
-            ExternalId = 0,
+            ExternalId = 1,
             Username = "sepehr_frd",
             Password = _authenticationService.HashPassword("Correct_p0"),
             Score = 0,
@@ -620,7 +620,7 @@ public class DatabaseSeeder
         var customerUser = new User
         {
             InternalId = CustomerUserInternalId,
-            ExternalId = 1,
+            ExternalId = 2,
             Username = "customer",
             Password = _authenticationService.HashPassword("Correct_p0"),
             Score = 0,
@@ -628,7 +628,7 @@ public class DatabaseSeeder
             IsEmailConfirmed = true
         };
 
-        var externalId = 2;
+        var externalId = 3;
 
         var userFaker = new Faker<User>()
             .RuleFor(user => user.ExternalId, _ => externalId++)
@@ -655,7 +655,7 @@ public class DatabaseSeeder
 
     private static List<UserRole> GetFakeUserRoles()
     {
-        var externalId = 2;
+        var externalId = 3;
 
         var userRoleFaker = new Faker<UserRole>()
             .RuleFor(userRole => userRole.ExternalId, _ => externalId++);

@@ -9,7 +9,7 @@ using Xunit;
 
 namespace IntegrationTests;
 
-// TODO: Remove paginations
+// TODO: Remove pagination
 public class UserTests : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly HttpClient _httpClient;

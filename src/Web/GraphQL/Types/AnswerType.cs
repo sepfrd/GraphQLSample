@@ -95,7 +95,8 @@ public class AnswerType : ObjectType<Answer>
 
         public async static Task<IEnumerable<Vote>?> GetVotesAsync([Parent] Answer answer, [Service] ISender sender)
         {
-            var votesQuery = new GetAllVotesQuery(x => x.ContentId == answer.InternalId && x.ContentType == VotableContentType.Answer);
+            var votesQuery = new GetAllVotesQuery(x =>
+                x.ContentId == answer.InternalId && x.ContentType == VotableContentType.Answer);
 
             var result = await sender.Send(votesQuery);
 

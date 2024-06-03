@@ -94,7 +94,7 @@ public static class DependencyInjectionHelper
             {
                 options.Complexity.Enable = true;
                 options.Complexity.MaximumAllowed = 10000;
-                options.ExecutionTimeout = TimeSpan.FromSeconds(1);
+                options.ExecutionTimeout = TimeSpan.FromSeconds(2d);
                 options.IncludeExceptionDetails = false;
             });
 

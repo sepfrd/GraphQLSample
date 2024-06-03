@@ -88,8 +88,7 @@ public class OrderType : ObjectType<Order>
         }
 
         public async static Task<IEnumerable<OrderItem>?> GetOrderItemsAsync([Parent] Order order,
-            [Service]
-            ISender sender)
+            [Service] ISender sender)
         {
             var orderItemsQuery = new GetAllOrderItemsQuery(x => x.OrderId == order.InternalId);
 
