@@ -10,7 +10,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.Questions.Handlers;
 
-public class DeleteQuestionByExternalIdCommandHandler : IRequestHandler<DeleteQuestionByExternalIdCommand, CommandResult>
+public class
+    DeleteQuestionByExternalIdCommandHandler : IRequestHandler<DeleteQuestionByExternalIdCommand, CommandResult>
 {
     private readonly IRepository<Question> _questionRepository;
     private readonly IRepository<User> _userRepository;
@@ -29,7 +30,8 @@ public class DeleteQuestionByExternalIdCommandHandler : IRequestHandler<DeleteQu
         _logger = logger;
     }
 
-    public virtual async Task<CommandResult> Handle(DeleteQuestionByExternalIdCommand request, CancellationToken cancellationToken)
+    public virtual async Task<CommandResult> Handle(DeleteQuestionByExternalIdCommand request,
+        CancellationToken cancellationToken)
     {
         var entity = await _questionRepository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
 
@@ -42,7 +44,8 @@ public class DeleteQuestionByExternalIdCommandHandler : IRequestHandler<DeleteQu
 
         if (userClaims?.ExternalId is null)
         {
-            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow, typeof(DeleteQuestionByExternalIdCommandHandler));
+            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow,
+                typeof(DeleteQuestionByExternalIdCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -53,7 +56,8 @@ public class DeleteQuestionByExternalIdCommandHandler : IRequestHandler<DeleteQu
 
         if (user is null)
         {
-            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(DeleteQuestionByExternalIdCommandHandler));
+            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User),
+                typeof(DeleteQuestionByExternalIdCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -70,7 +74,8 @@ public class DeleteQuestionByExternalIdCommandHandler : IRequestHandler<DeleteQu
             return CommandResult.Success(MessageConstants.SuccessfullyDeleted);
         }
 
-        _logger.LogError(MessageConstants.EntityDeletionFailed, DateTime.UtcNow, typeof(Question), typeof(DeleteAnswerByExternalIdCommand));
+        _logger.LogError(MessageConstants.EntityDeletionFailed, DateTime.UtcNow, typeof(Question),
+            typeof(DeleteAnswerByExternalIdCommand));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }

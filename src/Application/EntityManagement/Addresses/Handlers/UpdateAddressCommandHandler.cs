@@ -44,7 +44,8 @@ public class UpdateAddressCommandHandler : IRequestHandler<UpdateAddressCommand,
 
         if (userClaims?.ExternalId is null)
         {
-            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow, typeof(CreateAddressCommandHandler));
+            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow,
+                typeof(CreateAddressCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -55,7 +56,8 @@ public class UpdateAddressCommandHandler : IRequestHandler<UpdateAddressCommand,
 
         if (user is null)
         {
-            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(CreateAddressCommandHandler));
+            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User),
+                typeof(CreateAddressCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -69,7 +71,8 @@ public class UpdateAddressCommandHandler : IRequestHandler<UpdateAddressCommand,
 
         if (newEntity is null)
         {
-            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Address), typeof(UpdateAddressCommandHandler));
+            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Address),
+                typeof(UpdateAddressCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -81,7 +84,8 @@ public class UpdateAddressCommandHandler : IRequestHandler<UpdateAddressCommand,
             return CommandResult.Success(MessageConstants.SuccessfullyUpdated);
         }
 
-        _logger.LogError(message: MessageConstants.EntityUpdateFailed, DateTime.UtcNow, typeof(Address), typeof(UpdateAddressCommandHandler));
+        _logger.LogError(message: MessageConstants.EntityUpdateFailed, DateTime.UtcNow, typeof(Address),
+            typeof(UpdateAddressCommandHandler));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }

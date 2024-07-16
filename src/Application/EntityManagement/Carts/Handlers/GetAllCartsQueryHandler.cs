@@ -1,10 +1,10 @@
+using System.Net;
 using Application.Common;
 using Application.Common.Constants;
 using Application.EntityManagement.Carts.Queries;
 using Domain.Abstractions;
 using Domain.Entities;
 using MediatR;
-using System.Net;
 
 namespace Application.EntityManagement.Carts.Handlers;
 
@@ -17,9 +17,10 @@ public sealed class GetAllCartsQueryHandler : IRequestHandler<GetAllCartsQuery, 
         _repository = repository;
     }
 
-    public async Task<QueryResponse<IEnumerable<Cart>>> Handle(GetAllCartsQuery request, CancellationToken cancellationToken)
+    public async Task<QueryResponse<IEnumerable<Cart>>> Handle(GetAllCartsQuery request,
+        CancellationToken cancellationToken)
     {
-        var entities = await _repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
+        var entities = await _repository.GetAllAsync(request.Filter, cancellationToken);
 
         return new QueryResponse<IEnumerable<Cart>>(
             entities,

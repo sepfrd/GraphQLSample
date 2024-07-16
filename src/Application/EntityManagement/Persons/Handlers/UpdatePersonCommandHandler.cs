@@ -44,7 +44,8 @@ public class UpdatePersonCommandHandler : IRequestHandler<UpdatePersonCommand, C
 
         if (userClaims?.ExternalId is null)
         {
-            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow, typeof(UpdatePersonCommandHandler));
+            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow,
+                typeof(UpdatePersonCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -55,7 +56,8 @@ public class UpdatePersonCommandHandler : IRequestHandler<UpdatePersonCommand, C
 
         if (user is null)
         {
-            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(UpdatePersonCommandHandler));
+            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User),
+                typeof(UpdatePersonCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -69,7 +71,8 @@ public class UpdatePersonCommandHandler : IRequestHandler<UpdatePersonCommand, C
 
         if (newEntity is null)
         {
-            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Person), typeof(UpdatePersonCommandHandler));
+            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Person),
+                typeof(UpdatePersonCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -81,7 +84,8 @@ public class UpdatePersonCommandHandler : IRequestHandler<UpdatePersonCommand, C
             return CommandResult.Success(MessageConstants.SuccessfullyUpdated);
         }
 
-        _logger.LogError(message: MessageConstants.EntityUpdateFailed, DateTime.UtcNow, typeof(Person), typeof(UpdatePersonCommandHandler));
+        _logger.LogError(message: MessageConstants.EntityUpdateFailed, DateTime.UtcNow, typeof(Person),
+            typeof(UpdatePersonCommandHandler));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }

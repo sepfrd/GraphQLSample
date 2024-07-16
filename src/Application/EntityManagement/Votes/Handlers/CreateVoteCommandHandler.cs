@@ -50,10 +50,14 @@ public class CreateVoteCommandHandler : IRequestHandler<CreateVoteCommand, Comma
     {
         BaseEntity? content = request.VoteDto.ContentType switch
         {
-            VotableContentType.Answer => await _answerRepository.GetByExternalIdAsync(request.VoteDto.ContentExternalId, cancellationToken),
-            VotableContentType.Comment => await _commentRepository.GetByExternalIdAsync(request.VoteDto.ContentExternalId, cancellationToken),
-            VotableContentType.Product => await _productRepository.GetByExternalIdAsync(request.VoteDto.ContentExternalId, cancellationToken),
-            VotableContentType.Question => await _questionRepository.GetByExternalIdAsync(request.VoteDto.ContentExternalId, cancellationToken),
+            VotableContentType.Answer => await _answerRepository.GetByExternalIdAsync(request.VoteDto.ContentExternalId,
+                cancellationToken),
+            VotableContentType.Comment => await _commentRepository.GetByExternalIdAsync(
+                request.VoteDto.ContentExternalId, cancellationToken),
+            VotableContentType.Product => await _productRepository.GetByExternalIdAsync(
+                request.VoteDto.ContentExternalId, cancellationToken),
+            VotableContentType.Question => await _questionRepository.GetByExternalIdAsync(
+                request.VoteDto.ContentExternalId, cancellationToken),
             _ => null
         };
 
@@ -66,7 +70,8 @@ public class CreateVoteCommandHandler : IRequestHandler<CreateVoteCommand, Comma
 
         if (userClaims?.ExternalId is null)
         {
-            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow, typeof(CreateVoteCommandHandler));
+            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow,
+                typeof(CreateVoteCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -77,7 +82,8 @@ public class CreateVoteCommandHandler : IRequestHandler<CreateVoteCommand, Comma
 
         if (user is null)
         {
-            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(CreateVoteCommandHandler));
+            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User),
+                typeof(CreateVoteCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -86,7 +92,8 @@ public class CreateVoteCommandHandler : IRequestHandler<CreateVoteCommand, Comma
 
         if (entity is null)
         {
-            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Vote), typeof(CreateVoteCommandHandler));
+            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Vote),
+                typeof(CreateVoteCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -101,7 +108,8 @@ public class CreateVoteCommandHandler : IRequestHandler<CreateVoteCommand, Comma
             return CommandResult.Success(MessageConstants.SuccessfullyCreated);
         }
 
-        _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(Vote), typeof(CreateVoteCommandHandler));
+        _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(Vote),
+            typeof(CreateVoteCommandHandler));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }

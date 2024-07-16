@@ -4,4 +4,5 @@ using MediatR;
 
 namespace Application.EntityManagement.OrderItems.Commands;
 
-public record CreateOrderItemCommand(CreateOrderItemDto CreateOrderItemDto, int OrderExternalId) : IRequest<CommandResult>;
+public record CreateOrderItemCommand(CreateOrderItemDto CreateOrderItemDto, int OrderExternalId)
+    : IRequest<CommandResult>;

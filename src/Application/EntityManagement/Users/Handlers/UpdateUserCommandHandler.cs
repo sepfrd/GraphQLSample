@@ -38,7 +38,8 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Comma
 
         if (newEntity is null)
         {
-            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(User), typeof(UpdateUserCommandHandler));
+            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(User),
+                typeof(UpdateUserCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -50,7 +51,8 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Comma
             return CommandResult.Success(MessageConstants.SuccessfullyUpdated);
         }
 
-        _logger.LogError(message: MessageConstants.EntityUpdateFailed, DateTime.UtcNow, typeof(User), typeof(UpdateUserCommandHandler));
+        _logger.LogError(message: MessageConstants.EntityUpdateFailed, DateTime.UtcNow, typeof(User),
+            typeof(UpdateUserCommandHandler));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }

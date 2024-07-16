@@ -1,5 +1,4 @@
 using Application.EntityManagement.Users.Queries;
-using Domain.Common;
 using Domain.Entities;
 using MediatR;
 
@@ -10,7 +9,8 @@ public class PhoneNumberType : ObjectType<PhoneNumber>
     protected override void Configure(IObjectTypeDescriptor<PhoneNumber> descriptor)
     {
         descriptor
-            .Description("Represents a phone number associated with a user, including details like the number itself and its type.");
+            .Description(
+                "Represents a phone number associated with a user, including details like the number itself and its type.");
 
         descriptor
             .Field(phoneNumber => phoneNumber.User)
@@ -43,11 +43,9 @@ public class PhoneNumberType : ObjectType<PhoneNumber>
 
     private sealed class Resolvers
     {
-        public static async Task<User?> GetUserAsync([Parent] PhoneNumber phoneNumber, [Service] ISender sender)
+        public async static Task<User?> GetUserAsync([Parent] PhoneNumber phoneNumber, [Service] ISender sender)
         {
-            var usersQuery = new GetAllUsersQuery(
-                new Pagination(),
-                x => x.InternalId == phoneNumber.UserId);
+            var usersQuery = new GetAllUsersQuery(x => x.InternalId == phoneNumber.UserId);
 
             var result = await sender.Send(usersQuery);
 

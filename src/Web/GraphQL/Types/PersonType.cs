@@ -1,5 +1,4 @@
 using Application.EntityManagement.Users.Queries;
-using Domain.Common;
 using Domain.Entities;
 using MediatR;
 
@@ -43,11 +42,9 @@ public class PersonType : ObjectType<Person>
 
     private sealed class Resolvers
     {
-        public static async Task<User?> GetUserAsync([Parent] Person person, [Service] ISender sender)
+        public async static Task<User?> GetUserAsync([Parent] Person person, [Service] ISender sender)
         {
-            var usersQuery = new GetAllUsersQuery(
-                new Pagination(),
-                x => x.InternalId == person.UserId);
+            var usersQuery = new GetAllUsersQuery(x => x.InternalId == person.UserId);
 
             var result = await sender.Send(usersQuery);
 

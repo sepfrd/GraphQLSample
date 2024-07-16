@@ -1,6 +1,5 @@
 using Application.EntityManagement.Comments.Events;
 using Domain.Abstractions;
-using Domain.Common;
 using Domain.Entities;
 using Domain.Enums;
 using MediatR;
@@ -21,7 +20,6 @@ public class CommentDeletedEventHandler : INotificationHandler<CommentDeletedEve
         var votes = (await _repository.GetAllAsync(
                 vote => vote.ContentId == notification.Entity.InternalId &&
                         vote.ContentType == VotableContentType.Comment,
-                Pagination.MaxPagination,
                 cancellationToken))
             .ToList();
 

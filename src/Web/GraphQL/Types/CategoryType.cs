@@ -1,5 +1,4 @@
 using Application.EntityManagement.Products.Queries;
-using Domain.Common;
 using Domain.Entities;
 using MediatR;
 
@@ -10,7 +9,8 @@ public class CategoryType : ObjectType<Category>
     protected override void Configure(IObjectTypeDescriptor<Category> descriptor)
     {
         descriptor
-            .Description("Represents a product category with information such as name, description, image URL, and icon URL.");
+            .Description(
+                "Represents a product category with information such as name, description, image URL, and icon URL.");
 
         descriptor
             .Field(category => category.Name)
@@ -34,8 +34,7 @@ public class CategoryType : ObjectType<Category>
             .ResolveWith<Resolvers>(
                 resolvers =>
                     Resolvers.GetProductsAsync(default!, default!))
-            .UseFiltering()
-            .UseSorting();
+            .UsePaging();
 
         descriptor
             .Field(category => category.DateCreated)
@@ -56,11 +55,10 @@ public class CategoryType : ObjectType<Category>
 
     private sealed class Resolvers
     {
-        public static async Task<IEnumerable<Product>?> GetProductsAsync([Parent] Category category, [Service] ISender sender)
+        public async static Task<IEnumerable<Product>?> GetProductsAsync([Parent] Category category,
+            [Service] ISender sender)
         {
-            var productsQuery = new GetAllProductsQuery(
-                new Pagination(),
-                x => x.CategoryId == category.InternalId);
+            var productsQuery = new GetAllProductsQuery(x => x.CategoryId == category.InternalId);
 
             var result = await sender.Send(productsQuery);
 

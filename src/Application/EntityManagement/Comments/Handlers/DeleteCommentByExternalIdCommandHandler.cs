@@ -29,7 +29,8 @@ public class DeleteCommentByExternalIdCommandHandler : IRequestHandler<DeleteCom
         _logger = logger;
     }
 
-    public virtual async Task<CommandResult> Handle(DeleteCommentByExternalIdCommand request, CancellationToken cancellationToken)
+    public virtual async Task<CommandResult> Handle(DeleteCommentByExternalIdCommand request,
+        CancellationToken cancellationToken)
     {
         var entity = await _commentRepository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
 
@@ -42,7 +43,8 @@ public class DeleteCommentByExternalIdCommandHandler : IRequestHandler<DeleteCom
 
         if (userClaims?.ExternalId is null)
         {
-            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow, typeof(DeleteCommentByExternalIdCommandHandler));
+            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow,
+                typeof(DeleteCommentByExternalIdCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -53,7 +55,8 @@ public class DeleteCommentByExternalIdCommandHandler : IRequestHandler<DeleteCom
 
         if (user is null)
         {
-            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(DeleteCommentByExternalIdCommandHandler));
+            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User),
+                typeof(DeleteCommentByExternalIdCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -70,7 +73,8 @@ public class DeleteCommentByExternalIdCommandHandler : IRequestHandler<DeleteCom
             return CommandResult.Success(MessageConstants.SuccessfullyDeleted);
         }
 
-        _logger.LogError(MessageConstants.EntityDeletionFailed, DateTime.UtcNow, typeof(Comment), typeof(DeleteAnswerByExternalIdCommand));
+        _logger.LogError(MessageConstants.EntityDeletionFailed, DateTime.UtcNow, typeof(Comment),
+            typeof(DeleteAnswerByExternalIdCommand));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }

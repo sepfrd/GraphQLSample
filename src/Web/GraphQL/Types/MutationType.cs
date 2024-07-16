@@ -28,15 +28,17 @@ public sealed class MutationType : ObjectType<Mutation>
             .Field(_ =>
                 Mutation.AddAddressAsync(default!, default!, default!))
             .Authorize(PolicyConstants.CustomerPolicy)
-            .Description("Adds a new address to the user's profile. Requires details such as street, city, state, postal code, etc.\n" +
-                         "Authentication is required and only customers are allowed.");
+            .Description(
+                "Adds a new address to the user's profile. Requires details such as street, city, state, postal code, etc.\n" +
+                "Authentication is required and only customers are allowed.");
 
         descriptor
             .Field(_ =>
                 Mutation.UpdateAddressAsync(default!, default!, default!, default!))
             .Authorize(PolicyConstants.CustomerPolicy)
-            .Description("Updates an existing address in the user's profile. Requires the address ID and updated details.\n" +
-                         "Authentication is required and only customers are allowed.");
+            .Description(
+                "Updates an existing address in the user's profile. Requires the address ID and updated details.\n" +
+                "Authentication is required and only customers are allowed.");
 
         descriptor
             .Field(_ =>
@@ -125,9 +127,10 @@ public sealed class MutationType : ObjectType<Mutation>
             .Field(_ =>
                 Mutation.DeleteOrderAsync(default!, default!, default!))
             .Authorize(PolicyConstants.AdminPolicy)
-            .Description("Deletes an order and all of its related entities such as order items, payment, shipment, addresses, etc.\n" +
-                         "Requires the order ID.\n" +
-                         "Authentication is required and only administrators are allowed.");
+            .Description(
+                "Deletes an order and all of its related entities such as order items, payment, shipment, addresses, etc.\n" +
+                "Requires the order ID.\n" +
+                "Authentication is required and only administrators are allowed.");
 
         descriptor
             .Field(_ =>
@@ -189,9 +192,10 @@ public sealed class MutationType : ObjectType<Mutation>
             .Field(_ =>
                 Mutation.DeleteProductAsync(default!, default!, default!))
             .Authorize(PolicyConstants.AdminPolicy)
-            .Description("Deletes a product and all of its related entities such as comments, votes, questions, answers, etc.\n" +
-                         "Requires the product ID.\n" +
-                         "Authentication is required and only administrators are allowed.");
+            .Description(
+                "Deletes a product and all of its related entities such as comments, votes, questions, answers, etc.\n" +
+                "Requires the product ID.\n" +
+                "Authentication is required and only administrators are allowed.");
 
         descriptor
             .Field(_ =>
@@ -269,9 +273,10 @@ public sealed class MutationType : ObjectType<Mutation>
             .Field(_ =>
                 Mutation.DeleteUserAsync(default!, default!, default!))
             .Authorize(PolicyConstants.AdminPolicy)
-            .Description("Deletes a user account and all of its related entities such as questions, orders, addresses, etc.\n" +
-                         "Requires the user ID.\n" +
-                         "Authentication is required and only administrators are allowed.");
+            .Description(
+                "Deletes a user account and all of its related entities such as questions, orders, addresses, etc.\n" +
+                "Requires the user ID.\n" +
+                "Authentication is required and only administrators are allowed.");
 
         descriptor
             .Field(_ =>

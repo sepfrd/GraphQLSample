@@ -4,4 +4,5 @@ using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Persistence.Repositories;
 
-public class UserRoleRepository(IOptions<MongoDbSettings> databaseSettings) : BaseRepository<UserRole>(databaseSettings);
+public class UserRoleRepository(IOptions<MongoDbSettings> databaseSettings)
+    : BaseRepository<UserRole>(databaseSettings);

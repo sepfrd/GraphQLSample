@@ -14,8 +14,8 @@ public sealed class Person : BaseEntity
     {
         get
         {
-            DateTime currentDate = DateTime.UtcNow;
-            DateTime birthDate = BirthDate.ToUniversalTime();
+            var currentDate = DateTime.UtcNow;
+            var birthDate = BirthDate.ToUniversalTime();
 
             var age = currentDate.Year - birthDate.Year;
 

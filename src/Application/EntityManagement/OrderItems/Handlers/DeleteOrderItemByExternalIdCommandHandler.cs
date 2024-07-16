@@ -9,7 +9,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.OrderItems.Handlers;
 
-public class DeleteOrderItemByExternalIdCommandHandler : IRequestHandler<DeleteOrderItemByExternalIdCommand, CommandResult>
+public class
+    DeleteOrderItemByExternalIdCommandHandler : IRequestHandler<DeleteOrderItemByExternalIdCommand, CommandResult>
 {
     private readonly IRepository<OrderItem> _repository;
     private readonly ILogger _logger;
@@ -20,7 +21,8 @@ public class DeleteOrderItemByExternalIdCommandHandler : IRequestHandler<DeleteO
         _logger = logger;
     }
 
-    public virtual async Task<CommandResult> Handle(DeleteOrderItemByExternalIdCommand request, CancellationToken cancellationToken)
+    public virtual async Task<CommandResult> Handle(DeleteOrderItemByExternalIdCommand request,
+        CancellationToken cancellationToken)
     {
         var entity = await _repository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
 
@@ -36,7 +38,8 @@ public class DeleteOrderItemByExternalIdCommandHandler : IRequestHandler<DeleteO
             return CommandResult.Success(MessageConstants.SuccessfullyDeleted);
         }
 
-        _logger.LogError(MessageConstants.EntityDeletionFailed, DateTime.UtcNow, typeof(OrderItem), typeof(DeleteAnswerByExternalIdCommand));
+        _logger.LogError(MessageConstants.EntityDeletionFailed, DateTime.UtcNow, typeof(OrderItem),
+            typeof(DeleteAnswerByExternalIdCommand));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }

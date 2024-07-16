@@ -1,6 +1,5 @@
 using Application.EntityManagement.Answers.Events;
 using Domain.Abstractions;
-using Domain.Common;
 using Domain.Entities;
 using Domain.Enums;
 using MediatR;
@@ -21,7 +20,6 @@ public class AnswerDeletedEventHandler : INotificationHandler<AnswerDeletedEvent
         var votes = (await _repository.GetAllAsync(
                 vote => vote.ContentId == notification.Entity.InternalId &&
                         vote.ContentType == VotableContentType.Answer,
-                Pagination.MaxPagination,
                 cancellationToken))
             .ToList();
 

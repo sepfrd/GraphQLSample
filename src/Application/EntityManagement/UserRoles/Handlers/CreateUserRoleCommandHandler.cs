@@ -43,6 +43,17 @@ public class CreateUserRoleCommandHandler : IRequestHandler<CreateUserRoleComman
             return CommandResult.Failure(MessageConstants.BadRequest);
         }
 
+        var existingRecord = await _userRoleRepository.GetAllAsync(userRole =>
+            userRole.UserId == user.InternalId &&
+            userRole.RoleId == role.InternalId, cancellationToken);
+
+        var exists = existingRecord.Any();
+
+        if (exists)
+        {
+            return CommandResult.Failure(MessageConstants.AlreadyExists);
+        }
+
         var entity = new UserRole
         {
             UserId = user.InternalId,
@@ -56,7 +67,8 @@ public class CreateUserRoleCommandHandler : IRequestHandler<CreateUserRoleComman
             return CommandResult.Success(MessageConstants.SuccessfullyCreated);
         }
 
-        _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(UserRole), typeof(CreateUserRoleCommandHandler));
+        _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(UserRole),
+            typeof(CreateUserRoleCommandHandler));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }

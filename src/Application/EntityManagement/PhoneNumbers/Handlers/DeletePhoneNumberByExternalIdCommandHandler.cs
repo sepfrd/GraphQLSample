@@ -10,7 +10,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.PhoneNumbers.Handlers;
 
-public class DeletePhoneNumberByExternalIdCommandHandler : IRequestHandler<DeletePhoneNumberByExternalIdCommand, CommandResult>
+public class
+    DeletePhoneNumberByExternalIdCommandHandler : IRequestHandler<DeletePhoneNumberByExternalIdCommand, CommandResult>
 {
     private readonly IRepository<PhoneNumber> _phoneNumberRepository;
     private readonly IRepository<User> _userRepository;
@@ -29,7 +30,8 @@ public class DeletePhoneNumberByExternalIdCommandHandler : IRequestHandler<Delet
         _logger = logger;
     }
 
-    public virtual async Task<CommandResult> Handle(DeletePhoneNumberByExternalIdCommand request, CancellationToken cancellationToken)
+    public virtual async Task<CommandResult> Handle(DeletePhoneNumberByExternalIdCommand request,
+        CancellationToken cancellationToken)
     {
         var entity = await _phoneNumberRepository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
 
@@ -42,7 +44,8 @@ public class DeletePhoneNumberByExternalIdCommandHandler : IRequestHandler<Delet
 
         if (userClaims?.ExternalId is null)
         {
-            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow, typeof(DeletePhoneNumberByExternalIdCommandHandler));
+            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow,
+                typeof(DeletePhoneNumberByExternalIdCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -53,7 +56,8 @@ public class DeletePhoneNumberByExternalIdCommandHandler : IRequestHandler<Delet
 
         if (user is null)
         {
-            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(DeletePhoneNumberByExternalIdCommandHandler));
+            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User),
+                typeof(DeletePhoneNumberByExternalIdCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -70,7 +74,8 @@ public class DeletePhoneNumberByExternalIdCommandHandler : IRequestHandler<Delet
             return CommandResult.Success(MessageConstants.SuccessfullyDeleted);
         }
 
-        _logger.LogError(MessageConstants.EntityDeletionFailed, DateTime.UtcNow, typeof(PhoneNumber), typeof(DeleteAnswerByExternalIdCommand));
+        _logger.LogError(MessageConstants.EntityDeletionFailed, DateTime.UtcNow, typeof(PhoneNumber),
+            typeof(DeleteAnswerByExternalIdCommand));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }

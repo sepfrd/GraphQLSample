@@ -3,7 +3,6 @@ using Application.Common.Constants;
 using Application.EntityManagement.Orders.Commands;
 using Application.EntityManagement.Orders.Events;
 using Application.EntityManagement.Orders.Queries;
-using Domain.Common;
 using MediatR;
 
 namespace Application.EntityManagement.Orders;
@@ -17,11 +16,10 @@ public class OrderService
         _mediator = mediator;
     }
 
-    public async Task<CommandResult> DeleteByExternalIdAsync(int externalId, CancellationToken cancellationToken = default)
+    public async Task<CommandResult> DeleteByExternalIdAsync(int externalId,
+        CancellationToken cancellationToken = default)
     {
-        var pagination = new Pagination();
-
-        var ordersQuery = new GetAllOrdersQuery(pagination, order => order.ExternalId == externalId);
+        var ordersQuery = new GetAllOrdersQuery(order => order.ExternalId == externalId);
 
         var orderResult = await _mediator.Send(ordersQuery, cancellationToken);
 

@@ -38,7 +38,8 @@ public class UpdateRoleCommandHandler : IRequestHandler<UpdateRoleCommand, Comma
 
         if (newEntity is null)
         {
-            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Role), typeof(UpdateRoleCommandHandler));
+            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Role),
+                typeof(UpdateRoleCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -50,7 +51,8 @@ public class UpdateRoleCommandHandler : IRequestHandler<UpdateRoleCommand, Comma
             return CommandResult.Success(MessageConstants.SuccessfullyUpdated);
         }
 
-        _logger.LogError(message: MessageConstants.EntityUpdateFailed, DateTime.UtcNow, typeof(Role), typeof(UpdateRoleCommandHandler));
+        _logger.LogError(message: MessageConstants.EntityUpdateFailed, DateTime.UtcNow, typeof(Role),
+            typeof(UpdateRoleCommandHandler));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }

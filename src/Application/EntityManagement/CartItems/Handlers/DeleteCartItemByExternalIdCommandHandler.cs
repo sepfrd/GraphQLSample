@@ -9,7 +9,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.CartItems.Handlers;
 
-public class DeleteCartItemByExternalIdCommandHandler : IRequestHandler<DeleteCartItemByExternalIdCommand, CommandResult>
+public class
+    DeleteCartItemByExternalIdCommandHandler : IRequestHandler<DeleteCartItemByExternalIdCommand, CommandResult>
 {
     private readonly IRepository<CartItem> _cartItemRepository;
     private readonly IRepository<Cart> _cartRepository;
@@ -31,7 +32,8 @@ public class DeleteCartItemByExternalIdCommandHandler : IRequestHandler<DeleteCa
         _logger = logger;
     }
 
-    public async Task<CommandResult> Handle(DeleteCartItemByExternalIdCommand request, CancellationToken cancellationToken)
+    public async Task<CommandResult> Handle(DeleteCartItemByExternalIdCommand request,
+        CancellationToken cancellationToken)
     {
         var entity = await _cartItemRepository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
 
@@ -44,7 +46,8 @@ public class DeleteCartItemByExternalIdCommandHandler : IRequestHandler<DeleteCa
 
         if (cart is null)
         {
-            _logger.LogError(MessageConstants.EntityRelationshipsRetrievalFailed, DateTime.UtcNow, typeof(CartItem), typeof(DeleteCartItemByExternalIdCommandHandler));
+            _logger.LogError(MessageConstants.EntityRelationshipsRetrievalFailed, DateTime.UtcNow, typeof(CartItem),
+                typeof(DeleteCartItemByExternalIdCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -53,7 +56,8 @@ public class DeleteCartItemByExternalIdCommandHandler : IRequestHandler<DeleteCa
 
         if (userClaims?.ExternalId is null)
         {
-            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow, typeof(DeleteCartItemByExternalIdCommandHandler));
+            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow,
+                typeof(DeleteCartItemByExternalIdCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -64,7 +68,8 @@ public class DeleteCartItemByExternalIdCommandHandler : IRequestHandler<DeleteCa
 
         if (user is null)
         {
-            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(DeleteCartItemByExternalIdCommandHandler));
+            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User),
+                typeof(DeleteCartItemByExternalIdCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -90,7 +95,8 @@ public class DeleteCartItemByExternalIdCommandHandler : IRequestHandler<DeleteCa
             return CommandResult.Success(MessageConstants.SuccessfullyDeleted);
         }
 
-        _logger.LogError(MessageConstants.EntityDeletionFailed, DateTime.UtcNow, typeof(CartItem), typeof(DeleteCartItemByExternalIdCommandHandler));
+        _logger.LogError(MessageConstants.EntityDeletionFailed, DateTime.UtcNow, typeof(CartItem),
+            typeof(DeleteCartItemByExternalIdCommandHandler));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }

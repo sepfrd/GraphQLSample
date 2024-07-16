@@ -47,7 +47,8 @@ public class UpdateShipmentCommandHandler : IRequestHandler<UpdateShipmentComman
 
         if (order is null)
         {
-            _logger.LogError(MessageConstants.EntityRelationshipsRetrievalFailed, DateTime.UtcNow, typeof(Shipment), typeof(UpdateShipmentCommandHandler));
+            _logger.LogError(MessageConstants.EntityRelationshipsRetrievalFailed, DateTime.UtcNow, typeof(Shipment),
+                typeof(UpdateShipmentCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -56,7 +57,8 @@ public class UpdateShipmentCommandHandler : IRequestHandler<UpdateShipmentComman
 
         if (userClaims?.ExternalId is null)
         {
-            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow, typeof(UpdateShipmentCommandHandler));
+            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow,
+                typeof(UpdateShipmentCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -67,7 +69,8 @@ public class UpdateShipmentCommandHandler : IRequestHandler<UpdateShipmentComman
 
         if (user is null)
         {
-            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(UpdateShipmentCommandHandler));
+            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User),
+                typeof(UpdateShipmentCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -81,7 +84,8 @@ public class UpdateShipmentCommandHandler : IRequestHandler<UpdateShipmentComman
 
         if (newEntity is null)
         {
-            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Shipment), typeof(UpdateShipmentCommandHandler));
+            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Shipment),
+                typeof(UpdateShipmentCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -93,7 +97,8 @@ public class UpdateShipmentCommandHandler : IRequestHandler<UpdateShipmentComman
             return CommandResult.Success(MessageConstants.SuccessfullyUpdated);
         }
 
-        _logger.LogError(message: MessageConstants.EntityUpdateFailed, DateTime.UtcNow, typeof(Shipment), typeof(UpdateShipmentCommandHandler));
+        _logger.LogError(message: MessageConstants.EntityUpdateFailed, DateTime.UtcNow, typeof(Shipment),
+            typeof(UpdateShipmentCommandHandler));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }

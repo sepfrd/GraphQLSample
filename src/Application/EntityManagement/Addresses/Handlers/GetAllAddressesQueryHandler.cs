@@ -1,10 +1,10 @@
+using System.Net;
 using Application.Common;
 using Application.Common.Constants;
 using Application.EntityManagement.Addresses.Queries;
 using Domain.Abstractions;
 using Domain.Entities;
 using MediatR;
-using System.Net;
 
 namespace Application.EntityManagement.Addresses.Handlers;
 
@@ -17,9 +17,10 @@ public sealed class GetAllAddressesQueryHandler : IRequestHandler<GetAllAddresse
         _repository = repository;
     }
 
-    public async Task<QueryResponse<IEnumerable<Address>>> Handle(GetAllAddressesQuery request, CancellationToken cancellationToken)
+    public async Task<QueryResponse<IEnumerable<Address>>> Handle(GetAllAddressesQuery request,
+        CancellationToken cancellationToken)
     {
-        var entities = await _repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
+        var entities = await _repository.GetAllAsync(request.Filter, cancellationToken);
 
         return new QueryResponse<IEnumerable<Address>>(
             entities,

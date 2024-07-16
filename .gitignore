@@ -5,6 +5,8 @@
 
 .idea/
 
+global.json
+
 FodyWeavers.xml
 
 # User-specific files

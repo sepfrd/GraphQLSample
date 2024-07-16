@@ -1,4 +1,5 @@
 ﻿using Application.Common.Constants;
+using Web.GraphQL.Types.FilterTypes;
 
 namespace Web.GraphQL.Types;
 
@@ -12,8 +13,9 @@ public sealed class QueryType : ObjectType<Query>
 
         descriptor
             .Field(_ =>
-                Query.GetUsersAsync(default, default, default!, default!))
+                Query.GetUsersAsync(default!, default))
             .Authorize(PolicyConstants.AdminPolicy)
+            .UsePaging()
             .Description("Retrieves a list of users.\n" +
                          "Requires admin privileges for access.\n" +
                          "Supports advanced querying with pagination.\n" +
@@ -21,9 +23,10 @@ public sealed class QueryType : ObjectType<Query>
 
         descriptor
             .Field(_ =>
-                Query.GetCategoriesAsync(default, default!, default!))
+                Query.GetCategoriesAsync(default!, default))
             .AllowAnonymous()
-            .UseFiltering()
+            .UsePaging()
+            .UseFiltering<CategoryFilterType>()
             .UseSorting()
             .Description("Retrieves the list of product categories.\n" +
                          "Allows anonymous access for public visibility.\n" +
@@ -32,9 +35,10 @@ public sealed class QueryType : ObjectType<Query>
 
         descriptor
             .Field(_ =>
-                Query.GetProductsAsync(default, default, default!, default!))
+                Query.GetProductsAsync(default!, default))
             .AllowAnonymous()
-            .UseFiltering()
+            .UsePaging()
+            .UseFiltering<ProductFilterType>()
             .UseSorting()
             .Description("Retrieves a list of products.\n" +
                          "Allows anonymous access for public visibility.\n" +

@@ -3,7 +3,6 @@ using Serilog;
 using Serilog.Context;
 using Serilog.Core;
 using Serilog.Core.Enrichers;
-using Serilog.Enrichers;
 using Serilog.Events;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 using RollingInterval = Serilog.Sinks.MongoDB.RollingInterval;
@@ -25,10 +24,11 @@ public class CustomLogger : ILogger
         .Enrich
         .FromLogContext()
         .Enrich
-        .With(
-            new MachineNameEnricher(),
-            new EnvironmentNameEnricher(),
-            new EnvironmentUserNameEnricher())
+        .WithMachineName()
+        .Enrich
+        .WithEnvironmentName()
+        .Enrich
+        .WithEnvironmentUserName()
         .CreateLogger();
 
     public void Log<TState>(
@@ -50,7 +50,7 @@ public class CustomLogger : ILogger
             return;
         }
 
-        LogEventLevel serilogLogLevel = logLevel switch
+        var serilogLogLevel = logLevel switch
         {
             LogLevel.Trace => LogEventLevel.Verbose,
             LogLevel.Debug => LogEventLevel.Debug,

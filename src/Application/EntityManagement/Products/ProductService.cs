@@ -3,7 +3,6 @@ using Application.Common.Constants;
 using Application.EntityManagement.Products.Commands;
 using Application.EntityManagement.Products.Events;
 using Application.EntityManagement.Products.Queries;
-using Domain.Common;
 using MediatR;
 
 namespace Application.EntityManagement.Products;
@@ -17,11 +16,10 @@ public class ProductService
         _mediator = mediator;
     }
 
-    public async Task<CommandResult> DeleteByExternalIdAsync(int externalId, CancellationToken cancellationToken = default)
+    public async Task<CommandResult> DeleteByExternalIdAsync(int externalId,
+        CancellationToken cancellationToken = default)
     {
-        var pagination = new Pagination();
-
-        var productsQuery = new GetAllProductsQuery(pagination, product => product.ExternalId == externalId);
+        var productsQuery = new GetAllProductsQuery(product => product.ExternalId == externalId);
 
         var productResult = await _mediator.Send(productsQuery, cancellationToken);
 

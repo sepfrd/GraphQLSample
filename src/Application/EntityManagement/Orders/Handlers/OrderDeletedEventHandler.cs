@@ -1,6 +1,5 @@
 using Application.EntityManagement.Orders.Events;
 using Domain.Abstractions;
-using Domain.Common;
 using Domain.Entities;
 using MediatR;
 
@@ -26,7 +25,6 @@ public class OrderDeletedEventHandler : INotificationHandler<OrderDeletedEvent>
     {
         var orderItems = (await _orderItemRepository.GetAllAsync(
                 orderItem => orderItem.OrderId == notification.Entity.InternalId,
-                Pagination.MaxPagination,
                 cancellationToken))
             .ToList();
 
@@ -35,7 +33,8 @@ public class OrderDeletedEventHandler : INotificationHandler<OrderDeletedEvent>
             await _orderItemRepository.DeleteManyAsync(orderItems, cancellationToken);
         }
 
-        var shipment = await _shipmentRepository.GetByInternalIdAsync(notification.Entity.ShipmentId, cancellationToken);
+        var shipment =
+            await _shipmentRepository.GetByInternalIdAsync(notification.Entity.ShipmentId, cancellationToken);
 
         if (shipment is not null)
         {

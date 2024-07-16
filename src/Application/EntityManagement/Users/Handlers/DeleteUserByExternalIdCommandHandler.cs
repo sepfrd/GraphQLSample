@@ -35,7 +35,8 @@ public class DeleteUserByExternalIdCommandHandler : IRequestHandler<DeleteUserBy
             return CommandResult.Success(MessageConstants.SuccessfullyDeleted);
         }
 
-        _logger.LogError(MessageConstants.EntityDeletionFailed, DateTime.UtcNow, typeof(User), typeof(DeleteUserByExternalIdCommandHandler));
+        _logger.LogError(MessageConstants.EntityDeletionFailed, DateTime.UtcNow, typeof(User),
+            typeof(DeleteUserByExternalIdCommandHandler));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }

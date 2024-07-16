@@ -1,4 +1,5 @@
-﻿using Application.Abstractions;
+﻿using System.Security.Cryptography;
+using Application.Abstractions;
 using Application.Common.Constants;
 using Application.EntityManagement.Users.Dtos.UserDto;
 using Domain.Abstractions;
@@ -18,13 +19,13 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
-using System.Security.Cryptography;
 
 namespace Infrastructure;
 
 public static class DependencyInjectionHelper
 {
-    public static IServiceCollection InjectInfrastructureLayer(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection InjectInfrastructureLayer(this IServiceCollection services,
+        IConfiguration configuration)
     {
         ConfigureMapster();
 

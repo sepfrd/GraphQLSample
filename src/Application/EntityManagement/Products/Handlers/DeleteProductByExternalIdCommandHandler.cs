@@ -20,7 +20,8 @@ public class DeleteProductByExternalIdCommandHandler : IRequestHandler<DeletePro
         _logger = logger;
     }
 
-    public virtual async Task<CommandResult> Handle(DeleteProductByExternalIdCommand request, CancellationToken cancellationToken)
+    public virtual async Task<CommandResult> Handle(DeleteProductByExternalIdCommand request,
+        CancellationToken cancellationToken)
     {
         var entity = await _repository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
 
@@ -36,7 +37,8 @@ public class DeleteProductByExternalIdCommandHandler : IRequestHandler<DeletePro
             return CommandResult.Success(MessageConstants.SuccessfullyDeleted);
         }
 
-        _logger.LogError(MessageConstants.EntityDeletionFailed, DateTime.UtcNow, typeof(Product), typeof(DeleteAnswerByExternalIdCommand));
+        _logger.LogError(MessageConstants.EntityDeletionFailed, DateTime.UtcNow, typeof(Product),
+            typeof(DeleteAnswerByExternalIdCommand));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }

@@ -1,5 +1,4 @@
 using Application.EntityManagement.UserRoles.Queries;
-using Domain.Common;
 using Domain.Entities;
 using MediatR;
 
@@ -27,8 +26,6 @@ public class RoleType : ObjectType<Role>
         descriptor
             .Field(role => role.UserRoles)
             .ResolveWith<Resolvers>(resolvers => Resolvers.GetUserRolesAsync(default!, default!))
-            .UseFiltering()
-            .UseSorting()
             .Description("The User-Roles Associated with the Role\n" +
                          "Authentication is required.");
 
@@ -39,11 +36,9 @@ public class RoleType : ObjectType<Role>
 
     private sealed class Resolvers
     {
-        public static async Task<IEnumerable<UserRole>?> GetUserRolesAsync([Parent] Role role, [Service] ISender sender)
+        public async static Task<IEnumerable<UserRole>?> GetUserRolesAsync([Parent] Role role, [Service] ISender sender)
         {
-            var userRolesQuery = new GetAllUserRolesQuery(
-                Pagination.MaxPagination,
-                userRole => userRole.RoleId == role.InternalId);
+            var userRolesQuery = new GetAllUserRolesQuery(userRole => userRole.RoleId == role.InternalId);
 
             var result = await sender.Send(userRolesQuery);
 

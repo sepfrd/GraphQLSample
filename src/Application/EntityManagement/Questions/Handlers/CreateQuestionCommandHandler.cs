@@ -38,7 +38,8 @@ public class CreateQuestionCommandHandler : IRequestHandler<CreateQuestionComman
 
         if (entity is null)
         {
-            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Question), typeof(CreateQuestionCommandHandler));
+            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Question),
+                typeof(CreateQuestionCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -47,7 +48,8 @@ public class CreateQuestionCommandHandler : IRequestHandler<CreateQuestionComman
 
         if (userClaims?.ExternalId is null)
         {
-            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow, typeof(CreateQuestionCommandHandler));
+            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow,
+                typeof(CreateQuestionCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -58,7 +60,8 @@ public class CreateQuestionCommandHandler : IRequestHandler<CreateQuestionComman
 
         if (user is null)
         {
-            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(CreateQuestionCommandHandler));
+            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User),
+                typeof(CreateQuestionCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -72,7 +75,8 @@ public class CreateQuestionCommandHandler : IRequestHandler<CreateQuestionComman
             return CommandResult.Success(MessageConstants.SuccessfullyCreated);
         }
 
-        _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(Question), typeof(CreateQuestionCommandHandler));
+        _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(Question),
+            typeof(CreateQuestionCommandHandler));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }

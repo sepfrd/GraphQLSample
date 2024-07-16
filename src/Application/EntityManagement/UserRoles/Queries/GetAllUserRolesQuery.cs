@@ -1,12 +1,9 @@
-﻿using Application.Common;
-using Domain.Common;
+﻿using System.Linq.Expressions;
+using Application.Common;
 using Domain.Entities;
 using MediatR;
-using System.Linq.Expressions;
 
 namespace Application.EntityManagement.UserRoles.Queries;
 
-public record GetAllUserRolesQuery(
-        Pagination Pagination,
-        Expression<Func<UserRole, bool>>? Filter = null)
+public record GetAllUserRolesQuery(Expression<Func<UserRole, bool>>? Filter = null)
     : IRequest<QueryResponse<IEnumerable<UserRole>>>;

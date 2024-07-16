@@ -1,10 +1,10 @@
+using System.Net;
 using Application.Common;
 using Application.Common.Constants;
 using Application.EntityManagement.Users.Queries;
 using Domain.Abstractions;
 using Domain.Entities;
 using MediatR;
-using System.Net;
 
 namespace Application.EntityManagement.Users.Handlers;
 
@@ -18,9 +18,10 @@ public sealed class GetAllUsersQueryHandler
         _userRepository = userRepository;
     }
 
-    public async Task<QueryResponse<IEnumerable<User>>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
+    public async Task<QueryResponse<IEnumerable<User>>> Handle(GetAllUsersQuery request,
+        CancellationToken cancellationToken)
     {
-        var users = await _userRepository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
+        var users = await _userRepository.GetAllAsync(request.Filter, cancellationToken);
 
         return new QueryResponse<IEnumerable<User>>(
             users,

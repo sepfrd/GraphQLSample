@@ -14,7 +14,9 @@ using Application.EntityManagement.Users.Dtos.CreateUserDto;
 using Application.EntityManagement.Users.Dtos.LoginDto;
 using Application.EntityManagement.Users.Dtos.UserDto;
 using Application.EntityManagement.Votes.Dtos.VoteDto;
+using HotChocolate.Types.Pagination;
 using Web.GraphQL.Types;
+using Web.GraphQL.Types.SortTypes;
 
 namespace Web;
 
@@ -50,6 +52,23 @@ public static class DependencyInjectionHelper
             .AddType<VoteType>()
             .AddType<CommandResult>()
             .AddType<UserRoleType>()
+            .AddType<AddressSortType>()
+            .AddType<AnswerSortType>()
+            .AddType<CartItemSortType>()
+            .AddType<CategorySortType>()
+            .AddType<CategorySortType>()
+            .AddType<CommentSortType>()
+            .AddType<OrderItemSortType>()
+            .AddType<OrderSortType>()
+            .AddType<PaymentSortType>()
+            .AddType<PersonSortType>()
+            .AddType<PhoneNumberSortType>()
+            .AddType<ProductSortType>()
+            .AddType<QuestionSortType>()
+            .AddType<RoleSortType>()
+            .AddType<ShipmentSortType>()
+            .AddType<UserSortType>()
+            .AddType<VoteSortType>()
             .AddInputObjectType<AddressDto>()
             .AddInputObjectType<AnswerDto>()
             .AddInputObjectType<CategoryDto>()
@@ -65,13 +84,18 @@ public static class DependencyInjectionHelper
             .AddInputObjectType<LoginDto>()
             .AddInputObjectType<CreateUserDto>()
             .AddInputObjectType<VoteDto>()
+            .SetPagingOptions(new PagingOptions
+            {
+                IncludeTotalCount = true,
+                MaxPageSize = 100
+            })
             .AddFiltering()
             .AddSorting()
             .ModifyRequestOptions(options =>
             {
                 options.Complexity.Enable = true;
-                options.Complexity.MaximumAllowed = 300;
-                options.ExecutionTimeout = TimeSpan.FromSeconds(1);
+                options.Complexity.MaximumAllowed = 10000;
+                options.ExecutionTimeout = TimeSpan.FromSeconds(2d);
                 options.IncludeExceptionDetails = false;
             })
             .AddInMemorySubscriptions();

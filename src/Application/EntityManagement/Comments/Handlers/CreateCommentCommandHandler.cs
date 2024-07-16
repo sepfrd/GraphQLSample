@@ -41,7 +41,8 @@ public class CreateCommentCommandHandler : IRequestHandler<CreateCommentCommand,
 
         if (userClaims?.ExternalId is null)
         {
-            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow, typeof(CreateCommentCommandHandler));
+            _logger.LogError(message: MessageConstants.ClaimsRetrievalFailed, DateTime.UtcNow,
+                typeof(CreateCommentCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -52,12 +53,14 @@ public class CreateCommentCommandHandler : IRequestHandler<CreateCommentCommand,
 
         if (user is null)
         {
-            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User), typeof(CreateCommentCommandHandler));
+            _logger.LogError(message: MessageConstants.EntityRetrievalFailed, DateTime.UtcNow, typeof(User),
+                typeof(CreateCommentCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
 
-        var product = await _productRepository.GetByExternalIdAsync(request.CommentDto.ProductExternalId, cancellationToken);
+        var product =
+            await _productRepository.GetByExternalIdAsync(request.CommentDto.ProductExternalId, cancellationToken);
 
         if (product is null)
         {
@@ -68,7 +71,8 @@ public class CreateCommentCommandHandler : IRequestHandler<CreateCommentCommand,
 
         if (entity is null)
         {
-            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Comment), typeof(CreateCommentCommandHandler));
+            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Comment),
+                typeof(CreateCommentCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -83,7 +87,8 @@ public class CreateCommentCommandHandler : IRequestHandler<CreateCommentCommand,
             return CommandResult.Success(MessageConstants.SuccessfullyCreated);
         }
 
-        _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(Comment), typeof(CreateCommentCommandHandler));
+        _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(Comment),
+            typeof(CreateCommentCommandHandler));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }

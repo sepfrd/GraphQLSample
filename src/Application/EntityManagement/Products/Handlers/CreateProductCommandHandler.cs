@@ -31,7 +31,8 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
 
     public async Task<CommandResult> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
-        var category = await _categoryRepository.GetByExternalIdAsync(request.ProductDto.CategoryExternalId, cancellationToken);
+        var category =
+            await _categoryRepository.GetByExternalIdAsync(request.ProductDto.CategoryExternalId, cancellationToken);
 
         if (category is null)
         {
@@ -42,7 +43,8 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
 
         if (entity is null)
         {
-            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Product), typeof(CreateProductCommandHandler));
+            _logger.LogError(message: MessageConstants.MappingFailed, DateTime.UtcNow, typeof(Product),
+                typeof(CreateProductCommandHandler));
 
             return CommandResult.Failure(MessageConstants.InternalServerError);
         }
@@ -56,7 +58,8 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
             return CommandResult.Success(MessageConstants.SuccessfullyCreated);
         }
 
-        _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(Product), typeof(CreateProductCommandHandler));
+        _logger.LogError(message: MessageConstants.EntityCreationFailed, DateTime.UtcNow, typeof(Product),
+            typeof(CreateProductCommandHandler));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }

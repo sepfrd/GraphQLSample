@@ -1,8 +1,8 @@
 using Application.EntityManagement.Products.Queries;
 using Application.EntityManagement.Users.Queries;
 using Application.EntityManagement.Votes.Queries;
-using Domain.Common;
 using Domain.Entities;
+using Domain.Enums;
 using MediatR;
 
 namespace Web.GraphQL.Types;
@@ -12,7 +12,8 @@ public class CommentType : ObjectType<Comment>
     protected override void Configure(IObjectTypeDescriptor<Comment> descriptor)
     {
         descriptor
-            .Description("Represents a user's comment on a product or other content, including details like content, user information, and creation timestamp.");
+            .Description(
+                "Represents a user's comment on a product or other content, including details like content, user information, and creation timestamp.");
 
         descriptor
             .Field(comment => comment.Description)
@@ -66,33 +67,28 @@ public class CommentType : ObjectType<Comment>
 
     private sealed class Resolvers
     {
-        public static async Task<Product?> GetProductAsync([Parent] Comment comment, [Service] ISender sender)
+        public async static Task<Product?> GetProductAsync([Parent] Comment comment, [Service] ISender sender)
         {
-            var productsQuery = new GetAllProductsQuery(
-                new Pagination(),
-                x => x.InternalId == comment.ProductId);
+            var productsQuery = new GetAllProductsQuery(x => x.InternalId == comment.ProductId);
 
             var result = await sender.Send(productsQuery);
 
             return result.Data?.FirstOrDefault();
         }
 
-        public static async Task<User?> GetUserAsync([Parent] Comment comment, [Service] ISender sender)
+        public async static Task<User?> GetUserAsync([Parent] Comment comment, [Service] ISender sender)
         {
-            var usersQuery = new GetAllUsersQuery(
-                new Pagination(),
-                x => x.InternalId == comment.UserId);
+            var usersQuery = new GetAllUsersQuery(x => x.InternalId == comment.UserId);
 
             var result = await sender.Send(usersQuery);
 
             return result.Data?.FirstOrDefault();
         }
 
-        public static async Task<IEnumerable<Vote>?> GetVotesAsync([Parent] Comment comment, [Service] ISender sender)
+        public async static Task<IEnumerable<Vote>?> GetVotesAsync([Parent] Comment comment, [Service] ISender sender)
         {
-            var votesQuery = new GetAllVotesQuery(
-                new Pagination(),
-                x => x.ContentId == comment.InternalId && x.Content is Comment);
+            var votesQuery = new GetAllVotesQuery(x =>
+                x.ContentId == comment.InternalId && x.ContentType == VotableContentType.Comment);
 
             var result = await sender.Send(votesQuery);
 

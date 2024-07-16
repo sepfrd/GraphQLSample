@@ -9,7 +9,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.EntityManagement.UserRoles.Handlers;
 
-public class DeleteUserRoleByExternalIdCommandHandler : IRequestHandler<DeleteUserRoleByExternalIdCommand, CommandResult>
+public class
+    DeleteUserRoleByExternalIdCommandHandler : IRequestHandler<DeleteUserRoleByExternalIdCommand, CommandResult>
 {
     private readonly IRepository<UserRole> _repository;
     private readonly ILogger _logger;
@@ -20,7 +21,8 @@ public class DeleteUserRoleByExternalIdCommandHandler : IRequestHandler<DeleteUs
         _logger = logger;
     }
 
-    public virtual async Task<CommandResult> Handle(DeleteUserRoleByExternalIdCommand request, CancellationToken cancellationToken)
+    public virtual async Task<CommandResult> Handle(DeleteUserRoleByExternalIdCommand request,
+        CancellationToken cancellationToken)
     {
         var entity = await _repository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
 
@@ -36,7 +38,8 @@ public class DeleteUserRoleByExternalIdCommandHandler : IRequestHandler<DeleteUs
             return CommandResult.Success(MessageConstants.SuccessfullyDeleted);
         }
 
-        _logger.LogError(MessageConstants.EntityDeletionFailed, DateTime.UtcNow, typeof(UserRole), typeof(DeleteAnswerByExternalIdCommand));
+        _logger.LogError(MessageConstants.EntityDeletionFailed, DateTime.UtcNow, typeof(UserRole),
+            typeof(DeleteAnswerByExternalIdCommand));
 
         return CommandResult.Failure(MessageConstants.InternalServerError);
     }

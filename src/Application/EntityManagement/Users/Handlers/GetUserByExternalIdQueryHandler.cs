@@ -1,3 +1,4 @@
+using System.Net;
 using Application.Abstractions;
 using Application.Common;
 using Application.Common.Constants;
@@ -7,7 +8,6 @@ using Domain.Abstractions;
 using Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System.Net;
 
 namespace Application.EntityManagement.Users.Handlers;
 
@@ -27,7 +27,8 @@ public class GetUserByExternalIdQueryHandler : IRequestHandler<GetUserByExternal
         _logger = logger;
     }
 
-    public async Task<QueryResponse<UserDto>> Handle(GetUserByExternalIdQuery request, CancellationToken cancellationToken)
+    public async Task<QueryResponse<UserDto>> Handle(GetUserByExternalIdQuery request,
+        CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByExternalIdAsync(request.ExternalId, cancellationToken);
 
@@ -51,7 +52,8 @@ public class GetUserByExternalIdQueryHandler : IRequestHandler<GetUserByExternal
                 HttpStatusCode.OK);
         }
 
-        _logger.LogError(MessageConstants.MappingFailed, DateTime.UtcNow, typeof(User), typeof(GetUserByExternalIdQueryHandler));
+        _logger.LogError(MessageConstants.MappingFailed, DateTime.UtcNow, typeof(User),
+            typeof(GetUserByExternalIdQueryHandler));
 
         return new QueryResponse<UserDto>(
             null,

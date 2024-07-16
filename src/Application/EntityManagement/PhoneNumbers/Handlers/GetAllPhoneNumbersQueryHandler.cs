@@ -1,14 +1,15 @@
+using System.Net;
 using Application.Common;
 using Application.Common.Constants;
 using Application.EntityManagement.PhoneNumbers.Queries;
 using Domain.Abstractions;
 using Domain.Entities;
 using MediatR;
-using System.Net;
 
 namespace Application.EntityManagement.PhoneNumbers.Handlers;
 
-public sealed class GetAllPhoneNumbersQueryHandler : IRequestHandler<GetAllPhoneNumbersQuery, QueryResponse<IEnumerable<PhoneNumber>>>
+public sealed class
+    GetAllPhoneNumbersQueryHandler : IRequestHandler<GetAllPhoneNumbersQuery, QueryResponse<IEnumerable<PhoneNumber>>>
 {
     private readonly IRepository<PhoneNumber> _repository;
 
@@ -17,9 +18,10 @@ public sealed class GetAllPhoneNumbersQueryHandler : IRequestHandler<GetAllPhone
         _repository = repository;
     }
 
-    public async Task<QueryResponse<IEnumerable<PhoneNumber>>> Handle(GetAllPhoneNumbersQuery request, CancellationToken cancellationToken)
+    public async Task<QueryResponse<IEnumerable<PhoneNumber>>> Handle(GetAllPhoneNumbersQuery request,
+        CancellationToken cancellationToken)
     {
-        var entities = await _repository.GetAllAsync(request.Filter, request.Pagination, cancellationToken);
+        var entities = await _repository.GetAllAsync(request.Filter, cancellationToken);
 
         return new QueryResponse<IEnumerable<PhoneNumber>>(
             entities,
