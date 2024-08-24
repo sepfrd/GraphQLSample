@@ -20,7 +20,7 @@ using Web.GraphQL.Types.SortTypes;
 
 namespace Web;
 
-public static class DependencyInjectionHelper
+public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddAllGraphQlServices(this IServiceCollection services)
     {

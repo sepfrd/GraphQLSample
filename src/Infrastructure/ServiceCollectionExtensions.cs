@@ -22,7 +22,7 @@ using MongoDB.Driver;
 
 namespace Infrastructure;
 
-public static class DependencyInjectionHelper
+public static class ServiceCollectionExtensions
 {
     public static IServiceCollection InjectInfrastructureLayer(this IServiceCollection services,
         IConfiguration configuration)

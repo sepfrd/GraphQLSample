@@ -12,7 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Application;
 
-public static class DependencyInjectionHelper
+public static class ServiceCollectionExtensions
 {
     public static IServiceCollection InjectApplicationLayer(this IServiceCollection services) =>
         services
