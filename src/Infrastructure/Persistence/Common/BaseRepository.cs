@@ -41,7 +41,7 @@ public class BaseRepository<TEntity> : IRepository<TEntity>
         return await documentCursor.FirstOrDefaultAsync(cancellationToken);
     }
 
-    public virtual async Task<int> GenerateUniqueExternalIdAsync(CancellationToken cancellationToken = default)
+    private async Task<int> GenerateUniqueExternalIdAsync(CancellationToken cancellationToken = default)
     {
         var findOptions = new FindOptions<TEntity>
         {

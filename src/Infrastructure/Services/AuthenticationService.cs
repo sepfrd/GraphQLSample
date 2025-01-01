@@ -57,16 +57,16 @@ public class AuthenticationService : IAuthenticationService
 
         var rolesQuery = new GetAllRolesQuery(role => roleIds.Contains(role.InternalId));
 
-        var rolesResult = await _sender.Send(rolesQuery, cancellationToken);
+        var (roles, isSuccessful, _, _) = await _sender.Send(rolesQuery, cancellationToken);
 
-        if (!rolesResult.IsSuccessful ||
-            rolesResult.Data is null ||
-            !rolesResult.Data.Any())
+        var rolesList = roles?.ToList();
+
+        if (!isSuccessful ||
+            rolesList is null ||
+            rolesList.Count == 0)
         {
             return null;
         }
-
-        var roles = rolesResult.Data;
 
         var claims = new ClaimsIdentity(new[]
         {
@@ -78,10 +78,10 @@ public class AuthenticationService : IAuthenticationService
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
             new Claim(JwtClaimConstants.UsernameClaim, user.Username),
-            new Claim(JwtClaimConstants.ExternalIdClaim, user.ExternalId.ToString())
+            new Claim(JwtClaimConstants.ExternalIdClaim, user.ExternalId.ToString(CultureInfo.InvariantCulture))
         });
 
-        foreach (var role in roles)
+        foreach (var role in rolesList)
         {
             var claim = new Claim(ClaimTypes.Role, role.Title);
 
@@ -122,7 +122,7 @@ public class AuthenticationService : IAuthenticationService
         var externalIdString = user.FindFirstValue(JwtClaimConstants.ExternalIdClaim);
         var roles = user.FindFirstValue(ClaimTypes.Role)?.Split();
 
-        int? externalId = externalIdString is null ? null : int.Parse(externalIdString);
+        int? externalId = externalIdString is null ? null : int.Parse(externalIdString, CultureInfo.InvariantCulture);
 
         var userClaimsDto = new UserClaimsDto(
             iss,

@@ -55,7 +55,7 @@ public static class AuthHelper
                     .ToString(CultureInfo.InvariantCulture)),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), new Claim(JwtRegisteredClaimNames.Email, email),
             new Claim(JwtClaimConstants.UsernameClaim, username),
-            new Claim(JwtClaimConstants.ExternalIdClaim, externalId.ToString())
+            new Claim(JwtClaimConstants.ExternalIdClaim, externalId.ToString(CultureInfo.InvariantCulture))
         });
 
         foreach (var role in roles)

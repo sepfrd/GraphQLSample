@@ -33,7 +33,7 @@ public class CategoryType : ObjectType<Category>
             .Description("All Products of This Category")
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetProductsAsync(default!, default!))
+                    Resolvers.GetProductsAsync(null!, null!))
             .UsePaging();
 
         descriptor

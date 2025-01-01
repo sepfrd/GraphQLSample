@@ -13,7 +13,7 @@ public sealed class QueryType : ObjectType<Query>
 
         descriptor
             .Field(_ =>
-                Query.GetUsersAsync(default!, default))
+                Query.GetUsersAsync(null!, CancellationToken.None))
             .Authorize(PolicyConstants.AdminPolicy)
             .UsePaging()
             .Description("Retrieves a list of users.\n" +
@@ -23,7 +23,7 @@ public sealed class QueryType : ObjectType<Query>
 
         descriptor
             .Field(_ =>
-                Query.GetCategoriesAsync(default!, default))
+                Query.GetCategoriesAsync(null!, CancellationToken.None))
             .AllowAnonymous()
             .UsePaging()
             .UseFiltering<CategoryFilterType>()
@@ -35,7 +35,7 @@ public sealed class QueryType : ObjectType<Query>
 
         descriptor
             .Field(_ =>
-                Query.GetProductsAsync(default!, default))
+                Query.GetProductsAsync(null!, CancellationToken.None))
             .AllowAnonymous()
             .UsePaging()
             .UseFiltering<ProductFilterType>()

@@ -8,8 +8,6 @@ public interface
 {
     Task<TEntity?> CreateAsync(TEntity entity, CancellationToken cancellationToken = default);
 
-    Task<int> GenerateUniqueExternalIdAsync(CancellationToken cancellationToken = default);
-
     Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter = null,
         CancellationToken cancellationToken = default);
 

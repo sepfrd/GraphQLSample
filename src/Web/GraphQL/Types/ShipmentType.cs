@@ -17,7 +17,7 @@ public class ShipmentType : ObjectType<Shipment>
             .Field(shipment => shipment.Order)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetOrderAsync(default!, default!))
+                    Resolvers.GetOrderAsync(null!, null!))
             .Description("The Order Associated with the Shipment\n" +
                          "Authentication is required.");
 
@@ -25,7 +25,7 @@ public class ShipmentType : ObjectType<Shipment>
             .Field(shipment => shipment.DestinationAddressId)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetDestinationAddressAsync(default!, default!))
+                    Resolvers.GetDestinationAddressAsync(null!, null!))
             .Description("The Destination Address Associated with the Shipment\n" +
                          "Authentication is required.");
 
@@ -33,7 +33,7 @@ public class ShipmentType : ObjectType<Shipment>
             .Field(shipment => shipment.OriginAddressId)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetOriginAddressAsync(default!, default!))
+                    Resolvers.GetOriginAddressAsync(null!, null!))
             .Description("The Origin Address Associated with the Shipment\n" +
                          "Authentication is required.");
 

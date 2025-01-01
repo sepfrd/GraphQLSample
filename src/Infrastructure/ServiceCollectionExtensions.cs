@@ -65,8 +65,7 @@ public static class ServiceCollectionExtensions
         BsonClassMap.RegisterClassMap<BaseEntity>(classMap =>
         {
             classMap.AutoMap();
-            classMap
-                .MapIdMember(baseEntity => baseEntity.InternalId);
+            classMap.MapIdMember(baseEntity => baseEntity.InternalId);
         });
 
         var connectionString = configuration.GetSection("MongoDb").GetValue<string>("ConnectionString");

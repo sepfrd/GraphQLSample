@@ -40,7 +40,7 @@ public class AnswerType : ObjectType<Answer>
             .Description("The Original Question of This Answer")
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetQuestionAsync(default!, default!));
+                    Resolvers.GetQuestionAsync(null!, null!));
 
         descriptor
             .Field(answer => answer.Title)
@@ -51,14 +51,14 @@ public class AnswerType : ObjectType<Answer>
             .Description("The User Who Posted This Answer")
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetUserAsync(default!, default!));
+                    Resolvers.GetUserAsync(null!, null!));
 
         descriptor
             .Field(answer => answer.Votes)
             .Description("The Votes Submitted for This Answer")
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetVotesAsync(default!, default!));
+                    Resolvers.GetVotesAsync(null!, null!));
 
         descriptor
             .Field(answer => answer.DateCreated)

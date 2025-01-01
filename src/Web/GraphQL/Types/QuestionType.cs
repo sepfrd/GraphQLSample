@@ -19,7 +19,7 @@ public class QuestionType : ObjectType<Question>
             .Field(question => question.User)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetUserAsync(default!, default!))
+                    Resolvers.GetUserAsync(null!, null!))
             .Description("The User Who Posted the Question\n" +
                          "Authentication is required.");
 
@@ -27,7 +27,7 @@ public class QuestionType : ObjectType<Question>
             .Field(question => question.Answers)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetAnswersAsync(default!, default!))
+                    Resolvers.GetAnswersAsync(null!, null!))
             .Description("The Answers Associated with the Question\n" +
                          "Supports sorting for answer details.");
 
@@ -35,7 +35,7 @@ public class QuestionType : ObjectType<Question>
             .Field(question => question.Votes)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetVotesAsync(default!, default!))
+                    Resolvers.GetVotesAsync(null!, null!))
             .Description("The Votes Received by the Question");
 
         descriptor

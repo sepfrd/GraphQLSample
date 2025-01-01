@@ -16,7 +16,7 @@ public class PaymentType : ObjectType<Payment>
             .Field(payment => payment.Order)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetOrderAsync(default!, default!))
+                    Resolvers.GetOrderAsync(null!, null!))
             .Description("The Order Associated with the Payment\n" +
                          "Authentication is required.");
 

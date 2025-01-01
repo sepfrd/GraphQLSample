@@ -17,14 +17,14 @@ public class OrderItemType : ObjectType<OrderItem>
             .Field(orderItem => orderItem.Order)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetOrderAsync(default!, default!))
+                    Resolvers.GetOrderAsync(null!, null!))
             .Description("The Order This Item Belongs To");
 
         descriptor
             .Field(orderItem => orderItem.Product)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetProductAsync(default!, default!))
+                    Resolvers.GetProductAsync(null!, null!))
             .Description("The Product This Item Represents");
 
         descriptor

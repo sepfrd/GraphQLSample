@@ -22,7 +22,7 @@ public class VoteType : ObjectType<Vote>
             .Field(vote => vote.User)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetUserAsync(default!, default!))
+                    Resolvers.GetUserAsync(null!, null!))
             .Description("The User Who Voted\n" +
                          "Authentication is required.");
 
@@ -30,7 +30,7 @@ public class VoteType : ObjectType<Vote>
             .Field(vote => vote.Content)
             .ResolveWith<Resolvers>(
                 resolvers =>
-                    Resolvers.GetContentAsync(default!, default!))
+                    Resolvers.GetContentAsync(null!, null!))
             .Description("The Content Voted On\n" +
                          "Authentication is required.");
 

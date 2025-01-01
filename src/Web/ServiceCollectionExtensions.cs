@@ -14,7 +14,6 @@ using Application.EntityManagement.Users.Dtos.CreateUserDto;
 using Application.EntityManagement.Users.Dtos.LoginDto;
 using Application.EntityManagement.Users.Dtos.UserDto;
 using Application.EntityManagement.Votes.Dtos.VoteDto;
-using HotChocolate.Types.Pagination;
 using Web.GraphQL.Types;
 using Web.GraphQL.Types.SortTypes;
 
@@ -84,19 +83,25 @@ public static class ServiceCollectionExtensions
             .AddInputObjectType<LoginDto>()
             .AddInputObjectType<CreateUserDto>()
             .AddInputObjectType<VoteDto>()
-            .SetPagingOptions(new PagingOptions
+            .ModifyPagingOptions(options =>
             {
-                IncludeTotalCount = true,
-                MaxPageSize = 100
+                options.IncludeTotalCount = true;
+                options.MaxPageSize = 100;
             })
             .AddFiltering()
             .AddSorting()
             .ModifyRequestOptions(options =>
             {
-                options.Complexity.Enable = true;
-                options.Complexity.MaximumAllowed = 10000;
                 options.ExecutionTimeout = TimeSpan.FromSeconds(2d);
                 options.IncludeExceptionDetails = false;
+            })
+            .ModifyCostOptions(options =>
+            {
+                options.MaxFieldCost = 1_000;
+                options.MaxTypeCost = 10_000;
+                options.EnforceCostLimits = true;
+                options.ApplyCostDefaults = true;
+                options.DefaultResolverCost = 10.0;
             })
             .AddInMemorySubscriptions();
 

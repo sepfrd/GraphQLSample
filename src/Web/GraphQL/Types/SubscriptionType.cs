@@ -10,7 +10,7 @@ public sealed class SubscriptionType : ObjectType<Subscription>
     protected override void Configure(IObjectTypeDescriptor<Subscription> descriptor)
     {
         descriptor
-            .Field(_ => Subscription.OnAnswerSubmitted(default!))
+            .Field(_ => Subscription.OnAnswerSubmitted(null!))
             .Authorize(PolicyConstants.CustomerPolicy)
             .Subscribe(async context =>
             {

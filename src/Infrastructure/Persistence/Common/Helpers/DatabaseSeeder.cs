@@ -1,3 +1,4 @@
+using System.Globalization;
 using Application.Abstractions;
 using Application.Common.Constants;
 using Bogus;
@@ -425,7 +426,7 @@ public class DatabaseSeeder
             .RuleFor(product => product.StockQuantity, faker => faker.Random.Number(10_000))
             .RuleFor(product => product.Description, faker => faker.Commerce.ProductDescription())
             .RuleFor(product => product.Name, faker => faker.Commerce.ProductName())
-            .RuleFor(product => product.Price, faker => decimal.Parse(faker.Commerce.Price()))
+            .RuleFor(product => product.Price, faker => decimal.Parse(faker.Commerce.Price(), CultureInfo.InvariantCulture))
             .RuleFor(product => product.ImageUrls, faker => new List<string>
             {
                 faker.Image.PicsumUrl(),
