@@ -16,7 +16,7 @@ public class CustomLogger : ILogger
         .WriteTo
         .MongoDBBson(configuration =>
         {
-            configuration.SetConnectionString("mongodb://localhost:27017/OnlineShopSample");
+            configuration.SetConnectionString("mongodb://localhost:27017/CleanArchitectureSample");
             configuration.SetCollectionName("Logs");
             configuration.SetCreateCappedCollection(1024, 50_000);
             configuration.SetRollingInternal(RollingInterval.Day);

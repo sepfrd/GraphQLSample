@@ -5,16 +5,16 @@ services:
     ports:
       - '27017:27017'
     environment:
-      MONGO_INITDB_DATABASE: OnlineShopSample
+      MONGO_INITDB_DATABASE: CleanArchitectureSample
     healthcheck:
       test: ["CMD-SHELL", "echo 'db.runCommand({ ping: 1 })' | mongosh --quiet"]
       interval: 1s
       timeout: 2s
       retries: 5
 
-  online_shop_sample:
-    image: local/online-shop-sample:latest
-    container_name: online_shop_sample
+  clean_architecture_sample:
+    image: local/clean-architecture-sample:latest
+    container_name: clean_architecture_sample
     ports:
       - '4000:8080'
     depends_on:
@@ -22,6 +22,6 @@ services:
         condition: service_healthy
     environment:
       MONGODB__CONNECTIONSTRING: mongodb://mongodb:27017
-      MONGODB__DATABASENAME: OnlineShopSample
+      MONGODB__DATABASENAME: CleanArchitectureSample
       ASPNETCORE_ENVIRONMENT: Development
       ENABLEDATASEED: 'True'
