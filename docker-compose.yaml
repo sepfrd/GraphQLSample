@@ -14,6 +14,9 @@ services:
 
   clean_architecture_sample:
     image: local/clean-architecture-sample:latest
+    build:
+      context: .
+      dockerfile: ./src/Web/Dockerfile
     container_name: clean_architecture_sample
     ports:
       - '4000:8080'
