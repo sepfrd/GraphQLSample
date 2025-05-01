@@ -23,87 +23,77 @@ public class UserType : ObjectType<User>
 
         descriptor
             .Field(user => user.Cart)
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetCartAsync(null!, null!))
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetCartAsync(null!, null!))
             .Description("The Cart Associated with the User\n" +
                          "Authentication is required.");
 
         descriptor
             .Field(user => user.Person)
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetPersonAsync(null!, null!))
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetPersonAsync(null!, null!))
             .Description("The Personal Information of the User\n" +
                          "Authentication is required.");
 
         descriptor
             .Field(user => user.Addresses)
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetAddressesAsync(null!, null!))
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetAddressesAsync(null!, null!))
             .Description("The Addresses Associated with the User\n" +
                          "Authentication is required.\n" +
                          "Supports sorting for address details.");
 
         descriptor
             .Field(user => user.Answers)
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetAnswersAsync(null!, null!))
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetAnswersAsync(null!, null!))
             .Description("The Answers Posted by the User\n" +
                          "Authentication is required.\n" +
                          "Supports sorting for answer details.");
 
         descriptor
             .Field(user => user.Comments)
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetCommentsAsync(null!, null!))
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetCommentsAsync(null!, null!))
             .Description("The Comments Posted by the User\n" +
                          "Authentication is required.\n" +
                          "Supports sorting for comment details.");
 
         descriptor
             .Field(user => user.Orders)
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetOrdersAsync(null!, null!))
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetOrdersAsync(null!, null!))
             .Description("The Orders Associated with the User\n" +
                          "Authentication is required.\n" +
                          "Supports sorting for order details.");
 
         descriptor
             .Field(user => user.UserRoles)
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetUserRolesAsync(null!, null!))
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetUserRolesAsync(null!, null!))
             .Description("The User-Roles Associated with the User\n" +
                          "Authentication is required.\n" +
                          "Supports sorting for user-role details.");
 
         descriptor
             .Field(user => user.Questions)
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetQuestionsAsync(null!, null!))
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetQuestionsAsync(null!, null!))
             .Description("The Questions Posted by the User\n" +
                          "Authentication is required.\n" +
                          "Supports sorting for question details.");
 
         descriptor
             .Field(user => user.Votes)
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetVotesAsync(null!, null!))
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetVotesAsync(null!, null!))
             .Description("The Votes Associated with the User\n" +
                          "Authentication is required.");
 
         descriptor
             .Field(user => user.PhoneNumbers)
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetPhoneNumbersAsync(null!, null!))
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetPhoneNumbersAsync(null!, null!))
             .Description("The Phone Numbers Associated with the User\n" +
                          "Authentication is required.\n" +
                          "Supports sorting for phone number details.");

@@ -8,11 +8,11 @@ using Application.EntityManagement.Roles.Queries;
 using Application.EntityManagement.UserRoles.Queries;
 using Application.EntityManagement.Users.Dtos;
 using BCrypt.Net;
-using Domain.Common;
 using Domain.Entities;
+using Infrastructure.Common.Configurations;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.Services;
@@ -20,28 +20,32 @@ namespace Infrastructure.Services;
 public class AuthenticationService : IAuthenticationService
 {
     private readonly ISender _sender;
-    private readonly IConfiguration _configuration;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly AppOptions _appOptions;
+    private static SigningCredentials? _signingCredentials;
 
-    public AuthenticationService(ISender sender, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+    public AuthenticationService(ISender sender, IHttpContextAccessor httpContextAccessor, IOptions<AppOptions> appOptions)
     {
         _sender = sender;
-        _configuration = configuration;
         _httpContextAccessor = httpContextAccessor;
+        _appOptions = appOptions.Value;
+
+        if (_signingCredentials is not null)
+        {
+            return;
+        }
+
+        var rsa = RSA.Create();
+
+        rsa.ImportFromPem(_appOptions.JwtOptions!.PrivateKey);
+
+        var securityKey = new RsaSecurityKey(rsa);
+
+        _signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha512Signature);
     }
 
     public async Task<string?> CreateJwtAsync(User user, CancellationToken cancellationToken = default)
     {
-        var privateKey = _configuration.GetSection("JwtConfiguration").GetValue<string>("PrivateKey");
-
-        var rsa = RSA.Create();
-
-        rsa.ImportFromPem(privateKey);
-
-        var securityKey = new RsaSecurityKey(rsa);
-
-        var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha512Signature);
-
         var userRolesQuery = new GetAllUserRolesQuery(userRole => userRole.UserId == user.InternalId);
 
         var userRolesResult = await _sender.Send(userRolesQuery, cancellationToken);
@@ -70,8 +74,8 @@ public class AuthenticationService : IAuthenticationService
 
         var claims = new ClaimsIdentity(new[]
         {
-            new Claim(JwtRegisteredClaimNames.Iss, DomainConstants.ApplicationUrl),
-            new Claim(JwtRegisteredClaimNames.Aud, DomainConstants.ApplicationUrl),
+            new Claim(JwtRegisteredClaimNames.Iss, _appOptions.ServerUrl!),
+            new Claim(JwtRegisteredClaimNames.Aud, _appOptions.ClientUrl!),
             new Claim(
                 JwtRegisteredClaimNames.Iat,
                 DateTime.Now.ToUniversalTime().ToString(CultureInfo.InvariantCulture)),
@@ -91,8 +95,8 @@ public class AuthenticationService : IAuthenticationService
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = claims,
-            Expires = DateTime.Now.AddDays(1),
-            SigningCredentials = signingCredentials
+            Expires = DateTime.Now.AddMinutes(_appOptions.JwtOptions!.TokenExpirationDurationMinutes),
+            SigningCredentials = _signingCredentials
         };
 
         var jwtHandler = new JwtSecurityTokenHandler();

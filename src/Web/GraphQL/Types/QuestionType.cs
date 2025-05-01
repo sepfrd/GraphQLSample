@@ -17,25 +17,22 @@ public class QuestionType : ObjectType<Question>
 
         descriptor
             .Field(question => question.User)
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetUserAsync(null!, null!))
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetUserAsync(null!, null!))
             .Description("The User Who Posted the Question\n" +
                          "Authentication is required.");
 
         descriptor
             .Field(question => question.Answers)
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetAnswersAsync(null!, null!))
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetAnswersAsync(null!, null!))
             .Description("The Answers Associated with the Question\n" +
                          "Supports sorting for answer details.");
 
         descriptor
             .Field(question => question.Votes)
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetVotesAsync(null!, null!))
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetVotesAsync(null!, null!))
             .Description("The Votes Received by the Question");
 
         descriptor

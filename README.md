@@ -1,6 +1,6 @@
-# CleanArchitectureSample
+# GraphQLSample
 
-A sample .NET web application demonstrating Clean Architecture principles, integrating CQRS, the Mediator pattern, MongoDB, GraphQL with HotChocolate, and JWT-based authentication and authorization.
+A sample .NET web application demonstrating GraphQL with HotChocolate, using Clean Architecture practices, integrating CQRS, the Mediator pattern, MongoDB, and JWT-based authentication and authorization.
 
 ## 🧱 Architecture Overview
 
@@ -23,27 +23,30 @@ A sample .NET web application demonstrating Clean Architecture principles, integ
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/sepfrd/CleanArchitectureSample.git
-   cd CleanArchitectureSample
+   git clone https://github.com/sepfrd/GraphQLSample.git
+   cd GraphQLSample
    ```
 
 2. **Start the application using Docker Compose**:
 
    ```bash
-   docker-compose up -d
+   MONGO_ROOT_USERNAME=mongodb_username \
+   MONGO_ROOT_PASSWORD=mongodb_password \
+   ENABLE_DATA_SEED=false \
+   docker compose --file docker-compose.yaml up --detach
    ```
 
 ## 🔍 Project Structure
 
 ```
-CleanArchitectureSample/
+GraphQLSample/
 ├── src/
 │   ├── Application/        # Application layer (CQRS handlers, interfaces)
 │   ├── Domain/             # Domain entities and interfaces
 │   ├── Infrastructure/     # Data access, external services
 │   └── Web/                # API controllers, GraphQL setup
 ├── docker-compose.yaml
-├── CleanArchitectureSample.sln
+├── GraphQLSample.sln
 └── README.md
 ```
 

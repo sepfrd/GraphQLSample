@@ -14,9 +14,8 @@ public class PhoneNumberType : ObjectType<PhoneNumber>
 
         descriptor
             .Field(phoneNumber => phoneNumber.User)
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetUserAsync(null!, null!))
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetUserAsync(null!, null!))
             .Description("The User Associated with the Phone Number\n" +
                          "Authentication is required.");
 

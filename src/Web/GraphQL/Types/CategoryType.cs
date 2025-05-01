@@ -31,9 +31,8 @@ public class CategoryType : ObjectType<Category>
         descriptor
             .Field(category => category.Products)
             .Description("All Products of This Category")
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetProductsAsync(null!, null!))
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetProductsAsync(null!, null!))
             .UsePaging();
 
         descriptor

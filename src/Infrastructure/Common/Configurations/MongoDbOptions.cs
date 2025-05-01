@@ -1,6 +1,6 @@
-namespace Infrastructure.Persistence.Common;
+namespace Infrastructure.Common.Configurations;
 
-public record MongoDbSettings
+public record MongoDbOptions
 {
     public required string ConnectionString { get; init; }
 

@@ -15,16 +15,14 @@ public class OrderItemType : ObjectType<OrderItem>
 
         descriptor
             .Field(orderItem => orderItem.Order)
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetOrderAsync(null!, null!))
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetOrderAsync(null!, null!))
             .Description("The Order This Item Belongs To");
 
         descriptor
             .Field(orderItem => orderItem.Product)
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetProductAsync(null!, null!))
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetProductAsync(null!, null!))
             .Description("The Product This Item Represents");
 
         descriptor

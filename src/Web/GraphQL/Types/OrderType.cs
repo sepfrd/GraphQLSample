@@ -16,27 +16,24 @@ public class OrderType : ObjectType<Order>
 
         descriptor
             .Field(order => order.Payment)
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetPaymentAsync(null!, null!))
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetPaymentAsync(null!, null!))
             .Description("The Payment Information Associated with the Order\n" +
                          "Requires the order ID.\n" +
                          "Authentication is required.");
 
         descriptor
             .Field(order => order.Shipment)
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetShipmentAsync(null!, null!))
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetShipmentAsync(null!, null!))
             .Description("The Shipment Details Associated with the Order\n" +
                          "Requires the order ID.\n" +
                          "Authentication is required.");
 
         descriptor
             .Field(order => order.OrderItems)
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetOrderItemsAsync(null!, null!))
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetOrderItemsAsync(null!, null!))
             .Description("The List of Order Items Associated with the Order\n" +
                          "Requires the order ID.\n" +
                          "Authentication is required.\n" +

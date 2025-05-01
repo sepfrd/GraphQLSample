@@ -13,9 +13,8 @@ public class PersonType : ObjectType<Person>
 
         descriptor
             .Field(person => person.User)
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetUserAsync(null!, null!))
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetUserAsync(null!, null!))
             .Description("The User Associated with the Person\n" +
                          "Authentication is required.");
 

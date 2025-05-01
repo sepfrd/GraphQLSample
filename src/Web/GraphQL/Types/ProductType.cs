@@ -18,32 +18,28 @@ public class ProductType : ObjectType<Product>
 
         descriptor
             .Field(product => product.Category)
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetCategoryAsync(null!, null!))
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetCategoryAsync(null!, null!))
             .Description("The Category Associated with the Product");
 
         descriptor
             .Field(product => product.Votes)
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetVotesAsync(null!, null!))
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetVotesAsync(null!, null!))
             .Description("The Votes Associated with the Product");
 
         descriptor
             .Field(product => product.Comments)
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetCommentsAsync(null!, null!))
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetCommentsAsync(null!, null!))
             .Description("The Comments Associated with the Product\n" +
                          "Authentication is required.\n" +
                          "Supports sorting for comment details.");
 
         descriptor
             .Field(product => product.Questions)
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetQuestionsAsync(null!, null!))
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetQuestionsAsync(null!, null!))
             .Description("The Questions Associated with the Product\n" +
                          "Authentication is required.\n" +
                          "Supports sorting for question details.");

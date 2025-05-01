@@ -15,25 +15,22 @@ public class ShipmentType : ObjectType<Shipment>
 
         descriptor
             .Field(shipment => shipment.Order)
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetOrderAsync(null!, null!))
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetOrderAsync(null!, null!))
             .Description("The Order Associated with the Shipment\n" +
                          "Authentication is required.");
 
         descriptor
             .Field(shipment => shipment.DestinationAddressId)
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetDestinationAddressAsync(null!, null!))
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetDestinationAddressAsync(null!, null!))
             .Description("The Destination Address Associated with the Shipment\n" +
                          "Authentication is required.");
 
         descriptor
             .Field(shipment => shipment.OriginAddressId)
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetOriginAddressAsync(null!, null!))
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetOriginAddressAsync(null!, null!))
             .Description("The Origin Address Associated with the Shipment\n" +
                          "Authentication is required.");
 

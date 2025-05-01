@@ -1,7 +1,8 @@
 using Domain.Entities;
+using Infrastructure.Common.Configurations;
 using Infrastructure.Persistence.Common;
 using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Persistence.Repositories;
 
-public class ProductRepository(IOptions<MongoDbSettings> databaseSettings) : BaseRepository<Product>(databaseSettings);
+public class ProductRepository(IOptions<AppOptions> appOptions) : BaseRepository<Product>(appOptions);

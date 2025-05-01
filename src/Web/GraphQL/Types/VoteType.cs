@@ -20,17 +20,15 @@ public class VoteType : ObjectType<Vote>
 
         descriptor
             .Field(vote => vote.User)
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetUserAsync(null!, null!))
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetUserAsync(null!, null!))
             .Description("The User Who Voted\n" +
                          "Authentication is required.");
 
         descriptor
             .Field(vote => vote.Content)
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetContentAsync(null!, null!))
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetContentAsync(null!, null!))
             .Description("The Content Voted On\n" +
                          "Authentication is required.");
 

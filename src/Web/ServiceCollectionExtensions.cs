@@ -1,4 +1,5 @@
 using Application.Common;
+using Application.Common.Constants;
 using Application.EntityManagement.Addresses.Dtos.AddressDto;
 using Application.EntityManagement.Answers.Dtos.AnswerDto;
 using Application.EntityManagement.Categories.Dtos.CategoryDto;
@@ -14,6 +15,10 @@ using Application.EntityManagement.Users.Dtos.CreateUserDto;
 using Application.EntityManagement.Users.Dtos.LoginDto;
 using Application.EntityManagement.Users.Dtos.UserDto;
 using Application.EntityManagement.Votes.Dtos.VoteDto;
+using Infrastructure;
+using Infrastructure.Common.Configurations;
+using Infrastructure.Services.Logging;
+using Microsoft.Extensions.Options;
 using Web.GraphQL.Types;
 using Web.GraphQL.Types.SortTypes;
 
@@ -21,7 +26,33 @@ namespace Web;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddAllGraphQlServices(this IServiceCollection services)
+    public static IServiceCollection AddDependencies(this IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
+    {
+        var appOptions = configuration.Get<AppOptions>()!;
+
+        services
+            .AddHttpContextAccessor()
+            .AddEndpointsApiExplorer()
+            .AddCors(options =>
+            {
+                options.AddPolicy(PolicyConstants.CorsPolicy, policyBuilder =>
+                {
+                    policyBuilder
+                        .AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            })
+            .AddSingleton(Options.Create(appOptions))
+            .AddSingleton<ILogger, CustomLogger>()
+            .AddInfrastructure(appOptions)
+            .AddAllGraphQLServices(appOptions)
+            .AddHealthChecks();
+
+        return services;
+    }
+
+    private static IServiceCollection AddAllGraphQLServices(this IServiceCollection services, AppOptions appOptions)
     {
         services
             .AddGraphQLServer()
@@ -85,23 +116,23 @@ public static class ServiceCollectionExtensions
             .AddInputObjectType<VoteDto>()
             .ModifyPagingOptions(options =>
             {
-                options.IncludeTotalCount = true;
-                options.MaxPageSize = 100;
+                options.IncludeTotalCount = appOptions.GraphQLOptions!.IncludeTotalCount;
+                options.MaxPageSize = appOptions.GraphQLOptions.MaxPageSize;
             })
             .AddFiltering()
             .AddSorting()
             .ModifyRequestOptions(options =>
             {
-                options.ExecutionTimeout = TimeSpan.FromSeconds(2d);
-                options.IncludeExceptionDetails = false;
+                options.ExecutionTimeout = TimeSpan.FromSeconds(appOptions.GraphQLOptions!.ExecutionTimeoutSeconds);
+                options.IncludeExceptionDetails = appOptions.GraphQLOptions.IncludeExceptionDetails;
             })
             .ModifyCostOptions(options =>
             {
-                options.MaxFieldCost = 1_000;
-                options.MaxTypeCost = 10_000;
-                options.EnforceCostLimits = true;
-                options.ApplyCostDefaults = true;
-                options.DefaultResolverCost = 10.0;
+                options.MaxFieldCost = appOptions.GraphQLOptions!.MaxFieldCost;
+                options.MaxTypeCost = appOptions.GraphQLOptions.MaxTypeCost;
+                options.EnforceCostLimits = appOptions.GraphQLOptions.EnforceCostLimits;
+                options.ApplyCostDefaults = appOptions.GraphQLOptions.ApplyCostDefaults;
+                options.DefaultResolverCost = appOptions.GraphQLOptions.DefaultResolverCost;
             })
             .AddInMemorySubscriptions();
 

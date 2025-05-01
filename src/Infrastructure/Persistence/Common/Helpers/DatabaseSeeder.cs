@@ -4,6 +4,7 @@ using Application.Common.Constants;
 using Bogus;
 using Domain.Entities;
 using Domain.Enums;
+using Infrastructure.Common.Configurations;
 using MongoDB.Driver;
 using Person = Domain.Entities.Person;
 
@@ -20,11 +21,11 @@ public class DatabaseSeeder
     private static readonly Guid AdminUserInternalId = Guid.NewGuid();
     private static readonly Guid CustomerUserInternalId = Guid.NewGuid();
 
-    public DatabaseSeeder(string connectionString, string databaseName, IAuthenticationService authenticationService)
+    public DatabaseSeeder(MongoDbOptions mongoDbOptions, IAuthenticationService authenticationService)
     {
-        var mongoClient = new MongoClient(connectionString);
+        var mongoClient = new MongoClient(mongoDbOptions.ConnectionString);
 
-        _mongoDatabase = mongoClient.GetDatabase(databaseName);
+        _mongoDatabase = mongoClient.GetDatabase(mongoDbOptions.DatabaseName);
 
         _authenticationService = authenticationService;
     }

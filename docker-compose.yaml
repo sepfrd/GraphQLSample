@@ -3,28 +3,44 @@ services:
     image: mongo:latest
     container_name: mongodb
     ports:
-      - '27017:27017'
+      - "27017:27017"
     environment:
-      MONGO_INITDB_DATABASE: CleanArchitectureSample
+      MONGO_INITDB_DATABASE: GraphQLSample
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
     healthcheck:
-      test: ["CMD-SHELL", "echo 'db.runCommand({ ping: 1 })' | mongosh --quiet"]
+      test: [ "CMD-SHELL", "echo 'db.runCommand({ ping: 1 })' | mongosh --quiet" ]
       interval: 1s
       timeout: 2s
       retries: 5
 
-  clean_architecture_sample:
-    image: local/clean-architecture-sample:latest
+  graphql_sample:
+    image: graphql_sample:latest
     build:
       context: .
       dockerfile: ./src/Web/Dockerfile
-    container_name: clean_architecture_sample
+    container_name: graphql_sample
     ports:
-      - '4000:8080'
+      - "4000:8080"
     depends_on:
       mongodb:
         condition: service_healthy
     environment:
-      MONGODB__CONNECTIONSTRING: mongodb://mongodb:27017
-      MONGODB__DATABASENAME: CleanArchitectureSample
       ASPNETCORE_ENVIRONMENT: Development
-      ENABLEDATASEED: 'True'
+      ServerUrl: "https://sepfrd.com"
+      ClientUrl: "https://sepfrd.com"
+      GraphQLOptions__MaxPageSize: 100
+      GraphQLOptions__ExecutionTimeoutSeconds: 3.0
+      GraphQLOptions__MaxFieldCost: 1000.0
+      GraphQLOptions__MaxTypeCost: 10000.0
+      GraphQLOptions__DefaultResolverCost: 10.0
+      GraphQLOptions__IncludeTotalCount: true
+      GraphQLOptions__IncludeExceptionDetails: false
+      GraphQLOptions__EnforceCostLimits: true
+      GraphQLOptions__ApplyCostDefaults: true
+      JwtOptions__PrivateKey: "-----BEGIN PRIVATE KEY-----\n{Your Private Key Here}\n-----END PRIVATE KEY-----"
+      JwtOptions__PublicKey: "-----BEGIN PUBLIC KEY-----\n{Your Public Key Here}\n-----END PUBLIC KEY-----"
+      JwtOptions__TokenExpirationDurationMinutes: 1440
+      MongoDbOptions__ConnectionString: "mongodb://${MONGO_ROOT_USERNAME}:${MONGO_ROOT_PASSWORD}@mongodb:27017"
+      MongoDbOptions__DatabaseName: GraphQLSample
+      EnableDataSeed: ${ENABLE_DATA_SEED}

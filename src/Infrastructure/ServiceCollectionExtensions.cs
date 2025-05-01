@@ -1,18 +1,27 @@
 ﻿using System.Security.Cryptography;
 using Application.Abstractions;
+using Application.Common;
 using Application.Common.Constants;
+using Application.EntityManagement.Answers.Dtos.AnswerDto;
+using Application.EntityManagement.Comments;
+using Application.EntityManagement.Orders;
+using Application.EntityManagement.Products;
+using Application.EntityManagement.Questions;
+using Application.EntityManagement.Roles;
+using Application.EntityManagement.Users;
 using Application.EntityManagement.Users.Dtos.UserDto;
 using Domain.Abstractions;
 using Domain.Common;
 using Domain.Entities;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Humanizer;
-using Infrastructure.Persistence.Common;
+using Infrastructure.Common.Configurations;
 using Infrastructure.Persistence.Repositories;
 using Infrastructure.Services;
 using Infrastructure.Services.Mapping;
 using Mapster;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson;
@@ -24,18 +33,39 @@ namespace Infrastructure;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection InjectInfrastructureLayer(this IServiceCollection services,
-        IConfiguration configuration)
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services, AppOptions appOptions)
     {
         ConfigureMapster();
 
         return services
-            .AddMongoDb(configuration)
+            .AddMediator()
+            .AddServices()
+            .AddFluentValidation()
+            .AddMongoDb(appOptions.MongoDbOptions!)
             .AddRepositories()
             .AddSingleton<IMappingService, MappingService>()
             .AddScoped<IAuthenticationService, AuthenticationService>()
-            .AddAuth(configuration);
+            .AddAuth(appOptions);
     }
+
+    private static IServiceCollection AddMediator(this IServiceCollection services) =>
+        services
+            .AddMediatR(configuration => configuration
+                .RegisterServicesFromAssembly(typeof(CommandResult).Assembly));
+
+    private static IServiceCollection AddFluentValidation(this IServiceCollection services) =>
+        services
+            .AddFluentValidationAutoValidation()
+            .AddValidatorsFromAssemblyContaining<AnswerDtoValidator>();
+
+    private static IServiceCollection AddServices(this IServiceCollection services) =>
+        services
+            .AddScoped<CommentService>()
+            .AddScoped<OrderService>()
+            .AddScoped<ProductService>()
+            .AddScoped<QuestionService>()
+            .AddScoped<RoleService>()
+            .AddScoped<UserService>();
 
     private static IServiceCollection AddRepositories(this IServiceCollection services) =>
         services
@@ -58,7 +88,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IRepository<UserRole>, UserRoleRepository>()
             .AddScoped<IRepository<Vote>, VoteRepository>();
 
-    private static IServiceCollection AddMongoDb(this IServiceCollection services, IConfiguration configuration)
+    private static IServiceCollection AddMongoDb(this IServiceCollection services, MongoDbOptions mongoDbOptions)
     {
         BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
 
@@ -68,8 +98,8 @@ public static class ServiceCollectionExtensions
             classMap.MapIdMember(baseEntity => baseEntity.InternalId);
         });
 
-        var connectionString = configuration.GetSection("MongoDb").GetValue<string>("ConnectionString");
-        var databaseName = configuration.GetSection("MongoDb").GetValue<string>("DatabaseName");
+        var connectionString = mongoDbOptions.ConnectionString;
+        var databaseName = mongoDbOptions.DatabaseName;
 
         var mongoClient = new MongoClient(connectionString);
 
@@ -77,12 +107,10 @@ public static class ServiceCollectionExtensions
 
         CreateIndexes(mongoDatabase);
 
-        services.Configure<MongoDbSettings>(configuration.GetSection("MongoDb"));
-
         return services;
     }
 
-    private static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration) =>
+    public static IServiceCollection AddAuth(this IServiceCollection services, AppOptions appOptions) =>
         services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -91,11 +119,9 @@ public static class ServiceCollectionExtensions
             })
             .AddJwtBearer(options =>
             {
-                var publicKey = configuration.GetSection("JwtConfiguration").GetValue<string>("PublicKey");
-
                 var rsa = RSA.Create();
 
-                rsa.ImportFromPem(publicKey);
+                rsa.ImportFromPem(appOptions.JwtOptions!.PublicKey);
 
                 var securityKey = new RsaSecurityKey(rsa);
 
@@ -109,8 +135,8 @@ public static class ServiceCollectionExtensions
                     ValidateLifetime = true,
                     RequireExpirationTime = true,
                     IssuerSigningKey = securityKey,
-                    ValidIssuer = DomainConstants.ApplicationUrl,
-                    ValidAudience = DomainConstants.ApplicationUrl
+                    ValidIssuer = appOptions.ServerUrl,
+                    ValidAudience = appOptions.ClientUrl
                 };
             })
             .Services

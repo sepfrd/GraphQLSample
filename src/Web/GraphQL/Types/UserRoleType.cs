@@ -15,9 +15,8 @@ public class UserRoleType : ObjectType<UserRole>
 
         descriptor
             .Field(userRole => userRole.User)
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetUserAsync(null!, null!))
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetUserAsync(null!, null!))
             .Description("The User Associated with the User-Role\n" +
                          "Authentication is required.");
 

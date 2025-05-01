@@ -1,13 +1,10 @@
-using Application;
 using Application.Abstractions;
-using Application.Common.Constants;
-using Infrastructure;
+using Infrastructure.Common.Configurations;
 using Infrastructure.Persistence.Common.Helpers;
-using Infrastructure.Services.Logging;
+using Microsoft.Extensions.Options;
 using Serilog;
 using Serilog.Settings.Configuration;
 using Web;
-using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,29 +24,13 @@ Log.Logger.Information("Application setup started.");
 
 try
 {
-    builder
-        .Services
-        .AddHttpContextAccessor()
-        .AddEndpointsApiExplorer()
-        .AddCors(options =>
-        {
-            options.AddPolicy(PolicyConstants.CorsPolicy, policyBuilder =>
-            {
-                policyBuilder
-                    .AllowAnyOrigin()
-                    .AllowAnyHeader()
-                    .AllowAnyMethod();
-            });
-        })
-        .AddSingleton<ILogger, CustomLogger>()
-        .InjectApplicationLayer()
-        .InjectInfrastructureLayer(builder.Configuration)
-        .AddAllGraphQlServices()
-        .AddHealthChecks();
+    builder.Services.AddDependencies(builder.Configuration, builder.Environment);
 
     var app = builder.Build();
 
-    if (builder.Configuration.GetSection("EnableDataSeed").Value == "True")
+    var appOptions = app.Services.GetRequiredService<IOptions<AppOptions>>().Value;
+
+    if (appOptions.EnableDataSeed)
     {
         using var scope = app.Services.CreateScope();
 
@@ -57,26 +38,23 @@ try
 
         var authenticationService = serviceProvider.GetRequiredService<IAuthenticationService>();
 
-        var dataSeeder = new DatabaseSeeder(
-            builder.Configuration.GetSection("MongoDb").GetSection("ConnectionString").Value!,
-            builder.Configuration.GetSection("MongoDb").GetSection("DatabaseName").Value!,
-            authenticationService);
+        var mongoDbOptions = appOptions.MongoDbOptions!;
+
+        var dataSeeder = new DatabaseSeeder(mongoDbOptions, authenticationService);
 
         dataSeeder.SeedData();
 
         Console.BackgroundColor = ConsoleColor.DarkGreen;
-        Console.WriteLine("Database successfully seeded.");
+        Console.WriteLine("Successfully seeded the database.");
     }
 
     if (app.Environment.IsDevelopment())
     {
         app.UseDeveloperExceptionPage();
-
-        app.UseGraphQLVoyager("/graphql-voyager");
     }
 
     app
-        // .UseHttpsRedirection()
+        .UseGraphQLVoyager("/graphql-voyager")
         .UseRouting()
         .UseCors()
         .UseAuthentication()
@@ -85,20 +63,16 @@ try
         .UseEndpoints(endpoints =>
         {
             endpoints.MapGraphQL();
-            endpoints.MapHealthChecks("/healthcheck");
+            endpoints.MapHealthChecks("/health");
         });
 
-    app.Run();
+    await app.RunAsync();
 }
 catch (Exception exception)
 {
     Log.Error(exception, "Program stopped due to a {ExceptionType} exception", exception.GetType());
-
-    throw;
 }
 finally
 {
-    Log.CloseAndFlush();
+    await Log.CloseAndFlushAsync();
 }
-
-public partial class Program;

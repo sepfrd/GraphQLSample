@@ -22,23 +22,20 @@ public class CommentType : ObjectType<Comment>
         descriptor
             .Field(comment => comment.Product)
             .Description("The Product This Comment Is For")
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetProductAsync(null!, null!));
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetProductAsync(null!, null!));
 
         descriptor
             .Field(comment => comment.User)
             .Description("The User Who Wrote This Comment")
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetUserAsync(null!, null!));
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetUserAsync(null!, null!));
 
         descriptor
             .Field(comment => comment.Votes)
             .Description("The Votes Submitted for This Comment")
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetVotesAsync(null!, null!));
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetVotesAsync(null!, null!));
 
         descriptor
             .Field(comment => comment.DateCreated)

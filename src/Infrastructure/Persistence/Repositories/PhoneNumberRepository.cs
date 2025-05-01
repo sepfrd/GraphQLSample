@@ -1,8 +1,9 @@
 using Domain.Entities;
+using Infrastructure.Common.Configurations;
 using Infrastructure.Persistence.Common;
 using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Persistence.Repositories;
 
-public class PhoneNumberRepository(IOptions<MongoDbSettings> databaseSettings)
-    : BaseRepository<PhoneNumber>(databaseSettings);
+public class PhoneNumberRepository(IOptions<AppOptions> appOptions)
+    : BaseRepository<PhoneNumber>(appOptions);

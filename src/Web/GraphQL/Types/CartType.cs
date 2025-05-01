@@ -16,16 +16,14 @@ public class CartType : ObjectType<Cart>
         descriptor
             .Field(cart => cart.User)
             .Description("The User This Cart Belongs To")
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetUserAsync(null!, null!));
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetUserAsync(null!, null!));
 
         descriptor
             .Field(cart => cart.CartItems)
             .Description("All Sub Items of This Cart")
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetCartItemsAsync(null!, null!));
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetCartItemsAsync(null!, null!));
 
         descriptor
             .Field(cart => cart.TotalPrice)

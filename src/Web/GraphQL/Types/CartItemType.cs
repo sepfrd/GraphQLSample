@@ -40,16 +40,14 @@ public class CartItemType : ObjectType<CartItem>
         descriptor
             .Field(cartItem => cartItem.Cart)
             .Description("The Cart This Item Belongs To")
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetCartAsync(null!, null!));
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetCartAsync(null!, null!));
 
         descriptor
             .Field(cartItem => cartItem.Product)
             .Description("The Product This Cart Item Holds")
-            .ResolveWith<Resolvers>(
-                resolvers =>
-                    Resolvers.GetProductAsync(null!, null!));
+            .ResolveWith<Resolvers>(resolvers =>
+                Resolvers.GetProductAsync(null!, null!));
 
         descriptor
             .Field(cartItem => cartItem.DateCreated)

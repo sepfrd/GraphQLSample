@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using Domain.Abstractions;
 using Domain.Common;
 using Humanizer;
+using Infrastructure.Common.Configurations;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
@@ -12,11 +13,13 @@ public class BaseRepository<TEntity> : IRepository<TEntity>
 {
     private readonly IMongoCollection<TEntity> _mongoDbCollection;
 
-    protected BaseRepository(IOptions<MongoDbSettings> databaseSettings)
+    protected BaseRepository(IOptions<AppOptions> appOptions)
     {
-        var mongoClient = new MongoClient(databaseSettings.Value.ConnectionString);
+        var databaseSettings = appOptions.Value.MongoDbOptions!;
 
-        var mongoDatabase = mongoClient.GetDatabase(databaseSettings.Value.DatabaseName);
+        var mongoClient = new MongoClient(databaseSettings.ConnectionString);
+
+        var mongoDatabase = mongoClient.GetDatabase(databaseSettings.DatabaseName);
 
         var collectionName = typeof(TEntity).Name.Pluralize();
 
