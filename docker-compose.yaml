@@ -38,8 +38,8 @@ services:
       GraphQLOptions__IncludeExceptionDetails: false
       GraphQLOptions__EnforceCostLimits: true
       GraphQLOptions__ApplyCostDefaults: true
-      JwtOptions__PrivateKey: "-----BEGIN PRIVATE KEY-----\n{Your Private Key Here}\n-----END PRIVATE KEY-----"
-      JwtOptions__PublicKey: "-----BEGIN PUBLIC KEY-----\n{Your Public Key Here}\n-----END PUBLIC KEY-----"
+      JwtOptions__PrivateKey: "${PRIVATE_KEY}"
+      JwtOptions__PublicKey: "${PUBLIC_KEY}"
       JwtOptions__TokenExpirationDurationMinutes: 1440
       MongoDbOptions__ConnectionString: "mongodb://${MONGO_ROOT_USERNAME}:${MONGO_ROOT_PASSWORD}@mongodb:27017"
       MongoDbOptions__DatabaseName: GraphQLSample

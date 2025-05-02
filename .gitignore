@@ -5,6 +5,8 @@
 
 .idea/
 
+*.env
+
 global.json
 
 FodyWeavers.xml
