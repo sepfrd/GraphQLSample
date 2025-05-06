@@ -134,6 +134,7 @@ public static class ServiceCollectionExtensions
                 options.ApplyCostDefaults = appOptions.GraphQLOptions.ApplyCostDefaults;
                 options.DefaultResolverCost = appOptions.GraphQLOptions.DefaultResolverCost;
             })
+            .DisableIntrospection(false)
             .AddInMemorySubscriptions();
 
         return services;
