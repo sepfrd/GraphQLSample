@@ -10,8 +10,6 @@ public class AppOptions
 
     public bool EnableDataSeed { get; set; }
 
-    public string? ApplicationBaseAddress { get; set; }
-
     public string? ServerUrl { get; set; }
 
     public string? ClientUrl { get; set; }

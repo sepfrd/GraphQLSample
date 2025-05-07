@@ -26,12 +26,9 @@ services:
       mongodb:
         condition: service_healthy
     environment:
-      ASPNETCORE_ENVIRONMENT: Production
-      ApplicationBaseAddress: ${APPLICATION_BASE_ADDRESS}
-      ServerUrl: ${SERVER_URL}
-      ClientUrl: ${CLIENT_URL}
-      GraphQLOptions__Endpoint: ${GRAPHQL_ENDPOINT}
-      GraphQLOptions__VoyagerEndpoint: ${VOYAGER_ENDPOINT}
+      ASPNETCORE_ENVIRONMENT: Production 
+      ServerUrl: "https://sepfrd.com"
+      ClientUrl: "https://sepfrd.com"
       GraphQLOptions__MaxPageSize: 100
       GraphQLOptions__ExecutionTimeoutSeconds: 3.0
       GraphQLOptions__MaxFieldCost: 1000.0
