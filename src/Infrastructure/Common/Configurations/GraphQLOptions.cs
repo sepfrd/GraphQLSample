@@ -2,6 +2,10 @@ namespace Infrastructure.Common.Configurations;
 
 public class GraphQLOptions
 {
+    public string? Endpoint { get; set; }
+
+    public string? VoyagerEndpoint { get; set; }
+
     public int MaxPageSize { get; set; }
 
     public double ExecutionTimeoutSeconds { get; set; }

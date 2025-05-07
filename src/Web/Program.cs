@@ -1,4 +1,5 @@
 using Application.Abstractions;
+using GraphQL.Server.Ui.Voyager;
 using Infrastructure.Common.Configurations;
 using Infrastructure.Persistence.Common.Helpers;
 using Microsoft.Extensions.Options;
@@ -54,7 +55,6 @@ try
     }
 
     app
-        .UseGraphQLVoyager("/graphql-voyager")
         .UseRouting()
         .UseCors()
         .UseAuthentication()
@@ -62,7 +62,11 @@ try
         .UseWebSockets()
         .UseEndpoints(endpoints =>
         {
-            endpoints.MapGraphQL();
+            endpoints.MapGraphQL(appOptions.GraphQLOptions!.Endpoint!);
+            endpoints.MapGraphQLVoyager(appOptions.GraphQLOptions.VoyagerEndpoint!, new VoyagerOptions
+            {
+                GraphQLEndPoint = appOptions.ApplicationBaseAddress! + appOptions.GraphQLOptions.Endpoint
+            });
             endpoints.MapHealthChecks("/health");
         });
 
