@@ -54,7 +54,6 @@ try
     }
 
     app
-        .UseGraphQLVoyager("/graphql-voyager")
         .UseRouting()
         .UseCors()
         .UseAuthentication()
@@ -63,6 +62,7 @@ try
         .UseEndpoints(endpoints =>
         {
             endpoints.MapGraphQL();
+            endpoints.MapGraphQLVoyager();
             endpoints.MapHealthChecks("/health");
         });
 
