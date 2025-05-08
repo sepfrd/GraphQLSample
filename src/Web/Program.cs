@@ -62,7 +62,6 @@ try
         .UseEndpoints(endpoints =>
         {
             endpoints.MapGraphQL();
-            endpoints.MapGraphQLVoyager();
             endpoints.MapHealthChecks("/health");
         });
 

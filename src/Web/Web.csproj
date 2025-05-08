@@ -7,28 +7,27 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="GraphQL.Server.Ui.Voyager" Version="8.2.0" />
-        <PackageReference Include="HotChocolate" Version="15.1.3" />
-        <PackageReference Include="HotChocolate.AspNetCore" Version="15.1.3" />
-        <PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="15.1.3" />
-        <PackageReference Include="HotChocolate.Data" Version="15.1.3" />
-        <PackageReference Include="MediatR" Version="12.5.0" />
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
-        <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
-        <PackageReference Include="Serilog.Extensions.Hosting" Version="9.0.0" />
-        <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
-        <PackageReference Include="Serilog.Sinks.MongoDB" Version="7.0.0" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.1" />
+        <PackageReference Include="HotChocolate" Version="15.1.3"/>
+        <PackageReference Include="HotChocolate.AspNetCore" Version="15.1.3"/>
+        <PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="15.1.3"/>
+        <PackageReference Include="HotChocolate.Data" Version="15.1.3"/>
+        <PackageReference Include="MediatR" Version="12.5.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4"/>
+        <PackageReference Include="Serilog.AspNetCore" Version="9.0.0"/>
+        <PackageReference Include="Serilog.Extensions.Hosting" Version="9.0.0"/>
+        <PackageReference Include="Serilog.Sinks.File" Version="7.0.0"/>
+        <PackageReference Include="Serilog.Sinks.MongoDB" Version="7.0.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.1"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Application\Application.csproj" />
-        <ProjectReference Include="..\Domain\Domain.csproj" />
-        <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+        <ProjectReference Include="..\Application\Application.csproj"/>
+        <ProjectReference Include="..\Domain\Domain.csproj"/>
+        <ProjectReference Include="..\Infrastructure\Infrastructure.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-        <_ContentIncludedByDefault Remove="logs\development\log-.json" />
+        <_ContentIncludedByDefault Remove="logs\development\log-.json"/>
     </ItemGroup>
 
 </Project>
