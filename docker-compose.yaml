@@ -10,9 +10,16 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
     healthcheck:
       test: [ "CMD-SHELL", "echo 'db.runCommand({ ping: 1 })' | mongosh --quiet" ]
-      interval: 1s
-      timeout: 2s
+      interval: 60s
+      timeout: 3s
       retries: 5
+    volumes:
+      - mongodb_data:/data/db
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
 
   graphql_sample:
     image: graphql_sample:latest
@@ -26,7 +33,7 @@ services:
       mongodb:
         condition: service_healthy
     environment:
-      ASPNETCORE_ENVIRONMENT: Production 
+      ASPNETCORE_ENVIRONMENT: Production
       ServerUrl: "https://sepfrd.com"
       ClientUrl: "https://sepfrd.com"
       GraphQLOptions__MaxPageSize: 100
@@ -46,3 +53,8 @@ services:
       DataSeedOptions__ShouldSeed: ${SHOULD_SEED_DATA}
       DataSeedOptions__ItemsCount: ${SEED_DATA_COUNT}
       DataSeedOptions__ItemsLargeCount: ${SEED_DATA_LARGE_COUNT}
+
+volumes:
+  mongodb_data:
+    driver: local
+
