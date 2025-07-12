@@ -1,4 +1,5 @@
 using Application.Abstractions;
+using GraphQL.Server.Ui.GraphiQL;
 using HotChocolate.AspNetCore;
 using Infrastructure.Common.Configurations;
 using Infrastructure.Persistence.Common.Helpers;
@@ -31,7 +32,7 @@ try
 
     var appOptions = app.Services.GetRequiredService<IOptions<AppOptions>>().Value;
 
-    if (appOptions.DataSeedOptions!.ShouldSeed)
+    if (appOptions.DataSeedOptions.ShouldSeed)
     {
         using var scope = app.Services.CreateScope();
 
@@ -40,8 +41,8 @@ try
         var authenticationService = serviceProvider.GetRequiredService<IAuthenticationService>();
 
         var dataSeeder = new DatabaseSeeder(
-            appOptions.MongoDbOptions!,
-            appOptions.DataSeedOptions!,
+            appOptions.MongoDbOptions,
+            appOptions.DataSeedOptions,
             authenticationService);
 
         dataSeeder.SeedData();
@@ -65,17 +66,22 @@ try
         .UseWebSockets()
         .UseEndpoints(endpoints =>
         {
-            endpoints.MapGraphQL().WithOptions(new GraphQLServerOptions
-            {
-                Tool =
+            endpoints
+                .MapGraphQL()
+                .WithOptions(new GraphQLServerOptions
                 {
-                    Enable = false
-                }
-            });
+                    Tool =
+                    {
+                        Enable = false
+                    }
+                });
 
             endpoints.MapHealthChecks("/health");
         })
-        .UseGraphQLGraphiQL();
+        .UseGraphQLGraphiQL(options: new GraphiQLOptions
+        {
+            GraphQLEndPoint = appOptions.ApplicationUrl + "graphql"
+        });
 
     await app.RunAsync();
 }

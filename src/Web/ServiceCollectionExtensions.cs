@@ -116,19 +116,19 @@ public static class ServiceCollectionExtensions
             .AddInputObjectType<VoteDto>()
             .ModifyPagingOptions(options =>
             {
-                options.IncludeTotalCount = appOptions.GraphQLOptions!.IncludeTotalCount;
+                options.IncludeTotalCount = appOptions.GraphQLOptions.IncludeTotalCount;
                 options.MaxPageSize = appOptions.GraphQLOptions.MaxPageSize;
             })
             .AddFiltering()
             .AddSorting()
             .ModifyRequestOptions(options =>
             {
-                options.ExecutionTimeout = TimeSpan.FromSeconds(appOptions.GraphQLOptions!.ExecutionTimeoutSeconds);
+                options.ExecutionTimeout = TimeSpan.FromSeconds(appOptions.GraphQLOptions.ExecutionTimeoutSeconds);
                 options.IncludeExceptionDetails = appOptions.GraphQLOptions.IncludeExceptionDetails;
             })
             .ModifyCostOptions(options =>
             {
-                options.MaxFieldCost = appOptions.GraphQLOptions!.MaxFieldCost;
+                options.MaxFieldCost = appOptions.GraphQLOptions.MaxFieldCost;
                 options.MaxTypeCost = appOptions.GraphQLOptions.MaxTypeCost;
                 options.EnforceCostLimits = appOptions.GraphQLOptions.EnforceCostLimits;
                 options.ApplyCostDefaults = appOptions.GraphQLOptions.ApplyCostDefaults;

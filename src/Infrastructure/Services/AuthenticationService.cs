@@ -21,14 +21,14 @@ public class AuthenticationService : IAuthenticationService
 {
     private readonly ISender _sender;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly AppOptions _appOptions;
+    private readonly JwtOptions _jwtOptions;
     private static SigningCredentials? _signingCredentials;
 
     public AuthenticationService(ISender sender, IHttpContextAccessor httpContextAccessor, IOptions<AppOptions> appOptions)
     {
         _sender = sender;
         _httpContextAccessor = httpContextAccessor;
-        _appOptions = appOptions.Value;
+        _jwtOptions = appOptions.Value.JwtOptions;
 
         if (_signingCredentials is not null)
         {
@@ -37,7 +37,7 @@ public class AuthenticationService : IAuthenticationService
 
         var rsa = RSA.Create();
 
-        rsa.ImportFromPem(_appOptions.JwtOptions!.PrivateKey);
+        rsa.ImportFromPem(_jwtOptions.PrivateKey);
 
         var securityKey = new RsaSecurityKey(rsa);
 
@@ -74,8 +74,8 @@ public class AuthenticationService : IAuthenticationService
 
         var claims = new ClaimsIdentity(new[]
         {
-            new Claim(JwtRegisteredClaimNames.Iss, _appOptions.ServerUrl!),
-            new Claim(JwtRegisteredClaimNames.Aud, _appOptions.ClientUrl!),
+            new Claim(JwtRegisteredClaimNames.Iss, _jwtOptions.Issuer),
+            new Claim(JwtRegisteredClaimNames.Aud, _jwtOptions.Audience),
             new Claim(
                 JwtRegisteredClaimNames.Iat,
                 DateTime.Now.ToUniversalTime().ToString(CultureInfo.InvariantCulture)),
@@ -95,7 +95,7 @@ public class AuthenticationService : IAuthenticationService
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = claims,
-            Expires = DateTime.Now.AddMinutes(_appOptions.JwtOptions!.TokenExpirationDurationMinutes),
+            Expires = DateTime.Now.AddMinutes(_jwtOptions.TokenExpirationDurationMinutes),
             SigningCredentials = _signingCredentials
         };
 

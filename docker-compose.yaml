@@ -13,6 +13,7 @@ services:
       interval: 60s
       timeout: 3s
       retries: 5
+      start_period: 20s
     volumes:
       - mongodb_data:/data/db
     deploy:
@@ -28,14 +29,13 @@ services:
       dockerfile: ./src/Web/Dockerfile
     container_name: graphql_sample
     ports:
-      - "4000:8080"
+      - "${APPLICATION_HTTP_PORT}:8080"
     depends_on:
       mongodb:
         condition: service_healthy
     environment:
       ASPNETCORE_ENVIRONMENT: Production
-      ServerUrl: "https://sepfrd.com"
-      ClientUrl: "https://sepfrd.com"
+      ApplicationUrl: "${APPLICATION_URL}"
       GraphQLOptions__MaxPageSize: 100
       GraphQLOptions__ExecutionTimeoutSeconds: 3.0
       GraphQLOptions__MaxFieldCost: 1000.0
@@ -47,6 +47,8 @@ services:
       GraphQLOptions__ApplyCostDefaults: true
       JwtOptions__PrivateKey: "${PRIVATE_KEY}"
       JwtOptions__PublicKey: "${PUBLIC_KEY}"
+      JwtOptions__Issuer: "https://sepfrd.com"
+      JwtOptions__Audience: "https://sepfrd.com"
       JwtOptions__TokenExpirationDurationMinutes: 1440
       MongoDbOptions__ConnectionString: "mongodb://${MONGO_ROOT_USERNAME}:${MONGO_ROOT_PASSWORD}@mongodb:27017"
       MongoDbOptions__DatabaseName: GraphQLSample

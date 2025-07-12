@@ -2,15 +2,13 @@ namespace Infrastructure.Common.Configurations;
 
 public class AppOptions
 {
-    public JwtOptions? JwtOptions { get; set; }
+    public required JwtOptions JwtOptions { get; set; }
 
-    public GraphQLOptions? GraphQLOptions { get; set; }
+    public required GraphQLOptions GraphQLOptions { get; set; }
 
-    public MongoDbOptions? MongoDbOptions { get; set; }
+    public required MongoDbOptions MongoDbOptions { get; set; }
 
-    public DataSeedOptions? DataSeedOptions { get; set; }
+    public required DataSeedOptions DataSeedOptions { get; set; }
 
-    public string? ServerUrl { get; set; }
-
-    public string? ClientUrl { get; set; }
+    public required string ApplicationUrl { get; set; }
 }

@@ -15,7 +15,7 @@ public class BaseRepository<TEntity> : IRepository<TEntity>
 
     protected BaseRepository(IOptions<AppOptions> appOptions)
     {
-        var databaseSettings = appOptions.Value.MongoDbOptions!;
+        var databaseSettings = appOptions.Value.MongoDbOptions;
 
         var mongoClient = new MongoClient(databaseSettings.ConnectionString);
 

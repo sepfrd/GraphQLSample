@@ -41,11 +41,11 @@ public static class ServiceCollectionExtensions
             .AddMediator()
             .AddServices()
             .AddFluentValidation()
-            .AddMongoDb(appOptions.MongoDbOptions!)
+            .AddMongoDb(appOptions.MongoDbOptions)
             .AddRepositories()
             .AddSingleton<IMappingService, MappingService>()
             .AddScoped<IAuthenticationService, AuthenticationService>()
-            .AddAuth(appOptions);
+            .AddAuth(appOptions.JwtOptions);
     }
 
     private static IServiceCollection AddMediator(this IServiceCollection services) =>
@@ -110,7 +110,7 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddAuth(this IServiceCollection services, AppOptions appOptions) =>
+    public static IServiceCollection AddAuth(this IServiceCollection services, JwtOptions jwtOptions) =>
         services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -121,7 +121,7 @@ public static class ServiceCollectionExtensions
             {
                 var rsa = RSA.Create();
 
-                rsa.ImportFromPem(appOptions.JwtOptions!.PublicKey);
+                rsa.ImportFromPem(jwtOptions.PublicKey);
 
                 var securityKey = new RsaSecurityKey(rsa);
 
@@ -135,8 +135,8 @@ public static class ServiceCollectionExtensions
                     ValidateLifetime = true,
                     RequireExpirationTime = true,
                     IssuerSigningKey = securityKey,
-                    ValidIssuer = appOptions.ServerUrl,
-                    ValidAudience = appOptions.ClientUrl
+                    ValidIssuer = jwtOptions.Issuer,
+                    ValidAudience = jwtOptions.Audience
                 };
             })
             .Services
