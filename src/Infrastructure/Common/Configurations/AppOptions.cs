@@ -8,7 +8,7 @@ public class AppOptions
 
     public MongoDbOptions? MongoDbOptions { get; set; }
 
-    public bool EnableDataSeed { get; set; }
+    public DataSeedOptions? DataSeedOptions { get; set; }
 
     public string? ServerUrl { get; set; }
 

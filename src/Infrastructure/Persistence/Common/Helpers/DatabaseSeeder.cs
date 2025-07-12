@@ -12,8 +12,7 @@ namespace Infrastructure.Persistence.Common.Helpers;
 
 public class DatabaseSeeder
 {
-    private const int DefaultNumber = 200;
-    private const int DefaultLargeNumber = 100_000;
+    private readonly DataSeedOptions _dataSeedOptions;
     private readonly IAuthenticationService _authenticationService;
     private readonly IMongoDatabase _mongoDatabase;
     private static readonly Guid AdminRoleInternalId = Guid.NewGuid();
@@ -21,12 +20,15 @@ public class DatabaseSeeder
     private static readonly Guid AdminUserInternalId = Guid.NewGuid();
     private static readonly Guid CustomerUserInternalId = Guid.NewGuid();
 
-    public DatabaseSeeder(MongoDbOptions mongoDbOptions, IAuthenticationService authenticationService)
+    public DatabaseSeeder(
+        MongoDbOptions mongoDbOptions,
+        DataSeedOptions dataSeedOptions,
+        IAuthenticationService authenticationService)
     {
         var mongoClient = new MongoClient(mongoDbOptions.ConnectionString);
 
         _mongoDatabase = mongoClient.GetDatabase(mongoDbOptions.DatabaseName);
-
+        _dataSeedOptions = dataSeedOptions;
         _authenticationService = authenticationService;
     }
 
@@ -54,7 +56,7 @@ public class DatabaseSeeder
         var fakeProductVotes = GetFakeProductVotes();
         var fakeQuestionVotes = GetFakeQuestionVotes();
 
-        for (var i = 0; i < DefaultNumber; i++)
+        for (var i = 0; i < _dataSeedOptions.ItemsCount; i++)
         {
             fakeAddresses[i].UserId = fakeUsers[i].InternalId;
             fakePhoneNumbers[i].UserId = fakeUsers[i].InternalId;
@@ -76,15 +78,15 @@ public class DatabaseSeeder
             fakeCartItems[i].CartId = fakeCarts[i].InternalId;
 
             fakeShipments[i].DestinationAddressId = fakeAddresses[i].InternalId;
-            fakeShipments[i].OriginAddressId = fakeAddresses[DefaultNumber - i - 1].InternalId;
+            fakeShipments[i].OriginAddressId = fakeAddresses[_dataSeedOptions.ItemsCount - i - 1].InternalId;
 
             fakeUserRoles[i].UserId = fakeUsers[i].InternalId;
             fakeUserRoles[i].RoleId = fakeRoles.ElementAt(Random.Shared.Next(0, fakeRoles.Count)).InternalId;
         }
 
-        for (var index = 0; index < DefaultLargeNumber; index++)
+        for (var index = 0; index < _dataSeedOptions.ItemsLargeCount; index++)
         {
-            if (index < DefaultNumber)
+            if (index < _dataSeedOptions.ItemsCount)
             {
                 fakeCartItems[index].ProductId = fakeProducts[index].InternalId;
             }
@@ -151,7 +153,7 @@ public class DatabaseSeeder
         _mongoDatabase.GetCollection<Vote>("Votes").InsertMany(fakeVotes);
     }
 
-    private static List<Address> GetFakeAddresses()
+    private List<Address> GetFakeAddresses()
     {
         var externalId = 1;
 
@@ -167,7 +169,7 @@ public class DatabaseSeeder
 
         var fakeAddresses = new List<Address>();
 
-        for (var i = 0; i < DefaultNumber; i++)
+        for (var i = 0; i < _dataSeedOptions.ItemsCount; i++)
         {
             fakeAddresses.Add(addressFaker.Generate());
         }
@@ -175,7 +177,7 @@ public class DatabaseSeeder
         return fakeAddresses;
     }
 
-    private static List<Answer> GetFakeAnswers()
+    private List<Answer> GetFakeAnswers()
     {
         var externalId = 1;
 
@@ -186,7 +188,7 @@ public class DatabaseSeeder
 
         var fakeAnswers = new List<Answer>();
 
-        for (var i = 0; i < DefaultLargeNumber; i++)
+        for (var i = 0; i < _dataSeedOptions.ItemsLargeCount; i++)
         {
             fakeAnswers.Add(answerFaker.Generate());
         }
@@ -194,7 +196,7 @@ public class DatabaseSeeder
         return fakeAnswers;
     }
 
-    private static List<Cart> GetFakeCarts()
+    private List<Cart> GetFakeCarts()
     {
         var externalId = 1;
 
@@ -203,7 +205,7 @@ public class DatabaseSeeder
 
         var fakeCarts = new List<Cart>();
 
-        for (var i = 0; i < DefaultNumber; i++)
+        for (var i = 0; i < _dataSeedOptions.ItemsCount; i++)
         {
             fakeCarts.Add(cartFaker.Generate());
         }
@@ -211,7 +213,7 @@ public class DatabaseSeeder
         return fakeCarts;
     }
 
-    private static List<CartItem> GetFakeCartItems()
+    private List<CartItem> GetFakeCartItems()
     {
         var externalId = 1;
 
@@ -222,7 +224,7 @@ public class DatabaseSeeder
 
         var fakeCartItems = new List<CartItem>();
 
-        for (var i = 0; i < DefaultNumber; i++)
+        for (var i = 0; i < _dataSeedOptions.ItemsCount; i++)
         {
             fakeCartItems.Add(cartItemFaker.Generate());
         }
@@ -230,98 +232,7 @@ public class DatabaseSeeder
         return fakeCartItems;
     }
 
-    private static Category[] GetFakeCategories()
-    {
-        var externalId = 1;
-
-        Category[] fakeCategories =
-        [
-            new Category
-            {
-                ExternalId = externalId++,
-                Name = "Electronics",
-                Description = "Cutting-edge gadgets and devices for tech enthusiasts",
-                ImageUrl = "categories/electronics.png",
-                IconUrl = "categories/electronics.png"
-            },
-            new Category
-            {
-                ExternalId = externalId++,
-                Name = "Clothing",
-                Description = "Fashionable apparel and accessories for all occasions",
-                ImageUrl = "categories/clothing.png",
-                IconUrl = "categories/clothing.png"
-            },
-            new Category
-            {
-                ExternalId = externalId++,
-                Name = "Books",
-                Description = "Engaging reads for bookworms of all ages",
-                ImageUrl = "categories/books.png",
-                IconUrl = "categories/books.png"
-            },
-            new Category
-            {
-                ExternalId = externalId++,
-                Name = "Home & Garden",
-                Description = "Decor and essentials to spruce up your living space",
-                ImageUrl = "categories/garden.png",
-                IconUrl = "categories/garden.png"
-            },
-            new Category
-            {
-                ExternalId = externalId++,
-                Name = "Toys & Games",
-                Description = "Fun and entertaining toys and games for kids and adults alike",
-                ImageUrl = "categories/games.png",
-                IconUrl = "categories/games.png"
-            },
-            new Category
-            {
-                ExternalId = externalId++,
-                Name = "Health & Beauty",
-                Description = "Products to enhance your well-being and beauty regimen",
-                ImageUrl = "categories/health.png",
-                IconUrl = "categories/health.png"
-            },
-            new Category
-            {
-                ExternalId = externalId++,
-                Name = "Sports & Outdoors",
-                Description = "Gear and equipment for outdoor adventures and fitness pursuits",
-                ImageUrl = "categories/sports.png",
-                IconUrl = "categories/sports.png"
-            },
-            new Category
-            {
-                ExternalId = externalId++,
-                Name = "Pet Supplies",
-                Description = "Essentials and treats for your furry friends",
-                ImageUrl = "categories/pet.png",
-                IconUrl = "categories/pet.png"
-            },
-            new Category
-            {
-                ExternalId = externalId++,
-                Name = "Jewelry & Accessories",
-                Description = "Elegant adornments and stylish accessories to complement any outfit",
-                ImageUrl = "categories/jewelry.png",
-                IconUrl = "categories/jewelry.png"
-            },
-            new Category
-            {
-                ExternalId = externalId,
-                Name = "Food & Beverages",
-                Description = "Delicious treats and beverages for every palate",
-                ImageUrl = "categories/food.png",
-                IconUrl = "categories/food.png"
-            }
-        ];
-
-        return fakeCategories;
-    }
-
-    private static List<Comment> GetFakeComments()
+    private List<Comment> GetFakeComments()
     {
         var externalId = 1;
 
@@ -331,7 +242,7 @@ public class DatabaseSeeder
 
         var fakeComments = new List<Comment>();
 
-        for (var i = 0; i < DefaultLargeNumber; i++)
+        for (var i = 0; i < _dataSeedOptions.ItemsLargeCount; i++)
         {
             fakeComments.Add(commentFaker.Generate());
         }
@@ -339,7 +250,7 @@ public class DatabaseSeeder
         return fakeComments;
     }
 
-    private static List<Order> GetFakeOrders()
+    private List<Order> GetFakeOrders()
     {
         var externalId = 1;
 
@@ -349,7 +260,7 @@ public class DatabaseSeeder
 
         var fakeOrders = new List<Order>();
 
-        for (var i = 0; i < DefaultLargeNumber; i++)
+        for (var i = 0; i < _dataSeedOptions.ItemsLargeCount; i++)
         {
             fakeOrders.Add(orderFaker.Generate());
         }
@@ -357,7 +268,7 @@ public class DatabaseSeeder
         return fakeOrders;
     }
 
-    private static List<OrderItem> GetFakeOrderItems()
+    private List<OrderItem> GetFakeOrderItems()
     {
         var externalId = 1;
 
@@ -368,7 +279,7 @@ public class DatabaseSeeder
 
         var fakeOrderItems = new List<OrderItem>();
 
-        for (var i = 0; i < DefaultLargeNumber; i++)
+        for (var i = 0; i < _dataSeedOptions.ItemsLargeCount; i++)
         {
             fakeOrderItems.Add(orderItemFaker.Generate());
         }
@@ -376,7 +287,7 @@ public class DatabaseSeeder
         return fakeOrderItems;
     }
 
-    private static List<Payment> GetFakePayments()
+    private List<Payment> GetFakePayments()
     {
         var externalId = 1;
 
@@ -389,7 +300,7 @@ public class DatabaseSeeder
 
         var fakePayments = new List<Payment>();
 
-        for (var i = 0; i < DefaultLargeNumber; i++)
+        for (var i = 0; i < _dataSeedOptions.ItemsLargeCount; i++)
         {
             fakePayments.Add(paymentFaker.Generate());
         }
@@ -397,7 +308,7 @@ public class DatabaseSeeder
         return fakePayments;
     }
 
-    private static List<PhoneNumber> GetFakePhoneNumbers()
+    private List<PhoneNumber> GetFakePhoneNumbers()
     {
         var externalId = 1;
 
@@ -410,7 +321,7 @@ public class DatabaseSeeder
 
         var fakePhoneNumbers = new List<PhoneNumber>();
 
-        for (var i = 0; i < DefaultLargeNumber; i++)
+        for (var i = 0; i < _dataSeedOptions.ItemsLargeCount; i++)
         {
             fakePhoneNumbers.Add(phoneNumberFaker.Generate());
         }
@@ -418,7 +329,7 @@ public class DatabaseSeeder
         return fakePhoneNumbers;
     }
 
-    private static List<Product> GetFakeProducts()
+    private List<Product> GetFakeProducts()
     {
         var externalId = 1;
 
@@ -439,7 +350,7 @@ public class DatabaseSeeder
 
         var fakeProducts = new List<Product>();
 
-        for (var i = 0; i < DefaultLargeNumber; i++)
+        for (var i = 0; i < _dataSeedOptions.ItemsLargeCount; i++)
         {
             fakeProducts.Add(productFaker.Generate());
         }
@@ -447,7 +358,7 @@ public class DatabaseSeeder
         return fakeProducts;
     }
 
-    private static List<Question> GetFakeQuestions()
+    private List<Question> GetFakeQuestions()
     {
         var externalId = 1;
 
@@ -458,7 +369,7 @@ public class DatabaseSeeder
 
         var fakeQuestions = new List<Question>();
 
-        for (var i = 0; i < DefaultLargeNumber; i++)
+        for (var i = 0; i < _dataSeedOptions.ItemsLargeCount; i++)
         {
             fakeQuestions.Add(questionFaker.Generate());
         }
@@ -466,26 +377,7 @@ public class DatabaseSeeder
         return fakeQuestions;
     }
 
-    private static List<Role> GetFakeRoles() =>
-    [
-        new Role
-        {
-            InternalId = AdminRoleInternalId,
-            ExternalId = 1,
-            Title = RoleConstants.Admin,
-            Description = "The Highest Role in the Application Role Hierarchy"
-        },
-
-        new Role
-        {
-            InternalId = CustomerRoleInternalId,
-            ExternalId = 2,
-            Title = RoleConstants.Customer,
-            Description = "The Basic Role in the Application Role Hierarchy"
-        }
-    ];
-
-    private static List<Shipment> GetFakeShipments()
+    private List<Shipment> GetFakeShipments()
     {
         var externalId = 1;
 
@@ -502,7 +394,7 @@ public class DatabaseSeeder
 
         var fakeShipments = new List<Shipment>();
 
-        for (var i = 0; i < DefaultLargeNumber; i++)
+        for (var i = 0; i < _dataSeedOptions.ItemsLargeCount; i++)
         {
             fakeShipments.Add(shipmentFaker.Generate());
         }
@@ -510,7 +402,7 @@ public class DatabaseSeeder
         return fakeShipments;
     }
 
-    private static List<Vote> GetFakeAnswerVotes()
+    private List<Vote> GetFakeAnswerVotes()
     {
         var externalId = 1;
 
@@ -521,7 +413,7 @@ public class DatabaseSeeder
 
         var fakeAnswerVotes = new List<Vote>();
 
-        for (var i = 0; i < DefaultLargeNumber; i++)
+        for (var i = 0; i < _dataSeedOptions.ItemsLargeCount; i++)
         {
             fakeAnswerVotes.Add(voteFaker.Generate());
         }
@@ -529,9 +421,9 @@ public class DatabaseSeeder
         return fakeAnswerVotes;
     }
 
-    private static List<Vote> GetFakeCommentVotes()
+    private List<Vote> GetFakeCommentVotes()
     {
-        var externalId = DefaultLargeNumber;
+        var externalId = _dataSeedOptions.ItemsLargeCount;
 
         var voteFaker = new Faker<Vote>()
             .RuleFor(vote => vote.ExternalId, _ => externalId++)
@@ -540,7 +432,7 @@ public class DatabaseSeeder
 
         var fakeCommentVotes = new List<Vote>();
 
-        for (var i = 0; i < DefaultLargeNumber; i++)
+        for (var i = 0; i < _dataSeedOptions.ItemsLargeCount; i++)
         {
             fakeCommentVotes.Add(voteFaker.Generate());
         }
@@ -548,9 +440,9 @@ public class DatabaseSeeder
         return fakeCommentVotes;
     }
 
-    private static List<Vote> GetFakeProductVotes()
+    private List<Vote> GetFakeProductVotes()
     {
-        var externalId = DefaultLargeNumber * 2;
+        var externalId = _dataSeedOptions.ItemsLargeCount * 2;
 
         var voteFaker = new Faker<Vote>()
             .RuleFor(vote => vote.ExternalId, _ => externalId++)
@@ -559,7 +451,7 @@ public class DatabaseSeeder
 
         var fakeProductVotes = new List<Vote>();
 
-        for (var i = 0; i < DefaultLargeNumber; i++)
+        for (var i = 0; i < _dataSeedOptions.ItemsLargeCount; i++)
         {
             fakeProductVotes.Add(voteFaker.Generate());
         }
@@ -567,9 +459,9 @@ public class DatabaseSeeder
         return fakeProductVotes;
     }
 
-    private static List<Vote> GetFakeQuestionVotes()
+    private List<Vote> GetFakeQuestionVotes()
     {
-        var externalId = DefaultLargeNumber * 3;
+        var externalId = _dataSeedOptions.ItemsLargeCount * 3;
 
         var voteFaker = new Faker<Vote>()
             .RuleFor(vote => vote.ExternalId, _ => externalId++)
@@ -578,7 +470,7 @@ public class DatabaseSeeder
 
         var fakeQuestionVotes = new List<Vote>();
 
-        for (var i = 0; i < DefaultLargeNumber; i++)
+        for (var i = 0; i < _dataSeedOptions.ItemsLargeCount; i++)
         {
             fakeQuestionVotes.Add(voteFaker.Generate());
         }
@@ -586,7 +478,7 @@ public class DatabaseSeeder
         return fakeQuestionVotes;
     }
 
-    private static List<Person> GetFakePersons()
+    private List<Person> GetFakePersons()
     {
         var externalId = 1;
 
@@ -598,7 +490,7 @@ public class DatabaseSeeder
 
         var fakePeople = new List<Person>();
 
-        for (var i = 0; i < DefaultNumber; i++)
+        for (var i = 0; i < _dataSeedOptions.ItemsCount; i++)
         {
             fakePeople.Add(personFaker.Generate());
         }
@@ -647,7 +539,7 @@ public class DatabaseSeeder
             customerUser
         };
 
-        for (var i = 0; i < DefaultNumber - 2; i++)
+        for (var i = 0; i < _dataSeedOptions.ItemsCount - 2; i++)
         {
             fakeUsers.Add(userFaker.Generate());
         }
@@ -655,7 +547,7 @@ public class DatabaseSeeder
         return fakeUsers;
     }
 
-    private static List<UserRole> GetFakeUserRoles()
+    private List<UserRole> GetFakeUserRoles()
     {
         var externalId = 3;
 
@@ -664,11 +556,121 @@ public class DatabaseSeeder
 
         var fakeUserRoles = new List<UserRole>();
 
-        for (var i = 0; i < DefaultNumber; i++)
+        for (var i = 0; i < _dataSeedOptions.ItemsCount; i++)
         {
             fakeUserRoles.Add(userRoleFaker.Generate());
         }
 
         return fakeUserRoles;
     }
+
+    private static Category[] GetFakeCategories()
+    {
+        var externalId = 1;
+
+        Category[] fakeCategories =
+        [
+            new()
+            {
+                ExternalId = externalId++,
+                Name = "Electronics",
+                Description = "Cutting-edge gadgets and devices for tech enthusiasts",
+                ImageUrl = "categories/electronics.png",
+                IconUrl = "categories/electronics.png"
+            },
+            new()
+            {
+                ExternalId = externalId++,
+                Name = "Clothing",
+                Description = "Fashionable apparel and accessories for all occasions",
+                ImageUrl = "categories/clothing.png",
+                IconUrl = "categories/clothing.png"
+            },
+            new()
+            {
+                ExternalId = externalId++,
+                Name = "Books",
+                Description = "Engaging reads for bookworms of all ages",
+                ImageUrl = "categories/books.png",
+                IconUrl = "categories/books.png"
+            },
+            new()
+            {
+                ExternalId = externalId++,
+                Name = "Home & Garden",
+                Description = "Decor and essentials to spruce up your living space",
+                ImageUrl = "categories/garden.png",
+                IconUrl = "categories/garden.png"
+            },
+            new()
+            {
+                ExternalId = externalId++,
+                Name = "Toys & Games",
+                Description = "Fun and entertaining toys and games for kids and adults alike",
+                ImageUrl = "categories/games.png",
+                IconUrl = "categories/games.png"
+            },
+            new()
+            {
+                ExternalId = externalId++,
+                Name = "Health & Beauty",
+                Description = "Products to enhance your well-being and beauty regimen",
+                ImageUrl = "categories/health.png",
+                IconUrl = "categories/health.png"
+            },
+            new()
+            {
+                ExternalId = externalId++,
+                Name = "Sports & Outdoors",
+                Description = "Gear and equipment for outdoor adventures and fitness pursuits",
+                ImageUrl = "categories/sports.png",
+                IconUrl = "categories/sports.png"
+            },
+            new()
+            {
+                ExternalId = externalId++,
+                Name = "Pet Supplies",
+                Description = "Essentials and treats for your furry friends",
+                ImageUrl = "categories/pet.png",
+                IconUrl = "categories/pet.png"
+            },
+            new()
+            {
+                ExternalId = externalId++,
+                Name = "Jewelry & Accessories",
+                Description = "Elegant adornments and stylish accessories to complement any outfit",
+                ImageUrl = "categories/jewelry.png",
+                IconUrl = "categories/jewelry.png"
+            },
+            new()
+            {
+                ExternalId = externalId,
+                Name = "Food & Beverages",
+                Description = "Delicious treats and beverages for every palate",
+                ImageUrl = "categories/food.png",
+                IconUrl = "categories/food.png"
+            }
+        ];
+
+        return fakeCategories;
+    }
+
+    private static List<Role> GetFakeRoles() =>
+    [
+        new()
+        {
+            InternalId = AdminRoleInternalId,
+            ExternalId = 1,
+            Title = RoleConstants.Admin,
+            Description = "The Highest Role in the Application Role Hierarchy"
+        },
+
+        new()
+        {
+            InternalId = CustomerRoleInternalId,
+            ExternalId = 2,
+            Title = RoleConstants.Customer,
+            Description = "The Basic Role in the Application Role Hierarchy"
+        }
+    ];
 }

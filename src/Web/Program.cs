@@ -1,4 +1,5 @@
 using Application.Abstractions;
+using HotChocolate.AspNetCore;
 using Infrastructure.Common.Configurations;
 using Infrastructure.Persistence.Common.Helpers;
 using Microsoft.Extensions.Options;
@@ -30,7 +31,7 @@ try
 
     var appOptions = app.Services.GetRequiredService<IOptions<AppOptions>>().Value;
 
-    if (appOptions.EnableDataSeed)
+    if (appOptions.DataSeedOptions!.ShouldSeed)
     {
         using var scope = app.Services.CreateScope();
 
@@ -38,14 +39,17 @@ try
 
         var authenticationService = serviceProvider.GetRequiredService<IAuthenticationService>();
 
-        var mongoDbOptions = appOptions.MongoDbOptions!;
-
-        var dataSeeder = new DatabaseSeeder(mongoDbOptions, authenticationService);
+        var dataSeeder = new DatabaseSeeder(
+            appOptions.MongoDbOptions!,
+            appOptions.DataSeedOptions!,
+            authenticationService);
 
         dataSeeder.SeedData();
 
         Console.BackgroundColor = ConsoleColor.DarkGreen;
+        Console.ForegroundColor = ConsoleColor.Black;
         Console.WriteLine("Successfully seeded the database.");
+        Console.ResetColor();
     }
 
     if (app.Environment.IsDevelopment())
@@ -61,9 +65,17 @@ try
         .UseWebSockets()
         .UseEndpoints(endpoints =>
         {
-            endpoints.MapGraphQL();
+            endpoints.MapGraphQL().WithOptions(new GraphQLServerOptions
+            {
+                Tool =
+                {
+                    Enable = false
+                }
+            });
+
             endpoints.MapHealthChecks("/health");
-        });
+        })
+        .UseGraphQLGraphiQL();
 
     await app.RunAsync();
 }

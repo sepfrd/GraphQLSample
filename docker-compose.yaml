@@ -43,4 +43,6 @@ services:
       JwtOptions__TokenExpirationDurationMinutes: 1440
       MongoDbOptions__ConnectionString: "mongodb://${MONGO_ROOT_USERNAME}:${MONGO_ROOT_PASSWORD}@mongodb:27017"
       MongoDbOptions__DatabaseName: GraphQLSample
-      EnableDataSeed: ${ENABLE_DATA_SEED}
+      DataSeedOptions__ShouldSeed: ${SHOULD_SEED_DATA}
+      DataSeedOptions__ItemsCount: ${SEED_DATA_COUNT}
+      DataSeedOptions__ItemsLargeCount: ${SEED_DATA_LARGE_COUNT}
