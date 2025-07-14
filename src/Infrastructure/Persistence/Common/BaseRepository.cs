@@ -1,5 +1,5 @@
 using System.Linq.Expressions;
-using Domain.Abstractions;
+using Application.Abstractions;
 using Domain.Common;
 using Humanizer;
 using Infrastructure.Common.Configurations;
@@ -23,41 +23,19 @@ public class BaseRepository<TEntity> : IRepository<TEntity>
 
         var collectionName = typeof(TEntity).Name.Pluralize();
 
-        collectionName = collectionName == "People" ? "Persons" : collectionName;
-
         _mongoDbCollection = mongoDatabase.GetCollection<TEntity>(collectionName);
     }
 
     public virtual async Task<TEntity?> CreateAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
-        var externalId = await GenerateUniqueExternalIdAsync(cancellationToken);
-
-        entity.ExternalId = externalId;
-
         await _mongoDbCollection.InsertOneAsync(entity, null, cancellationToken);
 
-        var filterDefinition = Builders<TEntity>.Filter.Eq(document => document.InternalId, entity.InternalId);
+        var filterDefinition = Builders<TEntity>.Filter.Eq(document => document.Uuid, entity.Uuid);
 
         var documentCursor =
             await _mongoDbCollection.FindAsync<TEntity>(filterDefinition, cancellationToken: cancellationToken);
 
         return await documentCursor.FirstOrDefaultAsync(cancellationToken);
-    }
-
-    private async Task<int> GenerateUniqueExternalIdAsync(CancellationToken cancellationToken = default)
-    {
-        var findOptions = new FindOptions<TEntity>
-        {
-            Sort = Builders<TEntity>.Sort.Descending(document => document.ExternalId),
-            Limit = 1
-        };
-
-        var documentCursor =
-            await _mongoDbCollection.FindAsync(FilterDefinition<TEntity>.Empty, findOptions, cancellationToken);
-
-        var document = await documentCursor.FirstOrDefaultAsync(cancellationToken);
-
-        return document is null ? 0 : document.ExternalId + 1;
     }
 
     public virtual async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter = null,
@@ -73,28 +51,10 @@ public class BaseRepository<TEntity> : IRepository<TEntity>
         return await documentCursor.ToListAsync(cancellationToken);
     }
 
-    public virtual async Task<TEntity?> GetByInternalIdAsync(Guid internalId,
+    public virtual async Task<TEntity?> GetByUuidAsync(Guid uuid,
         CancellationToken cancellationToken = default)
     {
-        var filterDefinition = Builders<TEntity>.Filter.Eq(document => document.InternalId, internalId);
-
-        var findOptions = new FindOptions<TEntity>
-        {
-            Limit = 1
-        };
-
-        var documentCursor = await _mongoDbCollection.FindAsync(
-            filterDefinition,
-            findOptions,
-            cancellationToken);
-
-        return await documentCursor.FirstOrDefaultAsync(cancellationToken);
-    }
-
-    public virtual async Task<TEntity?> GetByExternalIdAsync(int externalId,
-        CancellationToken cancellationToken = default)
-    {
-        var filterDefinition = Builders<TEntity>.Filter.Eq(document => document.ExternalId, externalId);
+        var filterDefinition = Builders<TEntity>.Filter.Eq(document => document.Uuid, uuid);
 
         var findOptions = new FindOptions<TEntity>
         {
@@ -112,7 +72,7 @@ public class BaseRepository<TEntity> : IRepository<TEntity>
     public virtual async Task<TEntity?> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         var filterDefinition = new FilterDefinitionBuilder<TEntity>()
-            .Eq(document => document.InternalId, entity.InternalId);
+            .Eq(document => document.Uuid, entity.Uuid);
 
         var result = await _mongoDbCollection.FindOneAndReplaceAsync(filterDefinition, entity, null, cancellationToken);
 
@@ -122,7 +82,7 @@ public class BaseRepository<TEntity> : IRepository<TEntity>
     public virtual async Task<TEntity?> DeleteOneAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         var filterDefinition = new FilterDefinitionBuilder<TEntity>()
-            .Where(document => document.InternalId == entity.InternalId);
+            .Where(document => document.Uuid == entity.Uuid);
 
         var result = await _mongoDbCollection.FindOneAndDeleteAsync(filterDefinition, null, cancellationToken);
 
@@ -131,10 +91,10 @@ public class BaseRepository<TEntity> : IRepository<TEntity>
 
     public async Task DeleteManyAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
     {
-        var idsToDelete = entities.Select(entity => entity.InternalId).ToList();
+        var idsToDelete = entities.Select(entity => entity.Uuid).ToList();
 
         await _mongoDbCollection.DeleteManyAsync(
-            entity => idsToDelete.Contains(entity.InternalId),
+            entity => idsToDelete.Contains(entity.Uuid),
             cancellationToken);
     }
 }

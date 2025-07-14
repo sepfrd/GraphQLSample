@@ -38,4 +38,8 @@
         <None Remove="Services\MappingService\MapperlyMappers\**"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Common\Dtos\" />
+    </ItemGroup>
+
 </Project>

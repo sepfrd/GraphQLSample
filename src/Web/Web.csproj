@@ -12,7 +12,6 @@
         <PackageReference Include="HotChocolate.AspNetCore" Version="15.1.7" />
         <PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="15.1.7" />
         <PackageReference Include="HotChocolate.Data" Version="15.1.7" />
-        <PackageReference Include="MediatR" Version="13.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.7" />
         <PackageReference Include="Serilog.AspNetCore" Version="9.0.0"/>
         <PackageReference Include="Serilog.Extensions.Hosting" Version="9.0.0"/>
@@ -29,6 +28,7 @@
 
     <ItemGroup>
         <_ContentIncludedByDefault Remove="logs\development\log-.json"/>
+        <_ContentIncludedByDefault Remove="logs\log-20250712.json" />
     </ItemGroup>
 
 </Project>

@@ -1,6 +1,6 @@
-using Application.Abstractions;
 using GraphQL.Server.Ui.GraphiQL;
 using HotChocolate.AspNetCore;
+using Infrastructure.Abstraction;
 using Infrastructure.Common.Configurations;
 using Infrastructure.Persistence.Common.Helpers;
 using Microsoft.Extensions.Options;
@@ -38,7 +38,7 @@ try
 
         var serviceProvider = scope.ServiceProvider;
 
-        var authenticationService = serviceProvider.GetRequiredService<IAuthenticationService>();
+        var authenticationService = serviceProvider.GetRequiredService<IAuthService>();
 
         var dataSeeder = new DatabaseSeeder(
             appOptions.MongoDbOptions,

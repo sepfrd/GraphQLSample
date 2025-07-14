@@ -1,0 +1,109 @@
+using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using BCrypt.Net;
+using Infrastructure.Abstraction;
+using Infrastructure.Common.Configurations;
+using Infrastructure.Common.Constants;
+using Infrastructure.Services.AuthService.Dtos;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+
+namespace Infrastructure.Services.AuthService;
+
+public class AuthService : IAuthService
+{
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly JwtOptions _jwtOptions;
+    private static SigningCredentials? _signingCredentials;
+
+    public AuthService(
+        IHttpContextAccessor httpContextAccessor,
+        IOptions<AppOptions> appOptions)
+    {
+        _httpContextAccessor = httpContextAccessor;
+        _jwtOptions = appOptions.Value.JwtOptions;
+
+        if (_signingCredentials is not null)
+        {
+            return;
+        }
+
+        var rsa = RSA.Create();
+
+        rsa.ImportFromPem(_jwtOptions.PrivateKey);
+
+        var securityKey = new RsaSecurityKey(rsa);
+
+        _signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha512Signature);
+    }
+
+    public async Task<string?> CreateJwtAsync(User user, CancellationToken cancellationToken = default)
+    {
+        var claims = new ClaimsIdentity(new[]
+        {
+            new Claim(JwtRegisteredClaimNames.Iss, _jwtOptions.Issuer),
+            new Claim(JwtRegisteredClaimNames.Aud, _jwtOptions.Audience),
+            new Claim(
+                JwtRegisteredClaimNames.Iat,
+                DateTime.Now.ToUniversalTime().ToString(CultureInfo.InvariantCulture)),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(JwtRegisteredClaimNames.Email, user.Email),
+            new Claim(JwtClaimConstants.UsernameClaim, user.Username),
+            new Claim(JwtClaimConstants.ExternalIdClaim, user.Uuid.ToString())
+        });
+
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = claims,
+            Expires = DateTime.Now.AddMinutes(_jwtOptions.TokenExpirationDurationMinutes),
+            SigningCredentials = _signingCredentials
+        };
+
+        var jwtHandler = new JwtSecurityTokenHandler();
+
+        var token = jwtHandler.CreateToken(tokenDescriptor);
+
+        var jwt = jwtHandler.WriteToken(token);
+
+        return jwt;
+    }
+
+    public UserClaimsDto? GetLoggedInUser()
+    {
+        if (!IsLoggedIn())
+        {
+            return null;
+        }
+
+        var user = _httpContextAccessor.HttpContext!.User;
+
+        var iss = user.FindFirstValue(JwtRegisteredClaimNames.Iss);
+        var aud = user.FindFirstValue(JwtRegisteredClaimNames.Aud);
+        var iat = user.FindFirstValue(JwtRegisteredClaimNames.Iat);
+        var jti = user.FindFirstValue(JwtRegisteredClaimNames.Jti);
+        var email = user.FindFirstValue(JwtRegisteredClaimNames.Email);
+        var username = user.FindFirstValue(JwtClaimConstants.UsernameClaim);
+
+        var userClaimsDto = new UserClaimsDto(
+            iss,
+            aud,
+            iat,
+            jti,
+            email,
+            username);
+
+        return userClaimsDto;
+    }
+
+    public string HashPassword(string password) =>
+        BCrypt.Net.BCrypt.EnhancedHashPassword(password, HashType.SHA512, 12);
+
+    public bool ValidatePassword(string password, string passwordHash) =>
+        BCrypt.Net.BCrypt.EnhancedVerify(password, passwordHash, HashType.SHA512);
+
+    public bool IsLoggedIn() =>
+        _httpContextAccessor.HttpContext?.User.Identity?.IsAuthenticated ?? false;
+}

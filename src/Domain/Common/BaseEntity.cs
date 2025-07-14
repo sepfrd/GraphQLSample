@@ -4,15 +4,13 @@ public abstract class BaseEntity
 {
     protected BaseEntity()
     {
-        DateCreated = DateModified = DateTime.UtcNow;
-        InternalId = Guid.NewGuid();
+        CreatedAt = UpdatedAt = DateTime.UtcNow;
+        Uuid = Guid.CreateVersion7();
     }
 
-    public Guid InternalId { get; init; }
+    public Guid Uuid { get; init; }
 
-    public int ExternalId { get; set; }
+    public DateTimeOffset CreatedAt { get; set; }
 
-    public DateTime DateCreated { get; set; }
-
-    public DateTime DateModified { get; set; }
+    public DateTimeOffset UpdatedAt { get; set; }
 }
