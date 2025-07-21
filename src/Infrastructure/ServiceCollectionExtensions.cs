@@ -1,6 +1,9 @@
 ﻿using System.Security.Cryptography;
-using Application.Abstractions;
-using Domain.Common;
+using Application.Common.Abstractions;
+using Application.Common.Abstractions.Services;
+using Application.Common.Dtos;
+using Application.Services;
+using Domain.Abstractions;
 using Domain.Entities;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -8,9 +11,11 @@ using Humanizer;
 using Infrastructure.Abstraction;
 using Infrastructure.Common.Configurations;
 using Infrastructure.Common.Constants;
+using Infrastructure.Persistence.Repositories;
 using Infrastructure.Services.AuthService;
 using Infrastructure.Services.AuthService.Dtos.UserDto;
 using Infrastructure.Services.Mapping;
+using Mapster;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,8 +31,13 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, AppOptions appOptions)
     {
+        ConfigureMapster();
+
         return services
             .AddScoped<IAuthService, AuthService>()
+            .AddScoped<IRepositoryBase<Employee>, EmployeeRepository>()
+            .AddScoped<IRepositoryBase<User>, UserRepository>()
+            .AddScoped<IServiceBase<Employee, EmployeeDto>, ServiceBase<Employee, EmployeeDto>>()
             .AddFluentValidation()
             .AddMongoDb(appOptions.MongoDbOptions)
             .AddSingleton<IMappingService, MappingService>()
@@ -44,10 +54,16 @@ public static class ServiceCollectionExtensions
     {
         BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
 
-        BsonClassMap.RegisterClassMap<BaseEntity>(classMap =>
+        BsonClassMap.RegisterClassMap<DomainEntity>(classMap =>
         {
             classMap.AutoMap();
             classMap.MapIdMember(baseEntity => baseEntity.Uuid);
+        });
+
+        BsonClassMap.RegisterClassMap<User>(classMap =>
+        {
+            classMap.AutoMap();
+            classMap.MapIdMember(user => user.Uuid);
         });
 
         var connectionString = mongoDbOptions.ConnectionString;
@@ -60,6 +76,18 @@ public static class ServiceCollectionExtensions
         CreateIndexes(mongoDatabase);
 
         return services;
+    }
+
+    private static void ConfigureMapster()
+    {
+        TypeAdapterConfig<Employee, EmployeeDto>
+            .ForType()
+            .Map(
+                employeeDto => employeeDto.FirstName,
+                employee => employee.Info.FirstName)
+            .Map(
+                employeeDto => employeeDto.LastName,
+                employee => employee.Info.LastName);
     }
 
     public static IServiceCollection AddAuth(this IServiceCollection services, JwtOptions jwtOptions) =>
@@ -110,7 +138,7 @@ public static class ServiceCollectionExtensions
     }
 
     private static void CreateIndexForCollection<TEntity>(IMongoDatabase database)
-        where TEntity : BaseEntity
+        where TEntity : DomainEntity
     {
         var collectionName = typeof(TEntity).Name.Pluralize();
 

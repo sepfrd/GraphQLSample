@@ -1,10 +1,10 @@
-using Domain.Common;
+using Domain.Abstractions;
 using Domain.Enums;
 using Domain.ValueObjects;
 
 namespace Domain.Entities;
 
-public class Employee : BaseEntity
+public class Employee : DomainEntity
 {
     public required PersonInfo Info { get; set; }
 

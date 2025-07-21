@@ -2,11 +2,14 @@ using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using Application.Common.Abstractions;
 using BCrypt.Net;
 using Infrastructure.Abstraction;
 using Infrastructure.Common.Configurations;
 using Infrastructure.Common.Constants;
+using Infrastructure.Common.Dtos;
 using Infrastructure.Services.AuthService.Dtos;
+using Infrastructure.Services.AuthService.Dtos.LoginDto;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -17,13 +20,16 @@ public class AuthService : IAuthService
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly JwtOptions _jwtOptions;
+    private readonly IRepositoryBase<User> _userRepository;
     private static SigningCredentials? _signingCredentials;
 
     public AuthService(
         IHttpContextAccessor httpContextAccessor,
-        IOptions<AppOptions> appOptions)
+        IOptions<AppOptions> appOptions,
+        IRepositoryBase<User> userRepository)
     {
         _httpContextAccessor = httpContextAccessor;
+        _userRepository = userRepository;
         _jwtOptions = appOptions.Value.JwtOptions;
 
         if (_signingCredentials is not null)
@@ -40,7 +46,37 @@ public class AuthService : IAuthService
         _signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha512Signature);
     }
 
-    public async Task<string?> CreateJwtAsync(User user, CancellationToken cancellationToken = default)
+    public async Task<Result<string>> LogInAsync(LoginDto loginDto, CancellationToken cancellationToken = default)
+    {
+        if (IsLoggedIn())
+        {
+            return new Result<string>(null, MessageConstants.AlreadyLoggedIn, StatusCodes.Status400BadRequest);
+        }
+
+        var users = await _userRepository.GetAllAsync(
+            user => user.Username == loginDto.UsernameOrEmail || user.Email == loginDto.UsernameOrEmail,
+            cancellationToken);
+
+        var user = users.FirstOrDefault();
+
+        if (user is null)
+        {
+            return new Result<string>(null, MessageConstants.InvalidCredentials, StatusCodes.Status400BadRequest);
+        }
+
+        var isPasswordValid = ValidatePassword(loginDto.Password, user.PasswordHash);
+
+        if (!isPasswordValid)
+        {
+            return new Result<string>(null, MessageConstants.InvalidCredentials, StatusCodes.Status400BadRequest);
+        }
+
+        var jwt = GenerateAuthToken(user, cancellationToken);
+
+        return new Result<string>(jwt, MessageConstants.SuccessfullyLoggedIn, StatusCodes.Status200OK);
+    }
+
+    public string GenerateAuthToken(User user, CancellationToken cancellationToken = default)
     {
         var claims = new ClaimsIdentity(new[]
         {

@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
-using Application.Abstractions;
-using Domain.Common;
+using Application.Common.Abstractions;
+using Domain.Abstractions;
 using Humanizer;
 using Infrastructure.Common.Configurations;
 using Microsoft.Extensions.Options;
@@ -8,12 +8,12 @@ using MongoDB.Driver;
 
 namespace Infrastructure.Persistence.Common;
 
-public class BaseRepository<TEntity> : IRepository<TEntity>
-    where TEntity : BaseEntity
+public abstract class RepositoryBase<TEntity> : IRepositoryBase<TEntity>
+    where TEntity : IHasUuid
 {
     private readonly IMongoCollection<TEntity> _mongoDbCollection;
 
-    protected BaseRepository(IOptions<AppOptions> appOptions)
+    protected RepositoryBase(IOptions<AppOptions> appOptions)
     {
         var databaseSettings = appOptions.Value.MongoDbOptions;
 

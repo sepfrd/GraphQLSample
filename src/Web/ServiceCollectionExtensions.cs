@@ -44,7 +44,7 @@ public static class ServiceCollectionExtensions
             .AddMaxExecutionDepthRule(15)
             .AddQueryType<QueryType>()
             .AddMutationType<MutationType>()
-            .AddSubscriptionType<SubscriptionType>()
+            // .AddSubscriptionType<SubscriptionType>()
             .ModifyPagingOptions(options =>
             {
                 options.IncludeTotalCount = appOptions.GraphQLOptions.IncludeTotalCount;

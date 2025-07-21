@@ -1,6 +1,8 @@
+using Domain.Abstractions;
+
 namespace Infrastructure.Services.AuthService;
 
-public sealed class User
+public sealed class User : IHasUuid
 {
     public Guid Uuid { get; init; } = Guid.CreateVersion7();
 

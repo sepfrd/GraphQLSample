@@ -1,8 +1,8 @@
-using Domain.Common;
+using Domain.Abstractions;
 
 namespace Domain.Entities;
 
-public class Department : BaseEntity
+public class Department : DomainEntity
 {
     public required string Name { get; set; }
 

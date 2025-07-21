@@ -1,10 +1,9 @@
 using System.Linq.Expressions;
-using Domain.Common;
+using Domain.Abstractions;
 
-namespace Application.Abstractions;
+namespace Application.Common.Abstractions;
 
-public interface
-    IRepository<TEntity> where TEntity : BaseEntity
+public interface IRepositoryBase<TEntity> where TEntity : IHasUuid
 {
     Task<TEntity?> CreateAsync(TEntity entity, CancellationToken cancellationToken = default);
 
