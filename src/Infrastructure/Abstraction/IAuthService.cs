@@ -1,4 +1,4 @@
-using Infrastructure.Common.Dtos;
+using Domain.Abstractions;
 using Infrastructure.Services.AuthService;
 using Infrastructure.Services.AuthService.Dtos;
 using Infrastructure.Services.AuthService.Dtos.LoginDto;
@@ -7,7 +7,7 @@ namespace Infrastructure.Abstraction;
 
 public interface IAuthService
 {
-    Task<Result<string>> LogInAsync(LoginDto loginDto, CancellationToken cancellationToken = default);
+    Task<DomainResult<string>> LogInAsync(LoginDto loginDto, CancellationToken cancellationToken = default);
 
     string GenerateAuthToken(User user, CancellationToken cancellationToken = default);
 

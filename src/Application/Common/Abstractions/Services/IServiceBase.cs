@@ -1,12 +1,14 @@
+using Domain.Abstractions;
+
 namespace Application.Common.Abstractions.Services;
 
-public interface IServiceBase<TEntity, in TDto>
+public interface IServiceBase<T> where T : class
 {
-    Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken = default);
+    Task<DomainResult<IEnumerable<T>>> GetAllAsync(CancellationToken cancellationToken = default);
 
-    Task<TEntity?> CreateOneAsync(TDto dto, CancellationToken cancellationToken = default);
+    Task<DomainResult<T>> CreateOneAsync(T entity, CancellationToken cancellationToken = default);
 
-    Task<TEntity?> UpdateAsync(TDto dto, CancellationToken cancellationToken = default);
+    Task<DomainResult<T>> UpdateAsync(T entity, CancellationToken cancellationToken = default);
 
-    Task<TEntity?> DeleteAsync(Guid uuid, CancellationToken cancellationToken = default);
+    Task<DomainResult> DeleteAsync(Guid uuid, CancellationToken cancellationToken = default);
 }

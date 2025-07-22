@@ -37,7 +37,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IAuthService, AuthService>()
             .AddScoped<IRepositoryBase<Employee>, EmployeeRepository>()
             .AddScoped<IRepositoryBase<User>, UserRepository>()
-            .AddScoped<IServiceBase<Employee, EmployeeDto>, ServiceBase<Employee, EmployeeDto>>()
+            .AddScoped<IServiceBase<EmployeeDto>, ServiceBase<Employee, EmployeeDto>>()
             .AddFluentValidation()
             .AddMongoDb(appOptions.MongoDbOptions)
             .AddSingleton<IMappingService, MappingService>()

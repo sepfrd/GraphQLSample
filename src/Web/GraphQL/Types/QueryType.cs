@@ -1,5 +1,4 @@
-﻿using Infrastructure.Common.Constants;
-using Web.GraphQL.Types.FilterTypes;
+﻿using Web.GraphQL.Types.FilterTypes;
 
 namespace Web.GraphQL.Types;
 
@@ -11,7 +10,7 @@ public sealed class QueryType : ObjectType<Query>
             .Description("Root Query That Provides Operations to Retrieve Data");
 
         descriptor
-            .Authorize(PolicyConstants.AdminPolicy)
+            .Authorize()
             .Field(_ =>
                 Query.GetEmployeesAsync(null!, CancellationToken.None))
             .UsePaging()

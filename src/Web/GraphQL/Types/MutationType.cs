@@ -14,5 +14,9 @@ public sealed class MutationType : ObjectType<Mutation>
             .Description("Allows users to log in and obtain authentication credentials.\n" +
                          "Requires valid username/email and password.\n" +
                          "Returns an authentication token upon successful login.");
+
+        descriptor
+            .Field(_ => Mutation.CreateEmployeeAsync(null!, null!, CancellationToken.None))
+            .Description("Allows users to create an employee");
     }
 }

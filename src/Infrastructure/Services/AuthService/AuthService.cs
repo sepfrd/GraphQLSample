@@ -4,10 +4,10 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using Application.Common.Abstractions;
 using BCrypt.Net;
+using Domain.Abstractions;
 using Infrastructure.Abstraction;
 using Infrastructure.Common.Configurations;
 using Infrastructure.Common.Constants;
-using Infrastructure.Common.Dtos;
 using Infrastructure.Services.AuthService.Dtos;
 using Infrastructure.Services.AuthService.Dtos.LoginDto;
 using Microsoft.AspNetCore.Http;
@@ -46,11 +46,13 @@ public class AuthService : IAuthService
         _signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha512Signature);
     }
 
-    public async Task<Result<string>> LogInAsync(LoginDto loginDto, CancellationToken cancellationToken = default)
+    public async Task<DomainResult<string>> LogInAsync(LoginDto loginDto, CancellationToken cancellationToken = default)
     {
         if (IsLoggedIn())
         {
-            return new Result<string>(null, MessageConstants.AlreadyLoggedIn, StatusCodes.Status400BadRequest);
+            return DomainResult<string>.Failure(new Error(
+                StatusCodes.Status400BadRequest.ToString(),
+                MessageConstants.AlreadyLoggedIn));
         }
 
         var users = await _userRepository.GetAllAsync(
@@ -61,19 +63,23 @@ public class AuthService : IAuthService
 
         if (user is null)
         {
-            return new Result<string>(null, MessageConstants.InvalidCredentials, StatusCodes.Status400BadRequest);
+            return DomainResult<string>.Failure(new Error(
+                StatusCodes.Status400BadRequest.ToString(),
+                MessageConstants.InvalidCredentials));
         }
 
         var isPasswordValid = ValidatePassword(loginDto.Password, user.PasswordHash);
 
         if (!isPasswordValid)
         {
-            return new Result<string>(null, MessageConstants.InvalidCredentials, StatusCodes.Status400BadRequest);
+            return DomainResult<string>.Failure(new Error(
+                StatusCodes.Status400BadRequest.ToString(),
+                MessageConstants.InvalidCredentials));
         }
 
         var jwt = GenerateAuthToken(user, cancellationToken);
 
-        return new Result<string>(jwt, MessageConstants.SuccessfullyLoggedIn, StatusCodes.Status200OK);
+        return DomainResult<string>.Success(jwt);
     }
 
     public string GenerateAuthToken(User user, CancellationToken cancellationToken = default)

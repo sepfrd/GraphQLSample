@@ -15,6 +15,4 @@ public abstract class DomainEntity : IAuditable, IHasUuid
     public DateTimeOffset UpdatedAt { get; set; }
 
     public void MarkAsUpdated() => UpdatedAt = DateTimeOffset.UtcNow;
-
-    public long Id { get; set; }
 }
