@@ -6,6 +6,7 @@ using Application.Services.Employees.Dtos;
 using Application.Services.Projects.Dtos;
 using Domain.Abstractions;
 using Domain.Entities;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.Services.Projects;
 
@@ -34,7 +35,7 @@ public class ProjectService : ServiceBase<Project, ProjectDto>, IProjectService
 
         if (createdEntity is null)
         {
-            return DomainResult<ProjectDto>.Failure(Errors.InternalServerError);
+            return DomainResult<ProjectDto>.Failure(Errors.InternalServerError, StatusCodes.Status500InternalServerError);
         }
 
         var responseDto = _mappingService.Map<Project, ProjectDto>(createdEntity);
@@ -48,7 +49,9 @@ public class ProjectService : ServiceBase<Project, ProjectDto>, IProjectService
 
         if (project is null)
         {
-            return DomainResult<IEnumerable<EmployeeDto>>.Failure(Errors.NotFoundById(nameof(Project), projectId));
+            return DomainResult<IEnumerable<EmployeeDto>>.Failure(
+                Errors.NotFoundById(nameof(Project), projectId),
+                StatusCodes.Status404NotFound);
         }
 
         if (project.EmployeeIds.Count == 0)
@@ -71,7 +74,9 @@ public class ProjectService : ServiceBase<Project, ProjectDto>, IProjectService
 
         if (project is null)
         {
-            return DomainResult<EmployeeDto>.Failure(Errors.NotFoundById(nameof(Project), projectId));
+            return DomainResult<EmployeeDto>.Failure(
+                Errors.NotFoundById(nameof(Project), projectId),
+                StatusCodes.Status404NotFound);
         }
 
         var manager = await _employeeRepository.GetByIdAsync(project.ManagerId, cancellationToken);
@@ -87,13 +92,15 @@ public class ProjectService : ServiceBase<Project, ProjectDto>, IProjectService
 
         if (project is null)
         {
-            return DomainResult<ProjectDto>.Failure(Errors.NotFoundById(nameof(Project), dto.Id));
+            return DomainResult<ProjectDto>.Failure(
+                Errors.NotFoundById(nameof(Project), dto.Id),
+                StatusCodes.Status404NotFound);
         }
 
         if (string.Equals(project.Name, dto.NewName, StringComparison.InvariantCultureIgnoreCase) &&
             string.Equals(project.Description, dto.NewDescription, StringComparison.InvariantCultureIgnoreCase))
         {
-            return DomainResult<ProjectDto>.Failure(Errors.IdenticalValues);
+            return DomainResult<ProjectDto>.Failure(Errors.IdenticalValues, StatusCodes.Status400BadRequest);
         }
 
         _mappingService.Map(dto, project);
@@ -104,7 +111,7 @@ public class ProjectService : ServiceBase<Project, ProjectDto>, IProjectService
 
         if (updatedEntity is null)
         {
-            return DomainResult<ProjectDto>.Failure(Errors.InternalServerError);
+            return DomainResult<ProjectDto>.Failure(Errors.InternalServerError, StatusCodes.Status500InternalServerError);
         }
 
         var responseDto = _mappingService.Map<Project, ProjectDto>(updatedEntity);

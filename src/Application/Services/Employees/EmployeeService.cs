@@ -8,6 +8,7 @@ using Application.Services.Projects.Dtos;
 using Domain.Abstractions;
 using Domain.Entities;
 using Domain.ValueObjects;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.Services.Employees;
 
@@ -37,7 +38,7 @@ public class EmployeeService : ServiceBase<Employee, EmployeeDto>, IEmployeeServ
 
         if (department is null)
         {
-            return DomainResult<EmployeeDto>.Failure(EmployeeErrors.InvalidDepartmentId);
+            return DomainResult<EmployeeDto>.Failure(EmployeeErrors.InvalidDepartmentId, StatusCodes.Status400BadRequest);
         }
 
         var entity = _mappingService.Map<CreateEmployeeDto, Employee>(dto);
@@ -48,7 +49,7 @@ public class EmployeeService : ServiceBase<Employee, EmployeeDto>, IEmployeeServ
 
         if (createdEntity is null)
         {
-            return DomainResult<EmployeeDto>.Failure(Errors.InternalServerError);
+            return DomainResult<EmployeeDto>.Failure(Errors.InternalServerError, StatusCodes.Status500InternalServerError);
         }
 
         var responseDto = _mappingService.Map<Employee, EmployeeDto>(createdEntity);
@@ -62,7 +63,9 @@ public class EmployeeService : ServiceBase<Employee, EmployeeDto>, IEmployeeServ
 
         if (employee is null)
         {
-            return DomainResult<IEnumerable<ProjectDto>>.Failure(Errors.NotFoundById(nameof(Employee), employeeId));
+            return DomainResult<IEnumerable<ProjectDto>>.Failure(
+                Errors.NotFoundById(nameof(Employee), employeeId),
+                StatusCodes.Status404NotFound);
         }
 
         if (employee.ProjectIds.Count == 0)
@@ -85,7 +88,9 @@ public class EmployeeService : ServiceBase<Employee, EmployeeDto>, IEmployeeServ
 
         if (employee is null)
         {
-            return DomainResult<DepartmentDto>.Failure(Errors.NotFoundById(nameof(Employee), employeeId));
+            return DomainResult<DepartmentDto>.Failure(
+                Errors.NotFoundById(nameof(Employee), employeeId),
+                StatusCodes.Status404NotFound);
         }
 
         var department = await _departmentRepository.GetByIdAsync(employee.DepartmentId, cancellationToken);
@@ -101,7 +106,9 @@ public class EmployeeService : ServiceBase<Employee, EmployeeDto>, IEmployeeServ
 
         if (employee is null)
         {
-            return DomainResult<EmployeeDto>.Failure(Errors.NotFoundById(nameof(Employee), dto.Id));
+            return DomainResult<EmployeeDto>.Failure(
+                Errors.NotFoundById(nameof(Employee), dto.Id),
+                StatusCodes.Status404NotFound);
         }
 
         if
@@ -111,7 +118,7 @@ public class EmployeeService : ServiceBase<Employee, EmployeeDto>, IEmployeeServ
              employee.Info.BirthDate == dto.BirthDate &&
              employee.Skills.ToHashSet().SetEquals(dto.Skills))
         {
-            return DomainResult<EmployeeDto>.Failure(Errors.IdenticalValues);
+            return DomainResult<EmployeeDto>.Failure(Errors.IdenticalValues, StatusCodes.Status400BadRequest);
         }
 
         _mappingService.Map(dto, employee);
@@ -123,7 +130,7 @@ public class EmployeeService : ServiceBase<Employee, EmployeeDto>, IEmployeeServ
 
         if (updatedEntity is null)
         {
-            return DomainResult<EmployeeDto>.Failure(Errors.InternalServerError);
+            return DomainResult<EmployeeDto>.Failure(Errors.InternalServerError, StatusCodes.Status500InternalServerError);
         }
 
         var responseDto = _mappingService.Map<Employee, EmployeeDto>(updatedEntity);
@@ -137,27 +144,32 @@ public class EmployeeService : ServiceBase<Employee, EmployeeDto>, IEmployeeServ
 
         if (employee is null)
         {
-            return DomainResult.Failure(Errors.NotFoundById(nameof(Employee), employeeId));
+            return DomainResult.Failure(
+                Errors.NotFoundById(nameof(Employee), employeeId),
+                StatusCodes.Status404NotFound);
+        }
+
+        if (employee.DepartmentId == newDepartmentId)
+        {
+            return DomainResult.Failure(Errors.IdenticalValues, StatusCodes.Status400BadRequest);
         }
 
         var department = await _departmentRepository.GetByIdAsync(newDepartmentId, cancellationToken);
 
         if (department is null)
         {
-            return DomainResult.Failure(EmployeeErrors.InvalidDepartmentId);
+            return DomainResult.Failure(EmployeeErrors.InvalidDepartmentId, StatusCodes.Status400BadRequest);
         }
 
         employee.DepartmentId = department.Id;
 
         employee.MarkAsUpdated();
-        department.MarkAsUpdated();
 
         var updatedEmployee = await _employeeRepository.UpdateAsync(employee, cancellationToken);
-        var updatedDepartment = await _departmentRepository.UpdateAsync(department, cancellationToken);
 
-        if (updatedEmployee is null || updatedDepartment is null)
+        if (updatedEmployee is null)
         {
-            return DomainResult.Failure(Errors.InternalServerError);
+            return DomainResult.Failure(Errors.InternalServerError, StatusCodes.Status500InternalServerError);
         }
 
         return DomainResult.Success();
@@ -169,19 +181,21 @@ public class EmployeeService : ServiceBase<Employee, EmployeeDto>, IEmployeeServ
 
         if (employee is null)
         {
-            return DomainResult.Failure(Errors.NotFoundById(nameof(Employee), employeeId));
+            return DomainResult.Failure(Errors
+                .NotFoundById(nameof(Employee), employeeId),
+                StatusCodes.Status404NotFound);
         }
 
         var project = await _projectRepository.GetByIdAsync(projectId, cancellationToken);
 
         if (project is null)
         {
-            return DomainResult.Failure(EmployeeErrors.InvalidProjectId);
+            return DomainResult.Failure(EmployeeErrors.InvalidProjectId, StatusCodes.Status400BadRequest);
         }
 
         if (!employee.ProjectIds.Add(projectId))
         {
-            return DomainResult.Failure(EmployeeErrors.ProjectAlreadyAssigned);
+            return DomainResult.Failure(EmployeeErrors.ProjectAlreadyAssigned, StatusCodes.Status400BadRequest);
         }
 
         project.EmployeeIds.Add(employeeId);
@@ -194,7 +208,7 @@ public class EmployeeService : ServiceBase<Employee, EmployeeDto>, IEmployeeServ
 
         if (updatedEmployee is null || updatedProject is null)
         {
-            return DomainResult.Failure(Errors.InternalServerError);
+            return DomainResult.Failure(Errors.InternalServerError, StatusCodes.Status500InternalServerError);
         }
 
         return DomainResult.Success();
@@ -206,19 +220,19 @@ public class EmployeeService : ServiceBase<Employee, EmployeeDto>, IEmployeeServ
 
         if (employee is null)
         {
-            return DomainResult.Failure(Errors.NotFoundById(nameof(Employee), employeeId));
+            return DomainResult.Failure(Errors.NotFoundById(nameof(Employee), employeeId), StatusCodes.Status404NotFound);
         }
 
         var project = await _projectRepository.GetByIdAsync(projectId, cancellationToken);
 
         if (project is null)
         {
-            return DomainResult.Failure(EmployeeErrors.InvalidProjectId);
+            return DomainResult.Failure(EmployeeErrors.InvalidProjectId, StatusCodes.Status400BadRequest);
         }
 
         if (!employee.ProjectIds.Remove(projectId))
         {
-            return DomainResult.Failure(EmployeeErrors.ProjectNotAssigned);
+            return DomainResult.Failure(EmployeeErrors.ProjectNotAssigned, StatusCodes.Status400BadRequest);
         }
 
         project.EmployeeIds.Remove(employeeId);
@@ -231,7 +245,7 @@ public class EmployeeService : ServiceBase<Employee, EmployeeDto>, IEmployeeServ
 
         if (updatedEmployee is null || updatedProject is null)
         {
-            return DomainResult.Failure(Errors.InternalServerError);
+            return DomainResult.Failure(Errors.InternalServerError, StatusCodes.Status500InternalServerError);
         }
 
         return DomainResult.Success();

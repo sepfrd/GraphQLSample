@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using Application.Abstractions.Repositories;
 using Application.Common;
 using Domain.Abstractions;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.Abstractions.Services;
 
@@ -35,7 +36,7 @@ public abstract class ServiceBase<TEntity, TDto> : IServiceBase<TEntity, TDto>
 
         if (entity is null)
         {
-            return DomainResult<TDto>.Failure(Errors.NotFound);
+            return DomainResult<TDto>.Failure(Errors.NotFound, StatusCodes.Status404NotFound);
         }
 
         var dto = _mappingService.Map<TEntity, TDto>(entity);
@@ -49,14 +50,14 @@ public abstract class ServiceBase<TEntity, TDto> : IServiceBase<TEntity, TDto>
 
         if (entity is null)
         {
-            return DomainResult.Failure(Errors.NotFound);
+            return DomainResult.Failure(Errors.NotFound, StatusCodes.Status404NotFound);
         }
 
         var deletedEntity = await _repository.DeleteOneAsync(entity, cancellationToken);
 
         if (deletedEntity is null)
         {
-            return DomainResult.Failure(Errors.InternalServerError);
+            return DomainResult.Failure(Errors.InternalServerError, StatusCodes.Status500InternalServerError);
         }
 
         return DomainResult.Success();

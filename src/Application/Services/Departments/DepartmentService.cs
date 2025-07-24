@@ -6,6 +6,7 @@ using Application.Services.Departments.Dtos;
 using Application.Services.Employees.Dtos;
 using Domain.Abstractions;
 using Domain.Entities;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.Services.Departments;
 
@@ -34,7 +35,7 @@ public class DepartmentService : ServiceBase<Department, DepartmentDto>, IDepart
 
         if (createdEntity is null)
         {
-            return DomainResult<DepartmentDto>.Failure(Errors.InternalServerError);
+            return DomainResult<DepartmentDto>.Failure(Errors.InternalServerError, StatusCodes.Status500InternalServerError);
         }
 
         var responseDto = _mappingService.Map<Department, DepartmentDto>(createdEntity);
@@ -48,7 +49,9 @@ public class DepartmentService : ServiceBase<Department, DepartmentDto>, IDepart
 
         if (department is null)
         {
-            return DomainResult<IEnumerable<EmployeeDto>>.Failure(Errors.NotFoundById(nameof(Department), departmentId));
+            return DomainResult<IEnumerable<EmployeeDto>>.Failure(
+                Errors.NotFoundById(nameof(Department), departmentId),
+                StatusCodes.Status404NotFound);
         }
 
         var employees = await _employeeRepository.GetAllAsync(
@@ -66,13 +69,15 @@ public class DepartmentService : ServiceBase<Department, DepartmentDto>, IDepart
 
         if (department is null)
         {
-            return DomainResult<DepartmentDto>.Failure(Errors.NotFoundById(nameof(Department), dto.Id));
+            return DomainResult<DepartmentDto>.Failure(
+                Errors.NotFoundById(nameof(Department), dto.Id),
+                StatusCodes.Status404NotFound);
         }
 
         if (string.Equals(department.Name, dto.NewName, StringComparison.InvariantCultureIgnoreCase) &&
             string.Equals(department.Description, dto.NewDescription, StringComparison.InvariantCultureIgnoreCase))
         {
-            return DomainResult<DepartmentDto>.Failure(Errors.IdenticalValues);
+            return DomainResult<DepartmentDto>.Failure(Errors.IdenticalValues, StatusCodes.Status400BadRequest);
         }
 
         _mappingService.Map(dto, department);
@@ -83,7 +88,7 @@ public class DepartmentService : ServiceBase<Department, DepartmentDto>, IDepart
 
         if (updatedEntity is null)
         {
-            return DomainResult<DepartmentDto>.Failure(Errors.InternalServerError);
+            return DomainResult<DepartmentDto>.Failure(Errors.InternalServerError, StatusCodes.Status500InternalServerError);
         }
 
         var responseDto = _mappingService.Map<Department, DepartmentDto>(updatedEntity);

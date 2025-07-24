@@ -50,9 +50,7 @@ public class AuthService : IAuthService
     {
         if (IsLoggedIn())
         {
-            return DomainResult<string>.Failure(new Error(
-                StatusCodes.Status400BadRequest.ToString(),
-                MessageConstants.AlreadyLoggedIn));
+            return DomainResult<string>.Failure(new Error(MessageConstants.AlreadyLoggedIn), StatusCodes.Status400BadRequest);
         }
 
         var users = await _userRepository.GetAllAsync(
@@ -63,18 +61,14 @@ public class AuthService : IAuthService
 
         if (user is null)
         {
-            return DomainResult<string>.Failure(new Error(
-                StatusCodes.Status400BadRequest.ToString(),
-                MessageConstants.InvalidCredentials));
+            return DomainResult<string>.Failure(new Error(MessageConstants.InvalidCredentials), StatusCodes.Status400BadRequest);
         }
 
         var isPasswordValid = ValidatePassword(loginDto.Password, user.PasswordHash);
 
         if (!isPasswordValid)
         {
-            return DomainResult<string>.Failure(new Error(
-                StatusCodes.Status400BadRequest.ToString(),
-                MessageConstants.InvalidCredentials));
+            return DomainResult<string>.Failure(new Error(MessageConstants.InvalidCredentials), StatusCodes.Status400BadRequest);
         }
 
         var jwt = GenerateAuthToken(user, cancellationToken);
