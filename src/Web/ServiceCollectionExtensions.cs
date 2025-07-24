@@ -7,6 +7,7 @@ using Infrastructure.Common.Constants;
 using Infrastructure.Services.Logging;
 using Microsoft.Extensions.Options;
 using Web.GraphQL.Types;
+using Web.GraphQL.Types.FilterTypes;
 
 namespace Web;
 
@@ -46,14 +47,20 @@ public static class ServiceCollectionExtensions
             .AddAuthorization()
             .AddMaxExecutionDepthRule(15)
             .AddQueryType<QueryType>()
+            .AddMutationType<MutationType>()
             .AddType<EmployeeType>()
             .AddType<ProjectType>()
             .AddType<DepartmentType>()
+            .AddType<EmployeeFilterType>()
+            .AddType<SkillFilterType>()
+            .AddType<DepartmentFilterType>()
+            .AddType<ProjectFilterType>()
             .AddInputObjectType<CreateEmployeeDto>()
             .AddInputObjectType<UpdateEmployeeDto>()
             .AddInputObjectType<CreateProjectDto>()
+            .AddInputObjectType<UpdateProjectDto>()
             .AddInputObjectType<CreateDepartmentDto>()
-            .AddMutationType<MutationType>()
+            .AddInputObjectType<UpdateDepartmentDto>()
             .ModifyPagingOptions(options =>
             {
                 options.IncludeTotalCount = appOptions.GraphQLOptions.IncludeTotalCount;
@@ -74,8 +81,7 @@ public static class ServiceCollectionExtensions
                 options.ApplyCostDefaults = appOptions.GraphQLOptions.ApplyCostDefaults;
                 options.DefaultResolverCost = appOptions.GraphQLOptions.DefaultResolverCost;
             })
-            .DisableIntrospection(false)
-            .AddInMemorySubscriptions();
+            .DisableIntrospection(false);
 
         return services;
     }

@@ -4,6 +4,7 @@ using Domain.Enums;
 using Domain.ValueObjects;
 using Infrastructure.Abstractions;
 using Infrastructure.Common.Configurations;
+using Infrastructure.Common.Constants;
 using Infrastructure.Services.AuthService;
 using MongoDB.Driver;
 
@@ -144,31 +145,24 @@ public class DatabaseSeeder
 
     private List<User> GetFakeUsers()
     {
-        var defaultUser = new User
+        var admin = new User
         {
-            Username = "sepehr_frd",
-            PasswordHash = _authService.HashPassword("Correct_p0"),
-            Email = "sepfrd@outlook.com",
-            IsEmailConfirmed = true
+            Username = _dataSeedOptions.AdminUsername,
+            PasswordHash = _authService.HashPassword(_dataSeedOptions.AdminPassword),
+            Email = _dataSeedOptions.AdminEmail,
+            IsEmailConfirmed = true,
+            Roles = [RoleConstants.User, RoleConstants.Admin]
         };
 
-        var userFaker = new Faker<User>()
-            .RuleFor(user => user.Username, faker => faker.Internet.UserName())
-            .RuleFor(user => user.PasswordHash,
-                faker => _authService.HashPassword(faker.Internet.Password()))
-            .RuleFor(user => user.Email, faker => faker.Internet.Email())
-            .RuleFor(user => user.IsEmailConfirmed, faker => faker.Random.Bool());
-
-        var fakeUsers = new List<User>
+        var user = new User
         {
-            defaultUser
+            Username = _dataSeedOptions.UserUsername,
+            PasswordHash = _authService.HashPassword(_dataSeedOptions.UserPassword),
+            Email = _dataSeedOptions.UserEmail,
+            IsEmailConfirmed = true,
+            Roles = [RoleConstants.User]
         };
 
-        for (var i = 0; i < _dataSeedOptions.ItemsCount - 1; i++)
-        {
-            fakeUsers.Add(userFaker.Generate());
-        }
-
-        return fakeUsers;
+        return [admin, user];
     }
 }

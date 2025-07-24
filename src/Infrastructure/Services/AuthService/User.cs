@@ -1,4 +1,5 @@
 using Domain.Abstractions;
+using Infrastructure.Common.Constants;
 
 namespace Infrastructure.Services.AuthService;
 
@@ -13,4 +14,6 @@ public sealed class User : IEntity<Guid>
     public required string Email { get; init; }
 
     public bool IsEmailConfirmed { get; init; }
+
+    public HashSet<string> Roles { get; set; } = [RoleConstants.User];
 }

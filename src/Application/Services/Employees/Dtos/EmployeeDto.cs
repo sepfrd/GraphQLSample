@@ -16,4 +16,4 @@ public record EmployeeDto(
     string? Position,
     List<Skill> Skills,
     DepartmentDto Department,
-    List<ProjectDto> Projects);
+    IEnumerable<ProjectDto> Projects);

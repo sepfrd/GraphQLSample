@@ -9,4 +9,4 @@ public record ProjectDto(
     string Name,
     string Description,
     EmployeeDto Manager,
-    ICollection<EmployeeDto> Employees);
+    IEnumerable<EmployeeDto> Employees);

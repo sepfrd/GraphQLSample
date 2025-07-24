@@ -2,7 +2,9 @@ using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using Application.Abstractions;
 using Application.Abstractions.Repositories;
+using Application.Common;
 using BCrypt.Net;
 using Domain.Abstractions;
 using Infrastructure.Abstractions;
@@ -10,6 +12,8 @@ using Infrastructure.Common.Configurations;
 using Infrastructure.Common.Constants;
 using Infrastructure.Services.AuthService.Dtos;
 using Infrastructure.Services.AuthService.Dtos.LoginDto;
+using Infrastructure.Services.AuthService.Dtos.SignupDto;
+using Infrastructure.Services.AuthService.Dtos.UserDto;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -21,15 +25,19 @@ public class AuthService : IAuthService
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly JwtOptions _jwtOptions;
     private readonly IRepositoryBase<User> _userRepository;
+    private readonly IMappingService _mappingService;
+
     private static SigningCredentials? _signingCredentials;
 
     public AuthService(
         IHttpContextAccessor httpContextAccessor,
         IOptions<AppOptions> appOptions,
-        IRepositoryBase<User> userRepository)
+        IRepositoryBase<User> userRepository,
+        IMappingService mappingService)
     {
         _httpContextAccessor = httpContextAccessor;
         _userRepository = userRepository;
+        _mappingService = mappingService;
         _jwtOptions = appOptions.Value.JwtOptions;
 
         if (_signingCredentials is not null)
@@ -76,6 +84,52 @@ public class AuthService : IAuthService
         return DomainResult<string>.Success(jwt);
     }
 
+    public async Task<DomainResult<UserDto>> SignUpAsync(SignupDto signupDto, CancellationToken cancellationToken = default)
+    {
+        var isUsernameValid = !(await _userRepository.GetAllAsync(
+                user => user.Username == signupDto.Username,
+                cancellationToken))
+            .Any();
+
+        if (!isUsernameValid)
+        {
+            return DomainResult<UserDto>.Failure(
+                AuthErrors.PropertyNotUnique(nameof(SignupDto.Username), signupDto.Username),
+                StatusCodes.Status400BadRequest);
+        }
+
+        var isEmailValid = !(await _userRepository.GetAllAsync(
+                user => user.Email == signupDto.Email,
+                cancellationToken))
+            .Any();
+
+        if (!isEmailValid)
+        {
+            return DomainResult<UserDto>.Failure(
+                AuthErrors.PropertyNotUnique(nameof(SignupDto.Email), signupDto.Email),
+                StatusCodes.Status400BadRequest);
+        }
+
+        var user = new User
+        {
+            Username = signupDto.Username,
+            PasswordHash = HashPassword(signupDto.Password),
+            Email = signupDto.Email,
+            Roles = signupDto.IsAdmin ? [RoleConstants.User, RoleConstants.Admin] : [RoleConstants.User]
+        };
+
+        var createdUser = await _userRepository.CreateAsync(user, cancellationToken);
+
+        if (createdUser is null)
+        {
+            return DomainResult<UserDto>.Failure(Errors.InternalServerError, StatusCodes.Status500InternalServerError);
+        }
+
+        var userDto = _mappingService.Map<User, UserDto>(createdUser);
+
+        return DomainResult<UserDto>.Success(userDto, StatusCodes.Status201Created);
+    }
+
     public string GenerateAuthToken(User user, CancellationToken cancellationToken = default)
     {
         var claims = new ClaimsIdentity(new[]
@@ -90,6 +144,8 @@ public class AuthService : IAuthService
             new Claim(JwtClaimConstants.UsernameClaim, user.Username),
             new Claim(JwtClaimConstants.ExternalIdClaim, user.Id.ToString())
         });
+
+        claims.AddClaims(user.Roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {

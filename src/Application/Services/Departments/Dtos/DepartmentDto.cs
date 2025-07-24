@@ -8,4 +8,4 @@ public record DepartmentDto(
     DateTimeOffset UpdatedAt,
     string Name,
     string? Description,
-    ICollection<EmployeeDto> Employees);
+    IEnumerable<EmployeeDto> Employees);

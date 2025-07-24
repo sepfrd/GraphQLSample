@@ -49,20 +49,22 @@ public class EmployeeType : ObjectType<EmployeeDto>
 
         descriptor
             .Field(employee => employee.Skills)
-            .Description("The list of skills associated with the employee.");
+            .Description("The list of skills associated with the employee.")
+            .UseSorting();
 
         descriptor
             .Field(employee => employee.Department)
+            .Description("The department this employee belongs to.")
             .ResolveWith<Resolvers>(_ =>
-                Resolvers.GetDepartmentAsync(null!, null!, CancellationToken.None))
-            .Description("The department this employee belongs to.");
+                Resolvers.GetDepartmentAsync(null!, null!, CancellationToken.None));
 
         descriptor
             .Field(employee => employee.Projects)
             .Description("The list of projects associated with the employee.")
             .ResolveWith<Resolvers>(_ =>
                 Resolvers.GetProjectsAsync(null!, null!, CancellationToken.None))
-            .UsePaging();
+            .UsePaging()
+            .UseSorting();
     }
 
     private sealed class Resolvers

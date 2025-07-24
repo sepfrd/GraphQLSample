@@ -7,9 +7,8 @@ public class SkillFilterType : FilterInputType<Skill>
 {
     protected override void Configure(IFilterInputTypeDescriptor<Skill> descriptor)
     {
-        base.Configure(descriptor);
-
         descriptor
+            .BindFieldsExplicitly()
             .Field(skill => skill.Name)
             .Type<CustomStringOperationFilterType>();
     }

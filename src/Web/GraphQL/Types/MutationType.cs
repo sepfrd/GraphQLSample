@@ -1,4 +1,6 @@
-﻿namespace Web.GraphQL.Types;
+﻿using Infrastructure.Common.Constants;
+
+namespace Web.GraphQL.Types;
 
 public sealed class MutationType : ObjectType<Mutation>
 {
@@ -14,6 +16,11 @@ public sealed class MutationType : ObjectType<Mutation>
             .Description("Allows users to log in and obtain authentication credentials.\n" +
                          "Requires valid username/email and password.\n" +
                          "Returns an authentication token upon successful login.");
+
+        descriptor
+            .Field(_ => Mutation.SignupAsync(null!, null!, CancellationToken.None))
+            .Authorize(PolicyConstants.AdminPolicy)
+            .Description("Creates a new user account. Only users with admin privileges can perform this action.");
 
         descriptor
             .Field(_ => Mutation.CreateEmployeeAsync(null!, null!, CancellationToken.None))

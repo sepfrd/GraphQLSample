@@ -1,4 +1,4 @@
-namespace Domain.Constants;
+namespace Infrastructure.Common.Constants;
 
 public static class RoleConstants
 {

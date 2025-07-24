@@ -28,13 +28,36 @@ services:
       context: .
       dockerfile: ./src/Web/Dockerfile
     container_name: graphql_sample
-    ports:
-      - "${APPLICATION_HTTP_PORT}:8080"
-    depends_on:
-      mongodb:
-        condition: service_healthy
     environment:
       ASPNETCORE_ENVIRONMENT: Production
+
+      # INTERNAL SERILOG
+      InternalSerilog__MinimumLevel__Default: Information
+      InternalSerilog__MinimumLevel__Override__Microsoft: Warning
+      InternalSerilog__MinimumLevel__Override__System: Warning
+      InternalSerilog__WriteTo__0__Name: File
+      InternalSerilog__WriteTo__0__Args__path: /app/logs/log-.json
+      InternalSerilog__WriteTo__0__Args__rollingInterval: Day
+      InternalSerilog__WriteTo__0__Args__rollOnFileSizeLimit: true
+      InternalSerilog__WriteTo__0__Args__formatter: Serilog.Formatting.Json.JsonFormatter
+      InternalSerilog__WriteTo__1__Name: Console
+      InternalSerilog__WriteTo__1__Args__outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {Message:lj} <s:{SourceContext}>{NewLine}{Exception}"
+      InternalSerilog__Enrich__0: FromLogContext
+      InternalSerilog__Enrich__1: WithMachineName
+      InternalSerilog__Enrich__2: WithThreadId
+
+      # MAIN SERILOG
+      Serilog__MinimumLevel__Default: Warning
+      Serilog__WriteTo__0__Name: MongoDBBson
+      Serilog__WriteTo__0__Args__databaseUrl: mongodb://mongodb:27017/GraphQLSample
+      Serilog__WriteTo__0__Args__collectionName: Logs
+      Serilog__WriteTo__0__Args__cappedMaxSizeMb: 1024
+      Serilog__WriteTo__0__Args__cappedMaxDocuments: 50000
+      Serilog__WriteTo__0__Args__rollingInterval: Day
+      Serilog__WriteTo__0__Args__formatter: Serilog.Formatting.Json.JsonFormatter
+      Serilog__Enrich__0: FromLogContext
+      Serilog__Enrich__1: WithMachineName
+
       ApplicationUrl: "${APPLICATION_URL}"
       GraphQLOptions__MaxPageSize: 100
       GraphQLOptions__ExecutionTimeoutSeconds: 3.0
@@ -55,8 +78,23 @@ services:
       DataSeedOptions__ShouldSeed: ${SHOULD_SEED_DATA}
       DataSeedOptions__ItemsCount: ${SEED_DATA_COUNT}
       DataSeedOptions__ItemsLargeCount: ${SEED_DATA_LARGE_COUNT}
+      DataSeedOptions__AdminUsername: ${ADMIN_USERNAME}
+      DataSeedOptions__AdminPassword: ${ADMIN_PASSWORD}
+      DataSeedOptions__AdminEmail: ${ADMIN_EMAIL}
+      DataSeedOptions__UserUsername: ${USER_USERNAME}
+      DataSeedOptions__UserPassword: ${USER_PASSWORD}
+      DataSeedOptions__UserEmail: ${USER_EMAIL}
+    ports:
+      - "${APPLICATION_HTTP_PORT}:8080"
+    volumes:
+      - logs:/app/logs
+    depends_on:
+      mongodb:
+        condition: service_healthy
 
 volumes:
   mongodb_data:
+    driver: local
+  logs:
     driver: local
 

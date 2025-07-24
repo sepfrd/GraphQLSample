@@ -7,22 +7,37 @@ public class ProjectFilterType : FilterInputType<ProjectDto>
 {
     protected override void Configure(IFilterInputTypeDescriptor<ProjectDto> descriptor)
     {
-        base.Configure(descriptor);
+        descriptor
+            .BindFieldsExplicitly()
+            .AllowAnd(false)
+            .AllowOr(false);
 
         descriptor
-            .Field(project => project.Name)
+            .Field(projectDto => projectDto.Id)
+            .Ignore();
+
+        descriptor
+            .Field(projectDto => projectDto.Employees)
+            .Ignore();
+
+        descriptor
+            .Field(projectDto => projectDto.Manager)
+            .Ignore();
+
+        descriptor
+            .Field(projectDto => projectDto.CreatedAt)
+            .Type<DateTimeOperationFilterInputType>();
+
+        descriptor
+            .Field(projectDto => projectDto.UpdatedAt)
+            .Type<DateTimeOperationFilterInputType>();
+
+        descriptor
+            .Field(projectDto => projectDto.Name)
             .Type<CustomStringOperationFilterType>();
 
         descriptor
-            .Field(project => project.Description)
+            .Field(projectDto => projectDto.Description)
             .Type<CustomStringOperationFilterType>();
-
-        descriptor
-            .Field(project => project.Employees)
-            .Type<EmployeeFilterType>();
-
-        descriptor
-            .Field(project => project.Manager)
-            .Type<EmployeeFilterType>();
     }
 }

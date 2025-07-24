@@ -6,8 +6,7 @@ public sealed class QueryType : ObjectType<Query>
 {
     protected override void Configure(IObjectTypeDescriptor<Query> descriptor)
     {
-        descriptor
-            .Description("Root Query That Provides Operations to Retrieve Data");
+        descriptor.Description("Root Query That Provides Operations to Retrieve Data");
 
         descriptor
             .Authorize()
@@ -36,7 +35,7 @@ public sealed class QueryType : ObjectType<Query>
             .Field(_ =>
                 Query.GetDepartmentsAsync(null!, CancellationToken.None))
             .UsePaging()
-            .UseFiltering<EmployeeFilterType>()
+            .UseFiltering<DepartmentFilterType>()
             .UseSorting()
             .Description("Retrieves a list of departments.\n" +
                          "Supports advanced querying with pagination.\n" +

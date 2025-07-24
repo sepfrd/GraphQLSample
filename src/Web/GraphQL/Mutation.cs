@@ -7,6 +7,8 @@ using Application.Services.Projects.Dtos;
 using Domain.Abstractions;
 using Infrastructure.Abstractions;
 using Infrastructure.Services.AuthService.Dtos.LoginDto;
+using Infrastructure.Services.AuthService.Dtos.SignupDto;
+using Infrastructure.Services.AuthService.Dtos.UserDto;
 
 namespace Web.GraphQL;
 
@@ -17,6 +19,12 @@ public class Mutation
         LoginDto loginDto,
         CancellationToken cancellationToken) =>
         await authService.LogInAsync(loginDto, cancellationToken);
+
+    public static async Task<DomainResult<UserDto>> SignupAsync(
+        [Service] IAuthService authService,
+        SignupDto signupDto,
+        CancellationToken cancellationToken) =>
+        await authService.SignUpAsync(signupDto, cancellationToken);
 
     public static async Task<DomainResult<EmployeeDto>> CreateEmployeeAsync(
         [Service] IEmployeeService employeeService,

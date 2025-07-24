@@ -1,6 +1,9 @@
 using Application.Services.Employees.Dtos;
 using Application.Services.Projects;
 using Application.Services.Projects.Dtos;
+using Domain.Entities;
+using Humanizer;
+using Web.GraphQL.Types.FilterTypes;
 
 namespace Web.GraphQL.Types;
 
@@ -9,7 +12,10 @@ public class ProjectType : ObjectType<ProjectDto>
     protected override void Configure(IObjectTypeDescriptor<ProjectDto> descriptor)
     {
         base.Configure(descriptor);
-        descriptor.Description("Represents a project with its metadata, team members, and manager information.");
+
+        descriptor
+            .Name(nameof(Project).Pluralize())
+            .Description("Represents a project with its metadata, team members, and manager information.");
 
         descriptor
             .Field(projectDto => projectDto.Id)

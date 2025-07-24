@@ -1,6 +1,9 @@
 using Application.Services.Departments;
 using Application.Services.Departments.Dtos;
 using Application.Services.Employees.Dtos;
+using Domain.Entities;
+using Humanizer;
+using Web.GraphQL.Types.FilterTypes;
 
 namespace Web.GraphQL.Types;
 
@@ -10,7 +13,9 @@ public class DepartmentType : ObjectType<DepartmentDto>
     {
         base.Configure(descriptor);
 
-        descriptor.Description("Represents a department within the organization, including its name and optional description.");
+        descriptor
+            .Name(nameof(Department).Pluralize())
+            .Description("Represents a department within the organization, including its name and optional description.");
 
         descriptor
             .Field(departmentDto => departmentDto.Id)
