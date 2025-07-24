@@ -3,7 +3,7 @@ using Infrastructure.Services.AuthService;
 using Infrastructure.Services.AuthService.Dtos;
 using Infrastructure.Services.AuthService.Dtos.LoginDto;
 
-namespace Infrastructure.Abstraction;
+namespace Infrastructure.Abstractions;
 
 public interface IAuthService
 {

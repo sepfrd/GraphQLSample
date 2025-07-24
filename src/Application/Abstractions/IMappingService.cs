@@ -1,4 +1,4 @@
-namespace Application.Common.Abstractions;
+namespace Application.Abstractions;
 
 public interface IMappingService
 {

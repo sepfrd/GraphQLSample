@@ -2,10 +2,10 @@ using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using Application.Common.Abstractions;
+using Application.Abstractions.Repositories;
 using BCrypt.Net;
 using Domain.Abstractions;
-using Infrastructure.Abstraction;
+using Infrastructure.Abstractions;
 using Infrastructure.Common.Configurations;
 using Infrastructure.Common.Constants;
 using Infrastructure.Services.AuthService.Dtos;
@@ -94,7 +94,7 @@ public class AuthService : IAuthService
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
             new Claim(JwtClaimConstants.UsernameClaim, user.Username),
-            new Claim(JwtClaimConstants.ExternalIdClaim, user.Uuid.ToString())
+            new Claim(JwtClaimConstants.ExternalIdClaim, user.Id.ToString())
         });
 
         var tokenDescriptor = new SecurityTokenDescriptor

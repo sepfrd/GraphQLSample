@@ -1,16 +1,38 @@
-using Application.Common.Abstractions.Services;
-using Application.Common.Dtos;
+using Application.Services.Departments;
+using Application.Services.Departments.Dtos;
+using Application.Services.Employees;
+using Application.Services.Employees.Dtos;
+using Application.Services.Projects;
+using Application.Services.Projects.Dtos;
 
 namespace Web.GraphQL;
 
 public class Query
 {
     public static async Task<IEnumerable<EmployeeDto>> GetEmployeesAsync(
-        [Service] IServiceBase<EmployeeDto> employeeService,
+        [Service] IEmployeeService employeeService,
         CancellationToken cancellationToken)
     {
-        var result = await employeeService.GetAllAsync(cancellationToken);
+        var result = await employeeService.GetAllAsync(cancellationToken: cancellationToken);
 
-        return result.Data!;
+        return result;
+    }
+
+    public static async Task<IEnumerable<ProjectDto>> GetProjectsAsync(
+        [Service] IProjectService projectService,
+        CancellationToken cancellationToken)
+    {
+        var result = await projectService.GetAllAsync(cancellationToken: cancellationToken);
+
+        return result;
+    }
+
+    public static async Task<IEnumerable<DepartmentDto>> GetDepartmentsAsync(
+        [Service] IDepartmentService departmentService,
+        CancellationToken cancellationToken)
+    {
+        var result = await departmentService.GetAllAsync(cancellationToken: cancellationToken);
+
+        return result;
     }
 }

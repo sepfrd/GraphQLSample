@@ -2,12 +2,12 @@ using Bogus;
 using Domain.Entities;
 using Domain.Enums;
 using Domain.ValueObjects;
-using Infrastructure.Abstraction;
+using Infrastructure.Abstractions;
 using Infrastructure.Common.Configurations;
 using Infrastructure.Services.AuthService;
 using MongoDB.Driver;
 
-namespace Infrastructure.Persistence.Common.Helpers;
+namespace Infrastructure.Common.Helpers;
 
 public class DatabaseSeeder
 {
@@ -50,16 +50,26 @@ public class DatabaseSeeder
     public void SeedData()
     {
         var fakeEmployees = GetFakeEmployees();
+        var fakeProjects = GetFakeProjects();
         var fakeDepartments = GetFakeDepartments();
         var fakeUsers = GetFakeUsers();
 
+        foreach (var employee in fakeEmployees)
+        {
+            var randomFakeDepartment = fakeDepartments[Random.Shared.Next(0, fakeDepartments.Count)];
+            employee.DepartmentId = randomFakeDepartment.Id;
+        }
+
         for (var i = 0; i < _dataSeedOptions.ItemsCount; i++)
         {
-            fakeEmployees[i].DepartmentUuid = fakeDepartments[Random.Shared.Next(0, fakeDepartments.Count)].Uuid;
+            fakeProjects[i].ManagerId = fakeEmployees[Random.Shared.Next(0, fakeDepartments.Count)].Id;
+            fakeProjects[i].EmployeeIds = [fakeEmployees[i].Id];
+            fakeEmployees[i].ProjectIds = [fakeProjects[i].Id];
         }
 
         _mongoDatabase.GetCollection<Department>("Departments").InsertMany(fakeDepartments);
         _mongoDatabase.GetCollection<Employee>("Employees").InsertMany(fakeEmployees);
+        _mongoDatabase.GetCollection<Project>("Projects").InsertMany(fakeProjects);
         _mongoDatabase.GetCollection<User>("Users").InsertMany(fakeUsers);
     }
 
@@ -88,12 +98,32 @@ public class DatabaseSeeder
 
         var fakeEmployees = new List<Employee>();
 
-        for (var i = 0; i < _dataSeedOptions.ItemsCount; i++)
+        for (var i = 0; i < _dataSeedOptions.ItemsLargeCount; i++)
         {
             fakeEmployees.Add(employeeFaker.Generate());
         }
 
         return fakeEmployees;
+    }
+
+    private List<Project> GetFakeProjects()
+    {
+        var projectFaker = new Faker<Project>()
+            .RuleFor(
+                project => project.Name,
+                faker => faker.PickRandomParam("Financial", "Stocks", "Telecom", "CMS"))
+            .RuleFor(
+                project => project.Description,
+                faker => faker.PickRandomParam("Project's Description"));
+
+        var fakeProjects = new List<Project>();
+
+        for (var i = 0; i < _dataSeedOptions.ItemsCount; i++)
+        {
+            fakeProjects.Add(projectFaker.Generate());
+        }
+
+        return fakeProjects;
     }
 
     private static List<Department> GetFakeDepartments() =>

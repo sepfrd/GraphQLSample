@@ -2,9 +2,9 @@ using Domain.Abstractions;
 
 namespace Infrastructure.Services.AuthService;
 
-public sealed class User : IHasUuid
+public sealed class User : IEntity<Guid>
 {
-    public Guid Uuid { get; init; } = Guid.CreateVersion7();
+    public Guid Id { get; init; } = Guid.CreateVersion7();
 
     public required string Username { get; init; }
 

@@ -1,14 +1,14 @@
 ﻿namespace Domain.Abstractions;
 
-public abstract class DomainEntity : IAuditable, IHasUuid
+public abstract class DomainEntity : IEntity<Guid>, IAuditable
 {
     protected DomainEntity()
     {
         CreatedAt = UpdatedAt = DateTime.UtcNow;
-        Uuid = Guid.CreateVersion7();
+        Id = Guid.CreateVersion7();
     }
 
-    public Guid Uuid { get; init; }
+    public Guid Id { get; init; }
 
     public DateTimeOffset CreatedAt { get; init; }
 

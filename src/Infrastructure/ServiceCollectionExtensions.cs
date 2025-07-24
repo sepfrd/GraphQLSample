@@ -1,14 +1,20 @@
 ﻿using System.Security.Cryptography;
-using Application.Common.Abstractions;
-using Application.Common.Abstractions.Services;
-using Application.Common.Dtos;
-using Application.Services;
+using Application.Abstractions;
+using Application.Abstractions.Repositories;
+using Application.Services.Departments;
+using Application.Services.Departments.Dtos;
+using Application.Services.Employees;
+using Application.Services.Employees.Dtos;
+using Application.Services.Projects;
+using Application.Services.Projects.Dtos;
 using Domain.Abstractions;
+using Domain.Constants;
 using Domain.Entities;
+using Domain.ValueObjects;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Humanizer;
-using Infrastructure.Abstraction;
+using Infrastructure.Abstractions;
 using Infrastructure.Common.Configurations;
 using Infrastructure.Common.Constants;
 using Infrastructure.Persistence.Repositories;
@@ -35,9 +41,13 @@ public static class ServiceCollectionExtensions
 
         return services
             .AddScoped<IAuthService, AuthService>()
-            .AddScoped<IRepositoryBase<Employee>, EmployeeRepository>()
+            .AddScoped<IEmployeeRepository, EmployeeRepository>()
+            .AddScoped<IDepartmentRepository, DepartmentRepository>()
+            .AddScoped<IProjectRepository, ProjectRepository>()
             .AddScoped<IRepositoryBase<User>, UserRepository>()
-            .AddScoped<IServiceBase<EmployeeDto>, ServiceBase<Employee, EmployeeDto>>()
+            .AddScoped<IEmployeeService, EmployeeService>()
+            .AddScoped<IDepartmentService, DepartmentService>()
+            .AddScoped<IProjectService, ProjectService>()
             .AddFluentValidation()
             .AddMongoDb(appOptions.MongoDbOptions)
             .AddSingleton<IMappingService, MappingService>()
@@ -57,13 +67,13 @@ public static class ServiceCollectionExtensions
         BsonClassMap.RegisterClassMap<DomainEntity>(classMap =>
         {
             classMap.AutoMap();
-            classMap.MapIdMember(baseEntity => baseEntity.Uuid);
+            classMap.MapIdMember(baseEntity => baseEntity.Id);
         });
 
         BsonClassMap.RegisterClassMap<User>(classMap =>
         {
             classMap.AutoMap();
-            classMap.MapIdMember(user => user.Uuid);
+            classMap.MapIdMember(user => user.Id);
         });
 
         var connectionString = mongoDbOptions.ConnectionString;
@@ -87,7 +97,57 @@ public static class ServiceCollectionExtensions
                 employee => employee.Info.FirstName)
             .Map(
                 employeeDto => employeeDto.LastName,
-                employee => employee.Info.LastName);
+                employee => employee.Info.LastName)
+            .Map(
+                employeeDto => employeeDto.Age,
+                employee => employee.Info.Age);
+
+        TypeAdapterConfig<CreateEmployeeDto, Employee>
+            .ForType()
+            .MapWith(employeeDto =>
+                new Employee
+                {
+                    Info = new PersonInfo(
+                        employeeDto.FirstName,
+                        employeeDto.LastName,
+                        employeeDto.BirthDate),
+                    Status = employeeDto.Status,
+                    Position = employeeDto.Position,
+                    DepartmentId = employeeDto.DepartmentId,
+                    Skills = employeeDto.Skills.ToHashSet()
+                });
+
+        TypeAdapterConfig<UpdateEmployeeDto, Employee>
+            .ForType()
+            .ConstructUsing(employeeDto =>
+                new Employee
+                {
+                    Info = new PersonInfo(
+                        employeeDto.FirstName,
+                        employeeDto.LastName,
+                        employeeDto.BirthDate),
+                    Status = employeeDto.Status,
+                    Position = employeeDto.Position,
+                    Skills = employeeDto.Skills.ToHashSet()
+                });
+
+        TypeAdapterConfig<UpdateProjectDto, Project>
+            .ForType()
+            .Map(
+                project => project.Name,
+                projectDto => projectDto.NewName)
+            .Map(
+                project => project.Description,
+                projectDto => projectDto.NewDescription);
+
+        TypeAdapterConfig<UpdateDepartmentDto, Department>
+            .ForType()
+            .Map(
+                department => department.Name,
+                departmentDto => departmentDto.NewName)
+            .Map(
+                department => department.Description,
+                departmentDto => departmentDto.NewDescription);
     }
 
     public static IServiceCollection AddAuth(this IServiceCollection services, JwtOptions jwtOptions) =>
@@ -123,8 +183,8 @@ public static class ServiceCollectionExtensions
             .AddAuthorization(options =>
             {
                 options.AddPolicy(
-                    PolicyConstants.CustomerPolicy,
-                    policyConfig => policyConfig.RequireRole(RoleConstants.Customer, RoleConstants.Admin));
+                    PolicyConstants.UserPolicy,
+                    policyConfig => policyConfig.RequireRole(RoleConstants.User, RoleConstants.Admin));
 
                 options.AddPolicy(
                     PolicyConstants.AdminPolicy,
@@ -146,7 +206,7 @@ public static class ServiceCollectionExtensions
 
         var collection = database.GetCollection<TEntity>(collectionName);
 
-        var indexKeysDefinition = Builders<TEntity>.IndexKeys.Ascending(entity => entity.Uuid);
+        var indexKeysDefinition = Builders<TEntity>.IndexKeys.Ascending(entity => entity.Id);
 
         var indexModel = new CreateIndexModel<TEntity>(indexKeysDefinition);
 

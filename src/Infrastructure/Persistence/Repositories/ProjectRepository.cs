@@ -6,9 +6,9 @@ using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Persistence.Repositories;
 
-public class EmployeeRepository : RepositoryBase<Employee>, IEmployeeRepository
+public class ProjectRepository : RepositoryBase<Project>, IProjectRepository
 {
-    public EmployeeRepository(IOptions<AppOptions> appOptions) : base(appOptions)
+    public ProjectRepository(IOptions<AppOptions> appOptions) : base(appOptions)
     {
     }
 }

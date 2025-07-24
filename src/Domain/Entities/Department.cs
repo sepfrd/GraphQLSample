@@ -8,5 +8,5 @@ public class Department : DomainEntity
 
     public string? Description { get; set; }
 
-    public ICollection<Employee> Employees { get; set; } = [];
+    public ICollection<Employee>? Employees { get; set; }
 }

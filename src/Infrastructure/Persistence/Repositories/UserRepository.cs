@@ -1,5 +1,5 @@
+using Infrastructure.Abstractions;
 using Infrastructure.Common.Configurations;
-using Infrastructure.Persistence.Common;
 using Infrastructure.Services.AuthService;
 using Microsoft.Extensions.Options;
 

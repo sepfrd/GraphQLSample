@@ -17,7 +17,28 @@ public sealed class QueryType : ObjectType<Query>
             .UseFiltering<EmployeeFilterType>()
             .UseSorting()
             .Description("Retrieves a list of employees.\n" +
-                         "Requires admin privileges for access.\n" +
+                         "Supports advanced querying with pagination.\n" +
+                         "Authentication is mandatory for security purposes.");
+
+        descriptor
+            .Authorize()
+            .Field(_ =>
+                Query.GetProjectsAsync(null!, CancellationToken.None))
+            .UsePaging()
+            .UseFiltering<ProjectFilterType>()
+            .UseSorting()
+            .Description("Retrieves a list of projects.\n" +
+                         "Supports advanced querying with pagination.\n" +
+                         "Authentication is mandatory for security purposes.");
+
+        descriptor
+            .Authorize()
+            .Field(_ =>
+                Query.GetDepartmentsAsync(null!, CancellationToken.None))
+            .UsePaging()
+            .UseFiltering<EmployeeFilterType>()
+            .UseSorting()
+            .Description("Retrieves a list of departments.\n" +
                          "Supports advanced querying with pagination.\n" +
                          "Authentication is mandatory for security purposes.");
     }

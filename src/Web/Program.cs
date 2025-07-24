@@ -1,8 +1,8 @@
 using GraphQL.Server.Ui.GraphiQL;
 using HotChocolate.AspNetCore;
-using Infrastructure.Abstraction;
+using Infrastructure.Abstractions;
 using Infrastructure.Common.Configurations;
-using Infrastructure.Persistence.Common.Helpers;
+using Infrastructure.Common.Helpers;
 using Microsoft.Extensions.Options;
 using Serilog;
 using Serilog.Settings.Configuration;

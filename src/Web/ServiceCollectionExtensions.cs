@@ -1,3 +1,6 @@
+using Application.Services.Departments.Dtos;
+using Application.Services.Employees.Dtos;
+using Application.Services.Projects.Dtos;
 using Infrastructure;
 using Infrastructure.Common.Configurations;
 using Infrastructure.Common.Constants;
@@ -43,8 +46,14 @@ public static class ServiceCollectionExtensions
             .AddAuthorization()
             .AddMaxExecutionDepthRule(15)
             .AddQueryType<QueryType>()
+            .AddType<EmployeeType>()
+            .AddType<ProjectType>()
+            .AddType<DepartmentType>()
+            .AddInputObjectType<CreateEmployeeDto>()
+            .AddInputObjectType<UpdateEmployeeDto>()
+            .AddInputObjectType<CreateProjectDto>()
+            .AddInputObjectType<CreateDepartmentDto>()
             .AddMutationType<MutationType>()
-            // .AddSubscriptionType<SubscriptionType>()
             .ModifyPagingOptions(options =>
             {
                 options.IncludeTotalCount = appOptions.GraphQLOptions.IncludeTotalCount;

@@ -1,15 +1,15 @@
 using System.Linq.Expressions;
-using Application.Common.Abstractions;
+using Application.Abstractions.Repositories;
 using Domain.Abstractions;
 using Humanizer;
 using Infrastructure.Common.Configurations;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
-namespace Infrastructure.Persistence.Common;
+namespace Infrastructure.Abstractions;
 
 public abstract class RepositoryBase<TEntity> : IRepositoryBase<TEntity>
-    where TEntity : IHasUuid
+    where TEntity : IEntity<Guid>
 {
     private readonly IMongoCollection<TEntity> _mongoDbCollection;
 
@@ -30,7 +30,7 @@ public abstract class RepositoryBase<TEntity> : IRepositoryBase<TEntity>
     {
         await _mongoDbCollection.InsertOneAsync(entity, null, cancellationToken);
 
-        var filterDefinition = Builders<TEntity>.Filter.Eq(document => document.Uuid, entity.Uuid);
+        var filterDefinition = Builders<TEntity>.Filter.Eq(document => document.Id, entity.Id);
 
         var documentCursor =
             await _mongoDbCollection.FindAsync<TEntity>(filterDefinition, cancellationToken: cancellationToken);
@@ -38,7 +38,8 @@ public abstract class RepositoryBase<TEntity> : IRepositoryBase<TEntity>
         return await documentCursor.FirstOrDefaultAsync(cancellationToken);
     }
 
-    public virtual async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter = null,
+    public virtual async Task<IEnumerable<TEntity>> GetAllAsync(
+        Expression<Func<TEntity, bool>>? filter = null,
         CancellationToken cancellationToken = default)
     {
         var filterDefinition =
@@ -51,10 +52,10 @@ public abstract class RepositoryBase<TEntity> : IRepositoryBase<TEntity>
         return await documentCursor.ToListAsync(cancellationToken);
     }
 
-    public virtual async Task<TEntity?> GetByUuidAsync(Guid uuid,
+    public virtual async Task<TEntity?> GetByIdAsync(Guid id,
         CancellationToken cancellationToken = default)
     {
-        var filterDefinition = Builders<TEntity>.Filter.Eq(document => document.Uuid, uuid);
+        var filterDefinition = Builders<TEntity>.Filter.Eq(document => document.Id, id);
 
         var findOptions = new FindOptions<TEntity>
         {
@@ -72,17 +73,17 @@ public abstract class RepositoryBase<TEntity> : IRepositoryBase<TEntity>
     public virtual async Task<TEntity?> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         var filterDefinition = new FilterDefinitionBuilder<TEntity>()
-            .Eq(document => document.Uuid, entity.Uuid);
+            .Eq(document => document.Id, entity.Id);
 
-        var result = await _mongoDbCollection.FindOneAndReplaceAsync(filterDefinition, entity, null, cancellationToken);
+        await _mongoDbCollection.FindOneAndReplaceAsync(filterDefinition, entity, null, cancellationToken);
 
-        return result;
+        return entity;
     }
 
     public virtual async Task<TEntity?> DeleteOneAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         var filterDefinition = new FilterDefinitionBuilder<TEntity>()
-            .Where(document => document.Uuid == entity.Uuid);
+            .Where(document => document.Id == entity.Id);
 
         var result = await _mongoDbCollection.FindOneAndDeleteAsync(filterDefinition, null, cancellationToken);
 
@@ -91,10 +92,10 @@ public abstract class RepositoryBase<TEntity> : IRepositoryBase<TEntity>
 
     public async Task DeleteManyAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
     {
-        var idsToDelete = entities.Select(entity => entity.Uuid).ToList();
+        var idsToDelete = entities.Select(entity => entity.Id).ToList();
 
         await _mongoDbCollection.DeleteManyAsync(
-            entity => idsToDelete.Contains(entity.Uuid),
+            entity => idsToDelete.Contains(entity.Id),
             cancellationToken);
     }
 }

@@ -1,4 +1,4 @@
-using Application.Common.Abstractions;
+using Application.Abstractions;
 using Mapster;
 
 namespace Infrastructure.Services.Mapping;

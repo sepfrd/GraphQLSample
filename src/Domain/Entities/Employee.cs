@@ -1,4 +1,5 @@
 using Domain.Abstractions;
+using Domain.Constants;
 using Domain.Enums;
 using Domain.ValueObjects;
 
@@ -12,9 +13,13 @@ public class Employee : DomainEntity
 
     public string? Position { get; set; }
 
-    public Guid DepartmentUuid { get; set; }
+    public Guid DepartmentId { get; set; }
 
-    public Department? Department { get; set; }
+    public HashSet<Guid> ProjectIds { get; set; } = [];
 
-    public List<Skill> Skills { get; set; } = [];
+    public HashSet<Skill> Skills { get; set; } = [];
+
+    public HashSet<string> Roles { get; set; } = [RoleConstants.User];
+
+    public bool HasRole(string role) => Roles.Contains(role);
 }
