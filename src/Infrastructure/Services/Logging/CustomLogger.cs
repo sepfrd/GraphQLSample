@@ -19,7 +19,7 @@ public class CustomLogger : ILogger
             configuration.SetConnectionString("mongodb://localhost:27017/GraphQLSample");
             configuration.SetCollectionName("Logs");
             configuration.SetCreateCappedCollection(1024, 50_000);
-            configuration.SetRollingInternal(RollingInterval.Day);
+            configuration.SetRollingInterval(RollingInterval.Day);
         })
         .Enrich
         .FromLogContext()

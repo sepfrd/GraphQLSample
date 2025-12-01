@@ -3,7 +3,6 @@ using Application.Services.Projects;
 using Application.Services.Projects.Dtos;
 using Domain.Entities;
 using Humanizer;
-using Web.GraphQL.Types.FilterTypes;
 
 namespace Web.GraphQL.Types;
 

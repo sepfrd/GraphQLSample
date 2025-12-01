@@ -1,23 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="GraphQL.Server.Ui.GraphiQL" Version="8.2.0" />
-        <PackageReference Include="HotChocolate" Version="15.1.7" />
-        <PackageReference Include="HotChocolate.AspNetCore" Version="15.1.7" />
-        <PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="15.1.7" />
-        <PackageReference Include="HotChocolate.Data" Version="15.1.7" />
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.7" />
-        <PackageReference Include="Serilog.AspNetCore" Version="9.0.0"/>
-        <PackageReference Include="Serilog.Extensions.Hosting" Version="9.0.0"/>
+        <PackageReference Include="GraphQL.Server.Ui.GraphiQL" Version="8.3.3" />
+        <PackageReference Include="HotChocolate" Version="15.1.11" />
+        <PackageReference Include="HotChocolate.AspNetCore" Version="15.1.11" />
+        <PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="15.1.11" />
+        <PackageReference Include="HotChocolate.Data" Version="15.1.11" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0" />
+        <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
+        <PackageReference Include="Serilog.Extensions.Hosting" Version="10.0.0" />
         <PackageReference Include="Serilog.Sinks.File" Version="7.0.0"/>
-        <PackageReference Include="Serilog.Sinks.MongoDB" Version="7.0.0"/>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3" />
+        <PackageReference Include="Serilog.Sinks.MongoDB" Version="7.2.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="10.0.1" />
     </ItemGroup>
 
     <ItemGroup>
@@ -29,6 +29,12 @@
     <ItemGroup>
         <_ContentIncludedByDefault Remove="logs\development\log-.json"/>
         <_ContentIncludedByDefault Remove="logs\log-20250712.json" />
+        <_ContentIncludedByDefault Remove="logs\log-20250502.json" />
+        <_ContentIncludedByDefault Remove="logs\log-20250508.json" />
+        <_ContentIncludedByDefault Remove="logs\log-20250509.json" />
+        <_ContentIncludedByDefault Remove="logs\log-20250723.json" />
+        <_ContentIncludedByDefault Remove="logs\log-20250724.json" />
+        <_ContentIncludedByDefault Remove="logs\log-20250725.json" />
     </ItemGroup>
 
 </Project>

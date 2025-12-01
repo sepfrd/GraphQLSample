@@ -11,10 +11,12 @@ public class DataSeedOptions
     public required string AdminUsername { get; set; }
 
     public required string AdminPassword { get; set; }
+
     public required string AdminEmail { get; set; }
 
     public required string UserUsername { get; set; }
 
     public required string UserPassword { get; set; }
+
     public required string UserEmail { get; set; }
 }

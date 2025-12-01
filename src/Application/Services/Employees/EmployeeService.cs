@@ -182,7 +182,7 @@ public class EmployeeService : ServiceBase<Employee, EmployeeDto>, IEmployeeServ
         if (employee is null)
         {
             return DomainResult.Failure(Errors
-                .NotFoundById(nameof(Employee), employeeId),
+                    .NotFoundById(nameof(Employee), employeeId),
                 StatusCodes.Status404NotFound);
         }
 
