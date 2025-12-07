@@ -32,59 +32,103 @@ using MongoDB.Driver;
 
 namespace Infrastructure;
 
-public static class ServiceCollectionExtensions
+public static class Extensions
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, AppOptions appOptions)
+    extension(IServiceCollection services)
     {
-        ConfigureMapster();
-
-        return services
-            .AddScoped<IAuthService, AuthService>()
-            .AddScoped<IEmployeeRepository, EmployeeRepository>()
-            .AddScoped<IDepartmentRepository, DepartmentRepository>()
-            .AddScoped<IProjectRepository, ProjectRepository>()
-            .AddScoped<IRepositoryBase<User>, UserRepository>()
-            .AddScoped<IEmployeeService, EmployeeService>()
-            .AddScoped<IDepartmentService, DepartmentService>()
-            .AddScoped<IProjectService, ProjectService>()
-            .AddFluentValidation()
-            .AddMongoDb(appOptions.MongoDbOptions)
-            .AddSingleton<IMappingService, MappingService>()
-            .AddScoped<IAuthenticationService, AuthenticationService>()
-            .AddAuth(appOptions.JwtOptions);
-    }
-
-    private static IServiceCollection AddFluentValidation(this IServiceCollection services) =>
-        services
-            .AddFluentValidationAutoValidation()
-            .AddValidatorsFromAssemblyContaining<UserDtoValidator>();
-
-    private static IServiceCollection AddMongoDb(this IServiceCollection services, MongoDbOptions mongoDbOptions)
-    {
-        BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
-
-        BsonClassMap.RegisterClassMap<DomainEntity>(classMap =>
+        public IServiceCollection AddInfrastructure(AppOptions appOptions)
         {
-            classMap.AutoMap();
-            classMap.MapIdMember(baseEntity => baseEntity.Id);
-        });
+            ConfigureMapster();
 
-        BsonClassMap.RegisterClassMap<User>(classMap =>
+            return services
+                .AddScoped<IAuthService, AuthService>()
+                .AddScoped<IEmployeeRepository, EmployeeRepository>()
+                .AddScoped<IDepartmentRepository, DepartmentRepository>()
+                .AddScoped<IProjectRepository, ProjectRepository>()
+                .AddScoped<IRepositoryBase<User>, UserRepository>()
+                .AddScoped<IEmployeeService, EmployeeService>()
+                .AddScoped<IDepartmentService, DepartmentService>()
+                .AddScoped<IProjectService, ProjectService>()
+                .AddFluentValidation()
+                .AddMongoDb(appOptions.MongoDbOptions)
+                .AddSingleton<IMappingService, MappingService>()
+                .AddScoped<IAuthenticationService, AuthenticationService>()
+                .AddAuth(appOptions.JwtOptions);
+        }
+
+        private IServiceCollection AddFluentValidation() =>
+            services
+                .AddFluentValidationAutoValidation()
+                .AddValidatorsFromAssemblyContaining<UserDtoValidator>();
+
+        private IServiceCollection AddMongoDb(MongoDbOptions mongoDbOptions)
         {
-            classMap.AutoMap();
-            classMap.MapIdMember(user => user.Id);
-        });
+            BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
 
-        var connectionString = mongoDbOptions.ConnectionString;
-        var databaseName = mongoDbOptions.DatabaseName;
+            BsonClassMap.RegisterClassMap<DomainEntity>(classMap =>
+            {
+                classMap.AutoMap();
+                classMap.MapIdMember(baseEntity => baseEntity.Id);
+            });
 
-        var mongoClient = new MongoClient(connectionString);
+            BsonClassMap.RegisterClassMap<User>(classMap =>
+            {
+                classMap.AutoMap();
+                classMap.MapIdMember(user => user.Id);
+            });
 
-        var mongoDatabase = mongoClient.GetDatabase(databaseName);
+            var connectionString = mongoDbOptions.ConnectionString;
+            var databaseName = mongoDbOptions.DatabaseName;
 
-        CreateIndexes(mongoDatabase);
+            var mongoClient = new MongoClient(connectionString);
 
-        return services;
+            var mongoDatabase = mongoClient.GetDatabase(databaseName);
+
+            CreateIndexes(mongoDatabase);
+
+            return services;
+        }
+
+        public IServiceCollection AddAuth(JwtOptions jwtOptions) =>
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(options =>
+                {
+                    var rsa = RSA.Create();
+
+                    rsa.ImportFromPem(jwtOptions.PublicKey);
+
+                    var securityKey = new RsaSecurityKey(rsa);
+
+                    options.SaveToken = true;
+
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        RequireExpirationTime = true,
+                        IssuerSigningKey = securityKey,
+                        ValidIssuer = jwtOptions.Issuer,
+                        ValidAudience = jwtOptions.Audience
+                    };
+                })
+                .Services
+                .AddAuthorization(options =>
+                {
+                    options.AddPolicy(
+                        PolicyConstants.UserPolicy,
+                        policyConfig => policyConfig.RequireRole(RoleConstants.User, RoleConstants.Admin));
+
+                    options.AddPolicy(
+                        PolicyConstants.AdminPolicy,
+                        policyConfig => policyConfig.RequireRole(RoleConstants.Admin));
+                });
     }
 
     private static void ConfigureMapster()
@@ -148,47 +192,6 @@ public static class ServiceCollectionExtensions
                 department => department.Description,
                 departmentDto => departmentDto.NewDescription);
     }
-
-    public static IServiceCollection AddAuth(this IServiceCollection services, JwtOptions jwtOptions) =>
-        services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(options =>
-            {
-                var rsa = RSA.Create();
-
-                rsa.ImportFromPem(jwtOptions.PublicKey);
-
-                var securityKey = new RsaSecurityKey(rsa);
-
-                options.SaveToken = true;
-
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    RequireExpirationTime = true,
-                    IssuerSigningKey = securityKey,
-                    ValidIssuer = jwtOptions.Issuer,
-                    ValidAudience = jwtOptions.Audience
-                };
-            })
-            .Services
-            .AddAuthorization(options =>
-            {
-                options.AddPolicy(
-                    PolicyConstants.UserPolicy,
-                    policyConfig => policyConfig.RequireRole(RoleConstants.User, RoleConstants.Admin));
-
-                options.AddPolicy(
-                    PolicyConstants.AdminPolicy,
-                    policyConfig => policyConfig.RequireRole(RoleConstants.Admin));
-            });
 
     private static void CreateIndexes(IMongoDatabase database)
     {
